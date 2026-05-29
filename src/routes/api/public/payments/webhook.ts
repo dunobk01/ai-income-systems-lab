@@ -26,7 +26,7 @@ async function recordOneTimePurchase(session: any, env: StripeEnv) {
     ? line.price.product
     : (line?.price?.product as any)?.id ?? "unknown";
 
-  await getSupabase().from("subscriptions").upsert(
+  await (getSupabase().from("subscriptions") as any).upsert(
     {
       user_id: userId,
       stripe_subscription_id: full.payment_intent
