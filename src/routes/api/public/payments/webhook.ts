@@ -10,6 +10,55 @@ function getSupabase() {
   return _supabase;
 }
 
+const TIER_LABEL: Record<string, string> = {
+  starter_onetime: "Starter Lab",
+  builder_onetime: "Builder Lab",
+  pro_onetime: "Pro Systems Lab",
+};
+
+async function sendReceiptEmail(opts: {
+  to: string;
+  productLabel: string;
+  amountCents: number;
+  currency: string;
+}) {
+  const lovableKey = process.env.LOVABLE_API_KEY;
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!lovableKey || !resendKey) {
+    console.warn("Resend not configured, skipping receipt email");
+    return;
+  }
+  const amount = (opts.amountCents / 100).toLocaleString(undefined, {
+    style: "currency",
+    currency: opts.currency.toUpperCase(),
+  });
+  try {
+    const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": resendKey,
+      },
+      body: JSON.stringify({
+        from: "AI Income Systems Lab <onboarding@resend.dev>",
+        to: [opts.to],
+        subject: `You're in — ${opts.productLabel}`,
+        html: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
+          <h1 style="font-size:22px;margin:0 0 12px">Welcome to ${opts.productLabel} 🎉</h1>
+          <p style="color:#444;line-height:1.5">Your purchase is confirmed. Lifetime access is unlocked on your account right now.</p>
+          <p style="color:#444;line-height:1.5">Amount charged: <strong>${amount}</strong></p>
+          <p style="margin-top:24px"><a href="https://ai-income-systems-lab.lovable.app/dashboard" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Open your dashboard</a></p>
+          <p style="color:#888;font-size:12px;margin-top:32px">Refunds available within 14 days — just reply to this email.</p>
+        </div>`,
+      }),
+    });
+    if (!res.ok) console.error("Resend send failed", res.status, await res.text());
+  } catch (e) {
+    console.error("Resend send error", e);
+  }
+}
+
 async function recordOneTimePurchase(session: any, env: StripeEnv) {
   const userId = session.metadata?.userId;
   const priceId = session.metadata?.priceId;
@@ -19,36 +68,76 @@ async function recordOneTimePurchase(session: any, env: StripeEnv) {
   }
   const stripe = createStripeClient(env);
   const full = await stripe.checkout.sessions.retrieve(session.id, {
-    expand: ["line_items.data.price.product", "payment_intent"],
+    expand: ["line_items.data.price.product", "payment_intent", "customer"],
   });
   const line = full.line_items?.data?.[0];
   const productId = typeof line?.price?.product === "string"
     ? line.price.product
     : (line?.price?.product as any)?.id ?? "unknown";
 
+  const paymentIntentId = full.payment_intent
+    ? (typeof full.payment_intent === "string" ? full.payment_intent : full.payment_intent.id)
+    : full.id;
+
+  const customerId = typeof full.customer === "string" ? full.customer : full.customer?.id ?? "";
+  const amountCents = full.amount_total ?? 0;
+  const currency = (full.currency ?? "usd").toLowerCase();
+  const email =
+    (typeof full.customer === "object" && full.customer && "email" in full.customer
+      ? (full.customer as any).email
+      : null) ?? full.customer_details?.email ?? null;
+
   await (getSupabase().from("subscriptions") as any).upsert(
     {
       user_id: userId,
-      stripe_subscription_id: full.payment_intent
-        ? (typeof full.payment_intent === "string" ? full.payment_intent : full.payment_intent.id)
-        : full.id,
-      stripe_customer_id: typeof full.customer === "string" ? full.customer : full.customer?.id ?? "",
+      stripe_subscription_id: paymentIntentId,
+      stripe_customer_id: customerId,
       product_id: productId,
       price_id: priceId,
       status: "complete",
+      amount_cents: amountCents,
+      currency,
       environment: env,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "stripe_subscription_id" },
   );
+
+  if (email) {
+    await sendReceiptEmail({
+      to: email,
+      productLabel: TIER_LABEL[priceId] ?? "your plan",
+      amountCents,
+      currency,
+    });
+  }
+}
+
+async function handleRefund(charge: any, env: StripeEnv) {
+  // charge.payment_intent is the same id we stored as stripe_subscription_id.
+  const paymentIntentId =
+    typeof charge.payment_intent === "string"
+      ? charge.payment_intent
+      : charge.payment_intent?.id;
+  if (!paymentIntentId) {
+    console.error("charge.refunded missing payment_intent");
+    return;
+  }
+  await (getSupabase().from("subscriptions") as any)
+    .update({ status: "refunded", updated_at: new Date().toISOString() })
+    .eq("stripe_subscription_id", paymentIntentId)
+    .eq("environment", env);
+  // Trigger apply_subscription_tier recomputes profile.tier from remaining valid rows.
 }
 
 async function handle(req: Request, env: StripeEnv) {
   const event = await verifyWebhook(req, env);
   switch (event.type) {
     case "checkout.session.completed":
-    case "transaction.completed":
       await recordOneTimePurchase(event.data.object, env);
+      break;
+    case "charge.refunded":
+      await handleRefund(event.data.object, env);
       break;
     default:
       console.log("Unhandled event:", event.type);
