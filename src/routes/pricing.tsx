@@ -3,6 +3,7 @@ import { Check, Sparkles, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -58,6 +59,8 @@ const tiers = [
 ];
 
 function PricingPage() {
+  const { user } = useAuth();
+  const ctaTo = user ? "/checkout" : "/signup";
   return (
     <div className="min-h-screen">
       <SiteHeader />
@@ -112,7 +115,7 @@ function PricingPage() {
                 variant={t.featured ? "brand" : "glass"}
                 className="mt-7 h-11"
               >
-                <Link to="/signup" search={{ tier: t.tier }}>
+                <Link to={ctaTo} search={{ tier: t.tier }}>
                   Get {t.name} <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
