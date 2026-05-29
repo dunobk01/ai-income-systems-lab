@@ -59,6 +59,8 @@ const tiers = [
 ];
 
 function PricingPage() {
+  const { user } = useAuth();
+  const ctaTo = user ? "/checkout" : "/signup";
   return (
     <div className="min-h-screen">
       <SiteHeader />
