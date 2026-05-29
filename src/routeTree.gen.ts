@@ -24,6 +24,7 @@ import { Route as AuthenticatedCourseRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
+import { Route as AuthenticatedCourseModuleSlugLessonSlugRouteImport } from './routes/_authenticated/course.$moduleSlug.$lessonSlug'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -101,6 +102,12 @@ const AuthenticatedBuildersFunnelRoute =
     path: '/builders/funnel',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedCourseModuleSlugLessonSlugRoute =
+  AuthenticatedCourseModuleSlugLessonSlugRouteImport.update({
+    id: '/$moduleSlug/$lessonSlug',
+    path: '/$moduleSlug/$lessonSlug',
+    getParentRoute: () => AuthenticatedCourseRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -108,7 +115,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/course': typeof AuthenticatedCourseRoute
+  '/course': typeof AuthenticatedCourseRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/prompts': typeof AuthenticatedPromptsRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -124,7 +132,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/course': typeof AuthenticatedCourseRoute
+  '/course': typeof AuthenticatedCourseRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/prompts': typeof AuthenticatedPromptsRoute
@@ -133,6 +141,7 @@ export interface FileRoutesByTo {
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -142,7 +151,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
-  '/_authenticated/course': typeof AuthenticatedCourseRoute
+  '/_authenticated/course': typeof AuthenticatedCourseRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/prompts': typeof AuthenticatedPromptsRoute
@@ -151,6 +160,7 @@ export interface FileRoutesById {
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/workflows'
     | '/builders/funnel'
     | '/builders/product'
+    | '/course/$moduleSlug/$lessonSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/workflows'
     | '/builders/funnel'
     | '/builders/product'
+    | '/course/$moduleSlug/$lessonSlug'
   id:
     | '__root__'
     | '/'
@@ -202,6 +214,7 @@ export interface FileRouteTypes {
     | '/_authenticated/workflows'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
+    | '/_authenticated/course/$moduleSlug/$lessonSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -319,12 +332,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBuildersFunnelRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/course/$moduleSlug/$lessonSlug': {
+      id: '/_authenticated/course/$moduleSlug/$lessonSlug'
+      path: '/$moduleSlug/$lessonSlug'
+      fullPath: '/course/$moduleSlug/$lessonSlug'
+      preLoaderRoute: typeof AuthenticatedCourseModuleSlugLessonSlugRouteImport
+      parentRoute: typeof AuthenticatedCourseRoute
+    }
   }
 }
 
+interface AuthenticatedCourseRouteChildren {
+  AuthenticatedCourseModuleSlugLessonSlugRoute: typeof AuthenticatedCourseModuleSlugLessonSlugRoute
+}
+
+const AuthenticatedCourseRouteChildren: AuthenticatedCourseRouteChildren = {
+  AuthenticatedCourseModuleSlugLessonSlugRoute:
+    AuthenticatedCourseModuleSlugLessonSlugRoute,
+}
+
+const AuthenticatedCourseRouteWithChildren =
+  AuthenticatedCourseRoute._addFileChildren(AuthenticatedCourseRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
-  AuthenticatedCourseRoute: typeof AuthenticatedCourseRoute
+  AuthenticatedCourseRoute: typeof AuthenticatedCourseRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedPromptsRoute: typeof AuthenticatedPromptsRoute
@@ -337,7 +369,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
-  AuthenticatedCourseRoute: AuthenticatedCourseRoute,
+  AuthenticatedCourseRoute: AuthenticatedCourseRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedPromptsRoute: AuthenticatedPromptsRoute,
