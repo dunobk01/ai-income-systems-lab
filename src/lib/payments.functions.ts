@@ -44,8 +44,20 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
   })
   .handler(async ({ data, context }): Promise<CheckoutResult> => {
     try {
-      const stripe = createStripeClient(data.environment);
       const { userId, supabase } = context;
+
+      // Re-purchase guard: block if user already owns this tier or higher.
+      const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
+      const requested = data.priceId.replace("_onetime", "");
+      if (tierRank[requested] === undefined) throw new Error("Unknown price");
+      const { data: prof } = await supabase
+        .from("profiles").select("tier").eq("user_id", userId).maybeSingle();
+      const currentTier = (prof?.tier as string | undefined) ?? "none";
+      if ((tierRank[currentTier] ?? 0) >= tierRank[requested]) {
+        return { error: `You already have ${currentTier} access — this plan is included.` };
+      }
+
+      const stripe = createStripeClient(data.environment);
       const { data: userData } = await supabase.auth.getUser();
       const email = userData.user?.email ?? undefined;
 
