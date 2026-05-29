@@ -14,6 +14,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
 import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated/tools'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -50,6 +51,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
+  id: '/checkout/return',
+  path: '/checkout/return',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedWorkflowsRoute = AuthenticatedWorkflowsRouteImport.update({
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tools': typeof AuthenticatedToolsRoute
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tools'
     | '/workflows'
+    | '/checkout/return'
     | '/builders/funnel'
     | '/builders/product'
     | '/course/$moduleSlug/$lessonSlug'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tools'
     | '/workflows'
+    | '/checkout/return'
     | '/builders/funnel'
     | '/builders/product'
     | '/course/$moduleSlug/$lessonSlug'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/tools'
     | '/_authenticated/workflows'
+    | '/checkout/return'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
+  CheckoutReturnRoute: typeof CheckoutReturnRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -286,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/return': {
+      id: '/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof CheckoutReturnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/workflows': {
@@ -432,6 +452,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
+  CheckoutReturnRoute: CheckoutReturnRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
