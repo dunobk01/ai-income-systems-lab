@@ -24,7 +24,7 @@ function SettingsPage() {
     if (!user) return;
     void supabase
       .from("subscriptions")
-      .select("price_id, status, created_at, environment")
+      .select("price_id, status, amount_cents, currency, created_at, environment")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .then(({ data }) => setPurchases(data ?? []));
