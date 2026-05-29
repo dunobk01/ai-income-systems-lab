@@ -3,6 +3,7 @@ import { Check, Sparkles, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
