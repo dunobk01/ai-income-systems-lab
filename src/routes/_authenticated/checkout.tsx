@@ -5,9 +5,9 @@ import { StripeEmbeddedCheckoutView } from "@/components/stripe-embedded-checkou
 import { PaymentTestModeBanner } from "@/components/payment-test-mode-banner";
 
 const PRICE_MAP: Record<string, { name: string; price: number; priceId: string }> = {
-  starter: { name: "Starter Lab", price: 29, priceId: "starter_onetime" },
-  builder: { name: "Builder Lab", price: 79, priceId: "builder_onetime" },
-  pro: { name: "Pro Systems Lab", price: 149, priceId: "pro_onetime" },
+  starter: { name: "Starter Lab", price: 29, priceId: "ailab_starter_onetime" },
+  builder: { name: "Builder Lab", price: 79, priceId: "ailab_builder_onetime" },
+  pro: { name: "Pro Systems Lab", price: 149, priceId: "ailab_pro_onetime" },
 };
 
 export const Route = createFileRoute("/_authenticated/checkout")({
