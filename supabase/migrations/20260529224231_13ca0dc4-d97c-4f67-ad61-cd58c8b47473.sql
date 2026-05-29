@@ -1,0 +1,1 @@
+revoke execute on function public.apply_subscription_tier() from public, anon, authenticated;
