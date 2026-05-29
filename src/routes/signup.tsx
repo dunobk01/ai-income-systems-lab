@@ -22,14 +22,17 @@ export const Route = createFileRoute("/signup")({
 
 function SignupPage() {
   const { user, loading } = useAuth();
+  const { tier } = Route.useSearch();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  const postAuthTo = tier ? "/checkout" : "/dashboard";
+
   if (!loading && user) {
-    void navigate({ to: "/dashboard", replace: true });
+    void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   }
 
   const onSubmit = async (e: FormEvent) => {
@@ -40,18 +43,18 @@ function SignupPage() {
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin + "/dashboard",
+        emailRedirectTo: window.location.origin + postAuthTo,
         data: { display_name: name },
       },
     });
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
-    toast.success("Account created. Check your email to confirm.");
-    void navigate({ to: "/dashboard", replace: true });
+    toast.success("Account created.");
+    void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   };
 
   const onGoogle = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
+    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + postAuthTo });
     if (result.error) toast.error("Google sign-up failed");
   };
 
