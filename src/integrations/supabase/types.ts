@@ -296,42 +296,6 @@ export type Database = {
         }
         Relationships: []
       }
-      purchases: {
-        Row: {
-          amount_cents: number
-          created_at: string
-          currency: string
-          id: string
-          status: string
-          stripe_session_id: string | null
-          tier: Database["public"]["Enums"]["subscription_tier"]
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          amount_cents: number
-          created_at?: string
-          currency?: string
-          id?: string
-          status?: string
-          stripe_session_id?: string | null
-          tier: Database["public"]["Enums"]["subscription_tier"]
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          amount_cents?: number
-          created_at?: string
-          currency?: string
-          id?: string
-          status?: string
-          stripe_session_id?: string | null
-          tier?: Database["public"]["Enums"]["subscription_tier"]
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       saved_prompts: {
         Row: {
           created_at: string
@@ -363,8 +327,10 @@ export type Database = {
       }
       subscriptions: {
         Row: {
+          amount_cents: number
           cancel_at_period_end: boolean | null
           created_at: string | null
+          currency: string
           current_period_end: string | null
           current_period_start: string | null
           environment: string
@@ -378,8 +344,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          amount_cents?: number
           cancel_at_period_end?: boolean | null
           created_at?: string | null
+          currency?: string
           current_period_end?: string | null
           current_period_start?: string | null
           environment?: string
@@ -393,8 +361,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+          amount_cents?: number
           cancel_at_period_end?: boolean | null
           created_at?: string | null
+          currency?: string
           current_period_end?: string | null
           current_period_start?: string | null
           environment?: string
