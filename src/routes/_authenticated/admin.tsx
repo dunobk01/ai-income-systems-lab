@@ -35,17 +35,15 @@ function AdminPage() {
         const [{ count: totalUsers }, { data: profiles }, { data: subs }] = await Promise.all([
           supabase.from("profiles").select("id", { count: "exact", head: true }),
           supabase.from("profiles").select("tier"),
-          supabase.from("subscriptions").select("user_id, price_id, created_at, environment").order("created_at", { ascending: false }),
+          supabase.from("subscriptions").select("user_id, price_id, amount_cents, status, created_at, environment").order("created_at", { ascending: false }),
         ]);
 
         const byTier: Record<string, number> = { none: 0, starter: 0, builder: 0, pro: 0 };
         (profiles ?? []).forEach((p: any) => { byTier[p.tier] = (byTier[p.tier] ?? 0) + 1; });
 
-        const priceCents: Record<string, number> = {
-          starter_onetime: 2900, builder_onetime: 7900, pro_onetime: 14900,
-        };
-        const revenueCents = (subs ?? []).reduce((sum: number, s: any) => sum + (priceCents[s.price_id] ?? 0), 0);
-        const paidUsers = new Set((subs ?? []).map((s: any) => s.user_id)).size;
+        const validSubs = (subs ?? []).filter((s: any) => s.status !== "refunded");
+        const revenueCents = validSubs.reduce((sum: number, s: any) => sum + (s.amount_cents ?? 0), 0);
+        const paidUsers = new Set(validSubs.map((s: any) => s.user_id)).size;
 
         setStats({
           totalUsers: totalUsers ?? 0,

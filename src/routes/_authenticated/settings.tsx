@@ -24,7 +24,7 @@ function SettingsPage() {
     if (!user) return;
     void supabase
       .from("subscriptions")
-      .select("price_id, status, created_at, environment")
+      .select("price_id, status, amount_cents, currency, created_at, environment")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .then(({ data }) => setPurchases(data ?? []));
@@ -76,15 +76,26 @@ function SettingsPage() {
           <p className="mt-3 text-sm text-muted-foreground">No purchases yet.</p>
         ) : (
           <div className="mt-4 divide-y divide-white/10 text-sm">
-            {purchases.map((p, i) => (
-              <div key={i} className="py-3 flex items-center justify-between">
-                <div>
-                  <div className="font-medium capitalize">{p.price_id.replace("_onetime", "")}</div>
-                  <div className="text-xs text-muted-foreground">{new Date(p.created_at).toLocaleDateString()} · {p.environment}</div>
+            {purchases.map((p, i) => {
+              const refunded = p.status === "refunded";
+              const amount = p.amount_cents
+                ? (p.amount_cents / 100).toLocaleString(undefined, { style: "currency", currency: (p.currency ?? "usd").toUpperCase() })
+                : null;
+              return (
+                <div key={i} className="py-3 flex items-center justify-between">
+                  <div>
+                    <div className="font-medium capitalize">
+                      {p.price_id.replace("_onetime", "")}
+                      {amount && <span className="ml-2 text-xs text-muted-foreground font-normal">{amount}</span>}
+                    </div>
+                    <div className="text-xs text-muted-foreground">{new Date(p.created_at).toLocaleDateString()} · {p.environment}</div>
+                  </div>
+                  <span className={`text-xs uppercase tracking-wide ${refunded ? "text-red-300" : "text-emerald-300"}`}>
+                    {p.status}
+                  </span>
                 </div>
-                <span className="text-xs uppercase tracking-wide text-emerald-300">{p.status}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>

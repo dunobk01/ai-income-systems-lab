@@ -58,8 +58,11 @@ const tiers = [
   },
 ];
 
+const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
+
 function PricingPage() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
+  const currentRank = tierRank[profile?.tier ?? "none"];
   const ctaTo = user ? "/checkout" : "/signup";
   return (
     <div className="min-h-screen">
@@ -81,46 +84,57 @@ function PricingPage() {
 
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-20">
         <div className="grid gap-6 lg:grid-cols-3">
-          {tiers.map((t) => (
-            <div
-              key={t.name}
-              className={`rounded-3xl p-7 flex flex-col ${
-                t.featured ? "ring-brand bg-white/5 relative" : "glass"
-              }`}
-            >
-              {t.featured && (
-                <span
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold text-background px-3 py-1 rounded-full"
-                  style={{ background: "var(--gradient-brand)" }}
-                >
-                  {t.tag}
-                </span>
-              )}
-              {!t.featured && <span className="text-xs uppercase tracking-wider text-muted-foreground">{t.tag}</span>}
-              <h3 className="mt-2 text-xl font-bold">{t.name}</h3>
-              <div className="mt-4 flex items-baseline gap-1">
-                <span className="text-5xl font-black">${t.price}</span>
-                <span className="text-sm text-muted-foreground">one-time</span>
-              </div>
-              <ul className="mt-6 space-y-3 flex-1">
-                {t.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm">
-                    <Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button
-                asChild
-                variant={t.featured ? "brand" : "glass"}
-                className="mt-7 h-11"
+          {tiers.map((t) => {
+            const tierR = tierRank[t.tier];
+            const isCurrent = user && currentRank === tierR;
+            const isIncluded = user && currentRank > tierR;
+            return (
+              <div
+                key={t.name}
+                className={`rounded-3xl p-7 flex flex-col ${
+                  t.featured ? "ring-brand bg-white/5 relative" : "glass"
+                }`}
               >
-                <Link to={ctaTo} search={{ tier: t.tier }}>
-                  Get {t.name} <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          ))}
+                {t.featured && (
+                  <span
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold text-background px-3 py-1 rounded-full"
+                    style={{ background: "var(--gradient-brand)" }}
+                  >
+                    {t.tag}
+                  </span>
+                )}
+                {!t.featured && <span className="text-xs uppercase tracking-wider text-muted-foreground">{t.tag}</span>}
+                <h3 className="mt-2 text-xl font-bold">{t.name}</h3>
+                <div className="mt-4 flex items-baseline gap-1">
+                  <span className="text-5xl font-black">${t.price}</span>
+                  <span className="text-sm text-muted-foreground">one-time</span>
+                </div>
+                <ul className="mt-6 space-y-3 flex-1">
+                  {t.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm">
+                      <Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                {isCurrent ? (
+                  <Button disabled variant="glass" className="mt-7 h-11 opacity-70 cursor-default">
+                    Current plan
+                  </Button>
+                ) : isIncluded ? (
+                  <Button disabled variant="glass" className="mt-7 h-11 opacity-70 cursor-default">
+                    Included in your plan
+                  </Button>
+                ) : (
+                  <Button asChild variant={t.featured ? "brand" : "glass"} className="mt-7 h-11">
+                    <Link to={ctaTo} search={{ tier: t.tier }}>
+                      Get {t.name} <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         <p className="mt-10 text-center text-xs text-muted-foreground">
