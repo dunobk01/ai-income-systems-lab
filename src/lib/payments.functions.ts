@@ -48,8 +48,13 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 
       // Re-purchase guard: block if user already owns this tier or higher.
       const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
-      const requested = data.priceId.replace("_onetime", "");
-      if (tierRank[requested] === undefined) throw new Error("Unknown price");
+      const priceToTier: Record<string, string> = {
+        ailab_starter_onetime: "starter",
+        ailab_builder_onetime: "builder",
+        ailab_pro_onetime: "pro",
+      };
+      const requested = priceToTier[data.priceId];
+      if (!requested) throw new Error("Unknown price");
       const { data: prof } = await supabase
         .from("profiles").select("tier").eq("user_id", userId).maybeSingle();
       const currentTier = (prof?.tier as string | undefined) ?? "none";
