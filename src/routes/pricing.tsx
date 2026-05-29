@@ -115,7 +115,7 @@ function PricingPage() {
                 variant={t.featured ? "brand" : "glass"}
                 className="mt-7 h-11"
               >
-                <Link to="/signup" search={{ tier: t.tier }}>
+                <Link to={ctaTo} search={{ tier: t.tier }}>
                   Get {t.name} <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
