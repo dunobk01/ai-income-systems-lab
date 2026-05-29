@@ -92,14 +92,8 @@ function CoursePage() {
               <div className="border-t border-white/5 divide-y divide-white/5">
                 {moduleLessons.map((l) => {
                   const isDone = completed.has(l.id);
-                  return (
-                    <Link
-                      key={l.id}
-                      to="/course/$moduleSlug/$lessonSlug"
-                      params={{ moduleSlug: m.slug, lessonSlug: l.slug }}
-                      disabled={locked}
-                      className={`flex items-center gap-3 px-5 sm:px-6 py-3 hover:bg-white/5 transition ${locked ? "opacity-50 pointer-events-none" : ""}`}
-                    >
+                  const Inner = (
+                    <>
                       {isDone ? (
                         <Check className="h-4 w-4 text-emerald-400" />
                       ) : locked ? (
@@ -109,6 +103,21 @@ function CoursePage() {
                       )}
                       <span className="text-sm flex-1 min-w-0 truncate">{l.title}</span>
                       <span className="text-xs text-muted-foreground shrink-0">{l.duration_minutes ?? 10} min</span>
+                    </>
+                  );
+                  if (locked) {
+                    return (
+                      <div key={l.id} className="flex items-center gap-3 px-5 sm:px-6 py-3 opacity-50">{Inner}</div>
+                    );
+                  }
+                  return (
+                    <Link
+                      key={l.id}
+                      to="/course/$moduleSlug/$lessonSlug"
+                      params={{ moduleSlug: m.slug, lessonSlug: l.slug }}
+                      className="flex items-center gap-3 px-5 sm:px-6 py-3 hover:bg-white/5 transition"
+                    >
+                      {Inner}
                     </Link>
                   );
                 })}
