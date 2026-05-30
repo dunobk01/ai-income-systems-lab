@@ -447,6 +447,17 @@ export type Database = {
         }
         Returns: boolean
       }
+      tier_rank: {
+        Args: { _tier: Database["public"]["Enums"]["subscription_tier"] }
+        Returns: number
+      }
+      user_has_tier: {
+        Args: {
+          _required: Database["public"]["Enums"]["subscription_tier"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "user"
