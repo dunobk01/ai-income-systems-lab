@@ -21,9 +21,9 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedPromptsRouteImport } from './routes/_authenticated/prompts'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedCourseRouteImport } from './routes/_authenticated/course'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -88,11 +88,6 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedCourseRoute = AuthenticatedCourseRouteImport.update({
-  id: '/course',
-  path: '/course',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -103,6 +98,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCourseIndexRoute =
+  AuthenticatedCourseIndexRouteImport.update({
+    id: '/course/',
+    path: '/course/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedBuildersProductRoute =
   AuthenticatedBuildersProductRouteImport.update({
     id: '/builders/product',
@@ -123,9 +124,9 @@ const ApiPublicPaymentsWebhookRoute =
   } as any)
 const AuthenticatedCourseModuleSlugLessonSlugRoute =
   AuthenticatedCourseModuleSlugLessonSlugRouteImport.update({
-    id: '/$moduleSlug/$lessonSlug',
-    path: '/$moduleSlug/$lessonSlug',
-    getParentRoute: () => AuthenticatedCourseRoute,
+    id: '/course/$moduleSlug/$lessonSlug',
+    path: '/course/$moduleSlug/$lessonSlug',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -135,7 +136,6 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
-  '/course': typeof AuthenticatedCourseRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/prompts': typeof AuthenticatedPromptsRoute
@@ -145,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/checkout/return': typeof CheckoutReturnRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/course/': typeof AuthenticatedCourseIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -155,7 +156,6 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
-  '/course': typeof AuthenticatedCourseRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/prompts': typeof AuthenticatedPromptsRoute
@@ -165,6 +165,7 @@ export interface FileRoutesByTo {
   '/checkout/return': typeof CheckoutReturnRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/course': typeof AuthenticatedCourseIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -177,7 +178,6 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
-  '/_authenticated/course': typeof AuthenticatedCourseRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/prompts': typeof AuthenticatedPromptsRoute
@@ -187,6 +187,7 @@ export interface FileRoutesById {
   '/checkout/return': typeof CheckoutReturnRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -199,7 +200,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin'
     | '/checkout'
-    | '/course'
     | '/dashboard'
     | '/progress'
     | '/prompts'
@@ -209,6 +209,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/builders/funnel'
     | '/builders/product'
+    | '/course/'
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -219,7 +220,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin'
     | '/checkout'
-    | '/course'
     | '/dashboard'
     | '/progress'
     | '/prompts'
@@ -229,6 +229,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/builders/funnel'
     | '/builders/product'
+    | '/course'
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
   id:
@@ -240,7 +241,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/admin'
     | '/_authenticated/checkout'
-    | '/_authenticated/course'
     | '/_authenticated/dashboard'
     | '/_authenticated/progress'
     | '/_authenticated/prompts'
@@ -250,6 +250,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
+    | '/_authenticated/course/'
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -350,13 +351,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/course': {
-      id: '/_authenticated/course'
-      path: '/course'
-      fullPath: '/course'
-      preLoaderRoute: typeof AuthenticatedCourseRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/checkout': {
       id: '/_authenticated/checkout'
       path: '/checkout'
@@ -369,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/course/': {
+      id: '/_authenticated/course/'
+      path: '/course'
+      fullPath: '/course/'
+      preLoaderRoute: typeof AuthenticatedCourseIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/builders/product': {
@@ -394,30 +395,17 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/course/$moduleSlug/$lessonSlug': {
       id: '/_authenticated/course/$moduleSlug/$lessonSlug'
-      path: '/$moduleSlug/$lessonSlug'
+      path: '/course/$moduleSlug/$lessonSlug'
       fullPath: '/course/$moduleSlug/$lessonSlug'
       preLoaderRoute: typeof AuthenticatedCourseModuleSlugLessonSlugRouteImport
-      parentRoute: typeof AuthenticatedCourseRoute
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
-interface AuthenticatedCourseRouteChildren {
-  AuthenticatedCourseModuleSlugLessonSlugRoute: typeof AuthenticatedCourseModuleSlugLessonSlugRoute
-}
-
-const AuthenticatedCourseRouteChildren: AuthenticatedCourseRouteChildren = {
-  AuthenticatedCourseModuleSlugLessonSlugRoute:
-    AuthenticatedCourseModuleSlugLessonSlugRoute,
-}
-
-const AuthenticatedCourseRouteWithChildren =
-  AuthenticatedCourseRoute._addFileChildren(AuthenticatedCourseRouteChildren)
-
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
-  AuthenticatedCourseRoute: typeof AuthenticatedCourseRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedPromptsRoute: typeof AuthenticatedPromptsRoute
@@ -426,12 +414,13 @@ interface AuthenticatedRouteChildren {
   AuthenticatedWorkflowsRoute: typeof AuthenticatedWorkflowsRoute
   AuthenticatedBuildersFunnelRoute: typeof AuthenticatedBuildersFunnelRoute
   AuthenticatedBuildersProductRoute: typeof AuthenticatedBuildersProductRoute
+  AuthenticatedCourseIndexRoute: typeof AuthenticatedCourseIndexRoute
+  AuthenticatedCourseModuleSlugLessonSlugRoute: typeof AuthenticatedCourseModuleSlugLessonSlugRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
-  AuthenticatedCourseRoute: AuthenticatedCourseRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedPromptsRoute: AuthenticatedPromptsRoute,
@@ -440,6 +429,9 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWorkflowsRoute: AuthenticatedWorkflowsRoute,
   AuthenticatedBuildersFunnelRoute: AuthenticatedBuildersFunnelRoute,
   AuthenticatedBuildersProductRoute: AuthenticatedBuildersProductRoute,
+  AuthenticatedCourseIndexRoute: AuthenticatedCourseIndexRoute,
+  AuthenticatedCourseModuleSlugLessonSlugRoute:
+    AuthenticatedCourseModuleSlugLessonSlugRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -458,3 +450,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

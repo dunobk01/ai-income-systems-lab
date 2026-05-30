@@ -11,7 +11,7 @@ type Lesson = { id: string; slug: string; title: string; module_id: string; orde
 
 const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
 
-export const Route = createFileRoute("/_authenticated/course")({
+export const Route = createFileRoute("/_authenticated/course/")({
   head: () => ({ meta: [{ title: "Course — AI Income Systems Lab" }] }),
   component: CoursePage,
 });
