@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/prompts")({
 });
 
 function PromptsPage() {
-  const { user, profile } = useAuth();
+  const { user, profile, isAdmin } = useAuth();
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [savedIds, setSavedIds] = useState<Record<string, string>>({});
