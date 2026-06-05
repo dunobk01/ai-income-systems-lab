@@ -21,7 +21,7 @@ const tierOk = (t?: string, isAdmin?: boolean) => isAdmin === true || t === "bui
 type Plan = Awaited<ReturnType<typeof generateProductPlan>>;
 
 function ProductBuilder() {
-  const { profile } = useAuth();
+  const { profile, isAdmin } = useAuth();
   const fn = useServerFn(generateProductPlan);
   const [form, setForm] = useState({
     niche: "Solo coaches who want more leads from LinkedIn",
