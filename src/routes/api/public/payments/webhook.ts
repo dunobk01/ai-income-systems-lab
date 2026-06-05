@@ -14,24 +14,18 @@ const TIER_LABEL: Record<string, string> = {
   starter_onetime: "Starter Lab",
   builder_onetime: "Builder Lab",
   pro_onetime: "Pro Systems Lab",
+  ailab_starter_onetime: "Starter Lab",
+  ailab_builder_onetime: "Builder Lab",
+  ailab_pro_onetime: "Pro Systems Lab",
 };
 
-async function sendReceiptEmail(opts: {
-  to: string;
-  productLabel: string;
-  amountCents: number;
-  currency: string;
-}) {
+async function sendEmail(opts: { to: string; subject: string; html: string }) {
   const lovableKey = process.env.LOVABLE_API_KEY;
   const resendKey = process.env.RESEND_API_KEY;
   if (!lovableKey || !resendKey) {
-    console.warn("Resend not configured, skipping receipt email");
+    console.warn("Resend not configured, skipping email");
     return;
   }
-  const amount = (opts.amountCents / 100).toLocaleString(undefined, {
-    style: "currency",
-    currency: opts.currency.toUpperCase(),
-  });
   try {
     const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
       method: "POST",
@@ -43,20 +37,64 @@ async function sendReceiptEmail(opts: {
       body: JSON.stringify({
         from: "AI Income Systems Lab <onboarding@resend.dev>",
         to: [opts.to],
-        subject: `You're in — ${opts.productLabel}`,
-        html: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
-          <h1 style="font-size:22px;margin:0 0 12px">Welcome to ${opts.productLabel} 🎉</h1>
-          <p style="color:#444;line-height:1.5">Your purchase is confirmed. Lifetime access is unlocked on your account right now.</p>
-          <p style="color:#444;line-height:1.5">Amount charged: <strong>${amount}</strong></p>
-          <p style="margin-top:24px"><a href="https://ai-income-systems.com/dashboard" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Open your dashboard</a></p>
-          <p style="color:#888;font-size:12px;margin-top:32px">Refunds available within 14 days — just reply to this email.</p>
-        </div>`,
+        subject: opts.subject,
+        html: opts.html,
       }),
     });
     if (!res.ok) console.error("Resend send failed", res.status, await res.text());
   } catch (e) {
     console.error("Resend send error", e);
   }
+}
+
+function fmtAmount(cents: number, currency: string) {
+  return (Math.abs(cents) / 100).toLocaleString(undefined, {
+    style: "currency",
+    currency: currency.toUpperCase(),
+  });
+}
+
+async function sendReceiptEmail(opts: {
+  to: string;
+  productLabel: string;
+  amountCents: number;
+  currency: string;
+}) {
+  const amount = fmtAmount(opts.amountCents, opts.currency);
+  await sendEmail({
+    to: opts.to,
+    subject: `You're in — ${opts.productLabel}`,
+    html: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
+      <h1 style="font-size:22px;margin:0 0 12px">Welcome to ${opts.productLabel} 🎉</h1>
+      <p style="color:#444;line-height:1.5">Your purchase is confirmed. Lifetime access is unlocked on your account right now.</p>
+      <p style="color:#444;line-height:1.5">Amount charged: <strong>${amount}</strong></p>
+      <p style="margin-top:24px"><a href="https://ai-income-systems.com/dashboard" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Open your dashboard</a></p>
+      <p style="color:#888;font-size:12px;margin-top:32px">Refunds available within 14 days — just reply to this email.</p>
+    </div>`,
+  });
+}
+
+async function sendRefundEmail(opts: {
+  to: string;
+  productLabel: string;
+  amountCents: number;
+  currency: string;
+  newTier: string;
+}) {
+  const amount = fmtAmount(opts.amountCents, opts.currency);
+  const tierLine = opts.newTier === "none"
+    ? `Your premium access to the Lab has been removed.`
+    : `Your account has been moved to the <strong>${opts.newTier}</strong> tier based on your remaining purchases.`;
+  await sendEmail({
+    to: opts.to,
+    subject: `Refund processed — ${opts.productLabel}`,
+    html: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
+      <h1 style="font-size:22px;margin:0 0 12px">Your refund is processed</h1>
+      <p style="color:#444;line-height:1.5">We've refunded <strong>${amount}</strong> for <strong>${opts.productLabel}</strong>. It typically lands back on your card within 5–10 business days.</p>
+      <p style="color:#444;line-height:1.5">${tierLine} If you're still signed in, refresh the page or sign out and back in to see the change.</p>
+      <p style="color:#444;line-height:1.5">Questions or want to come back later? Just reply to this email — we're here.</p>
+    </div>`,
+  });
 }
 
 async function recordOneTimePurchase(session: any, env: StripeEnv) {
@@ -123,11 +161,57 @@ async function handleRefund(charge: any, env: StripeEnv) {
     console.error("charge.refunded missing payment_intent");
     return;
   }
-  await (getSupabase().from("subscriptions") as any)
+
+  // Flip the row to refunded and capture user/price/amount for the email.
+  // The subscriptions_apply_tier trigger recomputes profiles.tier from
+  // remaining non-refunded rows, so locked routes downgrade immediately.
+  const { data: updated, error: updateErr } = await (getSupabase().from("subscriptions") as any)
     .update({ status: "refunded", updated_at: new Date().toISOString() })
     .eq("stripe_subscription_id", paymentIntentId)
-    .eq("environment", env);
-  // Trigger apply_subscription_tier recomputes profile.tier from remaining valid rows.
+    .eq("environment", env)
+    .select("user_id, price_id, amount_cents, currency")
+    .maybeSingle();
+
+  if (updateErr) {
+    console.error("Failed to mark subscription refunded", updateErr);
+    return;
+  }
+  if (!updated) {
+    console.warn("No subscription row matched refunded charge", paymentIntentId);
+    return;
+  }
+
+  // Read the new effective tier (post-trigger) and the user's email so the
+  // notification can tell them exactly what changed.
+  const [{ data: profile }, { data: authUser }] = await Promise.all([
+    (getSupabase().from("profiles") as any)
+      .select("tier")
+      .eq("user_id", updated.user_id)
+      .maybeSingle(),
+    (getSupabase().auth as any).admin.getUserById(updated.user_id),
+  ]);
+
+  const email =
+    authUser?.user?.email ??
+    charge.billing_details?.email ??
+    charge.receipt_email ??
+    null;
+
+  if (!email) {
+    console.warn("Refund processed but no email found for user", updated.user_id);
+    return;
+  }
+
+  const refundedCents = charge.amount_refunded ?? updated.amount_cents ?? 0;
+  const currency = (charge.currency ?? updated.currency ?? "usd").toLowerCase();
+
+  await sendRefundEmail({
+    to: email,
+    productLabel: TIER_LABEL[updated.price_id] ?? "your plan",
+    amountCents: refundedCents,
+    currency,
+    newTier: profile?.tier ?? "none",
+  });
 }
 
 async function handle(req: Request, env: StripeEnv) {

@@ -62,6 +62,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Live-sync profile.tier when the webhook updates it (purchase or refund),
+  // so locked routes unlock/relock without a manual refresh.
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel(`profile-tier-${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "profiles", filter: `user_id=eq.${user.id}` },
+        () => { void loadProfile(user.id); },
+      )
+      .subscribe();
+    return () => { void supabase.removeChannel(channel); };
+  }, [user]);
+
   const value: AuthContextValue = {
     user,
     session,
