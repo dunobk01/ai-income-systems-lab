@@ -13,11 +13,11 @@ export const Route = createFileRoute("/_authenticated/builders/funnel")({
   component: FunnelBuilder,
 });
 
-const tierOk = (t?: string) => t === "builder" || t === "pro";
+const tierOk = (t?: string, isAdmin?: boolean) => isAdmin === true || t === "builder" || t === "pro";
 type Plan = Awaited<ReturnType<typeof generateFunnelPlan>>;
 
 function FunnelBuilder() {
-  const { profile } = useAuth();
+  const { profile, isAdmin } = useAuth();
   const fn = useServerFn(generateFunnelPlan);
   const [form, setForm] = useState({
     offer: "A 4-week group coaching cohort that gets coaches 10 LinkedIn leads/week",
@@ -29,7 +29,7 @@ function FunnelBuilder() {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  if (!tierOk(profile?.tier)) return <LockedView title="Sales Funnel Builder" />;
+  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="Sales Funnel Builder" />;
 
   const submit = async () => {
     setLoading(true); setError(null); setPlan(null);
