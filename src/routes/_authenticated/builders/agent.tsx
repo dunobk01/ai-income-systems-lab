@@ -23,7 +23,7 @@ export const Route = createFileRoute("/_authenticated/builders/agent")({
   component: AgentBuilder,
 });
 
-const tierOk = (t?: string) => t === "pro";
+const tierOk = (t?: string, isAdmin?: boolean) => isAdmin === true || t === "pro";
 type GenResult = Awaited<ReturnType<typeof generateAgentSpec>>;
 type Spec = Omit<GenResult, "id">;
 type HistoryItem = { id: string; title: string | null; created_at: string; updated_at: string };
