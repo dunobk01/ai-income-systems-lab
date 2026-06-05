@@ -9,7 +9,10 @@ type Tier = "starter" | "builder" | "pro";
 type Module = { id: string; slug: string; title: string; summary: string | null; required_tier: Tier; order_index: number; is_preview: boolean };
 type Lesson = { id: string; slug: string; title: string; module_id: string; order_index: number; duration_minutes: number | null };
 
-const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
+// Monthly subscribers get full curriculum access — treat them as having any
+// required curriculum tier. Builder/Pro-exclusive surfaces are gated elsewhere.
+const hasCurriculumAccess = (tier?: string, isAdmin?: boolean) =>
+  isAdmin === true || tier === "monthly" || tier === "starter" || tier === "builder" || tier === "pro";
 
 export const Route = createFileRoute("/_authenticated/course/")({
   head: () => ({
@@ -63,7 +66,7 @@ function CoursePage() {
     })();
   }, [user]);
 
-  const userRank = isAdmin ? 3 : tierRank[profile?.tier ?? "none"];
+  const canAccessAll = hasCurriculumAccess(profile?.tier, isAdmin);
   const totalLessons = lessons.length;
   const completedCount = completed.size;
   const pct = totalLessons ? Math.round((completedCount / totalLessons) * 100) : 0;
@@ -88,7 +91,7 @@ function CoursePage() {
       <div className="mt-8 space-y-4">
         {modules.map((m, i) => {
           const moduleLessons = lessons.filter((l) => l.module_id === m.id);
-          const locked = userRank < tierRank[m.required_tier] && !m.is_preview;
+          const locked = !canAccessAll && !m.is_preview;
           const doneInMod = moduleLessons.filter((l) => completed.has(l.id)).length;
           return (
             <section key={m.id} className="glass rounded-2xl overflow-hidden">
@@ -100,7 +103,7 @@ function CoursePage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h2 className="font-semibold">{m.title}</h2>
                     <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-white/15">{m.required_tier}</Badge>
-                    {m.is_preview && userRank < tierRank[m.required_tier] && (
+                    {m.is_preview && !canAccessAll && (
                       <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free preview</Badge>
                     )}
                     {locked && <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground"><Lock className="h-3 w-3" /> Locked</span>}
@@ -144,8 +147,8 @@ function CoursePage() {
               </div>
               {locked && (
                 <div className="bg-white/5 px-6 py-3 text-xs text-muted-foreground flex items-center justify-between">
-                  <span>Unlock this module by upgrading to {m.required_tier}.</span>
-                  <Link to="/pricing" className="text-[color:var(--brand)] hover:underline">View pricing →</Link>
+                  <span>Unlock this module — start All-Access Monthly ($14.99/mo) or grab lifetime access.</span>
+                  <Link to="/pricing" className="text-[color:var(--brand)] hover:underline">See plans →</Link>
                 </div>
               )}
             </section>
