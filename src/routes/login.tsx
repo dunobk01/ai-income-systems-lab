@@ -16,7 +16,17 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/login")({
   validateSearch: searchSchema,
-  head: () => ({ meta: [{ title: "Log in — AI Income Systems Lab" }] }),
+  head: () => ({
+    meta: [
+      { title: "Log in — AI Income Systems Lab" },
+      { name: "description", content: "Log in to your AI Income Systems Lab account to access the course, prompt library, and AI builders." },
+      { property: "og:title", content: "Log in — AI Income Systems Lab" },
+      { property: "og:description", content: "Log in to your AI Income Systems Lab account." },
+      { property: "og:url", content: "https://ai-income-systems.com/login" },
+      { name: "robots", content: "noindex" },
+    ],
+    links: [{ rel: "canonical", href: "https://ai-income-systems.com/login" }],
+  }),
   component: LoginPage,
 });
 
