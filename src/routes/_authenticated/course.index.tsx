@@ -71,7 +71,7 @@ function CoursePage() {
       <div className="mt-8 space-y-4">
         {modules.map((m, i) => {
           const moduleLessons = lessons.filter((l) => l.module_id === m.id);
-          const locked = userRank < tierRank[m.required_tier];
+          const locked = userRank < tierRank[m.required_tier] && !m.is_preview;
           const doneInMod = moduleLessons.filter((l) => completed.has(l.id)).length;
           return (
             <section key={m.id} className="glass rounded-2xl overflow-hidden">
