@@ -6,6 +6,8 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { CohortCountdown } from "@/components/cohort-countdown";
+import { LeadCapture } from "@/components/lead-capture";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,17 +37,17 @@ const builds = [
 ];
 
 const modules = [
-  { n: "01", title: "AI Money Foundations", lessons: 6 },
-  { n: "02", title: "Prompt Mastery", lessons: 9 },
-  { n: "03", title: "ChatGPT for Execution", lessons: 8 },
-  { n: "04", title: "Claude for Strategy", lessons: 8 },
-  { n: "05", title: "Perplexity for Research", lessons: 7 },
-  { n: "06", title: "Lovable App & Funnel Builder", lessons: 9 },
-  { n: "07", title: "Digital Product Factory", lessons: 9 },
-  { n: "08", title: "Sales Funnel Builder", lessons: 8 },
-  { n: "09", title: "n8n Automation Lab", lessons: 11 },
-  { n: "10", title: "Local Business AI Service Kit", lessons: 7 },
-  { n: "11", title: "Launch Your First Income System", lessons: 8 },
+  { n: "01", title: "AI Money Foundations", lessons: 6, outcome: "Pick a niche, an offer type, and a 90-day income target you can actually hit." },
+  { n: "02", title: "Prompt Mastery", lessons: 9, outcome: "Write reusable prompts that produce expert-level output on the first try." },
+  { n: "03", title: "ChatGPT for Execution", lessons: 8, outcome: "Use ChatGPT as your daily operator for content, copy, and customer work." },
+  { n: "04", title: "Claude for Strategy", lessons: 8, outcome: "Plan offers, products, and launches with long-context reasoning that doesn't drift." },
+  { n: "05", title: "Perplexity for Research", lessons: 7, outcome: "Validate niches, audiences, and competitors in minutes — with sources." },
+  { n: "06", title: "Lovable App & Funnel Builder", lessons: 9, outcome: "Ship a real landing page, micro-SaaS, or funnel without writing code." },
+  { n: "07", title: "Digital Product Factory", lessons: 9, outcome: "Produce and package a digital product (ebook, template pack, mini-course) you can sell this week." },
+  { n: "08", title: "Sales Funnel Builder", lessons: 8, outcome: "Map lead magnet → landing → tripwire → upsell and write every page that converts." },
+  { n: "09", title: "n8n Automation Lab", lessons: 11, outcome: "Build workflows that deliver products, follow up with buyers, and repurpose content on autopilot." },
+  { n: "10", title: "Local Business AI Service Kit", lessons: 7, outcome: "Sell a productized AI service (audits, content, automations) to local clients for $500–$2k." },
+  { n: "11", title: "Launch Your First Income System", lessons: 8, outcome: "Combine product + funnel + automation into a live offer in 7 days." },
 ];
 
 const audience = [
@@ -101,11 +103,14 @@ export default function LandingPage() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
             <Button asChild size="lg" variant="brand" className="h-12 px-7 text-base">
-              <Link to="/signup">Start Learning <ArrowRight className="h-4 w-4" /></Link>
+              <Link to="/signup">Build My First Income System <ArrowRight className="h-4 w-4" /></Link>
             </Button>
             <Button asChild size="lg" variant="glass" className="h-12 px-7 text-base">
-              <a href="#curriculum">View Curriculum</a>
+              <a href="#curriculum">See What You'll Build</a>
             </Button>
+          </div>
+          <div className="mt-6 flex justify-center">
+            <CohortCountdown compact />
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
             {["ChatGPT", "Claude", "Perplexity", "Lovable", "n8n"].map((t) => (
@@ -181,10 +186,13 @@ export default function LandingPage() {
         </div>
         <div className="glass-strong rounded-2xl overflow-hidden divide-y divide-white/5">
           {modules.map((m) => (
-            <div key={m.n} className="flex items-center gap-5 px-5 sm:px-7 py-4 hover:bg-white/5 transition">
-              <span className="text-xs font-mono text-muted-foreground w-8">{m.n}</span>
-              <span className="flex-1 font-medium">{m.title}</span>
-              <span className="text-xs text-muted-foreground">{m.lessons} lessons</span>
+            <div key={m.n} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 px-5 sm:px-7 py-4 hover:bg-white/5 transition">
+              <div className="flex items-center gap-3 sm:w-56 shrink-0">
+                <span className="text-xs font-mono text-muted-foreground w-8">{m.n}</span>
+                <span className="font-medium">{m.title}</span>
+              </div>
+              <span className="flex-1 text-sm text-muted-foreground">{m.outcome}</span>
+              <span className="text-xs text-muted-foreground shrink-0">{m.lessons} lessons</span>
             </div>
           ))}
         </div>
@@ -227,6 +235,11 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* LEAD CAPTURE */}
+      <section className="mx-auto max-w-5xl px-4 sm:px-6 py-12">
+        <LeadCapture source="landing-mid" />
+      </section>
+
       {/* PRICING TEASER */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="glass-strong rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
@@ -247,8 +260,11 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
-          <Button asChild variant="brand" size="lg" className="mt-8 h-12 px-7">
-            <Link to="/pricing">See full pricing <ArrowRight className="h-4 w-4" /></Link>
+          <div className="mt-6 flex justify-center">
+            <CohortCountdown />
+          </div>
+          <Button asChild variant="brand" size="lg" className="mt-6 h-12 px-7">
+            <Link to="/pricing">Get Instant Access <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
       </section>
@@ -285,7 +301,7 @@ export default function LandingPage() {
             Join AI Income Systems Lab and build your first real offer in the next 7 days.
           </p>
           <Button asChild size="lg" variant="brand" className="mt-7 h-12 px-8">
-            <Link to="/signup">Start Learning <ArrowRight className="h-4 w-4" /></Link>
+            <Link to="/signup">Build My First Income System <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
       </section>
