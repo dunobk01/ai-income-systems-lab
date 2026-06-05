@@ -103,11 +103,14 @@ export default function LandingPage() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
             <Button asChild size="lg" variant="brand" className="h-12 px-7 text-base">
-              <Link to="/signup">Start Learning <ArrowRight className="h-4 w-4" /></Link>
+              <Link to="/signup">Build My First Income System <ArrowRight className="h-4 w-4" /></Link>
             </Button>
             <Button asChild size="lg" variant="glass" className="h-12 px-7 text-base">
-              <a href="#curriculum">View Curriculum</a>
+              <a href="#curriculum">See What You'll Build</a>
             </Button>
+          </div>
+          <div className="mt-6 flex justify-center">
+            <CohortCountdown compact />
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
             {["ChatGPT", "Claude", "Perplexity", "Lovable", "n8n"].map((t) => (
