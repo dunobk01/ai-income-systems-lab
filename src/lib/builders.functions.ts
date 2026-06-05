@@ -203,12 +203,75 @@ Be specific to the user's domain — never generic.`;
     });
 
     const { supabase, userId } = context;
-    await supabase.from("agent_specs").insert({
-      user_id: userId,
-      title: experimental_output.name,
-      inputs: data,
-      output: experimental_output,
-    });
+    const { data: saved, error: saveErr } = await supabase
+      .from("agent_specs")
+      .insert({
+        user_id: userId,
+        title: experimental_output.name,
+        inputs: data,
+        output: experimental_output,
+      })
+      .select("id")
+      .single();
+    if (saveErr) throw new Error(saveErr.message);
 
-    return experimental_output;
+    return { ...experimental_output, id: saved.id as string };
+  });
+
+export const listAgentSpecs = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase } = context;
+    const { data, error } = await supabase
+      .from("agent_specs")
+      .select("id,title,created_at,updated_at")
+      .order("updated_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error(error.message);
+    return data;
+  });
+
+export const getAgentSpec = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const { data: row, error } = await supabase
+      .from("agent_specs")
+      .select("id,title,inputs,output,created_at,updated_at")
+      .eq("id", data.id)
+      .single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const updateAgentSpec = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z.object({
+      id: z.string().uuid(),
+      title: z.string().min(1).max(200).optional(),
+      output: z.record(z.string(), z.unknown()).optional(),
+    }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const patch: { title?: string; output?: unknown; updated_at: string } = {
+      updated_at: new Date().toISOString(),
+    };
+    if (data.title !== undefined) patch.title = data.title;
+    if (data.output !== undefined) patch.output = data.output;
+    const { error } = await supabase.from("agent_specs").update(patch as never).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteAgentSpec = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const { error } = await supabase.from("agent_specs").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
