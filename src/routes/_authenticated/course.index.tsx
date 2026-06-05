@@ -12,7 +12,24 @@ type Lesson = { id: string; slug: string; title: string; module_id: string; orde
 const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
 
 export const Route = createFileRoute("/_authenticated/course/")({
-  head: () => ({ meta: [{ title: "Course — AI Income Systems Lab" }] }),
+  head: () => ({
+    meta: [
+      { title: "Course — AI Income Systems Lab" },
+      { name: "description", content: "11 modules teaching you to build digital products, funnels, automations, and AI agents you can actually sell." },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: "AI Income Systems Lab",
+          description: "Master ChatGPT, Claude, Perplexity, Lovable, and n8n to build digital products, sales funnels, automations, and AI agents you can actually sell.",
+          provider: { "@type": "Organization", name: "AI Income Systems Lab", url: "https://ai-income-systems.com" },
+        }),
+      },
+    ],
+  }),
   component: CoursePage,
 });
 

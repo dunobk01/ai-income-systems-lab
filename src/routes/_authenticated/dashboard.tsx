@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — AI Income Systems Lab" }] }),
+  head: () => ({
+    meta: [
+      { title: "Dashboard — AI Income Systems Lab" },
+      { name: "description", content: "Your AI Income Systems Lab dashboard — continue the course, open the prompt library, and launch the AI builders." },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: DashboardPage,
 });
 
