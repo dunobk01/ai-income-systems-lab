@@ -173,7 +173,7 @@ function PricingPage() {
                   </span>
                 )}
                 {!t.featured && <span className="text-xs uppercase tracking-wider text-muted-foreground">{t.tag}</span>}
-                <h3 className="mt-2 text-xl font-bold">{t.name}</h3>
+                <h2 className="mt-2 text-xl font-bold">{t.name}</h2>
                 <p className="mt-1 text-xs text-muted-foreground">{t.bestFor}</p>
                 <div className="mt-4 flex items-baseline gap-1">
                   <span className="text-5xl font-black">${t.price}</span>
