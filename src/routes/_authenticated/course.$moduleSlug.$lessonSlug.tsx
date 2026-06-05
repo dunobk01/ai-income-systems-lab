@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 type Tier = "starter" | "builder" | "pro";
-type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number };
+type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number; is_preview: boolean };
 type Lesson = {
   id: string; slug: string; title: string; module_id: string;
   content: string | null; action_steps: string | null;
