@@ -12,7 +12,28 @@ export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing — AI Income Systems Lab" },
-      { name: "description", content: "Three tiers, one-time payment, lifetime access. Pick the level that fits your goals." },
+      { name: "description", content: "Three tiers, one-time payment, lifetime access. Starter ($29), Builder ($79), or Pro ($149) — pick the level that fits your goals." },
+      { property: "og:title", content: "Pricing — AI Income Systems Lab" },
+      { property: "og:description", content: "Three tiers, one-time payment, lifetime access. Starter, Builder, and Pro labs to learn AI and ship real income systems." },
+      { property: "og:url", content: "https://ai-income-systems.com/pricing" },
+    ],
+    links: [{ rel: "canonical", href: "https://ai-income-systems.com/pricing" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: "AI Income Systems Lab",
+          description: "Course + interactive builders teaching AI-powered digital products, funnels, and automations.",
+          brand: { "@type": "Brand", name: "AI Income Systems Lab" },
+          offers: [
+            { "@type": "Offer", name: "Starter Lab", price: "29", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Builder Lab", price: "79", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Pro Systems Lab", price: "149", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+          ],
+        }),
+      },
     ],
   }),
   component: PricingPage,
