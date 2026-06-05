@@ -161,11 +161,57 @@ async function handleRefund(charge: any, env: StripeEnv) {
     console.error("charge.refunded missing payment_intent");
     return;
   }
-  await (getSupabase().from("subscriptions") as any)
+
+  // Flip the row to refunded and capture user/price/amount for the email.
+  // The subscriptions_apply_tier trigger recomputes profiles.tier from
+  // remaining non-refunded rows, so locked routes downgrade immediately.
+  const { data: updated, error: updateErr } = await (getSupabase().from("subscriptions") as any)
     .update({ status: "refunded", updated_at: new Date().toISOString() })
     .eq("stripe_subscription_id", paymentIntentId)
-    .eq("environment", env);
-  // Trigger apply_subscription_tier recomputes profile.tier from remaining valid rows.
+    .eq("environment", env)
+    .select("user_id, price_id, amount_cents, currency")
+    .maybeSingle();
+
+  if (updateErr) {
+    console.error("Failed to mark subscription refunded", updateErr);
+    return;
+  }
+  if (!updated) {
+    console.warn("No subscription row matched refunded charge", paymentIntentId);
+    return;
+  }
+
+  // Read the new effective tier (post-trigger) and the user's email so the
+  // notification can tell them exactly what changed.
+  const [{ data: profile }, { data: authUser }] = await Promise.all([
+    (getSupabase().from("profiles") as any)
+      .select("tier")
+      .eq("user_id", updated.user_id)
+      .maybeSingle(),
+    (getSupabase().auth as any).admin.getUserById(updated.user_id),
+  ]);
+
+  const email =
+    authUser?.user?.email ??
+    charge.billing_details?.email ??
+    charge.receipt_email ??
+    null;
+
+  if (!email) {
+    console.warn("Refund processed but no email found for user", updated.user_id);
+    return;
+  }
+
+  const refundedCents = charge.amount_refunded ?? updated.amount_cents ?? 0;
+  const currency = (charge.currency ?? updated.currency ?? "usd").toLowerCase();
+
+  await sendRefundEmail({
+    to: email,
+    productLabel: TIER_LABEL[updated.price_id] ?? "your plan",
+    amountCents: refundedCents,
+    currency,
+    newTier: profile?.tier ?? "none",
+  });
 }
 
 async function handle(req: Request, env: StripeEnv) {
