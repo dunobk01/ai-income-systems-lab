@@ -48,7 +48,7 @@ async function sendReceiptEmail(opts: {
           <h1 style="font-size:22px;margin:0 0 12px">Welcome to ${opts.productLabel} 🎉</h1>
           <p style="color:#444;line-height:1.5">Your purchase is confirmed. Lifetime access is unlocked on your account right now.</p>
           <p style="color:#444;line-height:1.5">Amount charged: <strong>${amount}</strong></p>
-          <p style="margin-top:24px"><a href="https://ai-income-systems-lab.lovable.app/dashboard" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Open your dashboard</a></p>
+          <p style="margin-top:24px"><a href="https://ai-income-systems.com/dashboard" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Open your dashboard</a></p>
           <p style="color:#888;font-size:12px;margin-top:32px">Refunds available within 14 days — just reply to this email.</p>
         </div>`,
       }),
