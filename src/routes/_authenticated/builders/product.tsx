@@ -34,7 +34,7 @@ function ProductBuilder() {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  if (!tierOk(profile?.tier)) {
+  if (!tierOk(profile?.tier, isAdmin)) {
     return <LockedView title="Digital Product Builder" />;
   }
 
