@@ -40,7 +40,7 @@ export function SiteHeader() {
                 <Link to="/login" search={{ redirect: pathname }}>Log in</Link>
               </Button>
               <Button asChild variant="brand" size="sm">
-                <Link to="/signup">Start Learning</Link>
+                <Link to="/signup">Get Instant Access</Link>
               </Button>
             </>
           )}
