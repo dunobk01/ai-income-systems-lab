@@ -26,6 +26,7 @@ const nav = [
   { label: "n8n Workflows", to: "/workflows", icon: Workflow },
   { label: "Product Builder", to: "/builders/product", icon: Package },
   { label: "Funnel Builder", to: "/builders/funnel", icon: Megaphone },
+  { label: "Agent Generator", to: "/builders/agent", icon: Bot },
   { label: "Progress", to: "/progress", icon: BarChart3 },
 ];
 
