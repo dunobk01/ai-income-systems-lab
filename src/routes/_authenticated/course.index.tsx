@@ -83,6 +83,9 @@ function CoursePage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h2 className="font-semibold">{m.title}</h2>
                     <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-white/15">{m.required_tier}</Badge>
+                    {m.is_preview && userRank < tierRank[m.required_tier] && (
+                      <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free preview</Badge>
+                    )}
                     {locked && <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground"><Lock className="h-3 w-3" /> Locked</span>}
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">{m.summary}</p>
