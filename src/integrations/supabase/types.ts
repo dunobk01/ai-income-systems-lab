@@ -14,24 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      _lesson_content_staging: {
-        Row: {
-          action_steps: string
-          content: string
-          id: string
-        }
-        Insert: {
-          action_steps: string
-          content: string
-          id: string
-        }
-        Update: {
-          action_steps?: string
-          content?: string
-          id?: string
-        }
-        Relationships: []
-      }
       courses: {
         Row: {
           created_at: string
