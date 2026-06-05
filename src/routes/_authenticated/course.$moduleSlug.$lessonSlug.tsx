@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/course/$moduleSlug/$lesson
 
 function LessonPage() {
   const { moduleSlug, lessonSlug } = Route.useParams();
-  const { user, profile } = useAuth();
+  const { user, profile, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [module, setModule] = useState<Module | null>(null);
   const [lesson, setLesson] = useState<Lesson | null>(null);
