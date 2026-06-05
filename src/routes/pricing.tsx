@@ -237,8 +237,8 @@ function PricingPage() {
               </thead>
               <tbody>
                 {compare.map((s) => (
-                  <>
-                    <tr key={s.section} className="bg-black/20">
+                  <Fragment key={s.section}>
+                    <tr className="bg-black/20">
                       <td colSpan={4} className="px-5 py-2 text-[11px] uppercase tracking-wider text-muted-foreground">{s.section}</td>
                     </tr>
                     {s.rows.map((r) => (
@@ -249,7 +249,7 @@ function PricingPage() {
                         <td className="px-3 py-3 text-center"><Cell v={r.pro} /></td>
                       </tr>
                     ))}
-                  </>
+                  </Fragment>
                 ))}
               </tbody>
             </table>
