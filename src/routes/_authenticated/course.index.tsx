@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/course/")({
 });
 
 function CoursePage() {
-  const { profile, user } = useAuth();
+  const { profile, user, isAdmin } = useAuth();
   const [modules, setModules] = useState<Module[]>([]);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
