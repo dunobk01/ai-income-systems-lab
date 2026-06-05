@@ -28,6 +28,8 @@ import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenti
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
 import { Route as AuthenticatedBuildersAgentRouteImport } from './routes/_authenticated/builders/agent'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as AuthenticatedCourseModuleSlugLessonSlugRouteImport } from './routes/_authenticated/course.$moduleSlug.$lessonSlug'
 
@@ -129,6 +131,16 @@ const AuthenticatedBuildersAgentRoute =
     path: '/builders/agent',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -163,6 +175,8 @@ export interface FileRoutesByFullPath {
   '/course/': typeof AuthenticatedCourseIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -185,6 +199,8 @@ export interface FileRoutesByTo {
   '/course': typeof AuthenticatedCourseIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -209,6 +225,8 @@ export interface FileRoutesById {
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -233,6 +251,8 @@ export interface FileRouteTypes {
     | '/course/'
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -255,6 +275,8 @@ export interface FileRouteTypes {
     | '/course'
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   id:
     | '__root__'
     | '/'
@@ -278,6 +300,8 @@ export interface FileRouteTypes {
     | '/_authenticated/course/'
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -289,6 +313,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -426,6 +452,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBuildersAgentRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -489,7 +529,19 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
