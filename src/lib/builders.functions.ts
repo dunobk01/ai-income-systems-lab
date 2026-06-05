@@ -101,7 +101,20 @@ Be specific. Use real-sounding copy in the audience's voice, not generic marketi
       model,
       experimental_output: Output.object({ schema: funnelSchema }),
       prompt,
+    });
+
+    const { supabase, userId } = context;
+    await supabase.from("funnel_plans").insert({
+      user_id: userId,
+      title: data.offer.slice(0, 80),
+      inputs: data,
+      output: experimental_output,
+    });
+
+    return experimental_output;
   });
+
+
 
 const agentInput = z.object({
   prompt: z.string().min(10).max(4000),
