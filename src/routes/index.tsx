@@ -260,8 +260,11 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
-          <Button asChild variant="brand" size="lg" className="mt-8 h-12 px-7">
-            <Link to="/pricing">See full pricing <ArrowRight className="h-4 w-4" /></Link>
+          <div className="mt-6 flex justify-center">
+            <CohortCountdown />
+          </div>
+          <Button asChild variant="brand" size="lg" className="mt-6 h-12 px-7">
+            <Link to="/pricing">Get Instant Access <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
       </section>
