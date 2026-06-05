@@ -47,7 +47,7 @@ function SettingsPage() {
       id: activeMonthly.id,
       status: activeMonthly.status,
       current_period_end: activeMonthly.current_period_end,
-      cancel_at_period_end: activeMonthly.cancel_at_period_end,
+      cancel_at_period_end: activeMonthly.cancel_at_period_end ?? false,
     } : null);
   };
 
