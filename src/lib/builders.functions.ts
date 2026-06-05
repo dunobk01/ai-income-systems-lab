@@ -101,7 +101,105 @@ Be specific. Use real-sounding copy in the audience's voice, not generic marketi
       model,
       experimental_output: Output.object({ schema: funnelSchema }),
       prompt,
+  });
+
+const agentInput = z.object({
+  prompt: z.string().min(10).max(4000),
+  platform: z.enum(["chatgpt", "claude", "code"]).default("claude"),
+  goal: z.string().min(2).max(300).optional(),
+});
+
+const agentSchema = z.object({
+  name: z.string(),
+  one_liner: z.string(),
+  job_to_be_done: z.string(),
+  target_user: z.string(),
+  roles: z.array(z.object({
+    name: z.string(),
+    purpose: z.string(),
+    responsibilities: z.array(z.string()).min(2).max(6),
+  })).min(1).max(4),
+  tools: z.array(z.object({
+    name: z.string(),
+    description: z.string(),
+    when_to_use: z.string(),
+    when_not_to_use: z.string(),
+    input_schema: z.string(),
+    output_shape: z.string(),
+  })).min(2).max(8),
+  memory: z.object({
+    short_term: z.string(),
+    working: z.string(),
+    long_term: z.string(),
+  }),
+  skills: z.array(z.object({
+    name: z.string(),
+    description: z.string(),
+    when_to_trigger: z.string(),
+  })).min(1).max(5),
+  system_prompt: z.string(),
+  output_contract: z.string(),
+  guardrails: z.array(z.string()).min(3).max(8),
+  step_budget: z.number().int().min(3).max(40),
+  acceptance_tests: z.array(z.object({
+    name: z.string(),
+    input: z.string(),
+    expected: z.string(),
+    pass_criteria: z.string(),
+  })).min(5).max(10),
+  next_steps: z.array(z.string()).min(3).max(6),
+});
+
+export const generateAgentSpec = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => agentInput.parse(d))
+  .handler(async ({ data, context }) => {
+    const key = process.env.LOVABLE_API_KEY;
+    if (!key) throw new Error("AI is not configured. Please contact support.");
+    const gateway = createLovableAiGatewayProvider(key);
+    const model = gateway("google/gemini-3-flash-preview");
+
+    const prompt = `You are a senior AI agent architect. A user has a rough prompt or idea. Turn it into a complete, shippable agent specification — the kind that can be handed to a developer or pasted into ChatGPT/Claude/an SDK and actually run.
+
+Source prompt / idea from user:
+"""
+${data.prompt}
+"""
+
+Target platform: ${data.platform}
+Stated goal (optional): ${data.goal ?? "(infer from prompt)"}
+
+Produce an opinionated, specific spec. No fluff. Include:
+- Clear roles (specialist sub-agents only if the job actually needs them; otherwise a single role is fine)
+- 2–8 well-designed tools — each with crisp when-to-use and when-NOT-to-use, an input schema (TypeScript-style string), and a deterministic output shape
+- Memory layers (state "none" for layers not needed)
+- Skills (capability bundles the agent loads on demand) — at least one, with a description that doubles as the retrieval trigger
+- A full, paste-ready system prompt that includes identity, operating procedure, tool policy, output contract, guardrails, and step budget
+- An explicit output contract (the exact final-message shape)
+- 3–8 guardrails, written as enforceable rules
+- A sane step budget
+- 5–10 acceptance tests covering happy path, edges, adversarial, and known-bad. Each test has input, expected behavior, and pass criteria.
+- 3–6 concrete next steps to implement on the chosen platform.
+
+Be specific to the user's domain — never generic.`;
+
+    const { experimental_output } = await generateText({
+      model,
+      experimental_output: Output.object({ schema: agentSchema }),
+      prompt,
     });
+
+    const { supabase, userId } = context;
+    await supabase.from("agent_specs").insert({
+      user_id: userId,
+      title: experimental_output.name,
+      inputs: data,
+      output: experimental_output,
+    });
+
+    return experimental_output;
+  });
+
 
     const { supabase, userId } = context;
     await supabase.from("funnel_plans").insert({
