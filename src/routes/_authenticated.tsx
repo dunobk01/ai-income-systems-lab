@@ -2,8 +2,9 @@ import { Link, Outlet, createFileRoute, useNavigate, useRouterState } from "@tan
 import { useEffect } from "react";
 import {
   LayoutDashboard, BookOpen, Sparkles, Wrench, Workflow, Package,
-  Megaphone, BarChart3, Settings, Shield, LogOut, ChevronLeft, Menu,
+  Megaphone, BarChart3, Settings, Shield, LogOut, ChevronLeft, Menu, Bot,
 } from "lucide-react";
+
 import { useAuth } from "@/lib/auth-context";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
