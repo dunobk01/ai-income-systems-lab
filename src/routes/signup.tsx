@@ -67,6 +67,11 @@ function SignupPage() {
     if (result.error) toast.error("Google sign-up failed");
   };
 
+  const onApple = async () => {
+    const result = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + postAuthTo });
+    if (result.error) toast.error("Apple sign-up failed");
+  };
+
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="hidden lg:flex relative items-center justify-center p-12 overflow-hidden">
@@ -93,9 +98,14 @@ function SignupPage() {
             Have one? <Link to="/login" className="text-foreground hover:underline">Log in</Link>
           </p>
 
-          <Button onClick={onGoogle} variant="glass" className="mt-6 w-full h-11">
-            <GoogleIcon /> Continue with Google
-          </Button>
+          <div className="mt-6 grid gap-2">
+            <Button onClick={onGoogle} variant="glass" className="w-full h-11">
+              <GoogleIcon /> Continue with Google
+            </Button>
+            <Button onClick={onApple} variant="glass" className="w-full h-11">
+              <AppleIcon /> Continue with Apple
+            </Button>
+          </div>
 
           <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
             <div className="h-px flex-1 bg-white/10" /> or <div className="h-px flex-1 bg-white/10" />
@@ -135,6 +145,14 @@ function GoogleIcon() {
       <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
       <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35 26.7 36 24 36c-5.3 0-9.7-3.4-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
       <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C41.6 35.8 44 30.3 44 24c0-1.3-.1-2.4-.4-3.5z"/>
+    </svg>
+  );
+}
+
+function AppleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
+      <path d="M16.365 1.43c0 1.14-.42 2.22-1.18 3.02-.81.87-2.13 1.55-3.21 1.46-.13-1.12.41-2.25 1.13-2.97.81-.82 2.22-1.43 3.26-1.51zM20.5 17.49c-.56 1.28-.83 1.85-1.55 2.98-1.01 1.58-2.43 3.55-4.19 3.57-1.57.02-1.97-1.02-4.1-1-2.13.01-2.57 1.02-4.14 1-1.76-.02-3.11-1.8-4.12-3.38C-.4 16.84-.7 11.5 1.96 8.7c1.18-1.25 3.04-2.04 4.79-2.04 1.78 0 2.9 1 4.37 1 1.43 0 2.3-1 4.36-1 1.56 0 3.21.85 4.39 2.31-3.86 2.12-3.23 7.63.63 8.52z"/>
     </svg>
   );
 }
