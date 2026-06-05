@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Fragment } from "react";
-import { Check, Sparkles, ArrowRight, X as XIcon } from "lucide-react";
+import { z } from "zod";
+import { Check, Sparkles, ArrowRight, X as XIcon, Calendar } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
@@ -9,12 +10,13 @@ import { LeadCapture } from "@/components/lead-capture";
 import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/pricing")({
+  validateSearch: z.object({ expired: z.coerce.boolean().optional() }),
   head: () => ({
     meta: [
       { title: "Pricing — AI Income Systems Lab" },
-      { name: "description", content: "Three tiers, one-time payment, lifetime access. Starter ($29), Builder ($79), or Pro ($149) — pick the level that fits your goals." },
+      { name: "description", content: "All-Access Monthly at $14.99/mo, or one-time Starter ($29), Builder ($79), Pro ($149) — lifetime access. Pick the level that fits your goals." },
       { property: "og:title", content: "Pricing — AI Income Systems Lab" },
-      { property: "og:description", content: "Three tiers, one-time payment, lifetime access. Starter, Builder, and Pro labs to learn AI and ship real income systems." },
+      { property: "og:description", content: "Monthly membership or one-time lifetime. Three lifetime tiers plus a flexible monthly plan." },
       { property: "og:url", content: "https://ai-income-systems.com/pricing" },
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/pricing" }],
@@ -28,6 +30,7 @@ export const Route = createFileRoute("/pricing")({
           description: "Course + interactive builders teaching AI-powered digital products, funnels, and automations.",
           brand: { "@type": "Brand", name: "AI Income Systems Lab" },
           offers: [
+            { "@type": "Offer", name: "All-Access Monthly", price: "14.99", priceCurrency: "USD", priceSpecification: { "@type": "UnitPriceSpecification", price: "14.99", priceCurrency: "USD", billingDuration: "P1M" }, url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
             { "@type": "Offer", name: "Starter Lab", price: "29", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
             { "@type": "Offer", name: "Builder Lab", price: "79", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
             { "@type": "Offer", name: "Pro Systems Lab", price: "149", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
@@ -101,7 +104,7 @@ const tiers: Tier[] = [
   },
 ];
 
-const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
+const tierRank: Record<string, number> = { none: 0, monthly: 0, starter: 1, builder: 2, pro: 3 };
 
 type Row = { label: string; starter: boolean | string; builder: boolean | string; pro: boolean | string };
 const compare: { section: string; rows: Row[] }[] = [
@@ -149,22 +152,32 @@ function Cell({ v }: { v: boolean | string }) {
 
 function PricingPage() {
   const { user, profile } = useAuth();
-  const currentRank = tierRank[profile?.tier ?? "none"];
+  const { expired } = Route.useSearch();
+  const currentTier = profile?.tier ?? "none";
+  const currentRank = tierRank[currentTier];
+  const hasOneTime = currentTier === "starter" || currentTier === "builder" || currentTier === "pro";
+  const isMonthly = currentTier === "monthly";
   const ctaTo = user ? "/checkout" : "/signup";
+
   return (
     <div className="min-h-screen">
       <SiteHeader />
       <section className="relative">
         <div className="absolute inset-0 -z-10 bg-hero" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-10 text-center">
+          {expired && (
+            <div className="mx-auto mb-6 max-w-2xl rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-sm text-amber-100">
+              <strong className="font-semibold">Your membership has ended.</strong> Resubscribe to All-Access Monthly anytime, or grab lifetime access below.
+            </div>
+          )}
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Lifetime access · No subscriptions
+            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Two ways to learn · Monthly or lifetime
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl font-black tracking-tight">
             Pick your <span className="text-gradient">level</span>
           </h1>
           <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-            One-time payment. Free upgrades inside your tier. Cohort pricing closes monthly.
+            Start monthly and cancel anytime — or own it forever with a one-time payment. Cohort pricing closes monthly.
           </p>
           <div className="mt-6 flex justify-center">
             <CohortCountdown label="Current cohort pricing closes in" />
@@ -172,12 +185,73 @@ function PricingPage() {
         </div>
       </section>
 
+      {/* MONTHLY — hidden for users who already own a one-time tier */}
+      {!hasOneTime && (
+        <section className="mx-auto max-w-4xl px-4 sm:px-6 pb-10">
+          <div className="relative rounded-3xl glass-strong p-7 sm:p-8 ring-brand overflow-hidden">
+            <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
+            <span
+              className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold text-background px-3 py-1 rounded-full"
+              style={{ background: "var(--gradient-brand)" }}
+            >
+              ★ Most Flexible
+            </span>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-[color:var(--brand-2)]" />
+                  <h2 className="text-2xl font-bold">All-Access Monthly</h2>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Full curriculum access · Cancel anytime · No builders or bonus tools.
+                </p>
+                <ul className="mt-4 grid sm:grid-cols-2 gap-y-2 gap-x-6 text-sm">
+                  <li className="flex items-start gap-2"><Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" /><span>All 11 modules · 90+ lessons</span></li>
+                  <li className="flex items-start gap-2"><Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" /><span>Progress tracking + notes</span></li>
+                  <li className="flex items-start gap-2"><Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" /><span>Cancel anytime from Settings</span></li>
+                  <li className="flex items-start gap-2"><Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" /><span>Upgrade to lifetime anytime</span></li>
+                </ul>
+              </div>
+              <div className="md:text-right shrink-0">
+                <div className="flex items-baseline gap-1 md:justify-end">
+                  <span className="text-5xl font-black">$14.99</span>
+                  <span className="text-sm text-muted-foreground">/month</span>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">Less than 2 months of Starter</p>
+                {isMonthly ? (
+                  <Button disabled variant="glass" className="mt-4 h-11 w-full md:w-auto opacity-70 cursor-default">
+                    Current plan
+                  </Button>
+                ) : (
+                  <Button asChild variant="brand" className="mt-4 h-11 w-full md:w-auto">
+                    <Link to={ctaTo} search={{ tier: "monthly" }}>
+                      Start membership <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* DIVIDER */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-2 pb-6">
+        <div className="flex items-center gap-4">
+          <div className="h-px flex-1 bg-white/10" />
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">
+            Or own it forever — one-time payment
+          </p>
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
+      </section>
+
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-10">
         <div className="grid gap-6 lg:grid-cols-3">
           {tiers.map((t) => {
             const tierR = tierRank[t.tier];
-            const isCurrent = user && currentRank === tierR;
-            const isIncluded = user && currentRank > tierR;
+            const isCurrent = user && currentTier === t.tier;
+            const isIncluded = user && hasOneTime && currentRank > tierR;
             return (
               <div
                 key={t.name}
@@ -232,7 +306,7 @@ function PricingPage() {
         </div>
 
         <p className="mt-8 text-center text-xs text-muted-foreground">
-          Prices in USD. Stripe-secured checkout. Refunds available within 14 days, no questions asked.
+          Prices in USD. Stripe-secured checkout. One-time tiers include a 14-day refund window. Monthly: cancel anytime.
         </p>
       </section>
 
@@ -276,6 +350,9 @@ function PricingPage() {
             </table>
           </div>
         </div>
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          All-Access Monthly includes the full course (all 11 modules · 90+ lessons) but no builders or templates — those stay exclusive to lifetime Builder &amp; Pro.
+        </p>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-20">
