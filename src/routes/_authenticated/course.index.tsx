@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
 
 type Tier = "starter" | "builder" | "pro";
-type Module = { id: string; slug: string; title: string; summary: string | null; required_tier: Tier; order_index: number };
+type Module = { id: string; slug: string; title: string; summary: string | null; required_tier: Tier; order_index: number; is_preview: boolean };
 type Lesson = { id: string; slug: string; title: string; module_id: string; order_index: number; duration_minutes: number | null };
 
 const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
