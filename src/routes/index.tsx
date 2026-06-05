@@ -301,7 +301,7 @@ export default function LandingPage() {
             Join AI Income Systems Lab and build your first real offer in the next 7 days.
           </p>
           <Button asChild size="lg" variant="brand" className="mt-7 h-12 px-8">
-            <Link to="/signup">Start Learning <ArrowRight className="h-4 w-4" /></Link>
+            <Link to="/signup">Build My First Income System <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
       </section>
