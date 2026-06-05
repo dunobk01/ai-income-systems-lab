@@ -71,7 +71,7 @@ function LessonPage() {
     })();
   }, [moduleSlug, lessonSlug, user]);
 
-  const userRank = tierRank[profile?.tier ?? "none"];
+  const userRank = isAdmin ? 3 : tierRank[profile?.tier ?? "none"];
   const locked = module ? (userRank < tierRank[module.required_tier] && !module.is_preview) : false;
 
   const idx = useMemo(() => siblings.findIndex((l) => l.id === lesson?.id), [siblings, lesson]);
