@@ -186,10 +186,13 @@ export default function LandingPage() {
         </div>
         <div className="glass-strong rounded-2xl overflow-hidden divide-y divide-white/5">
           {modules.map((m) => (
-            <div key={m.n} className="flex items-center gap-5 px-5 sm:px-7 py-4 hover:bg-white/5 transition">
-              <span className="text-xs font-mono text-muted-foreground w-8">{m.n}</span>
-              <span className="flex-1 font-medium">{m.title}</span>
-              <span className="text-xs text-muted-foreground">{m.lessons} lessons</span>
+            <div key={m.n} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 px-5 sm:px-7 py-4 hover:bg-white/5 transition">
+              <div className="flex items-center gap-3 sm:w-56 shrink-0">
+                <span className="text-xs font-mono text-muted-foreground w-8">{m.n}</span>
+                <span className="font-medium">{m.title}</span>
+              </div>
+              <span className="flex-1 text-sm text-muted-foreground">{m.outcome}</span>
+              <span className="text-xs text-muted-foreground shrink-0">{m.lessons} lessons</span>
             </div>
           ))}
         </div>
