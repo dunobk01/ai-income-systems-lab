@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 type Tier = "starter" | "builder" | "pro";
-type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number };
+type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number; is_preview: boolean };
 type Lesson = {
   id: string; slug: string; title: string; module_id: string;
   content: string | null; action_steps: string | null;
@@ -45,7 +45,7 @@ function LessonPage() {
     void (async () => {
       setLoading(true); setError(null);
       try {
-        const { data: mod, error: mErr } = await supabase.from("modules").select("id, slug, title, required_tier, order_index").eq("slug", moduleSlug).maybeSingle();
+        const { data: mod, error: mErr } = await supabase.from("modules").select("id, slug, title, required_tier, order_index, is_preview").eq("slug", moduleSlug).maybeSingle();
         if (mErr) throw mErr;
         if (!mod) { setError("Module not found"); return; }
         setModule(mod as Module);
@@ -72,7 +72,7 @@ function LessonPage() {
   }, [moduleSlug, lessonSlug, user]);
 
   const userRank = tierRank[profile?.tier ?? "none"];
-  const locked = module ? userRank < tierRank[module.required_tier] : false;
+  const locked = module ? (userRank < tierRank[module.required_tier] && !module.is_preview) : false;
 
   const idx = useMemo(() => siblings.findIndex((l) => l.id === lesson?.id), [siblings, lesson]);
   const prev = idx > 0 ? siblings[idx - 1] : null;
