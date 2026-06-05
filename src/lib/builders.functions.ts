@@ -256,10 +256,12 @@ export const updateAgentSpec = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { supabase } = context;
-    const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    const patch: { title?: string; output?: unknown; updated_at: string } = {
+      updated_at: new Date().toISOString(),
+    };
     if (data.title !== undefined) patch.title = data.title;
     if (data.output !== undefined) patch.output = data.output;
-    const { error } = await supabase.from("agent_specs").update(patch).eq("id", data.id);
+    const { error } = await supabase.from("agent_specs").update(patch as never).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
