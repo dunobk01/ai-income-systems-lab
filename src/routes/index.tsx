@@ -235,6 +235,11 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* LEAD CAPTURE */}
+      <section className="mx-auto max-w-5xl px-4 sm:px-6 py-12">
+        <LeadCapture source="landing-mid" />
+      </section>
+
       {/* PRICING TEASER */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="glass-strong rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
