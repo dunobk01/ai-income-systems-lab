@@ -17,10 +17,13 @@ function diff(target: Date) {
 }
 
 export function CohortCountdown({ compact = false, label = "Current cohort closes in" }: { compact?: boolean; label?: string }) {
+  const [mounted, setMounted] = useState(false);
   const [target, setTarget] = useState(nextDeadline);
-  const [t, setT] = useState(() => diff(target));
+  const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 });
 
   useEffect(() => {
+    setMounted(true);
+    setT(diff(target));
     const id = setInterval(() => {
       const next = diff(target);
       if (next.d + next.h + next.m + next.s === 0) {
@@ -33,6 +36,9 @@ export function CohortCountdown({ compact = false, label = "Current cohort close
     }, 1000);
     return () => clearInterval(id);
   }, [target]);
+
+  if (!mounted) return null;
+
 
   if (compact) {
     return (

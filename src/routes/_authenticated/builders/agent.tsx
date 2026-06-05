@@ -23,13 +23,13 @@ export const Route = createFileRoute("/_authenticated/builders/agent")({
   component: AgentBuilder,
 });
 
-const tierOk = (t?: string) => t === "pro";
+const tierOk = (t?: string, isAdmin?: boolean) => isAdmin === true || t === "pro";
 type GenResult = Awaited<ReturnType<typeof generateAgentSpec>>;
 type Spec = Omit<GenResult, "id">;
 type HistoryItem = { id: string; title: string | null; created_at: string; updated_at: string };
 
 function AgentBuilder() {
-  const { profile } = useAuth();
+  const { profile, isAdmin } = useAuth();
   const genFn = useServerFn(generateAgentSpec);
   const listFn = useServerFn(listAgentSpecs);
   const getFn = useServerFn(getAgentSpec);
@@ -56,9 +56,9 @@ function AgentBuilder() {
     }
   }, [listFn]);
 
-  useEffect(() => { if (tierOk(profile?.tier)) void refresh(); }, [profile?.tier, refresh]);
+  useEffect(() => { if (tierOk(profile?.tier, isAdmin)) void refresh(); }, [profile?.tier, isAdmin, refresh]);
 
-  if (!tierOk(profile?.tier)) return <LockedView title="Agent Generator (Pro)" />;
+  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="Agent Generator (Pro)" />;
 
   const submit = async () => {
     setLoading(true); setError(null); setSpec(null); setActiveId(null);

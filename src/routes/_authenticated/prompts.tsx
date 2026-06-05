@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/prompts")({
 });
 
 function PromptsPage() {
-  const { user, profile } = useAuth();
+  const { user, profile, isAdmin } = useAuth();
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [savedIds, setSavedIds] = useState<Record<string, string>>({});
@@ -56,7 +56,7 @@ function PromptsPage() {
   const tools = useMemo(() => ["All", ...Array.from(new Set(prompts.map((p) => p.tool)))], [prompts]);
   const cats = useMemo(() => ["All", ...Array.from(new Set(prompts.map((p) => p.category)))], [prompts]);
 
-  const userRank = tierRank[profile?.tier ?? "none"];
+  const userRank = isAdmin ? 3 : tierRank[profile?.tier ?? "none"];
 
   const filtered = prompts.filter((p) => {
     if (onlySaved && !saved.has(p.id)) return false;

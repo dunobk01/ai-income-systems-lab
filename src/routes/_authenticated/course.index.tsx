@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/course/")({
 });
 
 function CoursePage() {
-  const { profile, user } = useAuth();
+  const { profile, user, isAdmin } = useAuth();
   const [modules, setModules] = useState<Module[]>([]);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
@@ -46,7 +46,7 @@ function CoursePage() {
     })();
   }, [user]);
 
-  const userRank = tierRank[profile?.tier ?? "none"];
+  const userRank = isAdmin ? 3 : tierRank[profile?.tier ?? "none"];
   const totalLessons = lessons.length;
   const completedCount = completed.size;
   const pct = totalLessons ? Math.round((completedCount / totalLessons) * 100) : 0;

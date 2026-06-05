@@ -16,12 +16,12 @@ export const Route = createFileRoute("/_authenticated/builders/product")({
   component: ProductBuilder,
 });
 
-const tierOk = (t?: string) => t === "builder" || t === "pro";
+const tierOk = (t?: string, isAdmin?: boolean) => isAdmin === true || t === "builder" || t === "pro";
 
 type Plan = Awaited<ReturnType<typeof generateProductPlan>>;
 
 function ProductBuilder() {
-  const { profile } = useAuth();
+  const { profile, isAdmin } = useAuth();
   const fn = useServerFn(generateProductPlan);
   const [form, setForm] = useState({
     niche: "Solo coaches who want more leads from LinkedIn",
@@ -34,7 +34,7 @@ function ProductBuilder() {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  if (!tierOk(profile?.tier)) {
+  if (!tierOk(profile?.tier, isAdmin)) {
     return <LockedView title="Digital Product Builder" />;
   }
 
