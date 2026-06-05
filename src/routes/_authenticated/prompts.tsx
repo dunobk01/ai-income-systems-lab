@@ -116,7 +116,7 @@ function PromptsPage() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {filtered.map((p) => {
-          const locked = userRank < tierRank[p.required_tier];
+          const locked = userRank < tierRank[p.required_tier] && !p.is_preview;
           const isSaved = saved.has(p.id);
           return (
             <article key={p.id} className="glass rounded-2xl p-5 flex flex-col">
@@ -126,6 +126,9 @@ function PromptsPage() {
                     <Badge variant="outline" className="border-white/15 text-[10px] uppercase">{p.tool}</Badge>
                     <Badge variant="outline" className="border-white/15 text-[10px] uppercase">{p.category}</Badge>
                     <Badge variant="outline" className="border-white/15 text-[10px] uppercase">{p.required_tier}</Badge>
+                    {p.is_preview && userRank < tierRank[p.required_tier] && (
+                      <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free preview</Badge>
+                    )}
                   </div>
                   <h3 className="mt-2 font-semibold">{p.title}</h3>
                   {p.use_case && <p className="text-xs text-muted-foreground mt-1">{p.use_case}</p>}
