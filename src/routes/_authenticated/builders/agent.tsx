@@ -56,9 +56,9 @@ function AgentBuilder() {
     }
   }, [listFn]);
 
-  useEffect(() => { if (tierOk(profile?.tier)) void refresh(); }, [profile?.tier, refresh]);
+  useEffect(() => { if (tierOk(profile?.tier, isAdmin)) void refresh(); }, [profile?.tier, isAdmin, refresh]);
 
-  if (!tierOk(profile?.tier)) return <LockedView title="Agent Generator (Pro)" />;
+  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="Agent Generator (Pro)" />;
 
   const submit = async () => {
     setLoading(true); setError(null); setSpec(null); setActiveId(null);
