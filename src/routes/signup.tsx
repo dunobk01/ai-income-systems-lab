@@ -68,7 +68,9 @@ function SignupPage() {
   };
 
   const onApple = async () => {
-    const result = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + postAuthTo });
+    const result = await lovable.auth.signInWithOAuth("apple", {
+      redirect_uri: window.location.origin + (tier ? postAuthTo : "/welcome"),
+    });
     if (result.error) toast.error("Apple sign-up failed");
   };
 
