@@ -60,6 +60,11 @@ function LoginPage() {
     if (result.error) toast.error("Google sign-in failed");
   };
 
+  const onApple = async () => {
+    const result = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/dashboard" });
+    if (result.error) toast.error("Apple sign-in failed");
+  };
+
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="hidden lg:flex relative items-center justify-center p-12 overflow-hidden">
@@ -84,9 +89,14 @@ function LoginPage() {
             New here? <Link to="/signup" className="text-foreground hover:underline">Create an account</Link>
           </p>
 
-          <Button onClick={onGoogle} variant="glass" className="mt-6 w-full h-11">
-            <GoogleIcon /> Continue with Google
-          </Button>
+          <div className="mt-6 grid gap-2">
+            <Button onClick={onGoogle} variant="glass" className="w-full h-11">
+              <GoogleIcon /> Continue with Google
+            </Button>
+            <Button onClick={onApple} variant="glass" className="w-full h-11">
+              <AppleIcon /> Continue with Apple
+            </Button>
+          </div>
 
           <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
             <div className="h-px flex-1 bg-white/10" /> or <div className="h-px flex-1 bg-white/10" />
