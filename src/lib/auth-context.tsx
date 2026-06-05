@@ -9,6 +9,7 @@ type Profile = {
   display_name: string | null;
   avatar_url: string | null;
   tier: Tier;
+  onboarded_at: string | null;
 };
 
 type AuthContextValue = {
