@@ -45,7 +45,7 @@ function LessonPage() {
     void (async () => {
       setLoading(true); setError(null);
       try {
-        const { data: mod, error: mErr } = await supabase.from("modules").select("id, slug, title, required_tier, order_index").eq("slug", moduleSlug).maybeSingle();
+        const { data: mod, error: mErr } = await supabase.from("modules").select("id, slug, title, required_tier, order_index, is_preview").eq("slug", moduleSlug).maybeSingle();
         if (mErr) throw mErr;
         if (!mod) { setError("Module not found"); return; }
         setModule(mod as Module);
