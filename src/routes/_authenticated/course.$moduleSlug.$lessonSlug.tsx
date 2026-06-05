@@ -157,8 +157,8 @@ function LessonPage() {
         </div>
       )}
 
-      <article className="mt-6 glass rounded-2xl p-6 prose prose-invert max-w-none">
-        <p className="whitespace-pre-wrap leading-relaxed">{lesson.content}</p>
+      <article className="mt-6 glass rounded-2xl p-6 prose prose-invert prose-headings:mt-6 prose-headings:mb-3 prose-p:leading-relaxed prose-pre:bg-black/40 prose-pre:border prose-pre:border-white/10 max-w-none">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{lesson.content ?? ""}</ReactMarkdown>
       </article>
 
       {steps.length > 0 && (
