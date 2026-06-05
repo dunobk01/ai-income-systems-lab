@@ -29,7 +29,7 @@ type Spec = Omit<GenResult, "id">;
 type HistoryItem = { id: string; title: string | null; created_at: string; updated_at: string };
 
 function AgentBuilder() {
-  const { profile } = useAuth();
+  const { profile, isAdmin } = useAuth();
   const genFn = useServerFn(generateAgentSpec);
   const listFn = useServerFn(listAgentSpecs);
   const getFn = useServerFn(getAgentSpec);
