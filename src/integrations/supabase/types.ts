@@ -191,6 +191,7 @@ export type Database = {
           course_id: string
           created_at: string
           id: string
+          is_preview: boolean
           order_index: number
           required_tier: Database["public"]["Enums"]["subscription_tier"]
           slug: string
@@ -202,6 +203,7 @@ export type Database = {
           course_id: string
           created_at?: string
           id?: string
+          is_preview?: boolean
           order_index?: number
           required_tier?: Database["public"]["Enums"]["subscription_tier"]
           slug: string
@@ -213,6 +215,7 @@ export type Database = {
           course_id?: string
           created_at?: string
           id?: string
+          is_preview?: boolean
           order_index?: number
           required_tier?: Database["public"]["Enums"]["subscription_tier"]
           slug?: string
@@ -265,6 +268,7 @@ export type Database = {
           category: string
           created_at: string
           id: string
+          is_preview: boolean
           prompt_text: string
           required_tier: Database["public"]["Enums"]["subscription_tier"]
           title: string
@@ -276,6 +280,7 @@ export type Database = {
           category: string
           created_at?: string
           id?: string
+          is_preview?: boolean
           prompt_text: string
           required_tier?: Database["public"]["Enums"]["subscription_tier"]
           title: string
@@ -287,6 +292,7 @@ export type Database = {
           category?: string
           created_at?: string
           id?: string
+          is_preview?: boolean
           prompt_text?: string
           required_tier?: Database["public"]["Enums"]["subscription_tier"]
           title?: string
