@@ -19,7 +19,8 @@ type Lesson = {
   duration_minutes: number | null; order_index: number;
 };
 
-const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
+const hasCurriculumAccess = (tier?: string, isAdmin?: boolean) =>
+  isAdmin === true || tier === "monthly" || tier === "starter" || tier === "builder" || tier === "pro";
 
 export const Route = createFileRoute("/_authenticated/course/$moduleSlug/$lessonSlug")({
   head: () => ({ meta: [{ title: "Lesson — AI Income Systems Lab" }] }),
@@ -71,8 +72,8 @@ function LessonPage() {
     })();
   }, [moduleSlug, lessonSlug, user]);
 
-  const userRank = isAdmin ? 3 : tierRank[profile?.tier ?? "none"];
-  const locked = module ? (userRank < tierRank[module.required_tier] && !module.is_preview) : false;
+  const canAccess = hasCurriculumAccess(profile?.tier, isAdmin);
+  const locked = module ? (!canAccess && !module.is_preview) : false;
 
   const idx = useMemo(() => siblings.findIndex((l) => l.id === lesson?.id), [siblings, lesson]);
   const prev = idx > 0 ? siblings[idx - 1] : null;
@@ -125,10 +126,10 @@ function LessonPage() {
       <div className="p-10 max-w-2xl">
         <div className="glass-strong rounded-2xl p-8 text-center">
           <Lock className="h-8 w-8 mx-auto text-muted-foreground" />
-          <h1 className="mt-3 text-xl font-bold">This module is part of the {module.required_tier} tier</h1>
-          <p className="mt-2 text-sm text-muted-foreground">Upgrade to unlock this lesson and everything in {module.title}.</p>
+          <h1 className="mt-3 text-xl font-bold">Unlock the full curriculum</h1>
+          <p className="mt-2 text-sm text-muted-foreground">Start All-Access Monthly at $14.99/mo, or grab lifetime access from $29.</p>
           <div className="mt-5 flex gap-2 justify-center">
-            <Button asChild variant="brand"><Link to="/pricing">See pricing</Link></Button>
+            <Button asChild variant="brand"><Link to="/pricing">See plans</Link></Button>
             <Button asChild variant="glass"><Link to="/course">Back to course</Link></Button>
           </div>
         </div>
