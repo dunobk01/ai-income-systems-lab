@@ -11,7 +11,11 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 
 const searchSchema = z.object({
-  redirect: z.string().optional().default("/dashboard"),
+  redirect: z
+    .string()
+    .optional()
+    .default("/dashboard")
+    .transform((v) => (v.startsWith("/") && !v.startsWith("//") ? v : "/dashboard")),
 });
 
 export const Route = createFileRoute("/login")({
