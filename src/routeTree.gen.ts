@@ -9,12 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
 import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated/tools'
@@ -25,15 +27,23 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
 import { Route as AuthenticatedBuildersAgentRouteImport } from './routes/_authenticated/builders/agent'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as AuthenticatedCourseModuleSlugLessonSlugRouteImport } from './routes/_authenticated/course.$moduleSlug.$lessonSlug'
 
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -61,6 +71,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
@@ -114,6 +129,11 @@ const AuthenticatedCourseIndexRoute =
     path: '/course/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedBuildersProductRoute =
   AuthenticatedBuildersProductRouteImport.update({
     id: '/builders/product',
@@ -131,6 +151,18 @@ const AuthenticatedBuildersAgentRoute =
     id: '/builders/agent',
     path: '/builders/agent',
     getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
@@ -167,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -176,15 +209,19 @@ export interface FileRoutesByFullPath {
   '/tools': typeof AuthenticatedToolsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -192,6 +229,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -201,15 +239,19 @@ export interface FileRoutesByTo {
   '/tools': typeof AuthenticatedToolsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/course': typeof AuthenticatedCourseIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -219,6 +261,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -228,15 +271,19 @@ export interface FileRoutesById {
   '/_authenticated/tools': typeof AuthenticatedToolsRoute
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/_authenticated/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -246,6 +293,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/sitemap.xml'
+    | '/unsubscribe'
     | '/admin'
     | '/checkout'
     | '/dashboard'
@@ -255,15 +303,19 @@ export interface FileRouteTypes {
     | '/tools'
     | '/workflows'
     | '/checkout/return'
+    | '/email/unsubscribe'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
+    | '/lovable/email/suppression'
     | '/course/'
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -271,6 +323,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/sitemap.xml'
+    | '/unsubscribe'
     | '/admin'
     | '/checkout'
     | '/dashboard'
@@ -280,15 +333,19 @@ export interface FileRouteTypes {
     | '/tools'
     | '/workflows'
     | '/checkout/return'
+    | '/email/unsubscribe'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
+    | '/lovable/email/suppression'
     | '/course'
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   id:
     | '__root__'
     | '/'
@@ -297,6 +354,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/sitemap.xml'
+    | '/unsubscribe'
     | '/_authenticated/admin'
     | '/_authenticated/checkout'
     | '/_authenticated/dashboard'
@@ -306,15 +364,19 @@ export interface FileRouteTypes {
     | '/_authenticated/tools'
     | '/_authenticated/workflows'
     | '/checkout/return'
+    | '/email/unsubscribe'
     | '/_authenticated/builders/agent'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
+    | '/lovable/email/suppression'
     | '/_authenticated/course/'
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -324,15 +386,27 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
+  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
+  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -373,6 +447,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout/return': {
@@ -445,6 +526,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCourseIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/builders/product': {
       id: '/_authenticated/builders/product'
       path: '/builders/product'
@@ -465,6 +553,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/builders/agent'
       preLoaderRoute: typeof AuthenticatedBuildersAgentRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/lovable/email/queue/process': {
       id: '/lovable/email/queue/process'
@@ -548,11 +650,16 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
+  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
+  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
