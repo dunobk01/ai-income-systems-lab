@@ -17,6 +17,7 @@ const TIER_LABEL: Record<string, string> = {
   ailab_starter_onetime: "Starter Lab",
   ailab_builder_onetime: "Builder Lab",
   ailab_pro_onetime: "Pro Systems Lab",
+  ailab_monthly_subscription: "All-Access Monthly",
 };
 
 async function sendEmail(opts: { to: string; subject: string; html: string }) {
@@ -74,6 +75,34 @@ async function sendReceiptEmail(opts: {
   });
 }
 
+async function sendMonthlyWelcomeEmail(opts: { to: string; amountCents: number; currency: string }) {
+  const amount = fmtAmount(opts.amountCents, opts.currency);
+  await sendEmail({
+    to: opts.to,
+    subject: "You're in — All-Access Monthly",
+    html: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
+      <h1 style="font-size:22px;margin:0 0 12px">Welcome to All-Access Monthly 🎉</h1>
+      <p style="color:#444;line-height:1.5">Your membership is active. You have full access to all 11 modules and 90+ lessons right now.</p>
+      <p style="color:#444;line-height:1.5">Charged today: <strong>${amount}</strong>. You can cancel anytime from Settings.</p>
+      <p style="margin-top:24px"><a href="https://ai-income-systems.com/dashboard" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Open your dashboard</a></p>
+      <p style="color:#888;font-size:12px;margin-top:32px">Want lifetime access + the builder tools? <a href="https://ai-income-systems.com/pricing">See one-time plans</a>.</p>
+    </div>`,
+  });
+}
+
+async function sendMonthlyCanceledEmail(opts: { to: string; periodEndISO: string | null }) {
+  const date = opts.periodEndISO ? new Date(opts.periodEndISO).toLocaleDateString() : "the end of your current period";
+  await sendEmail({
+    to: opts.to,
+    subject: "Your membership has ended",
+    html: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
+      <h1 style="font-size:22px;margin:0 0 12px">Your All-Access Monthly membership has ended</h1>
+      <p style="color:#444;line-height:1.5">Course access ended on <strong>${date}</strong>. You can resubscribe anytime, or pick up lifetime access starting at $29.</p>
+      <p style="margin-top:24px"><a href="https://ai-income-systems.com/pricing" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">See plans</a></p>
+    </div>`,
+  });
+}
+
 async function sendRefundEmail(opts: {
   to: string;
   productLabel: string;
@@ -104,6 +133,11 @@ async function recordOneTimePurchase(session: any, env: StripeEnv) {
     console.error("checkout.session.completed missing metadata", session.id);
     return;
   }
+
+  // Subscription sessions are handled via customer.subscription.* events;
+  // skip them here so we don't double-record.
+  if (session.mode === "subscription") return;
+
   const stripe = createStripeClient(env);
   const full = await stripe.checkout.sessions.retrieve(session.id, {
     expand: ["line_items.data.price.product", "payment_intent", "customer"],
@@ -151,8 +185,89 @@ async function recordOneTimePurchase(session: any, env: StripeEnv) {
   }
 }
 
+async function getUserEmail(userId: string): Promise<string | null> {
+  try {
+    const { data } = await (getSupabase().auth as any).admin.getUserById(userId);
+    return data?.user?.email ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function handleSubscriptionUpsert(sub: any, env: StripeEnv, isNew: boolean) {
+  const userId = sub.metadata?.userId;
+  if (!userId) {
+    console.error("subscription event missing metadata.userId", sub.id);
+    return;
+  }
+  const item = sub.items?.data?.[0];
+  const priceId =
+    item?.price?.lookup_key ||
+    item?.price?.metadata?.lovable_external_id ||
+    item?.price?.id;
+  const productId = item?.price?.product;
+  const amountCents = item?.price?.unit_amount ?? 0;
+  const currency = (item?.price?.currency ?? "usd").toLowerCase();
+  const periodEnd = item?.current_period_end ?? sub.current_period_end;
+
+  const { data: existing } = await (getSupabase().from("subscriptions") as any)
+    .select("status")
+    .eq("stripe_subscription_id", sub.id)
+    .eq("environment", env)
+    .maybeSingle();
+  const wasActiveBefore = existing?.status && ["active", "trialing"].includes(existing.status as string);
+
+  await (getSupabase().from("subscriptions") as any).upsert(
+    {
+      user_id: userId,
+      stripe_subscription_id: sub.id,
+      stripe_customer_id: sub.customer,
+      product_id: productId,
+      price_id: priceId,
+      status: sub.status,
+      amount_cents: amountCents,
+      currency,
+      current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+      cancel_at_period_end: sub.cancel_at_period_end ?? false,
+      environment: env,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "stripe_subscription_id" },
+  );
+
+  // Send welcome email on first activation.
+  const becameActive = !wasActiveBefore && ["active", "trialing"].includes(sub.status);
+  if (isNew || becameActive) {
+    const email = await getUserEmail(userId);
+    if (email && priceId === "ailab_monthly_subscription") {
+      await sendMonthlyWelcomeEmail({ to: email, amountCents, currency });
+    }
+  }
+}
+
+async function handleSubscriptionDeleted(sub: any, env: StripeEnv) {
+  const periodEnd = sub.items?.data?.[0]?.current_period_end ?? sub.current_period_end;
+  const periodEndISO = periodEnd ? new Date(periodEnd * 1000).toISOString() : null;
+
+  const { data: updated } = await (getSupabase().from("subscriptions") as any)
+    .update({
+      status: "canceled",
+      cancel_at_period_end: false,
+      current_period_end: periodEndISO,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("stripe_subscription_id", sub.id)
+    .eq("environment", env)
+    .select("user_id, price_id")
+    .maybeSingle();
+
+  if (updated?.user_id && updated.price_id === "ailab_monthly_subscription") {
+    const email = await getUserEmail(updated.user_id);
+    if (email) await sendMonthlyCanceledEmail({ to: email, periodEndISO });
+  }
+}
+
 async function handleRefund(charge: any, env: StripeEnv) {
-  // charge.payment_intent is the same id we stored as stripe_subscription_id.
   const paymentIntentId =
     typeof charge.payment_intent === "string"
       ? charge.payment_intent
@@ -162,9 +277,6 @@ async function handleRefund(charge: any, env: StripeEnv) {
     return;
   }
 
-  // Flip the row to refunded and capture user/price/amount for the email.
-  // The subscriptions_apply_tier trigger recomputes profiles.tier from
-  // remaining non-refunded rows, so locked routes downgrade immediately.
   const { data: updated, error: updateErr } = await (getSupabase().from("subscriptions") as any)
     .update({ status: "refunded", updated_at: new Date().toISOString() })
     .eq("stripe_subscription_id", paymentIntentId)
@@ -181,36 +293,28 @@ async function handleRefund(charge: any, env: StripeEnv) {
     return;
   }
 
-  // Read the new effective tier (post-trigger) and the user's email so the
-  // notification can tell them exactly what changed.
-  const [{ data: profile }, { data: authUser }] = await Promise.all([
+  const [{ data: profile }, email] = await Promise.all([
     (getSupabase().from("profiles") as any)
       .select("tier")
       .eq("user_id", updated.user_id)
       .maybeSingle(),
-    (getSupabase().auth as any).admin.getUserById(updated.user_id),
+    getUserEmail(updated.user_id as string),
   ]);
 
-  const email =
-    authUser?.user?.email ??
-    charge.billing_details?.email ??
-    charge.receipt_email ??
-    null;
+  const resolvedEmail =
+    email ?? charge.billing_details?.email ?? charge.receipt_email ?? null;
 
-  if (!email) {
-    console.warn("Refund processed but no email found for user", updated.user_id);
-    return;
-  }
+  if (!resolvedEmail) return;
 
   const refundedCents = charge.amount_refunded ?? updated.amount_cents ?? 0;
   const currency = (charge.currency ?? updated.currency ?? "usd").toLowerCase();
 
   await sendRefundEmail({
-    to: email,
-    productLabel: TIER_LABEL[updated.price_id] ?? "your plan",
+    to: resolvedEmail,
+    productLabel: TIER_LABEL[updated.price_id as string] ?? "your plan",
     amountCents: refundedCents,
     currency,
-    newTier: profile?.tier ?? "none",
+    newTier: (profile?.tier as string | undefined) ?? "none",
   });
 }
 
@@ -219,6 +323,15 @@ async function handle(req: Request, env: StripeEnv) {
   switch (event.type) {
     case "checkout.session.completed":
       await recordOneTimePurchase(event.data.object, env);
+      break;
+    case "customer.subscription.created":
+      await handleSubscriptionUpsert(event.data.object, env, true);
+      break;
+    case "customer.subscription.updated":
+      await handleSubscriptionUpsert(event.data.object, env, false);
+      break;
+    case "customer.subscription.deleted":
+      await handleSubscriptionDeleted(event.data.object, env);
       break;
     case "charge.refunded":
       await handleRefund(event.data.object, env);

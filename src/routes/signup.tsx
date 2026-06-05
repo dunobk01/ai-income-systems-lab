@@ -11,7 +11,7 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 
 const searchSchema = z.object({
-  tier: z.enum(["starter", "builder", "pro"]).optional(),
+  tier: z.enum(["starter", "builder", "pro", "monthly"]).optional(),
 });
 
 export const Route = createFileRoute("/signup")({

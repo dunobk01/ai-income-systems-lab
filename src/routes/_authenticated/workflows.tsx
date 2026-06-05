@@ -3,12 +3,15 @@ import { Workflow, Copy, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Header } from "./builders/product";
+import { useAuth } from "@/lib/auth-context";
+import { Header, LockedView } from "./builders/product";
 
 export const Route = createFileRoute("/_authenticated/workflows")({
   head: () => ({ meta: [{ title: "n8n Workflows — AI Income Systems Lab" }] }),
   component: WorkflowsPage,
 });
+
+const tierOk = (t?: string, isAdmin?: boolean) => isAdmin === true || t === "builder" || t === "pro";
 
 type WF = { title: string; category: string; difficulty: "Beginner" | "Intermediate" | "Advanced"; summary: string; nodes: string[]; setup: string[]; tip: string };
 
@@ -88,6 +91,8 @@ const workflows: WF[] = [
 ];
 
 function WorkflowsPage() {
+  const { profile, isAdmin } = useAuth();
+  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="n8n Workflow Library" />;
   const copyJSON = (wf: WF) => { navigator.clipboard.writeText(JSON.stringify(wf, null, 2)); toast.success("Workflow spec copied"); };
   return (
     <div className="p-6 lg:p-10 max-w-6xl mx-auto">

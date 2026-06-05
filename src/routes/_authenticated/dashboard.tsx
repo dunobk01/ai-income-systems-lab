@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, Sparkles, Workflow, Package, Megaphone, Lock } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, BookOpen, Sparkles, Workflow, Package, Megaphone, Lock, X } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -16,20 +17,64 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 const quickStart = [
-  { to: "/course", title: "Continue the course", desc: "11 modules · 90+ lessons", icon: BookOpen },
-  { to: "/prompts", title: "Open prompt library", desc: "Browse and save prompts", icon: Sparkles },
-  { to: "/builders/product", title: "Plan a digital product", desc: "Generate an offer in minutes", icon: Package },
-  { to: "/builders/funnel", title: "Map a sales funnel", desc: "End-to-end funnel blueprint", icon: Megaphone },
-  { to: "/workflows", title: "Browse n8n workflows", desc: "Templates to copy and run", icon: Workflow },
+  { to: "/course", title: "Continue the course", desc: "11 modules · 90+ lessons", icon: BookOpen, monthlyOk: true },
+  { to: "/prompts", title: "Open prompt library", desc: "Browse and save prompts", icon: Sparkles, monthlyOk: true },
+  { to: "/builders/product", title: "Plan a digital product", desc: "Generate an offer in minutes", icon: Package, monthlyOk: false },
+  { to: "/builders/funnel", title: "Map a sales funnel", desc: "End-to-end funnel blueprint", icon: Megaphone, monthlyOk: false },
+  { to: "/workflows", title: "Browse n8n workflows", desc: "Templates to copy and run", icon: Workflow, monthlyOk: false },
 ];
+
+const BANNER_DISMISS_KEY = "ails:monthly-upgrade-banner-dismissed";
+
+function MonthlyUpgradeBanner() {
+  const [dismissed, setDismissed] = useState(true);
+  useEffect(() => {
+    setDismissed(typeof window !== "undefined" && localStorage.getItem(BANNER_DISMISS_KEY) === "1");
+  }, []);
+  const dismiss = () => {
+    localStorage.setItem(BANNER_DISMISS_KEY, "1");
+    setDismissed(true);
+  };
+  if (dismissed) return null;
+  return (
+    <div className="mb-6 relative rounded-2xl glass-strong p-5 sm:p-6 ring-brand">
+      <button
+        onClick={dismiss}
+        aria-label="Dismiss"
+        className="absolute top-3 right-3 p-1.5 rounded-md hover:bg-white/10 text-muted-foreground"
+      >
+        <X className="h-4 w-4" />
+      </button>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between pr-8">
+        <div className="min-w-0">
+          <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--brand-2)]">All-Access Monthly · $14.99/mo</p>
+          <h3 className="mt-1 font-semibold">Enjoying the course? Upgrade to lifetime.</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Builder Lab is one payment of $79 — keeps the course forever and unlocks the Product Builder, Funnel Builder, and n8n library.
+          </p>
+        </div>
+        <div className="flex gap-2 shrink-0">
+          <Button onClick={dismiss} variant="glass" size="sm">Dismiss</Button>
+          <Button asChild variant="brand" size="sm">
+            <Link to="/pricing">See upgrade options <ArrowRight className="h-4 w-4" /></Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function DashboardPage() {
   const { profile, user } = useAuth();
   const name = profile?.display_name?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "Builder";
   const tier = profile?.tier ?? "none";
+  const isMonthly = tier === "monthly";
+  const isNone = tier === "none";
 
   return (
     <div className="p-6 lg:p-10 max-w-6xl mx-auto">
+      {isMonthly && <MonthlyUpgradeBanner />}
+
       <div className="relative overflow-hidden rounded-3xl glass-strong p-8 sm:p-10">
         <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Welcome back</p>
@@ -41,7 +86,7 @@ function DashboardPage() {
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button asChild variant="brand"><Link to="/course">Open course <ArrowRight className="h-4 w-4" /></Link></Button>
-          {tier === "none" && (
+          {isNone && (
             <Button asChild variant="glass"><Link to="/pricing">Unlock full access</Link></Button>
           )}
         </div>
@@ -68,7 +113,9 @@ function DashboardPage() {
         <h2 className="text-lg font-semibold mb-4">Quick start</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {quickStart.map((q) => {
-            const locked = tier === "none" && q.to !== "/course";
+            const lockedForNone = isNone && q.to !== "/course";
+            const lockedForMonthly = isMonthly && !q.monthlyOk;
+            const locked = lockedForNone || lockedForMonthly;
             return (
               <Link
                 key={q.to}

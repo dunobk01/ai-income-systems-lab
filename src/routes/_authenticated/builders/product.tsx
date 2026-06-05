@@ -160,12 +160,20 @@ export function List({ items, ordered }: { items: string[]; ordered?: boolean })
 }
 
 export function LockedView({ title }: { title: string }) {
+  const { profile } = useAuth();
+  const monthly = profile?.tier === "monthly";
   return (
     <div className="p-10 max-w-2xl mx-auto">
       <div className="glass-strong rounded-3xl p-10 text-center">
         <Lock className="h-8 w-8 mx-auto text-muted-foreground" />
         <h1 className="mt-3 text-2xl font-bold">{title}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Available on the Builder and Pro tiers.</p>
+        {monthly ? (
+          <p className="mt-2 text-sm text-muted-foreground">
+            This tool is included in the <strong className="text-foreground">Builder Lab ($79 one-time)</strong>. Upgrade to unlock it permanently — your monthly membership doesn't include the builders.
+          </p>
+        ) : (
+          <p className="mt-2 text-sm text-muted-foreground">Available on the Builder and Pro tiers.</p>
+        )}
         <Button asChild variant="brand" className="mt-5"><Link to="/pricing">See pricing</Link></Button>
       </div>
     </div>
