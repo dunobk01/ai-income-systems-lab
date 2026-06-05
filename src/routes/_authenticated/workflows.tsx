@@ -91,6 +91,8 @@ const workflows: WF[] = [
 ];
 
 function WorkflowsPage() {
+  const { profile, isAdmin } = useAuth();
+  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="n8n Workflow Library" />;
   const copyJSON = (wf: WF) => { navigator.clipboard.writeText(JSON.stringify(wf, null, 2)); toast.success("Workflow spec copied"); };
   return (
     <div className="p-6 lg:p-10 max-w-6xl mx-auto">

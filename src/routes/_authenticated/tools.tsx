@@ -1,12 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Wrench, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Header } from "./builders/product";
+import { useAuth } from "@/lib/auth-context";
+import { Header, LockedView } from "./builders/product";
 
 export const Route = createFileRoute("/_authenticated/tools")({
   head: () => ({ meta: [{ title: "AI Tool Stack — AI Income Systems Lab" }] }),
   component: ToolsPage,
 });
+
+const tierOk = (t?: string, isAdmin?: boolean) => isAdmin === true || t === "builder" || t === "pro";
 
 type Tool = { name: string; category: string; price: string; useFor: string; whyWeRecommend: string; url: string; pairsWith: string[] };
 
@@ -26,6 +29,8 @@ const tools: Tool[] = [
 ];
 
 function ToolsPage() {
+  const { profile, isAdmin } = useAuth();
+  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="AI Tool Stack Guide" />;
   const categories = Array.from(new Set(tools.map((t) => t.category)));
   return (
     <div className="p-6 lg:p-10 max-w-6xl mx-auto">
