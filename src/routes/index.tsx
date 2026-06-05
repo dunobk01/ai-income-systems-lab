@@ -12,9 +12,15 @@ import { LeadCapture } from "@/components/lead-capture";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AI Income Systems Lab — Master AI by building real income systems" },
+      { title: "AI Income Systems Lab — Build Real AI Income Systems" },
       { name: "description", content: "Learn how to combine ChatGPT, Claude, Perplexity, Lovable, and n8n to create digital products, funnels, automations, and simple apps you can actually sell." },
+      { property: "og:title", content: "AI Income Systems Lab — Build Real AI Income Systems" },
+      { property: "og:description", content: "Learn how to combine ChatGPT, Claude, Perplexity, Lovable, and n8n to create digital products, funnels, automations, and simple apps you can actually sell." },
+      { property: "og:url", content: "https://ai-income-systems.com/" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/482ab1b5-41be-4f5f-a537-63fb59a87231" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/482ab1b5-41be-4f5f-a537-63fb59a87231" },
     ],
+    links: [{ rel: "canonical", href: "https://ai-income-systems.com/" }],
   }),
   component: LandingPage,
 });
