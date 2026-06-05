@@ -27,6 +27,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
+import { Route as AuthenticatedBuildersAgentRouteImport } from './routes/_authenticated/builders/agent'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as AuthenticatedCourseModuleSlugLessonSlugRouteImport } from './routes/_authenticated/course.$moduleSlug.$lessonSlug'
 
@@ -122,6 +123,12 @@ const AuthenticatedBuildersFunnelRoute =
     path: '/builders/funnel',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedBuildersAgentRoute =
+  AuthenticatedBuildersAgentRouteImport.update({
+    id: '/builders/agent',
+    path: '/builders/agent',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -150,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/tools': typeof AuthenticatedToolsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
@@ -171,6 +179,7 @@ export interface FileRoutesByTo {
   '/tools': typeof AuthenticatedToolsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
   '/course': typeof AuthenticatedCourseIndexRoute
@@ -194,6 +203,7 @@ export interface FileRoutesById {
   '/_authenticated/tools': typeof AuthenticatedToolsRoute
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/_authenticated/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/workflows'
     | '/checkout/return'
+    | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
     | '/course/'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/workflows'
     | '/checkout/return'
+    | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
     | '/course'
@@ -260,6 +272,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tools'
     | '/_authenticated/workflows'
     | '/checkout/return'
+    | '/_authenticated/builders/agent'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
     | '/_authenticated/course/'
@@ -406,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBuildersFunnelRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/builders/agent': {
+      id: '/_authenticated/builders/agent'
+      path: '/builders/agent'
+      fullPath: '/builders/agent'
+      preLoaderRoute: typeof AuthenticatedBuildersAgentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -432,6 +452,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedToolsRoute: typeof AuthenticatedToolsRoute
   AuthenticatedWorkflowsRoute: typeof AuthenticatedWorkflowsRoute
+  AuthenticatedBuildersAgentRoute: typeof AuthenticatedBuildersAgentRoute
   AuthenticatedBuildersFunnelRoute: typeof AuthenticatedBuildersFunnelRoute
   AuthenticatedBuildersProductRoute: typeof AuthenticatedBuildersProductRoute
   AuthenticatedCourseIndexRoute: typeof AuthenticatedCourseIndexRoute
@@ -447,6 +468,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedToolsRoute: AuthenticatedToolsRoute,
   AuthenticatedWorkflowsRoute: AuthenticatedWorkflowsRoute,
+  AuthenticatedBuildersAgentRoute: AuthenticatedBuildersAgentRoute,
   AuthenticatedBuildersFunnelRoute: AuthenticatedBuildersFunnelRoute,
   AuthenticatedBuildersProductRoute: AuthenticatedBuildersProductRoute,
   AuthenticatedCourseIndexRoute: AuthenticatedCourseIndexRoute,

@@ -2,8 +2,9 @@ import { Link, Outlet, createFileRoute, useNavigate, useRouterState } from "@tan
 import { useEffect } from "react";
 import {
   LayoutDashboard, BookOpen, Sparkles, Wrench, Workflow, Package,
-  Megaphone, BarChart3, Settings, Shield, LogOut, ChevronLeft, Menu,
+  Megaphone, BarChart3, Settings, Shield, LogOut, ChevronLeft, Menu, Bot,
 } from "lucide-react";
+
 import { useAuth } from "@/lib/auth-context";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ const nav = [
   { label: "n8n Workflows", to: "/workflows", icon: Workflow },
   { label: "Product Builder", to: "/builders/product", icon: Package },
   { label: "Funnel Builder", to: "/builders/funnel", icon: Megaphone },
+  { label: "Agent Generator", to: "/builders/agent", icon: Bot },
   { label: "Progress", to: "/progress", icon: BarChart3 },
 ];
 
