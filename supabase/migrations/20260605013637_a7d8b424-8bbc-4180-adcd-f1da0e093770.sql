@@ -1,0 +1,1 @@
+GRANT INSERT, SELECT, UPDATE, DELETE ON public._lesson_content_staging TO sandbox_exec;
