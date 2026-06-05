@@ -28,7 +28,7 @@ function CoursePage() {
     void (async () => {
       try {
         const [{ data: mods, error: mErr }, { data: lsns, error: lErr }] = await Promise.all([
-          supabase.from("modules").select("id, slug, title, summary, required_tier, order_index").order("order_index"),
+          supabase.from("modules").select("id, slug, title, summary, required_tier, order_index, is_preview").order("order_index"),
           supabase.from("lessons").select("id, slug, title, module_id, order_index, duration_minutes").order("order_index"),
         ]);
         if (mErr) throw mErr; if (lErr) throw lErr;
