@@ -212,15 +212,3 @@ Be specific to the user's domain — never generic.`;
 
     return experimental_output;
   });
-
-
-    const { supabase, userId } = context;
-    await supabase.from("funnel_plans").insert({
-      user_id: userId,
-      title: data.offer.slice(0, 80),
-      inputs: data,
-      output: experimental_output,
-    });
-
-    return experimental_output;
-  });
