@@ -4,15 +4,17 @@ import { z } from "zod";
 import { StripeEmbeddedCheckoutView } from "@/components/stripe-embedded-checkout";
 import { PaymentTestModeBanner } from "@/components/payment-test-mode-banner";
 
-const PRICE_MAP: Record<string, { name: string; price: number; priceId: string }> = {
-  starter: { name: "Starter Lab", price: 29, priceId: "ailab_starter_onetime" },
-  builder: { name: "Builder Lab", price: 79, priceId: "ailab_builder_onetime" },
-  pro: { name: "Pro Systems Lab", price: 149, priceId: "ailab_pro_onetime" },
+type PlanInfo = { name: string; price: number; priceId: string; recurring?: boolean; subline: string };
+const PRICE_MAP: Record<string, PlanInfo> = {
+  starter: { name: "Starter Lab", price: 29, priceId: "ailab_starter_onetime", subline: "One-time payment. Lifetime access. 14-day refund window." },
+  builder: { name: "Builder Lab", price: 79, priceId: "ailab_builder_onetime", subline: "One-time payment. Lifetime access. 14-day refund window." },
+  pro: { name: "Pro Systems Lab", price: 149, priceId: "ailab_pro_onetime", subline: "One-time payment. Lifetime access. 14-day refund window." },
+  monthly: { name: "All-Access Monthly", price: 14.99, priceId: "ailab_monthly_subscription", recurring: true, subline: "$14.99/month · Cancel anytime from Settings. Full curriculum access." },
 };
 
 export const Route = createFileRoute("/_authenticated/checkout")({
   validateSearch: z.object({
-    tier: z.enum(["starter", "builder", "pro"]).optional(),
+    tier: z.enum(["starter", "builder", "pro", "monthly"]).optional(),
   }),
   beforeLoad: ({ search }) => {
     if (!search.tier) throw redirect({ to: "/pricing" });
@@ -36,12 +38,13 @@ function CheckoutPage() {
           <div className="glass rounded-3xl p-6 h-fit">
             <div className="text-xs uppercase tracking-wider text-muted-foreground">Order summary</div>
             <h2 className="mt-1 text-2xl font-bold">{plan.name}</h2>
-            <p className="text-sm text-muted-foreground mt-2">
-              One-time payment. Lifetime access. 14-day refund window.
-            </p>
+            <p className="text-sm text-muted-foreground mt-2">{plan.subline}</p>
             <div className="mt-6 flex items-baseline justify-between border-t border-white/10 pt-4">
-              <span className="text-sm text-muted-foreground">Total today</span>
-              <span className="text-3xl font-black">${plan.price}</span>
+              <span className="text-sm text-muted-foreground">{plan.recurring ? "Billed today" : "Total today"}</span>
+              <span className="text-3xl font-black">
+                ${plan.price}
+                {plan.recurring && <span className="text-sm font-medium text-muted-foreground">/mo</span>}
+              </span>
             </div>
           </div>
           <StripeEmbeddedCheckoutView priceId={plan.priceId} returnUrl={returnUrl} />
