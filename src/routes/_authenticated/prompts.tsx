@@ -13,6 +13,7 @@ type Tier = "starter" | "builder" | "pro";
 type Prompt = {
   id: string; title: string; category: string; tool: string;
   use_case: string | null; prompt_text: string; required_tier: Tier;
+  is_preview: boolean;
 };
 
 const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
