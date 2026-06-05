@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/builders/product")({
   component: ProductBuilder,
 });
 
-const tierOk = (t?: string) => t === "builder" || t === "pro";
+const tierOk = (t?: string, isAdmin?: boolean) => isAdmin === true || t === "builder" || t === "pro";
 
 type Plan = Awaited<ReturnType<typeof generateProductPlan>>;
 
