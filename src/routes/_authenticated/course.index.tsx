@@ -46,7 +46,7 @@ function CoursePage() {
     })();
   }, [user]);
 
-  const userRank = tierRank[profile?.tier ?? "none"];
+  const userRank = isAdmin ? 3 : tierRank[profile?.tier ?? "none"];
   const totalLessons = lessons.length;
   const completedCount = completed.size;
   const pct = totalLessons ? Math.round((completedCount / totalLessons) * 100) : 0;
