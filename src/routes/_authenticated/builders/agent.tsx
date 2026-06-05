@@ -1,8 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
-import { Loader2, Sparkles, Bot, Copy } from "lucide-react";
-import { generateAgentSpec } from "@/lib/builders.functions";
+import { useCallback, useEffect, useState } from "react";
+import { Loader2, Sparkles, Bot, Copy, Trash2, Plus, Save, Pencil } from "lucide-react";
+import {
+  generateAgentSpec,
+  listAgentSpecs,
+  getAgentSpec,
+  updateAgentSpec,
+  deleteAgentSpec,
+} from "@/lib/builders.functions";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,11 +24,18 @@ export const Route = createFileRoute("/_authenticated/builders/agent")({
 });
 
 const tierOk = (t?: string) => t === "pro";
-type Spec = Awaited<ReturnType<typeof generateAgentSpec>>;
+type GenResult = Awaited<ReturnType<typeof generateAgentSpec>>;
+type Spec = Omit<GenResult, "id">;
+type HistoryItem = { id: string; title: string | null; created_at: string; updated_at: string };
 
 function AgentBuilder() {
   const { profile } = useAuth();
-  const fn = useServerFn(generateAgentSpec);
+  const genFn = useServerFn(generateAgentSpec);
+  const listFn = useServerFn(listAgentSpecs);
+  const getFn = useServerFn(getAgentSpec);
+  const updateFn = useServerFn(updateAgentSpec);
+  const deleteFn = useServerFn(deleteAgentSpec);
+
   const [prompt, setPrompt] = useState(
     "I want an agent that researches inbound leads from a typeform and writes a 1-page brief with company facts, 3 buying signals, the right contact title, and a personalized opener — then saves it to a Google Sheet.",
   );
@@ -30,31 +43,103 @@ function AgentBuilder() {
   const [platform, setPlatform] = useState<"claude" | "chatgpt" | "code">("claude");
   const [loading, setLoading] = useState(false);
   const [spec, setSpec] = useState<Spec | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  const refresh = useCallback(async () => {
+    try {
+      const rows = await listFn();
+      setHistory(rows as HistoryItem[]);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [listFn]);
+
+  useEffect(() => { if (tierOk(profile?.tier)) void refresh(); }, [profile?.tier, refresh]);
 
   if (!tierOk(profile?.tier)) return <LockedView title="Agent Generator (Pro)" />;
 
   const submit = async () => {
-    setLoading(true); setError(null); setSpec(null);
+    setLoading(true); setError(null); setSpec(null); setActiveId(null);
     try {
-      const result = await fn({ data: { prompt, platform, goal: goal || undefined } });
-      setSpec(result);
+      const result = await genFn({ data: { prompt, platform, goal: goal || undefined } });
+      const { id, ...rest } = result;
+      setSpec(rest);
+      setActiveId(id);
+      await refresh();
     } catch (e) {
       setError((e as Error).message ?? "Couldn't generate. Try again.");
     } finally { setLoading(false); }
   };
 
+  const load = async (id: string) => {
+    setError(null); setSpec(null); setActiveId(null);
+    try {
+      const row = await getFn({ data: { id } });
+      setSpec(row.output as Spec);
+      setActiveId(row.id);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
+  const remove = async (id: string) => {
+    if (!confirm("Delete this agent spec?")) return;
+    try {
+      await deleteFn({ data: { id } });
+      if (activeId === id) { setSpec(null); setActiveId(null); }
+      await refresh();
+      toast.success("Deleted");
+    } catch (e) { toast.error((e as Error).message); }
+  };
+
+  const saveEdits = async (next: Spec, opts?: { silent?: boolean }) => {
+    if (!activeId) return;
+    setSpec(next);
+    try {
+      await updateFn({ data: { id: activeId, title: next.name, output: next as unknown as Record<string, unknown> } });
+      if (!opts?.silent) toast.success("Saved");
+      await refresh();
+    } catch (e) { toast.error((e as Error).message); }
+  };
+
+  const newSpec = () => { setSpec(null); setActiveId(null); setError(null); };
+
   return (
-    <div className="p-6 lg:p-10 max-w-6xl mx-auto">
+    <div className="p-6 lg:p-10 max-w-7xl mx-auto">
       <Header
         icon={<Bot className="h-5 w-5" />}
         eyebrow="Pro builder"
         title="Generate Agent from Prompt"
-        subtitle="Turn a rough idea or a pro prompt into a complete agent spec — roles, tools, skills, system prompt, and acceptance tests."
+        subtitle="Turn a rough idea or a pro prompt into a complete agent spec — saved automatically so you can revisit and edit later."
       />
 
-      <div className="mt-8 grid lg:grid-cols-2 gap-6">
-        <section className="glass rounded-2xl p-6 space-y-4">
+      <div className="mt-8 grid lg:grid-cols-[260px_1fr_1fr] gap-6">
+        <aside className="glass rounded-2xl p-4 space-y-3 h-fit lg:sticky lg:top-6">
+          <div className="flex items-center justify-between">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">History</p>
+            <Button size="sm" variant="glass" onClick={newSpec}><Plus className="h-3 w-3" /> New</Button>
+          </div>
+          <div className="space-y-1 max-h-[60vh] overflow-auto pr-1">
+            {history.length === 0 && (
+              <p className="text-xs text-muted-foreground py-4 text-center">No saved specs yet.</p>
+            )}
+            {history.map((h) => (
+              <div key={h.id} className={`group flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs hover:bg-white/5 ${activeId === h.id ? "bg-white/10" : ""}`}>
+                <button onClick={() => load(h.id)} className="flex-1 text-left truncate">
+                  <div className="font-medium truncate">{h.title || "Untitled agent"}</div>
+                  <div className="text-[10px] text-muted-foreground">{new Date(h.updated_at).toLocaleDateString()}</div>
+                </button>
+                <button onClick={() => remove(h.id)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-400 p-1" aria-label="Delete">
+                  <Trash2 className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </aside>
+
+        <section className="glass rounded-2xl p-6 space-y-4 h-fit">
           <div className="space-y-1.5">
             <Label className="text-xs uppercase tracking-wider text-muted-foreground">Source prompt / idea</Label>
             <Textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={9} />
@@ -85,19 +170,26 @@ function AgentBuilder() {
             <div className="h-full grid place-items-center text-center text-sm text-muted-foreground">
               <div>
                 <Bot className="h-6 w-6 mx-auto text-[color:var(--brand)] mb-2" />
-                Your agent spec will appear here.
+                Generate a new spec or pick one from history.
               </div>
             </div>
           )}
           {loading && <div className="h-full grid place-items-center text-sm text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin" /></div>}
-          {spec && <SpecView spec={spec} />}
+          {spec && <SpecView spec={spec} editable={!!activeId} onSave={saveEdits} />}
         </section>
       </div>
     </div>
   );
 }
 
-function SpecView({ spec }: { spec: Spec }) {
+function SpecView({ spec, editable, onSave }: { spec: Spec; editable: boolean; onSave: (next: Spec) => void | Promise<void> }) {
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [editingPrompt, setEditingPrompt] = useState(false);
+  const [titleDraft, setTitleDraft] = useState(spec.name);
+  const [promptDraft, setPromptDraft] = useState(spec.system_prompt);
+
+  useEffect(() => { setTitleDraft(spec.name); setPromptDraft(spec.system_prompt); }, [spec]);
+
   const copyJson = () => {
     navigator.clipboard.writeText(JSON.stringify(spec, null, 2));
     toast.success("Full spec copied as JSON");
@@ -106,12 +198,23 @@ function SpecView({ spec }: { spec: Spec }) {
     navigator.clipboard.writeText(spec.system_prompt);
     toast.success("System prompt copied");
   };
+
   return (
     <div className="space-y-5 text-sm">
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Agent</p>
-          <h2 className="text-xl font-bold">{spec.name}</h2>
+          {editingTitle && editable ? (
+            <div className="flex gap-2 mt-1">
+              <Input value={titleDraft} onChange={(e) => setTitleDraft(e.target.value)} className="text-lg font-bold" />
+              <Button size="sm" variant="brand" onClick={() => { onSave({ ...spec, name: titleDraft }); setEditingTitle(false); }}><Save className="h-3 w-3" /></Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold">{spec.name}</h2>
+              {editable && <button onClick={() => setEditingTitle(true)} className="text-muted-foreground hover:text-foreground"><Pencil className="h-3 w-3" /></button>}
+            </div>
+          )}
           <p className="text-muted-foreground mt-1">{spec.one_liner}</p>
         </div>
         <div className="flex gap-2 shrink-0">
@@ -172,7 +275,20 @@ function SpecView({ spec }: { spec: Spec }) {
       </Block>
 
       <Block label={`System prompt (step budget: ${spec.step_budget})`}>
-        <pre className="text-xs bg-black/40 rounded-lg p-3 max-h-72 overflow-auto whitespace-pre-wrap font-mono text-foreground/85">{spec.system_prompt}</pre>
+        {editingPrompt && editable ? (
+          <div className="space-y-2">
+            <Textarea value={promptDraft} onChange={(e) => setPromptDraft(e.target.value)} rows={14} className="font-mono text-xs" />
+            <div className="flex gap-2">
+              <Button size="sm" variant="brand" onClick={() => { onSave({ ...spec, system_prompt: promptDraft }); setEditingPrompt(false); }}><Save className="h-3 w-3" /> Save</Button>
+              <Button size="sm" variant="glass" onClick={() => { setPromptDraft(spec.system_prompt); setEditingPrompt(false); }}>Cancel</Button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <pre className="text-xs bg-black/40 rounded-lg p-3 max-h-72 overflow-auto whitespace-pre-wrap font-mono text-foreground/85">{spec.system_prompt}</pre>
+            {editable && <Button size="sm" variant="glass" onClick={() => setEditingPrompt(true)}><Pencil className="h-3 w-3" /> Edit prompt</Button>}
+          </div>
+        )}
       </Block>
 
       <Block label="Output contract">
