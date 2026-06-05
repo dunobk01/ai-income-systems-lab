@@ -6,6 +6,8 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { CohortCountdown } from "@/components/cohort-countdown";
+import { LeadCapture } from "@/components/lead-capture";
 
 export const Route = createFileRoute("/")({
   head: () => ({
