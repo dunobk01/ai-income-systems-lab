@@ -73,6 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "8HOsPtjN19kPsUFU_8CGyWZ7YlB0ogYjA0pXIrNldpM" },
       { title: "AI Income Systems Lab — Learn AI by building real income systems" },
       { name: "description", content: "Master ChatGPT, Claude, Perplexity, Lovable, and n8n to build digital products, funnels, and automations you can actually sell." },
       { property: "og:title", content: "AI Income Systems Lab — Learn AI by building real income systems" },
