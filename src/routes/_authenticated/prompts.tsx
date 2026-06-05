@@ -16,7 +16,9 @@ type Prompt = {
   is_preview: boolean;
 };
 
-const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
+// Monthly subscribers see Starter prompts (part of the curriculum) but not
+// Builder/Pro prompts, which stay exclusive to the lifetime tiers.
+const tierRank: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3 };
 
 export const Route = createFileRoute("/_authenticated/prompts")({
   head: () => ({ meta: [{ title: "Prompt Library — AI Income Systems Lab" }] }),
