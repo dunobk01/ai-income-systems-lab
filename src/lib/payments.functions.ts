@@ -46,20 +46,36 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     try {
       const { userId, supabase } = context;
 
-      // Re-purchase guard: block if user already owns this tier or higher.
-      const tierRank: Record<string, number> = { none: 0, starter: 1, builder: 2, pro: 3 };
-      const priceToTier: Record<string, string> = {
+      // Tier mapping. Monthly is its own tier; one-time tiers are ranked.
+      const oneTimeRank: Record<string, number> = { starter: 1, builder: 2, pro: 3 };
+      const priceToTier: Record<string, "starter" | "builder" | "pro" | "monthly"> = {
         ailab_starter_onetime: "starter",
         ailab_builder_onetime: "builder",
         ailab_pro_onetime: "pro",
+        ailab_monthly_subscription: "monthly",
       };
       const requested = priceToTier[data.priceId];
       if (!requested) throw new Error("Unknown price");
+
       const { data: prof } = await supabase
         .from("profiles").select("tier").eq("user_id", userId).maybeSingle();
       const currentTier = (prof?.tier as string | undefined) ?? "none";
-      if ((tierRank[currentTier] ?? 0) >= tierRank[requested]) {
-        return { error: `You already have ${currentTier} access — this plan is included.` };
+
+      if (requested === "monthly") {
+        // Hide monthly for anyone with a lifetime tier OR already on monthly.
+        if (currentTier === "monthly") {
+          return { error: "You already have an active monthly membership." };
+        }
+        if (oneTimeRank[currentTier]) {
+          return { error: `You already have lifetime ${currentTier} access — the monthly plan is included.` };
+        }
+      } else {
+        // One-time tier: block if user already owns this tier or higher.
+        const wantRank = oneTimeRank[requested];
+        const haveRank = oneTimeRank[currentTier] ?? 0;
+        if (haveRank >= wantRank) {
+          return { error: `You already have ${currentTier} access — this plan is included.` };
+        }
       }
 
       const stripe = createStripeClient(data.environment);
@@ -69,6 +85,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
       if (!prices.data.length) throw new Error("Price not found");
       const stripePrice = prices.data[0];
+      const isRecurring = stripePrice.type === "recurring";
 
       const customerId = await resolveOrCreateCustomer(stripe, { email, userId });
 
@@ -77,15 +94,50 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 
       const session = await stripe.checkout.sessions.create({
         line_items: [{ price: stripePrice.id, quantity: 1 }],
-        mode: "payment",
+        mode: isRecurring ? "subscription" : "payment",
         ui_mode: "embedded_page",
         return_url: data.returnUrl,
         customer: customerId,
-        payment_intent_data: { description: product.name },
+        ...(isRecurring
+          ? { subscription_data: { metadata: { userId, priceId: data.priceId } } }
+          : { payment_intent_data: { description: product.name } }),
         metadata: { userId, priceId: data.priceId },
       });
 
       return { clientSecret: session.client_secret ?? "" };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+type CancelResult = { ok: true; periodEnd: string | null } | { error: string };
+
+export const cancelMonthlySubscription = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { environment: StripeEnv }) => data)
+  .handler(async ({ data, context }): Promise<CancelResult> => {
+    try {
+      const { userId, supabase } = context;
+      const { data: row } = await supabase
+        .from("subscriptions")
+        .select("stripe_subscription_id")
+        .eq("user_id", userId)
+        .eq("environment", data.environment)
+        .eq("price_id", "ailab_monthly_subscription")
+        .in("status", ["active", "trialing", "past_due"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!row?.stripe_subscription_id) return { error: "No active monthly membership found." };
+
+      const stripe = createStripeClient(data.environment);
+      const sub = await stripe.subscriptions.update(row.stripe_subscription_id as string, {
+        cancel_at_period_end: true,
+      });
+      const periodEnd = (sub as any).current_period_end
+        ? new Date((sub as any).current_period_end * 1000).toISOString()
+        : null;
+      return { ok: true, periodEnd };
     } catch (error) {
       return { error: getStripeErrorMessage(error) };
     }
