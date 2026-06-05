@@ -37,17 +37,17 @@ const builds = [
 ];
 
 const modules = [
-  { n: "01", title: "AI Money Foundations", lessons: 6 },
-  { n: "02", title: "Prompt Mastery", lessons: 9 },
-  { n: "03", title: "ChatGPT for Execution", lessons: 8 },
-  { n: "04", title: "Claude for Strategy", lessons: 8 },
-  { n: "05", title: "Perplexity for Research", lessons: 7 },
-  { n: "06", title: "Lovable App & Funnel Builder", lessons: 9 },
-  { n: "07", title: "Digital Product Factory", lessons: 9 },
-  { n: "08", title: "Sales Funnel Builder", lessons: 8 },
-  { n: "09", title: "n8n Automation Lab", lessons: 11 },
-  { n: "10", title: "Local Business AI Service Kit", lessons: 7 },
-  { n: "11", title: "Launch Your First Income System", lessons: 8 },
+  { n: "01", title: "AI Money Foundations", lessons: 6, outcome: "Pick a niche, an offer type, and a 90-day income target you can actually hit." },
+  { n: "02", title: "Prompt Mastery", lessons: 9, outcome: "Write reusable prompts that produce expert-level output on the first try." },
+  { n: "03", title: "ChatGPT for Execution", lessons: 8, outcome: "Use ChatGPT as your daily operator for content, copy, and customer work." },
+  { n: "04", title: "Claude for Strategy", lessons: 8, outcome: "Plan offers, products, and launches with long-context reasoning that doesn't drift." },
+  { n: "05", title: "Perplexity for Research", lessons: 7, outcome: "Validate niches, audiences, and competitors in minutes — with sources." },
+  { n: "06", title: "Lovable App & Funnel Builder", lessons: 9, outcome: "Ship a real landing page, micro-SaaS, or funnel without writing code." },
+  { n: "07", title: "Digital Product Factory", lessons: 9, outcome: "Produce and package a digital product (ebook, template pack, mini-course) you can sell this week." },
+  { n: "08", title: "Sales Funnel Builder", lessons: 8, outcome: "Map lead magnet → landing → tripwire → upsell and write every page that converts." },
+  { n: "09", title: "n8n Automation Lab", lessons: 11, outcome: "Build workflows that deliver products, follow up with buyers, and repurpose content on autopilot." },
+  { n: "10", title: "Local Business AI Service Kit", lessons: 7, outcome: "Sell a productized AI service (audits, content, automations) to local clients for $500–$2k." },
+  { n: "11", title: "Launch Your First Income System", lessons: 8, outcome: "Combine product + funnel + automation into a live offer in 7 days." },
 ];
 
 const audience = [
