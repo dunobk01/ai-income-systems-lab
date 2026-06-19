@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Mail, ArrowRight, Check, Loader2 } from "lucide-react";
+import { Mail, ArrowRight, Check, Loader2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { submitLead } from "@/lib/leads.functions";
+import kitAsset from "@/assets/ai-income-starter-kit.pdf.asset.json";
 
 type Props = {
   source: string;
@@ -66,7 +67,18 @@ export function LeadCapture({
         </form>
       </div>
       {error && <p className="mt-3 text-xs text-red-300">{error}</p>}
-      {state === "done" && <p className="mt-3 text-xs text-[color:var(--success)]">Thanks — check your inbox in the next few minutes.</p>}
+      {state === "done" && (
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3 rounded-2xl border border-[color:var(--brand-2)]/30 bg-[color:var(--brand-2)]/5 px-4 py-3">
+          <p className="text-sm text-foreground/90 flex-1">
+            <span className="text-[color:var(--success)] font-medium">You're in.</span> Grab your free AI Income Starter Kit — 10 prompts + the n8n automation blueprint.
+          </p>
+          <Button asChild variant="brand" className="h-10 whitespace-nowrap">
+            <a href={kitAsset.url} target="_blank" rel="noopener noreferrer" download>
+              <Download className="h-4 w-4" /> Download the kit
+            </a>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
