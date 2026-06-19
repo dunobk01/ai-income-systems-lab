@@ -34,7 +34,7 @@ async function syncToMailerLite(email: string, source?: string | null, leadMagne
       body: JSON.stringify({
         email,
         fields: {
-          source: source ?? undefined,
+          lead_source: source ?? undefined,
           lead_magnet: leadMagnet ?? undefined,
         },
         status: "active",
