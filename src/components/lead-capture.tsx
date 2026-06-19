@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Mail, ArrowRight, Check, Loader2 } from "lucide-react";
+import { Mail, ArrowRight, Check, Loader2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { submitLead } from "@/lib/leads.functions";
+import kitAsset from "@/assets/ai-income-starter-kit.pdf.asset.json";
 
 type Props = {
   source: string;
