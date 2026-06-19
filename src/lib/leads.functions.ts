@@ -10,14 +10,27 @@ const schema = z.object({
 async function syncToMailerLite(email: string, source?: string | null, leadMagnet?: string | null) {
   const apiKey = process.env.MAILERLITE_API_KEY;
   if (!apiKey) return;
+
+  const headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Authorization: `Bearer ${apiKey}`,
+  };
+
   try {
-    const res = await fetch("https://connect.mailerlite.com/api/subscribers", {
+    // Find the group ID for "AI-Income-Systems Leads 1"
+    const groupsRes = await fetch("https://connect.mailerlite.com/api/groups", { headers });
+    let groupId: string | undefined;
+    if (groupsRes.ok) {
+      const groupsData = (await groupsRes.json()) as { data?: Array<{ id: string; name: string }> };
+      const group = groupsData.data?.find((g) => g.name === "AI-Income-Systems Leads 1");
+      if (group) groupId = group.id;
+    }
+
+    // Create/update subscriber
+    const subscriberRes = await fetch("https://connect.mailerlite.com/api/subscribers", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
+      headers,
       body: JSON.stringify({
         email,
         fields: {
@@ -25,11 +38,12 @@ async function syncToMailerLite(email: string, source?: string | null, leadMagne
           lead_magnet: leadMagnet ?? undefined,
         },
         status: "active",
+        groups: groupId ? [groupId] : undefined,
       }),
     });
-    if (!res.ok) {
-      const body = await res.text();
-      console.error("[mailerlite] subscribe failed", res.status, body);
+    if (!subscriberRes.ok) {
+      const body = await subscriberRes.text();
+      console.error("[mailerlite] subscribe failed", subscriberRes.status, body);
     }
   } catch (err) {
     console.error("[mailerlite] subscribe error", err);
