@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { CohortCountdown } from "@/components/cohort-countdown";
 import { LeadCapture } from "@/components/lead-capture";
+import dustinPhoto from "@/assets/dustin.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -250,8 +251,8 @@ export default function LandingPage() {
       <section id="founder" className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="grid gap-10 md:grid-cols-[220px_1fr] items-start">
           <div className="mx-auto md:mx-0">
-            <div className="h-52 w-52 rounded-2xl glass-strong grid place-items-center text-5xl font-black text-gradient overflow-hidden">
-              <span className="text-6xl">D</span>
+            <div className="h-52 w-52 rounded-2xl glass-strong overflow-hidden">
+              <img src={dustinPhoto.url} alt="Dustin, creator of AI Income Systems Lab" className="h-full w-full object-cover" />
             </div>
             <p className="mt-4 text-center md:text-left text-sm font-semibold">Dustin</p>
             <p className="text-center md:text-left text-xs text-muted-foreground">Creator of AI Income Systems Lab</p>
