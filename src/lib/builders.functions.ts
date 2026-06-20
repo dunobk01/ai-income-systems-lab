@@ -188,7 +188,9 @@ const agentSchema = z.object({
 type AgentSpec = z.infer<typeof agentSchema>;
 
 const asRecord = (value: unknown): Record<string, unknown> =>
-  value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+  value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
 
 const stringifyValue = (value: unknown, fallback: string) => {
   if (typeof value === "string") return value.trim() || fallback;
