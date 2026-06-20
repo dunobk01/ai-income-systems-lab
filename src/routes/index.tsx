@@ -113,7 +113,7 @@ export default function LandingPage() {
               <Link to="/signup">Build My First Income System <ArrowRight className="h-4 w-4" /></Link>
             </Button>
             <Button asChild size="lg" variant="glass" className="h-12 px-7 text-base">
-              <a href="#curriculum">See What You'll Build</a>
+              <Link to="/curriculum">See What You'll Build</Link>
             </Button>
           </div>
           <div className="mt-6 flex justify-center">
