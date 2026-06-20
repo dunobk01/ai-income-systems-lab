@@ -248,21 +248,79 @@ export default function LandingPage() {
 
       {/* FOUNDER */}
       <section id="founder" className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
-        <div className="grid gap-10 md:grid-cols-[200px_1fr] items-center">
-          <div className="mx-auto md:mx-0 h-40 w-40 rounded-2xl glass-strong grid place-items-center text-5xl font-black text-gradient">
-            AIS
+        <div className="grid gap-10 md:grid-cols-[220px_1fr] items-start">
+          <div className="mx-auto md:mx-0">
+            <div className="h-52 w-52 rounded-2xl glass-strong grid place-items-center text-5xl font-black text-gradient overflow-hidden">
+              <span className="text-6xl">D</span>
+            </div>
+            <p className="mt-4 text-center md:text-left text-sm font-semibold">Dustin</p>
+            <p className="text-center md:text-left text-xs text-muted-foreground">Creator of AI Income Systems Lab</p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Who's behind this</p>
-            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Built by an operator, not a guru</h2>
-            <p className="mt-4 text-muted-foreground">
-              AI Income Systems Lab was built by a working creator who got tired of $2,000 "AI mastermind" upsells
-              and screenshots of fake Stripe dashboards. Every module, prompt, builder, and workflow inside this
-              course is something used in real offers — not theory pulled from a Twitter thread.
-            </p>
-            <p className="mt-3 text-muted-foreground">
-              No fake income claims. No 47-bonus stack. One course, three tiers, real systems you can actually ship.
-            </p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">I Stopped Chasing Tools. I Started Building Systems.</h2>
+
+            <div className="mt-6 space-y-4 text-muted-foreground leading-relaxed">
+              <p>
+                I've downloaded more free prompt packs than I care to admit. I've watched the tutorials, followed the gurus, and yes — I even paid for a couple of those "AI income" courses that basically just taught me how to use ChatGPT to write captions faster.
+              </p>
+              <p className="text-foreground font-medium">Cool. Love captions. Still broke.</p>
+              <p>
+                Here's what nobody was saying out loud: a single AI tool is a hammer. What you actually need is a construction crew.
+              </p>
+            </div>
+
+            <div className="mt-8 space-y-4 text-muted-foreground leading-relaxed">
+              <p>
+                Let me paint you a picture of where I was six months ago. I had ChatGPT open in one tab. Claude in another. Perplexity for research. Lovable bookmarked but barely touched. And n8n — which I'd heard was "the automation thing" — staring at me like a dare.
+              </p>
+              <p>
+                I was using all of them. Individually. For random tasks. Like hiring five specialists and then making each one work alone in a room with no Wi-Fi.
+              </p>
+              <p>
+                The results? Mediocre content. Half-finished ideas. A growing pile of "I'll get back to this" notes that I never got back to.
+              </p>
+              <p>
+                The problem wasn't the tools. The tools are genuinely incredible. The problem was that I was treating them like productivity hacks instead of <strong className="text-foreground">infrastructure</strong>.
+              </p>
+              <p>
+                That shift — from tool to system — is the whole game. And once I saw it, I couldn't unsee it.
+              </p>
+            </div>
+
+            <div className="mt-8 glass rounded-2xl p-6">
+              <p className="text-sm text-foreground font-medium mb-2">Here's what I mean in plain English:</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                ChatGPT is great at brainstorming and drafting. Claude is great at thinking through logic and refining. Perplexity pulls in real research without hallucinating half the citations. Lovable builds actual web products without you needing to code. And n8n ties them all together into automated workflows that run on a schedule, trigger on events, and don't need you babysitting them at 11pm.
+              </p>
+              <p className="mt-3 text-sm text-foreground font-medium">
+                Alone, each one is useful. Together, they're a business.
+              </p>
+            </div>
+
+            <div className="mt-8 space-y-4 text-muted-foreground leading-relaxed">
+              <p>
+                That's what I spent the last several months actually building — not content for content's sake, not more prompts to add to a folder — but full income-generating systems that use all five tools working in sequence. Systems where one tool's output becomes another tool's input. Where a workflow runs, delivers value, and generates revenue while I'm doing something else entirely. Like sleeping. Or watching football. Or, I don't know, having a life.
+              </p>
+              <p>
+                I built an online course around this — <strong className="text-foreground">AI Income Systems Lab</strong> — specifically because I kept looking for this exact thing and it didn't exist. Every course was either "here's how to use ChatGPT" or "here's how to make money online" with zero overlap between the two. Nobody was connecting the dots.
+              </p>
+              <p>
+                So I connected them myself.
+              </p>
+              <p>
+                The biggest thing I've learned in this whole process — and I mean this genuinely — is that <strong className="text-foreground">combining AI tools is exponentially more profitable than using them in isolation</strong>. Not slightly more. Not incrementally. The difference between a single AI tool and a five-tool system working together is the difference between a flashlight and stadium lighting.
+              </p>
+              <p className="text-foreground font-medium">
+                You're probably not bad at this stuff. You're just missing the wiring.
+              </p>
+            </div>
+
+            <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
+              <Button asChild size="lg" variant="brand" className="h-12 px-7 text-base">
+                <Link to="/signup">Don't Get Left Behind — Start Building Systems</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
