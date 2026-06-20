@@ -24,9 +24,9 @@ export function SiteHeader() {
         <Logo />
         <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
           {nav.map((item) => (
-            <a key={item.label} href={item.to} className="hover:text-foreground transition">
+            <Link key={item.label} to={item.to} className="hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-2">
