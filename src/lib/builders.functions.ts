@@ -130,8 +130,8 @@ const agentSchema = z.object({
   roles: z.array(z.object({
     name: z.string(),
     purpose: z.string(),
-    responsibilities: z.array(z.string()).min(2).max(6),
-  })).min(1).max(4),
+    responsibilities: z.array(z.string()),
+  })),
   tools: z.array(z.object({
     name: z.string(),
     description: z.string(),
@@ -139,7 +139,7 @@ const agentSchema = z.object({
     when_not_to_use: z.string(),
     input_schema: z.string(),
     output_shape: z.string(),
-  })).min(2).max(8),
+  })),
   memory: z.object({
     short_term: z.string(),
     working: z.string(),
@@ -149,19 +149,20 @@ const agentSchema = z.object({
     name: z.string(),
     description: z.string(),
     when_to_trigger: z.string(),
-  })).min(1).max(5),
+  })),
   system_prompt: z.string(),
   output_contract: z.string(),
-  guardrails: z.array(z.string()).min(3).max(8),
-  step_budget: z.number().int().min(3).max(40),
+  guardrails: z.array(z.string()),
+  step_budget: z.number().int(),
   acceptance_tests: z.array(z.object({
     name: z.string(),
     input: z.string(),
     expected: z.string(),
     pass_criteria: z.string(),
-  })).min(5).max(10),
-  next_steps: z.array(z.string()).min(3).max(6),
+  })),
+  next_steps: z.array(z.string()),
 });
+
 
 export const generateAgentSpec = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -200,7 +201,10 @@ Be specific to the user's domain — never generic.`;
       model,
       experimental_output: Output.object({ schema: agentSchema }),
       prompt,
+      maxOutputTokens: 8000,
+      maxRetries: 2,
     });
+
 
     const { supabase, userId } = context;
     const { data: saved, error: saveErr } = await supabase
