@@ -153,13 +153,21 @@ export default function LandingPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {builds.map((b) => (
-            <div key={b.title} className="glass rounded-2xl p-6 transition hover:bg-white/8">
+            <Link
+              key={b.title}
+              to="/systems/$slug"
+              params={{ slug: b.slug }}
+              className="group glass rounded-2xl p-6 transition hover:bg-white/8 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)] text-left"
+            >
               <div className="grid h-10 w-10 place-items-center rounded-lg" style={{ background: "var(--gradient-soft)" }}>
                 <b.icon className="h-5 w-5 text-[color:var(--brand)]" />
               </div>
-              <h3 className="mt-4 font-semibold">{b.title}</h3>
+              <h3 className="mt-4 font-semibold group-hover:text-[color:var(--brand)] transition-colors">{b.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{b.desc}</p>
-            </div>
+              <span className="mt-4 inline-flex items-center gap-1 text-xs text-[color:var(--brand)]">
+                Explore this system <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
           ))}
         </div>
       </section>
