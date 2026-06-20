@@ -326,15 +326,25 @@ Produce an opinionated, specific spec. No fluff. Include:
 - 5–10 acceptance tests covering happy path, edges, adversarial, and known-bad. Each test has input, expected behavior, and pass criteria.
 - 3–6 concrete next steps to implement on the chosen platform.
 
-Be specific to the user's domain — never generic.`;
+Be specific to the user's domain — never generic.
 
-    const { experimental_output } = await generateText({
-      model,
-      experimental_output: Output.object({ schema: agentSchema }),
-      prompt,
-      maxOutputTokens: 8000,
-      maxRetries: 2,
-    });
+Return ONLY one valid JSON object. Do not wrap it in markdown. Do not add commentary.
+Use exactly these top-level keys: name, one_liner, job_to_be_done, target_user, roles, tools, memory, skills, system_prompt, output_contract, guardrails, step_budget, acceptance_tests, next_steps.
+Each role needs name, purpose, responsibilities. Each tool needs name, description, when_to_use, when_not_to_use, input_schema, output_shape. Each skill needs name, description, when_to_trigger. Memory needs short_term, working, long_term. Each acceptance test needs name, input, expected, pass_criteria.`;
+
+    let output: AgentSpec;
+    try {
+      const result = await generateText({
+        model,
+        prompt,
+        maxOutputTokens: 12000,
+        maxRetries: 2,
+      });
+      output = normalizeAgentSpec(extractJsonObject(result.text), data);
+    } catch (error) {
+      console.error("Agent spec generation failed", error);
+      throw new Error("The agent generator returned an incomplete response. Please try again with a slightly shorter prompt or more specific goal.");
+    }
 
 
     const { supabase, userId } = context;
@@ -342,15 +352,15 @@ Be specific to the user's domain — never generic.`;
       .from("agent_specs")
       .insert({
         user_id: userId,
-        title: experimental_output.name,
+        title: output.name,
         inputs: data,
-        output: experimental_output,
+        output,
       })
       .select("id")
       .single();
     if (saveErr) throw new Error(saveErr.message);
 
-    return { ...experimental_output, id: saved.id as string };
+    return { ...output, id: saved.id as string };
   });
 
 export const listAgentSpecs = createServerFn({ method: "GET" })
