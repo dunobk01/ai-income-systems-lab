@@ -240,11 +240,15 @@ function extractJsonObject(text: string) {
     }
     if (char === "}") {
       depth -= 1;
-      if (depth === 0 && start !== -1) return JSON.parse(cleaned.slice(start, i + 1));
+      if (depth === 0 && start !== -1) {
+        return JSON.parse(cleaned.slice(start, i + 1));
+      }
     }
   }
 
-  throw new Error("The AI response was not valid JSON. Please try again with a shorter or clearer prompt.");
+  throw new Error(
+    "The AI response was not valid JSON. Please try again with a shorter or clearer prompt.",
+  );
 }
 
 function normalizeAgentSpec(raw: unknown, input: z.infer<typeof agentInput>): AgentSpec {
