@@ -35,12 +35,12 @@ const tools = [
 ];
 
 const builds = [
-  { title: "Digital products", desc: "Ebooks, templates, prompt packs, mini-courses you can sell on day one.", icon: Layers },
-  { title: "Sales funnels", desc: "Lead magnet → landing page → tripwire → upsell — mapped end to end.", icon: Rocket },
-  { title: "Simple SaaS MVPs", desc: "Working web apps with auth, payments, and a real customer use case.", icon: Bot },
-  { title: "Automations", desc: "n8n workflows that handle delivery, follow-up, and content repurposing.", icon: Zap },
-  { title: "Local AI services", desc: "Productized offers for small businesses — audits, mockups, automations.", icon: Wand2 },
-  { title: "Content systems", desc: "Repeatable AI content pipelines for Pinterest, TikTok, Shorts, and SEO.", icon: Sparkles },
+  { slug: "digital-products", title: "Digital products", desc: "Ebooks, templates, prompt packs, mini-courses you can sell on day one.", icon: Layers },
+  { slug: "sales-funnels", title: "Sales funnels", desc: "Lead magnet → landing page → tripwire → upsell — mapped end to end.", icon: Rocket },
+  { slug: "simple-saas-mvps", title: "Simple SaaS MVPs", desc: "Working web apps with auth, payments, and a real customer use case.", icon: Bot },
+  { slug: "automations", title: "Automations", desc: "n8n workflows that handle delivery, follow-up, and content repurposing.", icon: Zap },
+  { slug: "local-ai-services", title: "Local AI services", desc: "Productized offers for small businesses — audits, mockups, automations.", icon: Wand2 },
+  { slug: "content-systems", title: "Content systems", desc: "Repeatable AI content pipelines for Pinterest, TikTok, Shorts, and SEO.", icon: Sparkles },
 ];
 
 const modules = [
