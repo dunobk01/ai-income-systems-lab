@@ -18,7 +18,10 @@ const productSchema = z.object({
   target_buyer: z.string(),
   top_pains: z.array(z.string()).min(3).max(5),
   deliverables: z.array(z.string()).min(3).max(8),
-  outline: z.array(z.object({ chapter: z.string(), summary: z.string() })).min(4).max(8),
+  outline: z
+    .array(z.object({ chapter: z.string(), summary: z.string() }))
+    .min(4)
+    .max(8),
   positioning: z.string(),
   three_week_plan: z.array(z.string()).min(3).max(3),
   launch_hooks: z.array(z.string()).min(3).max(5),
@@ -72,8 +75,22 @@ const funnelSchema = z.object({
   positioning_line: z.string(),
   ad_hooks: z.array(z.string()).min(5).max(8),
   lead_magnet: z.object({ name: z.string(), description: z.string(), format: z.string() }),
-  landing_page: z.object({ headline: z.string(), subhead: z.string(), sections: z.array(z.string()).min(5) }),
-  email_sequence: z.array(z.object({ day: z.number(), subject: z.string(), purpose: z.string(), body_outline: z.string() })).min(5).max(5),
+  landing_page: z.object({
+    headline: z.string(),
+    subhead: z.string(),
+    sections: z.array(z.string()).min(5),
+  }),
+  email_sequence: z
+    .array(
+      z.object({
+        day: z.number(),
+        subject: z.string(),
+        purpose: z.string(),
+        body_outline: z.string(),
+      }),
+    )
+    .min(5)
+    .max(5),
   sales_page_outline: z.array(z.string()).min(6),
   upsell: z.object({ name: z.string(), price: z.string(), pitch: z.string() }),
   kpis: z.array(z.string()).min(4).max(6),
@@ -113,9 +130,6 @@ Be specific. Use real-sounding copy in the audience's voice, not generic marketi
 
     return experimental_output;
   });
-
-
-
 const agentInput = z.object({
   prompt: z.string().min(10).max(4000),
   platform: z.enum(["chatgpt", "claude", "code"]).default("claude"),
@@ -127,42 +141,277 @@ const agentSchema = z.object({
   one_liner: z.string(),
   job_to_be_done: z.string(),
   target_user: z.string(),
-  roles: z.array(z.object({
-    name: z.string(),
-    purpose: z.string(),
-    responsibilities: z.array(z.string()),
-  })),
-  tools: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-    when_to_use: z.string(),
-    when_not_to_use: z.string(),
-    input_schema: z.string(),
-    output_shape: z.string(),
-  })),
+  roles: z.array(
+    z.object({
+      name: z.string(),
+      purpose: z.string(),
+      responsibilities: z.array(z.string()),
+    }),
+  ),
+  tools: z.array(
+    z.object({
+      name: z.string(),
+      description: z.string(),
+      when_to_use: z.string(),
+      when_not_to_use: z.string(),
+      input_schema: z.string(),
+      output_shape: z.string(),
+    }),
+  ),
   memory: z.object({
     short_term: z.string(),
     working: z.string(),
     long_term: z.string(),
   }),
-  skills: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-    when_to_trigger: z.string(),
-  })),
+  skills: z.array(
+    z.object({
+      name: z.string(),
+      description: z.string(),
+      when_to_trigger: z.string(),
+    }),
+  ),
   system_prompt: z.string(),
   output_contract: z.string(),
   guardrails: z.array(z.string()),
   step_budget: z.number().int(),
-  acceptance_tests: z.array(z.object({
-    name: z.string(),
-    input: z.string(),
-    expected: z.string(),
-    pass_criteria: z.string(),
-  })),
+  acceptance_tests: z.array(
+    z.object({
+      name: z.string(),
+      input: z.string(),
+      expected: z.string(),
+      pass_criteria: z.string(),
+    }),
+  ),
   next_steps: z.array(z.string()),
 });
 
+type AgentSpec = z.infer<typeof agentSchema>;
+
+const asRecord = (value: unknown): Record<string, unknown> =>
+  value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+
+const stringifyValue = (value: unknown, fallback: string) => {
+  if (typeof value === "string") return value.trim() || fallback;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (value && typeof value === "object") return JSON.stringify(value, null, 2);
+  return fallback;
+};
+
+const stringList = (value: unknown, fallback: string[]): string[] => {
+  if (Array.isArray(value)) {
+    const items = value.map((item) => stringifyValue(item, "")).filter(Boolean);
+    return items.length > 0 ? items : fallback;
+  }
+  if (typeof value === "string" && value.trim()) return [value.trim()];
+  return fallback;
+};
+
+function extractJsonObject(text: string) {
+  const cleaned = text
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/```\s*$/i, "")
+    .trim();
+
+  let start = -1;
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+
+  for (let i = 0; i < cleaned.length; i += 1) {
+    const char = cleaned[i];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (char === "\\" && inString) {
+      escaped = true;
+      continue;
+    }
+    if (char === '"') {
+      inString = !inString;
+      continue;
+    }
+    if (inString) continue;
+    if (char === "{") {
+      if (depth === 0) start = i;
+      depth += 1;
+    }
+    if (char === "}") {
+      depth -= 1;
+      if (depth === 0 && start !== -1) {
+        return JSON.parse(cleaned.slice(start, i + 1));
+      }
+    }
+  }
+
+  throw new Error(
+    "The AI response was not valid JSON. Please try again with a shorter or clearer prompt.",
+  );
+}
+
+function normalizeAgentSpec(raw: unknown, input: z.infer<typeof agentInput>): AgentSpec {
+  const obj = asRecord(raw);
+  const titleFallback = input.goal || "AI Workflow Agent";
+  const rolesRaw = Array.isArray(obj.roles) ? obj.roles.map(asRecord) : [];
+  const toolsRaw = Array.isArray(obj.tools) ? obj.tools.map(asRecord) : [];
+  const skillsRaw = Array.isArray(obj.skills) ? obj.skills.map(asRecord) : [];
+  const testsRaw = Array.isArray(obj.acceptance_tests) ? obj.acceptance_tests.map(asRecord) : [];
+  const memory = asRecord(obj.memory);
+
+  return agentSchema.parse({
+    name: stringifyValue(obj.name, titleFallback).slice(0, 120),
+    one_liner: stringifyValue(
+      obj.one_liner,
+      `An agent that ${input.goal || "turns the provided workflow into a reliable AI-assisted system"}.`,
+    ),
+    job_to_be_done: stringifyValue(obj.job_to_be_done, input.goal || input.prompt),
+    target_user: stringifyValue(
+      obj.target_user,
+      "The operator or builder responsible for this workflow.",
+    ),
+    roles:
+      rolesRaw.length > 0
+        ? rolesRaw.map((role, index) => ({
+            name: stringifyValue(
+              role.name,
+              index === 0 ? "Primary Agent" : `Specialist ${index + 1}`,
+            ),
+            purpose: stringifyValue(role.purpose, "Own a specific part of the workflow."),
+            responsibilities: stringList(role.responsibilities, [
+              "Interpret the user's request",
+              "Execute the assigned workflow step",
+              "Return clear handoff notes",
+            ]),
+          }))
+        : [
+            {
+              name: "Primary Agent",
+              purpose: "Own the workflow from intake through final output.",
+              responsibilities: [
+                "Clarify the requested outcome",
+                "Use the available tools only when needed",
+                "Return the final answer in the agreed format",
+              ],
+            },
+          ],
+    tools:
+      toolsRaw.length > 0
+        ? toolsRaw.map((tool, index) => ({
+            name: stringifyValue(tool.name, `tool_${index + 1}`)
+              .replace(/\s+/g, "_")
+              .toLowerCase(),
+            description: stringifyValue(
+              tool.description,
+              "Supports the agent with a focused workflow capability.",
+            ),
+            when_to_use: stringifyValue(
+              tool.when_to_use,
+              "Use when the workflow requires this capability.",
+            ),
+            when_not_to_use: stringifyValue(
+              tool.when_not_to_use,
+              "Do not use when the answer can be completed directly.",
+            ),
+            input_schema: stringifyValue(tool.input_schema, "{ query: string }"),
+            output_shape: stringifyValue(tool.output_shape, "{ result: string, notes?: string }"),
+          }))
+        : [
+            {
+              name: "research_context",
+              description: "Collects the facts and context required to complete the workflow.",
+              when_to_use: "Use before making recommendations or producing the final deliverable.",
+              when_not_to_use:
+                "Do not use when the user has already supplied enough verified context.",
+              input_schema: "{ topic: string, constraints?: string[] }",
+              output_shape: "{ findings: string[], gaps: string[] }",
+            },
+          ],
+    memory: {
+      short_term: stringifyValue(
+        memory.short_term,
+        "Track the current request, constraints, and active tool results.",
+      ),
+      working: stringifyValue(
+        memory.working,
+        "Maintain the plan, intermediate decisions, and unresolved questions during the run.",
+      ),
+      long_term: stringifyValue(
+        memory.long_term,
+        "Store reusable preferences, source rules, and successful workflow patterns when persistence is available.",
+      ),
+    },
+    skills:
+      skillsRaw.length > 0
+        ? skillsRaw.map((skill, index) => ({
+            name: stringifyValue(
+              skill.name,
+              index === 0 ? "Workflow Execution" : `Skill ${index + 1}`,
+            ),
+            description: stringifyValue(
+              skill.description,
+              "A reusable capability bundle for this agent.",
+            ),
+            when_to_trigger: stringifyValue(
+              skill.when_to_trigger,
+              "Trigger when the user request matches this capability.",
+            ),
+          }))
+        : [
+            {
+              name: "Workflow Execution",
+              description:
+                "Turns an ambiguous request into a concrete plan, executes the steps, and packages the final deliverable.",
+              when_to_trigger:
+                "When the user asks the agent to complete the core job described in the prompt.",
+            },
+          ],
+    system_prompt: stringifyValue(
+      obj.system_prompt,
+      `You are ${titleFallback}. Your job is to ${input.goal || "complete the user's requested workflow"}. Clarify only when required, use tools deliberately, follow the output contract, and produce a specific final result.`,
+    ),
+    output_contract: stringifyValue(
+      obj.output_contract,
+      "Return: summary, completed work, assumptions, risks, and next action.",
+    ),
+    guardrails: stringList(obj.guardrails, [
+      "Ask for clarification when required inputs are missing.",
+      "Never invent verified facts or tool results.",
+      "Keep outputs specific to the user's domain.",
+    ]),
+    step_budget: Number.isFinite(Number(obj.step_budget))
+      ? Math.max(3, Math.round(Number(obj.step_budget)))
+      : 12,
+    acceptance_tests:
+      testsRaw.length > 0
+        ? testsRaw.map((test, index) => ({
+            name: stringifyValue(test.name, `Acceptance test ${index + 1}`),
+            input: stringifyValue(test.input, input.prompt),
+            expected: stringifyValue(
+              test.expected,
+              "The agent completes the workflow and follows the output contract.",
+            ),
+            pass_criteria: stringifyValue(
+              test.pass_criteria,
+              "The result is accurate, specific, and usable without extra cleanup.",
+            ),
+          }))
+        : [
+            {
+              name: "Happy path",
+              input: input.prompt,
+              expected: "The agent produces the requested deliverable in the correct format.",
+              pass_criteria: "All required sections are present, specific, and actionable.",
+            },
+          ],
+    next_steps: stringList(obj.next_steps, [
+      "Paste the system prompt into the target platform.",
+      "Add the listed tools or integrations.",
+      "Run the acceptance tests and refine failures.",
+    ]),
+  });
+}
 
 export const generateAgentSpec = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -195,31 +444,42 @@ Produce an opinionated, specific spec. No fluff. Include:
 - 5–10 acceptance tests covering happy path, edges, adversarial, and known-bad. Each test has input, expected behavior, and pass criteria.
 - 3–6 concrete next steps to implement on the chosen platform.
 
-Be specific to the user's domain — never generic.`;
+Be specific to the user's domain — never generic.
 
-    const { experimental_output } = await generateText({
-      model,
-      experimental_output: Output.object({ schema: agentSchema }),
-      prompt,
-      maxOutputTokens: 8000,
-      maxRetries: 2,
-    });
+Return ONLY one valid JSON object. Do not wrap it in markdown. Do not add commentary.
+Use exactly these top-level keys: name, one_liner, job_to_be_done, target_user, roles, tools, memory, skills, system_prompt, output_contract, guardrails, step_budget, acceptance_tests, next_steps.
+Each role needs name, purpose, responsibilities. Each tool needs name, description, when_to_use, when_not_to_use, input_schema, output_shape. Each skill needs name, description, when_to_trigger. Memory needs short_term, working, long_term. Each acceptance test needs name, input, expected, pass_criteria.`;
 
+    let output: AgentSpec;
+    try {
+      const result = await generateText({
+        model,
+        prompt,
+        maxOutputTokens: 12000,
+        maxRetries: 2,
+      });
+      output = normalizeAgentSpec(extractJsonObject(result.text), data);
+    } catch (error) {
+      console.error("Agent spec generation failed", error);
+      throw new Error(
+        "The agent generator returned an incomplete response. Please try again with a slightly shorter prompt or more specific goal.",
+      );
+    }
 
     const { supabase, userId } = context;
     const { data: saved, error: saveErr } = await supabase
       .from("agent_specs")
       .insert({
         user_id: userId,
-        title: experimental_output.name,
+        title: output.name,
         inputs: data,
-        output: experimental_output,
+        output,
       })
       .select("id")
       .single();
     if (saveErr) throw new Error(saveErr.message);
 
-    return { ...experimental_output, id: saved.id as string };
+    return { ...output, id: saved.id as string };
   });
 
 export const listAgentSpecs = createServerFn({ method: "GET" })
@@ -252,11 +512,13 @@ export const getAgentSpec = createServerFn({ method: "POST" })
 export const updateAgentSpec = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
-    z.object({
-      id: z.string().uuid(),
-      title: z.string().min(1).max(200).optional(),
-      output: z.record(z.string(), z.unknown()).optional(),
-    }).parse(d),
+    z
+      .object({
+        id: z.string().uuid(),
+        title: z.string().min(1).max(200).optional(),
+        output: z.record(z.string(), z.unknown()).optional(),
+      })
+      .parse(d),
   )
   .handler(async ({ data, context }) => {
     const { supabase } = context;
@@ -265,7 +527,10 @@ export const updateAgentSpec = createServerFn({ method: "POST" })
     };
     if (data.title !== undefined) patch.title = data.title;
     if (data.output !== undefined) patch.output = data.output;
-    const { error } = await supabase.from("agent_specs").update(patch as never).eq("id", data.id);
+    const { error } = await supabase
+      .from("agent_specs")
+      .update(patch as never)
+      .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
