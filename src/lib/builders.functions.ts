@@ -461,7 +461,9 @@ Each role needs name, purpose, responsibilities. Each tool needs name, descripti
       output = normalizeAgentSpec(extractJsonObject(result.text), data);
     } catch (error) {
       console.error("Agent spec generation failed", error);
-      throw new Error("The agent generator returned an incomplete response. Please try again with a slightly shorter prompt or more specific goal.");
+      throw new Error(
+        "The agent generator returned an incomplete response. Please try again with a slightly shorter prompt or more specific goal.",
+      );
     }
 
     const { supabase, userId } = context;
@@ -510,11 +512,13 @@ export const getAgentSpec = createServerFn({ method: "POST" })
 export const updateAgentSpec = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
-    z.object({
-      id: z.string().uuid(),
-      title: z.string().min(1).max(200).optional(),
-      output: z.record(z.string(), z.unknown()).optional(),
-    }).parse(d),
+    z
+      .object({
+        id: z.string().uuid(),
+        title: z.string().min(1).max(200).optional(),
+        output: z.record(z.string(), z.unknown()).optional(),
+      })
+      .parse(d),
   )
   .handler(async ({ data, context }) => {
     const { supabase } = context;
@@ -523,7 +527,10 @@ export const updateAgentSpec = createServerFn({ method: "POST" })
     };
     if (data.title !== undefined) patch.title = data.title;
     if (data.output !== undefined) patch.output = data.output;
-    const { error } = await supabase.from("agent_specs").update(patch as never).eq("id", data.id);
+    const { error } = await supabase
+      .from("agent_specs")
+      .update(patch as never)
+      .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
