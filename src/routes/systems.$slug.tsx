@@ -52,8 +52,8 @@ function SystemDetail() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-12 pb-12">
-          <Link to="/" hash="builds" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-3 w-3" /> All systems
+          <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-3 w-3" /> Back home
           </Link>
           <div className="mt-6 flex items-start gap-5">
             <div className="grid h-14 w-14 place-items-center rounded-2xl shrink-0" style={{ background: "var(--gradient-soft)" }}>
