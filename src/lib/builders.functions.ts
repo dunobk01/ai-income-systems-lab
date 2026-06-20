@@ -446,7 +446,6 @@ Each role needs name, purpose, responsibilities. Each tool needs name, descripti
       throw new Error("The agent generator returned an incomplete response. Please try again with a slightly shorter prompt or more specific goal.");
     }
 
-
     const { supabase, userId } = context;
     const { data: saved, error: saveErr } = await supabase
       .from("agent_specs")
