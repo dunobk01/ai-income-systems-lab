@@ -18,7 +18,10 @@ const productSchema = z.object({
   target_buyer: z.string(),
   top_pains: z.array(z.string()).min(3).max(5),
   deliverables: z.array(z.string()).min(3).max(8),
-  outline: z.array(z.object({ chapter: z.string(), summary: z.string() })).min(4).max(8),
+  outline: z
+    .array(z.object({ chapter: z.string(), summary: z.string() }))
+    .min(4)
+    .max(8),
   positioning: z.string(),
   three_week_plan: z.array(z.string()).min(3).max(3),
   launch_hooks: z.array(z.string()).min(3).max(5),
@@ -72,8 +75,22 @@ const funnelSchema = z.object({
   positioning_line: z.string(),
   ad_hooks: z.array(z.string()).min(5).max(8),
   lead_magnet: z.object({ name: z.string(), description: z.string(), format: z.string() }),
-  landing_page: z.object({ headline: z.string(), subhead: z.string(), sections: z.array(z.string()).min(5) }),
-  email_sequence: z.array(z.object({ day: z.number(), subject: z.string(), purpose: z.string(), body_outline: z.string() })).min(5).max(5),
+  landing_page: z.object({
+    headline: z.string(),
+    subhead: z.string(),
+    sections: z.array(z.string()).min(5),
+  }),
+  email_sequence: z
+    .array(
+      z.object({
+        day: z.number(),
+        subject: z.string(),
+        purpose: z.string(),
+        body_outline: z.string(),
+      }),
+    )
+    .min(5)
+    .max(5),
   sales_page_outline: z.array(z.string()).min(6),
   upsell: z.object({ name: z.string(), price: z.string(), pitch: z.string() }),
   kpis: z.array(z.string()).min(4).max(6),
@@ -113,9 +130,6 @@ Be specific. Use real-sounding copy in the audience's voice, not generic marketi
 
     return experimental_output;
   });
-
-
-
 const agentInput = z.object({
   prompt: z.string().min(10).max(4000),
   platform: z.enum(["chatgpt", "claude", "code"]).default("claude"),
