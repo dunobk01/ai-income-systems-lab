@@ -201,7 +201,10 @@ Be specific to the user's domain — never generic.`;
       model,
       experimental_output: Output.object({ schema: agentSchema }),
       prompt,
+      maxOutputTokens: 8000,
+      maxRetries: 2,
     });
+
 
     const { supabase, userId } = context;
     const { data: saved, error: saveErr } = await supabase
