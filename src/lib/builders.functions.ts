@@ -317,35 +317,80 @@ function normalizeAgentSpec(raw: unknown, input: z.infer<typeof agentInput>): Ag
             },
           ],
     memory: {
-      short_term: stringifyValue(memory.short_term, "Track the current request, constraints, and active tool results."),
-      working: stringifyValue(memory.working, "Maintain the plan, intermediate decisions, and unresolved questions during the run."),
-      long_term: stringifyValue(memory.long_term, "Store reusable preferences, source rules, and successful workflow patterns when persistence is available."),
+      short_term: stringifyValue(
+        memory.short_term,
+        "Track the current request, constraints, and active tool results.",
+      ),
+      working: stringifyValue(
+        memory.working,
+        "Maintain the plan, intermediate decisions, and unresolved questions during the run.",
+      ),
+      long_term: stringifyValue(
+        memory.long_term,
+        "Store reusable preferences, source rules, and successful workflow patterns when persistence is available.",
+      ),
     },
-    skills: skillsRaw.length > 0 ? skillsRaw.map((skill, index) => ({
-      name: stringifyValue(skill.name, index === 0 ? "Workflow Execution" : `Skill ${index + 1}`),
-      description: stringifyValue(skill.description, "A reusable capability bundle for this agent."),
-      when_to_trigger: stringifyValue(skill.when_to_trigger, "Trigger when the user request matches this capability."),
-    })) : [{
-      name: "Workflow Execution",
-      description: "Turns an ambiguous request into a concrete plan, executes the steps, and packages the final deliverable.",
-      when_to_trigger: "When the user asks the agent to complete the core job described in the prompt.",
-    }],
-    system_prompt: stringifyValue(obj.system_prompt, `You are ${titleFallback}. Your job is to ${input.goal || "complete the user's requested workflow"}. Clarify only when required, use tools deliberately, follow the output contract, and produce a specific final result.`),
-    output_contract: stringifyValue(obj.output_contract, "Return: summary, completed work, assumptions, risks, and next action."),
-    guardrails: stringList(obj.guardrails, ["Ask for clarification when required inputs are missing.", "Never invent verified facts or tool results.", "Keep outputs specific to the user's domain."]),
-    step_budget: Number.isFinite(Number(obj.step_budget)) ? Math.max(3, Math.round(Number(obj.step_budget))) : 12,
-    acceptance_tests: testsRaw.length > 0 ? testsRaw.map((test, index) => ({
-      name: stringifyValue(test.name, `Acceptance test ${index + 1}`),
-      input: stringifyValue(test.input, input.prompt),
-      expected: stringifyValue(test.expected, "The agent completes the workflow and follows the output contract."),
-      pass_criteria: stringifyValue(test.pass_criteria, "The result is accurate, specific, and usable without extra cleanup."),
-    })) : [{
-      name: "Happy path",
-      input: input.prompt,
-      expected: "The agent produces the requested deliverable in the correct format.",
-      pass_criteria: "All required sections are present, specific, and actionable.",
-    }],
-    next_steps: stringList(obj.next_steps, ["Paste the system prompt into the target platform.", "Add the listed tools or integrations.", "Run the acceptance tests and refine failures."]),
+    skills:
+      skillsRaw.length > 0
+        ? skillsRaw.map((skill, index) => ({
+            name: stringifyValue(skill.name, index === 0 ? "Workflow Execution" : `Skill ${index + 1}`),
+            description: stringifyValue(skill.description, "A reusable capability bundle for this agent."),
+            when_to_trigger: stringifyValue(
+              skill.when_to_trigger,
+              "Trigger when the user request matches this capability.",
+            ),
+          }))
+        : [
+            {
+              name: "Workflow Execution",
+              description:
+                "Turns an ambiguous request into a concrete plan, executes the steps, and packages the final deliverable.",
+              when_to_trigger: "When the user asks the agent to complete the core job described in the prompt.",
+            },
+          ],
+    system_prompt: stringifyValue(
+      obj.system_prompt,
+      `You are ${titleFallback}. Your job is to ${input.goal || "complete the user's requested workflow"}. Clarify only when required, use tools deliberately, follow the output contract, and produce a specific final result.`,
+    ),
+    output_contract: stringifyValue(
+      obj.output_contract,
+      "Return: summary, completed work, assumptions, risks, and next action.",
+    ),
+    guardrails: stringList(obj.guardrails, [
+      "Ask for clarification when required inputs are missing.",
+      "Never invent verified facts or tool results.",
+      "Keep outputs specific to the user's domain.",
+    ]),
+    step_budget: Number.isFinite(Number(obj.step_budget))
+      ? Math.max(3, Math.round(Number(obj.step_budget)))
+      : 12,
+    acceptance_tests:
+      testsRaw.length > 0
+        ? testsRaw.map((test, index) => ({
+            name: stringifyValue(test.name, `Acceptance test ${index + 1}`),
+            input: stringifyValue(test.input, input.prompt),
+            expected: stringifyValue(
+              test.expected,
+              "The agent completes the workflow and follows the output contract.",
+            ),
+            pass_criteria: stringifyValue(
+              test.pass_criteria,
+              "The result is accurate, specific, and usable without extra cleanup.",
+            ),
+          }))
+        : [
+            {
+              name: "Happy path",
+              input: input.prompt,
+              expected: "The agent produces the requested deliverable in the correct format.",
+              pass_criteria: "All required sections are present, specific, and actionable.",
+            },
+          ],
+    next_steps: stringList(obj.next_steps, [
+      "Paste the system prompt into the target platform.",
+      "Add the listed tools or integrations.",
+      "Run the acceptance tests and refine failures.",
+    ]),
   });
 }
 
