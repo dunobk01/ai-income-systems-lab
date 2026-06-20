@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 
 const nav = [
-  { label: "Curriculum", to: "/#curriculum" as const },
-  { label: "Tools", to: "/#tools" as const },
+  { label: "Curriculum", to: "/curriculum" as const },
+  { label: "Tools", to: "/tools" as const },
   { label: "Pricing", to: "/pricing" as const },
-  { label: "FAQ", to: "/#faq" as const },
+  { label: "FAQ", to: "/faq" as const },
 ];
 
 export function SiteHeader() {
