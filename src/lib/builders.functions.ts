@@ -262,33 +262,60 @@ function normalizeAgentSpec(raw: unknown, input: z.infer<typeof agentInput>): Ag
 
   return agentSchema.parse({
     name: stringifyValue(obj.name, titleFallback).slice(0, 120),
-    one_liner: stringifyValue(obj.one_liner, `An agent that ${input.goal || "turns the provided workflow into a reliable AI-assisted system"}.`),
+    one_liner: stringifyValue(
+      obj.one_liner,
+      `An agent that ${input.goal || "turns the provided workflow into a reliable AI-assisted system"}.`,
+    ),
     job_to_be_done: stringifyValue(obj.job_to_be_done, input.goal || input.prompt),
     target_user: stringifyValue(obj.target_user, "The operator or builder responsible for this workflow."),
-    roles: rolesRaw.length > 0 ? rolesRaw.map((role, index) => ({
-      name: stringifyValue(role.name, index === 0 ? "Primary Agent" : `Specialist ${index + 1}`),
-      purpose: stringifyValue(role.purpose, "Own a specific part of the workflow."),
-      responsibilities: stringList(role.responsibilities, ["Interpret the user's request", "Execute the assigned workflow step", "Return clear handoff notes"]),
-    })) : [{
-      name: "Primary Agent",
-      purpose: "Own the workflow from intake through final output.",
-      responsibilities: ["Clarify the requested outcome", "Use the available tools only when needed", "Return the final answer in the agreed format"],
-    }],
-    tools: toolsRaw.length > 0 ? toolsRaw.map((tool, index) => ({
-      name: stringifyValue(tool.name, `tool_${index + 1}`).replace(/\s+/g, "_").toLowerCase(),
-      description: stringifyValue(tool.description, "Supports the agent with a focused workflow capability."),
-      when_to_use: stringifyValue(tool.when_to_use, "Use when the workflow requires this capability."),
-      when_not_to_use: stringifyValue(tool.when_not_to_use, "Do not use when the answer can be completed directly."),
-      input_schema: stringifyValue(tool.input_schema, "{ query: string }") ,
-      output_shape: stringifyValue(tool.output_shape, "{ result: string, notes?: string }") ,
-    })) : [{
-      name: "research_context",
-      description: "Collects the facts and context required to complete the workflow.",
-      when_to_use: "Use before making recommendations or producing the final deliverable.",
-      when_not_to_use: "Do not use when the user has already supplied enough verified context.",
-      input_schema: "{ topic: string, constraints?: string[] }",
-      output_shape: "{ findings: string[], gaps: string[] }",
-    }],
+    roles:
+      rolesRaw.length > 0
+        ? rolesRaw.map((role, index) => ({
+            name: stringifyValue(role.name, index === 0 ? "Primary Agent" : `Specialist ${index + 1}`),
+            purpose: stringifyValue(role.purpose, "Own a specific part of the workflow."),
+            responsibilities: stringList(role.responsibilities, [
+              "Interpret the user's request",
+              "Execute the assigned workflow step",
+              "Return clear handoff notes",
+            ]),
+          }))
+        : [
+            {
+              name: "Primary Agent",
+              purpose: "Own the workflow from intake through final output.",
+              responsibilities: [
+                "Clarify the requested outcome",
+                "Use the available tools only when needed",
+                "Return the final answer in the agreed format",
+              ],
+            },
+          ],
+    tools:
+      toolsRaw.length > 0
+        ? toolsRaw.map((tool, index) => ({
+            name: stringifyValue(tool.name, `tool_${index + 1}`).replace(/\s+/g, "_").toLowerCase(),
+            description: stringifyValue(
+              tool.description,
+              "Supports the agent with a focused workflow capability.",
+            ),
+            when_to_use: stringifyValue(tool.when_to_use, "Use when the workflow requires this capability."),
+            when_not_to_use: stringifyValue(
+              tool.when_not_to_use,
+              "Do not use when the answer can be completed directly.",
+            ),
+            input_schema: stringifyValue(tool.input_schema, "{ query: string }"),
+            output_shape: stringifyValue(tool.output_shape, "{ result: string, notes?: string }"),
+          }))
+        : [
+            {
+              name: "research_context",
+              description: "Collects the facts and context required to complete the workflow.",
+              when_to_use: "Use before making recommendations or producing the final deliverable.",
+              when_not_to_use: "Do not use when the user has already supplied enough verified context.",
+              input_schema: "{ topic: string, constraints?: string[] }",
+              output_shape: "{ findings: string[], gaps: string[] }",
+            },
+          ],
     memory: {
       short_term: stringifyValue(memory.short_term, "Track the current request, constraints, and active tool results."),
       working: stringifyValue(memory.working, "Maintain the plan, intermediate decisions, and unresolved questions during the run."),
