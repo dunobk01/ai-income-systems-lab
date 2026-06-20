@@ -132,11 +132,22 @@ export function Header({ icon, eyebrow, title, subtitle }: { icon: React.ReactNo
   );
 }
 
-export function Field({ label, v, onChange, textarea }: { label: string; v: string; onChange: (v: string) => void; textarea?: boolean }) {
+export function Field({ label, v, onChange, textarea, maxLength }: { label: string; v: string; onChange: (v: string) => void; textarea?: boolean; maxLength?: number }) {
+  const count = v.length;
+  const nearLimit = maxLength ? count >= maxLength - 20 : false;
+  const overLimit = maxLength ? count > maxLength : false;
   return (
     <div className="space-y-1.5">
-      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
+      <div className="flex items-center justify-between">
+        <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
+        {maxLength !== undefined && (
+          <span className={`text-xs tabular-nums ${overLimit ? "text-red-400 font-medium" : nearLimit ? "text-amber-400" : "text-muted-foreground"}`}>
+            {count}/{maxLength}
+          </span>
+        )}
+      </div>
       {textarea ? <Textarea value={v} onChange={(e) => onChange(e.target.value)} rows={3} /> : <Input value={v} onChange={(e) => onChange(e.target.value)} />}
+      {overLimit && <p className="text-xs text-red-400">{label} is over the {maxLength} character limit. Please shorten it.</p>}
     </div>
   );
 }
