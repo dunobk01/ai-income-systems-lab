@@ -62,10 +62,10 @@ Return a tight, specific, opinionated plan. No fluff. Use the buyer's likely lan
   });
 
 const funnelInput = z.object({
-  offer: z.string().min(2).max(300),
-  audience: z.string().min(2).max(200),
+  offer: z.string().min(2).max(2000),
+  audience: z.string().min(2).max(1000),
   price: z.string().min(1).max(50),
-  channel: z.string().min(2).max(100),
+  channel: z.string().min(2).max(500),
 });
 
 const funnelSchema = z.object({
