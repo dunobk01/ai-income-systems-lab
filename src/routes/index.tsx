@@ -246,15 +246,56 @@ export default function LandingPage() {
         <LeadCapture source="landing-mid" />
       </section>
 
+      {/* FOUNDER */}
+      <section id="founder" className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
+        <div className="grid gap-10 md:grid-cols-[200px_1fr] items-center">
+          <div className="mx-auto md:mx-0 h-40 w-40 rounded-2xl glass-strong grid place-items-center text-5xl font-black text-gradient">
+            AIS
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Who's behind this</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Built by an operator, not a guru</h2>
+            <p className="mt-4 text-muted-foreground">
+              AI Income Systems Lab was built by a working creator who got tired of $2,000 "AI mastermind" upsells
+              and screenshots of fake Stripe dashboards. Every module, prompt, builder, and workflow inside this
+              course is something used in real offers — not theory pulled from a Twitter thread.
+            </p>
+            <p className="mt-3 text-muted-foreground">
+              No fake income claims. No 47-bonus stack. One course, three tiers, real systems you can actually ship.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST STRIP — honest, no fabricated testimonials */}
+      <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-10">
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            { k: "14-day", v: "Refund window on every one-time tier" },
+            { k: "0", v: "Subscriptions, upsells, or hidden fees" },
+            { k: "Cancel", v: "Anytime on monthly — keep what you've built" },
+          ].map((t) => (
+            <div key={t.v} className="glass rounded-2xl p-5 text-center">
+              <p className="text-2xl font-black text-gradient">{t.k}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{t.v}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          New program — we'd rather earn testimonials than fake them. Early cohort builders get featured here.
+        </p>
+      </section>
+
       {/* PRICING TEASER */}
-      <section className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
         <div className="glass-strong rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
           <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Pricing</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Three tiers. One-time payment.</h2>
-          <p className="mt-3 text-muted-foreground">No subscriptions. No upsells. Pick your level, get lifetime access.</p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-3 text-left">
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Monthly or lifetime. Your call.</h2>
+          <p className="mt-3 text-muted-foreground">Start month-to-month, or own it forever with a one-time payment.</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-left">
             {[
+              { name: "All-Access Monthly", price: "$14.99", note: "/mo · cancel anytime" },
               { name: "Starter Lab", price: "$29", note: "Course + prompts" },
               { name: "Builder Lab", price: "$79", note: "+ builders + workflows", featured: true },
               { name: "Pro Systems Lab", price: "$149", note: "+ local kit + templates" },
@@ -270,7 +311,7 @@ export default function LandingPage() {
             <CohortCountdown />
           </div>
           <Button asChild variant="brand" size="lg" className="mt-6 h-12 px-7">
-            <Link to="/pricing">Get Instant Access <ArrowRight className="h-4 w-4" /></Link>
+            <Link to="/pricing">See full pricing <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
       </section>
