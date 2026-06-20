@@ -345,8 +345,14 @@ function normalizeAgentSpec(raw: unknown, input: z.infer<typeof agentInput>): Ag
     skills:
       skillsRaw.length > 0
         ? skillsRaw.map((skill, index) => ({
-            name: stringifyValue(skill.name, index === 0 ? "Workflow Execution" : `Skill ${index + 1}`),
-            description: stringifyValue(skill.description, "A reusable capability bundle for this agent."),
+            name: stringifyValue(
+              skill.name,
+              index === 0 ? "Workflow Execution" : `Skill ${index + 1}`,
+            ),
+            description: stringifyValue(
+              skill.description,
+              "A reusable capability bundle for this agent.",
+            ),
             when_to_trigger: stringifyValue(
               skill.when_to_trigger,
               "Trigger when the user request matches this capability.",
@@ -357,7 +363,8 @@ function normalizeAgentSpec(raw: unknown, input: z.infer<typeof agentInput>): Ag
               name: "Workflow Execution",
               description:
                 "Turns an ambiguous request into a concrete plan, executes the steps, and packages the final deliverable.",
-              when_to_trigger: "When the user asks the agent to complete the core job described in the prompt.",
+              when_to_trigger:
+                "When the user asks the agent to complete the core job described in the prompt.",
             },
           ],
     system_prompt: stringifyValue(
@@ -405,7 +412,6 @@ function normalizeAgentSpec(raw: unknown, input: z.infer<typeof agentInput>): Ag
     ]),
   });
 }
-
 
 export const generateAgentSpec = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
