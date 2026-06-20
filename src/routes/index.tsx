@@ -181,14 +181,24 @@ export default function LandingPage() {
         </div>
         <div className="grid gap-4 grid-cols-2 md:grid-cols-5">
           {tools.map((t) => (
-            <div key={t.name} className="glass rounded-2xl p-5 text-center">
+            <Link
+              key={t.name}
+              to="/tools/$slug"
+              params={{ slug: t.slug }}
+              className="group glass rounded-2xl p-5 text-center transition hover:bg-white/8 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
+            >
               <div className="mx-auto grid h-12 w-12 place-items-center rounded-xl" style={{ background: "var(--gradient-soft)" }}>
                 <t.icon className="h-6 w-6 text-[color:var(--brand-2)]" />
               </div>
-              <p className="mt-4 font-semibold">{t.name}</p>
+              <p className="mt-4 font-semibold group-hover:text-[color:var(--brand)] transition-colors">{t.name}</p>
               <p className="text-xs text-muted-foreground">{t.desc}</p>
-            </div>
+            </Link>
           ))}
+        </div>
+        <div className="mt-8 text-center">
+          <Button asChild variant="glass" size="lg" className="h-11 px-6">
+            <Link to="/tools">See full tool stack <ArrowRight className="h-4 w-4" /></Link>
+          </Button>
         </div>
       </section>
 
