@@ -45,11 +45,11 @@ function FunnelBuilder() {
       <Header icon={<Megaphone className="h-5 w-5" />} eyebrow="Builder" title="Sales Funnel Builder" subtitle="End-to-end funnel blueprint: hooks, lead magnet, landing page, emails, sales page, upsell." />
       <div className="mt-8 grid lg:grid-cols-2 gap-6">
         <section className="glass rounded-2xl p-6 space-y-4">
-          <Field label="Offer" v={form.offer} onChange={(v) => setForm({ ...form, offer: v })} textarea />
-          <Field label="Audience" v={form.audience} onChange={(v) => setForm({ ...form, audience: v })} />
+          <Field label="Offer" v={form.offer} onChange={(v) => setForm({ ...form, offer: v })} textarea maxLength={2000} />
+          <Field label="Audience" v={form.audience} onChange={(v) => setForm({ ...form, audience: v })} maxLength={1000} />
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Price" v={form.price} onChange={(v) => setForm({ ...form, price: v })} />
-            <Field label="Channel" v={form.channel} onChange={(v) => setForm({ ...form, channel: v })} />
+            <Field label="Price" v={form.price} onChange={(v) => setForm({ ...form, price: v })} maxLength={50} />
+            <Field label="Channel" v={form.channel} onChange={(v) => setForm({ ...form, channel: v })} maxLength={500} />
           </div>
           <Button variant="brand" onClick={submit} disabled={loading} className="w-full">
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
