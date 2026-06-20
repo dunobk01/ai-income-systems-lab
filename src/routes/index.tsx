@@ -27,11 +27,11 @@ export const Route = createFileRoute("/")({
 });
 
 const tools = [
-  { name: "ChatGPT", desc: "Execution + content", icon: MessageSquare },
-  { name: "Claude", desc: "Long-form + strategy", icon: Brain },
-  { name: "Perplexity", desc: "Research + validation", icon: Search },
-  { name: "Lovable", desc: "Apps + funnels", icon: FileCode2 },
-  { name: "n8n", desc: "Automation glue", icon: Workflow },
+  { name: "ChatGPT", slug: "chatgpt", desc: "Execution + content", icon: MessageSquare },
+  { name: "Claude", slug: "claude", desc: "Long-form + strategy", icon: Brain },
+  { name: "Perplexity", slug: "perplexity", desc: "Research + validation", icon: Search },
+  { name: "Lovable", slug: "lovable", desc: "Apps + funnels", icon: FileCode2 },
+  { name: "n8n", slug: "n8n", desc: "Automation glue", icon: Workflow },
 ];
 
 const builds = [
