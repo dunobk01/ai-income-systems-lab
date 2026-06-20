@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { CohortCountdown } from "@/components/cohort-countdown";
 import { LeadCapture } from "@/components/lead-capture";
+import dustinPhoto from "@/assets/dustin.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
