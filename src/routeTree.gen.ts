@@ -10,17 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
+import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as CurriculumRouteImport } from './routes/curriculum'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
 import { Route as AuthenticatedWelcomeRouteImport } from './routes/_authenticated/welcome'
-import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated/tools'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedPromptsRouteImport } from './routes/_authenticated/prompts'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
@@ -29,7 +33,6 @@ import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
-import { Route as AuthenticatedToolsSlugRouteImport } from './routes/_authenticated/tools.$slug'
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
 import { Route as AuthenticatedBuildersAgentRouteImport } from './routes/_authenticated/builders/agent'
@@ -44,6 +47,11 @@ import { Route as AuthenticatedCourseModuleSlugLessonSlugRouteImport } from './r
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
   path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -66,6 +74,16 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CurriculumRoute = CurriculumRouteImport.update({
+  id: '/curriculum',
+  path: '/curriculum',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -73,6 +91,16 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsSlugRoute = ToolsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ToolsRoute,
+} as any)
+const SystemsSlugRoute = SystemsSlugRouteImport.update({
+  id: '/systems/$slug',
+  path: '/systems/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
@@ -93,11 +121,6 @@ const AuthenticatedWorkflowsRoute = AuthenticatedWorkflowsRouteImport.update({
 const AuthenticatedWelcomeRoute = AuthenticatedWelcomeRouteImport.update({
   id: '/welcome',
   path: '/welcome',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedToolsRoute = AuthenticatedToolsRouteImport.update({
-  id: '/tools',
-  path: '/tools',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
@@ -140,11 +163,6 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedToolsSlugRoute = AuthenticatedToolsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => AuthenticatedToolsRoute,
 } as any)
 const AuthenticatedBuildersProductRoute =
   AuthenticatedBuildersProductRouteImport.update({
@@ -207,10 +225,13 @@ const AuthenticatedCourseModuleSlugLessonSlugRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/curriculum': typeof CurriculumRoute
+  '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tools': typeof ToolsRouteWithChildren
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
@@ -218,15 +239,15 @@ export interface FileRoutesByFullPath {
   '/progress': typeof AuthenticatedProgressRoute
   '/prompts': typeof AuthenticatedPromptsRoute
   '/settings': typeof AuthenticatedSettingsRoute
-  '/tools': typeof AuthenticatedToolsRouteWithChildren
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/systems/$slug': typeof SystemsSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
-  '/tools/$slug': typeof AuthenticatedToolsSlugRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
@@ -239,10 +260,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/curriculum': typeof CurriculumRoute
+  '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tools': typeof ToolsRouteWithChildren
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
@@ -250,15 +274,15 @@ export interface FileRoutesByTo {
   '/progress': typeof AuthenticatedProgressRoute
   '/prompts': typeof AuthenticatedPromptsRoute
   '/settings': typeof AuthenticatedSettingsRoute
-  '/tools': typeof AuthenticatedToolsRouteWithChildren
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/systems/$slug': typeof SystemsSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
-  '/tools/$slug': typeof AuthenticatedToolsSlugRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/course': typeof AuthenticatedCourseIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
@@ -273,10 +297,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/curriculum': typeof CurriculumRoute
+  '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tools': typeof ToolsRouteWithChildren
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
@@ -284,15 +311,15 @@ export interface FileRoutesById {
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/prompts': typeof AuthenticatedPromptsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
-  '/_authenticated/tools': typeof AuthenticatedToolsRouteWithChildren
   '/_authenticated/welcome': typeof AuthenticatedWelcomeRoute
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/systems/$slug': typeof SystemsSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/_authenticated/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
-  '/_authenticated/tools/$slug': typeof AuthenticatedToolsSlugRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
@@ -307,10 +334,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/curriculum'
+    | '/faq'
     | '/login'
     | '/pricing'
     | '/signup'
     | '/sitemap.xml'
+    | '/tools'
     | '/unsubscribe'
     | '/admin'
     | '/checkout'
@@ -318,15 +348,15 @@ export interface FileRouteTypes {
     | '/progress'
     | '/prompts'
     | '/settings'
-    | '/tools'
     | '/welcome'
     | '/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/systems/$slug'
+    | '/tools/$slug'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
-    | '/tools/$slug'
     | '/lovable/email/suppression'
     | '/course/'
     | '/course/$moduleSlug/$lessonSlug'
@@ -339,10 +369,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/curriculum'
+    | '/faq'
     | '/login'
     | '/pricing'
     | '/signup'
     | '/sitemap.xml'
+    | '/tools'
     | '/unsubscribe'
     | '/admin'
     | '/checkout'
@@ -350,15 +383,15 @@ export interface FileRouteTypes {
     | '/progress'
     | '/prompts'
     | '/settings'
-    | '/tools'
     | '/welcome'
     | '/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/systems/$slug'
+    | '/tools/$slug'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
-    | '/tools/$slug'
     | '/lovable/email/suppression'
     | '/course'
     | '/course/$moduleSlug/$lessonSlug'
@@ -372,10 +405,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/curriculum'
+    | '/faq'
     | '/login'
     | '/pricing'
     | '/signup'
     | '/sitemap.xml'
+    | '/tools'
     | '/unsubscribe'
     | '/_authenticated/admin'
     | '/_authenticated/checkout'
@@ -383,15 +419,15 @@ export interface FileRouteTypes {
     | '/_authenticated/progress'
     | '/_authenticated/prompts'
     | '/_authenticated/settings'
-    | '/_authenticated/tools'
     | '/_authenticated/welcome'
     | '/_authenticated/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/systems/$slug'
+    | '/tools/$slug'
     | '/_authenticated/builders/agent'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
-    | '/_authenticated/tools/$slug'
     | '/lovable/email/suppression'
     | '/_authenticated/course/'
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
@@ -406,13 +442,17 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  CurriculumRoute: typeof CurriculumRoute
+  FaqRoute: typeof FaqRoute
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ToolsRoute: typeof ToolsRouteWithChildren
   UnsubscribeRoute: typeof UnsubscribeRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  SystemsSlugRoute: typeof SystemsSlugRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -429,6 +469,13 @@ declare module '@tanstack/react-router' {
       path: '/unsubscribe'
       fullPath: '/unsubscribe'
       preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -459,6 +506,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/curriculum': {
+      id: '/curriculum'
+      path: '/curriculum'
+      fullPath: '/curriculum'
+      preLoaderRoute: typeof CurriculumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -471,6 +532,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/$slug': {
+      id: '/tools/$slug'
+      path: '/$slug'
+      fullPath: '/tools/$slug'
+      preLoaderRoute: typeof ToolsSlugRouteImport
+      parentRoute: typeof ToolsRoute
+    }
+    '/systems/$slug': {
+      id: '/systems/$slug'
+      path: '/systems/$slug'
+      fullPath: '/systems/$slug'
+      preLoaderRoute: typeof SystemsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
@@ -499,13 +574,6 @@ declare module '@tanstack/react-router' {
       path: '/welcome'
       fullPath: '/welcome'
       preLoaderRoute: typeof AuthenticatedWelcomeRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/tools': {
-      id: '/_authenticated/tools'
-      path: '/tools'
-      fullPath: '/tools'
-      preLoaderRoute: typeof AuthenticatedToolsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/settings': {
@@ -563,13 +631,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/lovable/email/suppression'
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/tools/$slug': {
-      id: '/_authenticated/tools/$slug'
-      path: '/$slug'
-      fullPath: '/tools/$slug'
-      preLoaderRoute: typeof AuthenticatedToolsSlugRouteImport
-      parentRoute: typeof AuthenticatedToolsRoute
     }
     '/_authenticated/builders/product': {
       id: '/_authenticated/builders/product'
@@ -644,17 +705,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedToolsRouteChildren {
-  AuthenticatedToolsSlugRoute: typeof AuthenticatedToolsSlugRoute
-}
-
-const AuthenticatedToolsRouteChildren: AuthenticatedToolsRouteChildren = {
-  AuthenticatedToolsSlugRoute: AuthenticatedToolsSlugRoute,
-}
-
-const AuthenticatedToolsRouteWithChildren =
-  AuthenticatedToolsRoute._addFileChildren(AuthenticatedToolsRouteChildren)
-
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
@@ -662,7 +712,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedPromptsRoute: typeof AuthenticatedPromptsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
-  AuthenticatedToolsRoute: typeof AuthenticatedToolsRouteWithChildren
   AuthenticatedWelcomeRoute: typeof AuthenticatedWelcomeRoute
   AuthenticatedWorkflowsRoute: typeof AuthenticatedWorkflowsRoute
   AuthenticatedBuildersAgentRoute: typeof AuthenticatedBuildersAgentRoute
@@ -679,7 +728,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedPromptsRoute: AuthenticatedPromptsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
-  AuthenticatedToolsRoute: AuthenticatedToolsRouteWithChildren,
   AuthenticatedWelcomeRoute: AuthenticatedWelcomeRoute,
   AuthenticatedWorkflowsRoute: AuthenticatedWorkflowsRoute,
   AuthenticatedBuildersAgentRoute: AuthenticatedBuildersAgentRoute,
@@ -694,16 +742,30 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface ToolsRouteChildren {
+  ToolsSlugRoute: typeof ToolsSlugRoute
+}
+
+const ToolsRouteChildren: ToolsRouteChildren = {
+  ToolsSlugRoute: ToolsSlugRoute,
+}
+
+const ToolsRouteWithChildren = ToolsRoute._addFileChildren(ToolsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  CurriculumRoute: CurriculumRoute,
+  FaqRoute: FaqRoute,
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ToolsRoute: ToolsRouteWithChildren,
   UnsubscribeRoute: UnsubscribeRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  SystemsSlugRoute: SystemsSlugRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,

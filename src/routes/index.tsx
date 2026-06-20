@@ -27,20 +27,20 @@ export const Route = createFileRoute("/")({
 });
 
 const tools = [
-  { name: "ChatGPT", desc: "Execution + content", icon: MessageSquare },
-  { name: "Claude", desc: "Long-form + strategy", icon: Brain },
-  { name: "Perplexity", desc: "Research + validation", icon: Search },
-  { name: "Lovable", desc: "Apps + funnels", icon: FileCode2 },
-  { name: "n8n", desc: "Automation glue", icon: Workflow },
+  { name: "ChatGPT", slug: "chatgpt", desc: "Execution + content", icon: MessageSquare },
+  { name: "Claude", slug: "claude", desc: "Long-form + strategy", icon: Brain },
+  { name: "Perplexity", slug: "perplexity", desc: "Research + validation", icon: Search },
+  { name: "Lovable", slug: "lovable", desc: "Apps + funnels", icon: FileCode2 },
+  { name: "n8n", slug: "n8n", desc: "Automation glue", icon: Workflow },
 ];
 
 const builds = [
-  { title: "Digital products", desc: "Ebooks, templates, prompt packs, mini-courses you can sell on day one.", icon: Layers },
-  { title: "Sales funnels", desc: "Lead magnet → landing page → tripwire → upsell — mapped end to end.", icon: Rocket },
-  { title: "Simple SaaS MVPs", desc: "Working web apps with auth, payments, and a real customer use case.", icon: Bot },
-  { title: "Automations", desc: "n8n workflows that handle delivery, follow-up, and content repurposing.", icon: Zap },
-  { title: "Local AI services", desc: "Productized offers for small businesses — audits, mockups, automations.", icon: Wand2 },
-  { title: "Content systems", desc: "Repeatable AI content pipelines for Pinterest, TikTok, Shorts, and SEO.", icon: Sparkles },
+  { slug: "digital-products", title: "Digital products", desc: "Ebooks, templates, prompt packs, mini-courses you can sell on day one.", icon: Layers },
+  { slug: "sales-funnels", title: "Sales funnels", desc: "Lead magnet → landing page → tripwire → upsell — mapped end to end.", icon: Rocket },
+  { slug: "simple-saas-mvps", title: "Simple SaaS MVPs", desc: "Working web apps with auth, payments, and a real customer use case.", icon: Bot },
+  { slug: "automations", title: "Automations", desc: "n8n workflows that handle delivery, follow-up, and content repurposing.", icon: Zap },
+  { slug: "local-ai-services", title: "Local AI services", desc: "Productized offers for small businesses — audits, mockups, automations.", icon: Wand2 },
+  { slug: "content-systems", title: "Content systems", desc: "Repeatable AI content pipelines for Pinterest, TikTok, Shorts, and SEO.", icon: Sparkles },
 ];
 
 const modules = [
@@ -113,7 +113,7 @@ export default function LandingPage() {
               <Link to="/signup">Build My First Income System <ArrowRight className="h-4 w-4" /></Link>
             </Button>
             <Button asChild size="lg" variant="glass" className="h-12 px-7 text-base">
-              <a href="#curriculum">See What You'll Build</a>
+              <Link to="/curriculum">See What You'll Build</Link>
             </Button>
           </div>
           <div className="mt-6 flex justify-center">
@@ -153,13 +153,21 @@ export default function LandingPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {builds.map((b) => (
-            <div key={b.title} className="glass rounded-2xl p-6 transition hover:bg-white/8">
+            <Link
+              key={b.title}
+              to="/systems/$slug"
+              params={{ slug: b.slug }}
+              className="group glass rounded-2xl p-6 transition hover:bg-white/8 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)] text-left"
+            >
               <div className="grid h-10 w-10 place-items-center rounded-lg" style={{ background: "var(--gradient-soft)" }}>
                 <b.icon className="h-5 w-5 text-[color:var(--brand)]" />
               </div>
-              <h3 className="mt-4 font-semibold">{b.title}</h3>
+              <h3 className="mt-4 font-semibold group-hover:text-[color:var(--brand)] transition-colors">{b.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{b.desc}</p>
-            </div>
+              <span className="mt-4 inline-flex items-center gap-1 text-xs text-[color:var(--brand)]">
+                Explore this system <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
           ))}
         </div>
       </section>
@@ -173,14 +181,24 @@ export default function LandingPage() {
         </div>
         <div className="grid gap-4 grid-cols-2 md:grid-cols-5">
           {tools.map((t) => (
-            <div key={t.name} className="glass rounded-2xl p-5 text-center">
+            <Link
+              key={t.name}
+              to="/tools/$slug"
+              params={{ slug: t.slug }}
+              className="group glass rounded-2xl p-5 text-center transition hover:bg-white/8 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
+            >
               <div className="mx-auto grid h-12 w-12 place-items-center rounded-xl" style={{ background: "var(--gradient-soft)" }}>
                 <t.icon className="h-6 w-6 text-[color:var(--brand-2)]" />
               </div>
-              <p className="mt-4 font-semibold">{t.name}</p>
+              <p className="mt-4 font-semibold group-hover:text-[color:var(--brand)] transition-colors">{t.name}</p>
               <p className="text-xs text-muted-foreground">{t.desc}</p>
-            </div>
+            </Link>
           ))}
+        </div>
+        <div className="mt-8 text-center">
+          <Button asChild variant="glass" size="lg" className="h-11 px-6">
+            <Link to="/tools">See full tool stack <ArrowRight className="h-4 w-4" /></Link>
+          </Button>
         </div>
       </section>
 

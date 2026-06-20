@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 
 const nav = [
-  { label: "Curriculum", to: "/#curriculum" as const },
-  { label: "Tools", to: "/#tools" as const },
+  { label: "Curriculum", to: "/curriculum" as const },
+  { label: "Tools", to: "/tools" as const },
   { label: "Pricing", to: "/pricing" as const },
-  { label: "FAQ", to: "/#faq" as const },
+  { label: "FAQ", to: "/faq" as const },
 ];
 
 export function SiteHeader() {
@@ -24,9 +24,9 @@ export function SiteHeader() {
         <Logo />
         <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
           {nav.map((item) => (
-            <a key={item.label} href={item.to} className="hover:text-foreground transition">
+            <Link key={item.label} to={item.to} className="hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-2">
@@ -57,14 +57,14 @@ export function SiteHeader() {
         <div className="md:hidden border-t border-white/5 bg-background/95 backdrop-blur-xl">
           <div className="px-4 py-4 flex flex-col gap-2">
             {nav.map((item) => (
-              <a
+              <Link
                 key={item.label}
-                href={item.to}
+                to={item.to}
                 onClick={() => setOpen(false)}
                 className="py-2 text-sm text-muted-foreground hover:text-foreground"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
             <div className="flex gap-2 pt-2">
               {user ? (
