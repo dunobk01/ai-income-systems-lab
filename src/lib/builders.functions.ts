@@ -141,39 +141,47 @@ const agentSchema = z.object({
   one_liner: z.string(),
   job_to_be_done: z.string(),
   target_user: z.string(),
-  roles: z.array(z.object({
-    name: z.string(),
-    purpose: z.string(),
-    responsibilities: z.array(z.string()),
-  })),
-  tools: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-    when_to_use: z.string(),
-    when_not_to_use: z.string(),
-    input_schema: z.string(),
-    output_shape: z.string(),
-  })),
+  roles: z.array(
+    z.object({
+      name: z.string(),
+      purpose: z.string(),
+      responsibilities: z.array(z.string()),
+    }),
+  ),
+  tools: z.array(
+    z.object({
+      name: z.string(),
+      description: z.string(),
+      when_to_use: z.string(),
+      when_not_to_use: z.string(),
+      input_schema: z.string(),
+      output_shape: z.string(),
+    }),
+  ),
   memory: z.object({
     short_term: z.string(),
     working: z.string(),
     long_term: z.string(),
   }),
-  skills: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-    when_to_trigger: z.string(),
-  })),
+  skills: z.array(
+    z.object({
+      name: z.string(),
+      description: z.string(),
+      when_to_trigger: z.string(),
+    }),
+  ),
   system_prompt: z.string(),
   output_contract: z.string(),
   guardrails: z.array(z.string()),
   step_budget: z.number().int(),
-  acceptance_tests: z.array(z.object({
-    name: z.string(),
-    input: z.string(),
-    expected: z.string(),
-    pass_criteria: z.string(),
-  })),
+  acceptance_tests: z.array(
+    z.object({
+      name: z.string(),
+      input: z.string(),
+      expected: z.string(),
+      pass_criteria: z.string(),
+    }),
+  ),
   next_steps: z.array(z.string()),
 });
 
