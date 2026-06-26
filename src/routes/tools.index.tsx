@@ -36,12 +36,16 @@ function ToolsPublicPage() {
             <h2 className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-4">{cat}</h2>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {tools.filter((t) => t.category === cat).map((t) => (
-                <Link
+                <div
                   key={t.slug}
-                  to="/tools/$slug"
-                  params={{ slug: t.slug }}
-                  className="group glass rounded-2xl p-5 flex flex-col text-left transition hover:bg-white/5 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
+                  className="group relative glass rounded-2xl p-5 flex flex-col text-left transition hover:bg-white/5 hover:border-white/20 focus-within:ring-2 focus-within:ring-[color:var(--brand)]"
                 >
+                  <Link
+                    to="/tools/$slug"
+                    params={{ slug: t.slug }}
+                    aria-label={`View ${t.name} details`}
+                    className="absolute inset-0 rounded-2xl focus:outline-none"
+                  />
                   <div className="flex items-start justify-between gap-2">
                     <h3 className="font-semibold group-hover:text-[color:var(--brand)] transition-colors">{t.name}</h3>
                     <Badge variant="outline" className="border-white/15 text-[10px]">{t.price}</Badge>
@@ -57,13 +61,12 @@ function ToolsPublicPage() {
                       href={t.url}
                       target="_blank"
                       rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                      className="relative z-10 inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
                     >
                       Visit <ExternalLink className="h-3 w-3" />
                     </a>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
