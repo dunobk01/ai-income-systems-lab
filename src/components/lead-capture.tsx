@@ -34,6 +34,12 @@ export function LeadCapture({
     try {
       await fn({ data: { email, source, lead_magnet: leadMagnet } });
       setState("done");
+      void tiktokIdentify({ email });
+      tiktokTrack("Lead", {
+        contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
+        value: 0,
+        currency: "USD",
+      });
     } catch (err) {
       setState("error");
       setError((err as Error).message ?? "Couldn't sign you up. Try again.");
