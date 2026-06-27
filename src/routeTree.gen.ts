@@ -14,14 +14,17 @@ import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as NewsletterRouteImport } from './routes/newsletter'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CurriculumRouteImport } from './routes/curriculum'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
+import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
+import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
@@ -70,6 +73,11 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsletterRoute = NewsletterRouteImport.update({
+  id: '/newsletter',
+  path: '/newsletter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -99,6 +107,11 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ToolsRoute,
 } as any)
+const NewsletterIndexRoute = NewsletterIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => NewsletterRoute,
+} as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -108,6 +121,11 @@ const SystemsSlugRoute = SystemsSlugRouteImport.update({
   id: '/systems/$slug',
   path: '/systems/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterSlugRoute = NewsletterSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => NewsletterRoute,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -234,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
+  '/newsletter': typeof NewsletterRouteWithChildren
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -249,8 +268,10 @@ export interface FileRoutesByFullPath {
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
@@ -284,8 +305,10 @@ export interface FileRoutesByTo {
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/newsletter': typeof NewsletterIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
@@ -307,6 +330,7 @@ export interface FileRoutesById {
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
+  '/newsletter': typeof NewsletterRouteWithChildren
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -322,8 +346,10 @@ export interface FileRoutesById {
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/_authenticated/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
@@ -345,6 +371,7 @@ export interface FileRouteTypes {
     | '/curriculum'
     | '/faq'
     | '/login'
+    | '/newsletter'
     | '/pricing'
     | '/signup'
     | '/sitemap.xml'
@@ -360,8 +387,10 @@ export interface FileRouteTypes {
     | '/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/newsletter/'
     | '/tools/'
     | '/builders/agent'
     | '/builders/funnel'
@@ -395,8 +424,10 @@ export interface FileRouteTypes {
     | '/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/newsletter'
     | '/tools'
     | '/builders/agent'
     | '/builders/funnel'
@@ -417,6 +448,7 @@ export interface FileRouteTypes {
     | '/curriculum'
     | '/faq'
     | '/login'
+    | '/newsletter'
     | '/pricing'
     | '/signup'
     | '/sitemap.xml'
@@ -432,8 +464,10 @@ export interface FileRouteTypes {
     | '/_authenticated/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/newsletter/'
     | '/tools/'
     | '/_authenticated/builders/agent'
     | '/_authenticated/builders/funnel'
@@ -455,6 +489,7 @@ export interface RootRouteChildren {
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
   LoginRoute: typeof LoginRoute
+  NewsletterRoute: typeof NewsletterRouteWithChildren
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -509,6 +544,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/newsletter': {
+      id: '/newsletter'
+      path: '/newsletter'
+      fullPath: '/newsletter'
+      preLoaderRoute: typeof NewsletterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -551,6 +593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsIndexRouteImport
       parentRoute: typeof ToolsRoute
     }
+    '/newsletter/': {
+      id: '/newsletter/'
+      path: '/'
+      fullPath: '/newsletter/'
+      preLoaderRoute: typeof NewsletterIndexRouteImport
+      parentRoute: typeof NewsletterRoute
+    }
     '/tools/$slug': {
       id: '/tools/$slug'
       path: '/$slug'
@@ -564,6 +613,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/systems/$slug'
       preLoaderRoute: typeof SystemsSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/$slug': {
+      id: '/newsletter/$slug'
+      path: '/$slug'
+      fullPath: '/newsletter/$slug'
+      preLoaderRoute: typeof NewsletterSlugRouteImport
+      parentRoute: typeof NewsletterRoute
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -759,6 +815,20 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface NewsletterRouteChildren {
+  NewsletterSlugRoute: typeof NewsletterSlugRoute
+  NewsletterIndexRoute: typeof NewsletterIndexRoute
+}
+
+const NewsletterRouteChildren: NewsletterRouteChildren = {
+  NewsletterSlugRoute: NewsletterSlugRoute,
+  NewsletterIndexRoute: NewsletterIndexRoute,
+}
+
+const NewsletterRouteWithChildren = NewsletterRoute._addFileChildren(
+  NewsletterRouteChildren,
+)
+
 interface ToolsRouteChildren {
   ToolsSlugRoute: typeof ToolsSlugRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
@@ -777,6 +847,7 @@ const rootRouteChildren: RootRouteChildren = {
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,
   LoginRoute: LoginRoute,
+  NewsletterRoute: NewsletterRouteWithChildren,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
