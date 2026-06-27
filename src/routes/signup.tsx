@@ -60,6 +60,12 @@ function SignupPage() {
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Account created.");
+    void tiktokIdentify({ email });
+    tiktokTrack("CompleteRegistration", {
+      contents: [{ content_id: tier ?? "free", content_type: "product", content_name: `signup-${tier ?? "free"}` }],
+      value: 0,
+      currency: "USD",
+    });
     void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   };
 
