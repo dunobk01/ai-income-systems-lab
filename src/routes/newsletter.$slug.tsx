@@ -98,7 +98,11 @@ function PostPage() {
               <p className="text-sm text-muted-foreground mt-1">Free. One email a week. Unsubscribe anytime.</p>
               <div className="mt-4 max-w-xl">
                 <NewsletterSignup source="newsletter-post" />
-              </div>
+          </div>
+
+          <NewsletterEngagement postId={post.id} />
+
+
             </div>
           </div>
         </article>
