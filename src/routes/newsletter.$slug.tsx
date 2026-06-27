@@ -5,6 +5,7 @@ import { getPostBySlug } from "@/lib/newsletter.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { NewsletterEngagement } from "@/components/newsletter-engagement";
 
 export const Route = createFileRoute("/newsletter/$slug")({
   loader: async ({ context, params }) => {
