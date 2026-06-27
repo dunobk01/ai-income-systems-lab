@@ -159,7 +159,43 @@ function RootComponent() {
   useEffect(() => {
     // Fire a TikTok pageview on every SPA route change.
     import("@/lib/tiktok").then((m) => m.tiktokPage()).catch(() => {});
+    // Standardized GTM page_view.
+    import("@/lib/datalayer").then((m) =>
+      m.dlPageView({ path: pathname, title: typeof document !== "undefined" ? document.title : "" }),
+    ).catch(() => {});
   }, [pathname]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    // Delegated button_click tracker. Opt-in via data-track="button"
+    // with optional data-track-label, data-track-location, data-track-category.
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const el = target.closest<HTMLElement>("[data-track='button'], [data-track-label]");
+      if (!el) return;
+      const label =
+        el.getAttribute("data-track-label") ||
+        el.getAttribute("aria-label") ||
+        (el.textContent || "").trim().slice(0, 80);
+      if (!label) return;
+      const destination =
+        el.getAttribute("data-track-destination") ||
+        el.getAttribute("href") ||
+        undefined;
+      import("@/lib/datalayer").then((m) =>
+        m.dlButtonClick({
+          label,
+          location: el.getAttribute("data-track-location") ?? window.location.pathname,
+          destination: destination ?? undefined,
+          category: el.getAttribute("data-track-category") ?? undefined,
+        }),
+      ).catch(() => {});
+    };
+    document.addEventListener("click", onClick, { capture: true });
+    return () => document.removeEventListener("click", onClick, { capture: true } as EventListenerOptions);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
