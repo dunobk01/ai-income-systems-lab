@@ -92,19 +92,18 @@ function PostPage() {
             ))}
           </div>
 
+          <NewsletterEngagement postId={post.id} />
+
           <div className="mt-16">
             <div className="glass rounded-2xl p-6">
               <h3 className="text-lg font-bold">Get next week's issue in your inbox</h3>
               <p className="text-sm text-muted-foreground mt-1">Free. One email a week. Unsubscribe anytime.</p>
               <div className="mt-4 max-w-xl">
                 <NewsletterSignup source="newsletter-post" />
-          </div>
-
-          <NewsletterEngagement postId={post.id} />
-
-
+              </div>
             </div>
           </div>
+
         </article>
       </main>
       <SiteFooter />
