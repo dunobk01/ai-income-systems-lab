@@ -5,6 +5,7 @@ import { getPostBySlug } from "@/lib/newsletter.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { NewsletterEngagement } from "@/components/newsletter-engagement";
 
 export const Route = createFileRoute("/newsletter/$slug")({
   loader: async ({ context, params }) => {
@@ -91,6 +92,8 @@ function PostPage() {
             ))}
           </div>
 
+          <NewsletterEngagement postId={post.id} />
+
           <div className="mt-16">
             <div className="glass rounded-2xl p-6">
               <h3 className="text-lg font-bold">Get next week's issue in your inbox</h3>
@@ -100,6 +103,7 @@ function PostPage() {
               </div>
             </div>
           </div>
+
         </article>
       </main>
       <SiteFooter />
