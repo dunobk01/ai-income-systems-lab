@@ -141,6 +141,11 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    // Fire a TikTok pageview on every SPA route change.
+    import("@/lib/tiktok").then((m) => m.tiktokPage()).catch(() => {});
+  }, [pathname]);
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -150,3 +155,4 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+
