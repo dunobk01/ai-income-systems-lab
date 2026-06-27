@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { getPostBySlug } from "@/lib/newsletter.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { LeadCapture } from "@/components/lead-capture";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 
 export const Route = createFileRoute("/newsletter/$slug")({
   loader: async ({ context, params }) => {
@@ -95,8 +95,8 @@ function PostPage() {
             <div className="glass rounded-2xl p-6">
               <h3 className="text-lg font-bold">Get next week's issue in your inbox</h3>
               <p className="text-sm text-muted-foreground mt-1">Free. One email a week. Unsubscribe anytime.</p>
-              <div className="mt-4">
-                <LeadCapture source="newsletter-post" leadMagnet="weekly-newsletter" />
+              <div className="mt-4 max-w-xl">
+                <NewsletterSignup source="newsletter-post" />
               </div>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { ArrowRight, Mail } from "lucide-react";
 import { listPublishedPosts } from "@/lib/newsletter.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { LeadCapture } from "@/components/lead-capture";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 
 export const Route = createFileRoute("/newsletter/")({
   head: () => ({
@@ -48,7 +48,13 @@ function NewsletterIndex() {
         </section>
 
         <section className="mx-auto max-w-4xl px-4 sm:px-6 pb-8">
-          <LeadCapture source="newsletter" leadMagnet="weekly-newsletter" />
+          <div className="glass-strong rounded-3xl p-8 sm:p-10">
+            <h2 className="text-2xl font-bold">Get weekly tips in your inbox</h2>
+            <p className="mt-2 text-sm text-muted-foreground">One short email a week. Real systems I'm using. Unsubscribe anytime.</p>
+            <div className="mt-5 max-w-xl">
+              <NewsletterSignup source="newsletter" />
+            </div>
+          </div>
         </section>
 
         <section className="mx-auto max-w-4xl px-4 sm:px-6 py-10">
