@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
+import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import { toast } from "sonner";
 
 const searchSchema = z.object({
@@ -59,6 +60,12 @@ function SignupPage() {
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Account created.");
+    void tiktokIdentify({ email });
+    tiktokTrack("CompleteRegistration", {
+      contents: [{ content_id: tier ?? "free", content_type: "product", content_name: `signup-${tier ?? "free"}` }],
+      value: 0,
+      currency: "USD",
+    });
     void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   };
 

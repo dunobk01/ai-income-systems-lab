@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { tiktokTrack } from "@/lib/tiktok";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -11,6 +13,14 @@ export const Route = createFileRoute("/checkout/return")({
 
 function ReturnPage() {
   const { session_id } = Route.useSearch();
+  useEffect(() => {
+    if (!session_id) return;
+    tiktokTrack("Purchase", {
+      contents: [{ content_id: session_id, content_type: "product", content_name: "ai-income-systems-lab" }],
+      value: 0,
+      currency: "USD",
+    });
+  }, [session_id]);
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="glass rounded-3xl p-10 max-w-lg w-full text-center">

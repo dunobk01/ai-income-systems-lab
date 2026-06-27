@@ -4,6 +4,7 @@ import { Mail, ArrowRight, Check, Loader2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { submitLead } from "@/lib/leads.functions";
+import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import kitAsset from "@/assets/ai-income-starter-kit.pdf.asset.json";
 
 type Props = {
@@ -33,6 +34,12 @@ export function LeadCapture({
     try {
       await fn({ data: { email, source, lead_magnet: leadMagnet } });
       setState("done");
+      void tiktokIdentify({ email });
+      tiktokTrack("Lead", {
+        contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
+        value: 0,
+        currency: "USD",
+      });
     } catch (err) {
       setState("error");
       setError((err as Error).message ?? "Couldn't sign you up. Try again.");
@@ -73,7 +80,17 @@ export function LeadCapture({
             <span className="text-[color:var(--success)] font-medium">You're in.</span> Grab your free AI Income Starter Kit — 10 prompts + the n8n automation blueprint.
           </p>
           <Button asChild variant="brand" className="h-10 whitespace-nowrap">
-            <a href={kitAsset.url} target="_blank" rel="noopener noreferrer" download>
+            <a
+              href={kitAsset.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              onClick={() => tiktokTrack("Download", {
+                contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
+                value: 0,
+                currency: "USD",
+              })}
+            >
               <Download className="h-4 w-4" /> Download the kit
             </a>
           </Button>
