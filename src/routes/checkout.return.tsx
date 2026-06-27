@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { tiktokTrack } from "@/lib/tiktok";
+import { dlPurchase } from "@/lib/datalayer";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
