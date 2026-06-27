@@ -67,6 +67,7 @@ function SignupPage() {
       value: 0,
       currency: "USD",
     });
+    dlSignUp({ method: "email" });
     void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   };
 
