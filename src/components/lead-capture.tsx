@@ -80,7 +80,17 @@ export function LeadCapture({
             <span className="text-[color:var(--success)] font-medium">You're in.</span> Grab your free AI Income Starter Kit — 10 prompts + the n8n automation blueprint.
           </p>
           <Button asChild variant="brand" className="h-10 whitespace-nowrap">
-            <a href={kitAsset.url} target="_blank" rel="noopener noreferrer" download>
+            <a
+              href={kitAsset.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              onClick={() => tiktokTrack("Download", {
+                contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
+                value: 0,
+                currency: "USD",
+              })}
+            >
               <Download className="h-4 w-4" /> Download the kit
             </a>
           </Button>
