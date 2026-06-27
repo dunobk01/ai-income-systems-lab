@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { dlCourseProgress } from "@/lib/datalayer";
 
 type Tier = "starter" | "builder" | "pro";
 type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number; is_preview: boolean };
