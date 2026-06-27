@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
 import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
+import { dlSignUp } from "@/lib/datalayer";
 import { toast } from "sonner";
 
 const searchSchema = z.object({
@@ -66,6 +67,7 @@ function SignupPage() {
       value: 0,
       currency: "USD",
     });
+    dlSignUp({ method: "email" });
     void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   };
 

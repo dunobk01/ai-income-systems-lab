@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { dlCourseProgress } from "@/lib/datalayer";
 
 type Tier = "starter" | "builder" | "pro";
 type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number; is_preview: boolean };
@@ -72,6 +73,19 @@ function LessonPage() {
     })();
   }, [moduleSlug, lessonSlug, user]);
 
+  // Fire lesson_start once per lesson view (only if accessible & not already complete).
+  useEffect(() => {
+    if (!lesson || !module) return;
+    dlCourseProgress({
+      action: "lesson_start",
+      module_slug: module.slug,
+      module_title: module.title,
+      lesson_slug: lesson.slug,
+      lesson_title: lesson.title,
+      lesson_id: lesson.id,
+    });
+  }, [lesson?.id, module?.id]);
+
   const canAccess = hasCurriculumAccess(profile?.tier, isAdmin);
   const locked = module ? (!canAccess && !module.is_preview) : false;
 
@@ -89,8 +103,19 @@ function LessonPage() {
     if (err) { toast.error("Couldn't save progress: " + err.message); return; }
     setCompleted(true);
     toast.success("Marked complete");
+    dlCourseProgress({
+      action: "lesson_complete",
+      module_slug: module?.slug,
+      module_title: module?.title,
+      lesson_slug: lesson.slug,
+      lesson_title: lesson.title,
+      lesson_id: lesson.id,
+    });
     if (next && module) {
       void navigate({ to: "/course/$moduleSlug/$lessonSlug", params: { moduleSlug: module.slug, lessonSlug: next.slug } });
+    } else if (module) {
+      // Last lesson in module → module_complete
+      dlCourseProgress({ action: "module_complete", module_slug: module.slug, module_title: module.title });
     }
   };
 

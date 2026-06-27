@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { submitLead } from "@/lib/leads.functions";
 import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
+import { dlLead, dlButtonClick } from "@/lib/datalayer";
 import kitAsset from "@/assets/ai-income-starter-kit.pdf.asset.json";
 
 type Props = {
@@ -40,6 +41,7 @@ export function LeadCapture({
         value: 0,
         currency: "USD",
       });
+      dlLead({ lead_source: source, lead_magnet: leadMagnet });
     } catch (err) {
       setState("error");
       setError((err as Error).message ?? "Couldn't sign you up. Try again.");
@@ -85,11 +87,19 @@ export function LeadCapture({
               target="_blank"
               rel="noopener noreferrer"
               download
-              onClick={() => tiktokTrack("Download", {
-                contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
-                value: 0,
-                currency: "USD",
-              })}
+              onClick={() => {
+                tiktokTrack("Download", {
+                  contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
+                  value: 0,
+                  currency: "USD",
+                });
+                dlButtonClick({
+                  label: "Download the kit",
+                  category: "lead_magnet",
+                  destination: kitAsset.url,
+                  lead_magnet: leadMagnet,
+                });
+              }}
             >
               <Download className="h-4 w-4" /> Download the kit
             </a>

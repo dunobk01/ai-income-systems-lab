@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { tiktokTrack } from "@/lib/tiktok";
+import { dlPurchase } from "@/lib/datalayer";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -19,6 +20,11 @@ function ReturnPage() {
       contents: [{ content_id: session_id, content_type: "product", content_name: "ai-income-systems-lab" }],
       value: 0,
       currency: "USD",
+    });
+    dlPurchase({
+      transaction_id: session_id,
+      currency: "USD",
+      items: [{ item_id: "ai-income-systems-lab", item_name: "AI Income Systems Lab" }],
     });
   }, [session_id]);
   return (
