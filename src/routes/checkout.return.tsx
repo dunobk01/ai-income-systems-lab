@@ -21,6 +21,11 @@ function ReturnPage() {
       value: 0,
       currency: "USD",
     });
+    dlPurchase({
+      transaction_id: session_id,
+      currency: "USD",
+      items: [{ item_id: "ai-income-systems-lab", item_name: "AI Income Systems Lab" }],
+    });
   }, [session_id]);
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
