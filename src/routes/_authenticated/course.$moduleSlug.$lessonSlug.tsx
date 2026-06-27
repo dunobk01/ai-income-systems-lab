@@ -103,8 +103,19 @@ function LessonPage() {
     if (err) { toast.error("Couldn't save progress: " + err.message); return; }
     setCompleted(true);
     toast.success("Marked complete");
+    dlCourseProgress({
+      action: "lesson_complete",
+      module_slug: module?.slug,
+      module_title: module?.title,
+      lesson_slug: lesson.slug,
+      lesson_title: lesson.title,
+      lesson_id: lesson.id,
+    });
     if (next && module) {
       void navigate({ to: "/course/$moduleSlug/$lessonSlug", params: { moduleSlug: module.slug, lessonSlug: next.slug } });
+    } else if (module) {
+      // Last lesson in module → module_complete
+      dlCourseProgress({ action: "module_complete", module_slug: module.slug, module_title: module.title });
     }
   };
 
