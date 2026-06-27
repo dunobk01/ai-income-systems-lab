@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { NewsletterEngagement } from "@/components/newsletter-engagement";
+import { Linkify } from "@/components/linkify";
 
 export const Route = createFileRoute("/newsletter/$slug")({
   loader: async ({ context, params }) => {
