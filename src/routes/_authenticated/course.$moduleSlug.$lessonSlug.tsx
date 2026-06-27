@@ -73,6 +73,19 @@ function LessonPage() {
     })();
   }, [moduleSlug, lessonSlug, user]);
 
+  // Fire lesson_start once per lesson view (only if accessible & not already complete).
+  useEffect(() => {
+    if (!lesson || !module) return;
+    dlCourseProgress({
+      action: "lesson_start",
+      module_slug: module.slug,
+      module_title: module.title,
+      lesson_slug: lesson.slug,
+      lesson_title: lesson.title,
+      lesson_id: lesson.id,
+    });
+  }, [lesson?.id, module?.id]);
+
   const canAccess = hasCurriculumAccess(profile?.tier, isAdmin);
   const locked = module ? (!canAccess && !module.is_preview) : false;
 
