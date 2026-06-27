@@ -87,11 +87,19 @@ export function LeadCapture({
               target="_blank"
               rel="noopener noreferrer"
               download
-              onClick={() => tiktokTrack("Download", {
-                contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
-                value: 0,
-                currency: "USD",
-              })}
+              onClick={() => {
+                tiktokTrack("Download", {
+                  contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
+                  value: 0,
+                  currency: "USD",
+                });
+                dlButtonClick({
+                  label: "Download the kit",
+                  category: "lead_magnet",
+                  destination: kitAsset.url,
+                  lead_magnet: leadMagnet,
+                });
+              }}
             >
               <Download className="h-4 w-4" /> Download the kit
             </a>
