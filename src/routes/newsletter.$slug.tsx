@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { NewsletterEngagement } from "@/components/newsletter-engagement";
+import { Linkify } from "@/components/linkify";
 
 export const Route = createFileRoute("/newsletter/$slug")({
   loader: async ({ context, params }) => {
@@ -88,7 +89,7 @@ function PostPage() {
           )}
           <div className="mt-10 text-base leading-relaxed text-foreground/90 space-y-5">
             {post.content.split(/\n{2,}/).map((para, i) => (
-              <p key={i} className="whitespace-pre-wrap">{para}</p>
+              <p key={i} className="whitespace-pre-wrap"><Linkify text={para} /></p>
             ))}
           </div>
 
