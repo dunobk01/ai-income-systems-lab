@@ -14,7 +14,7 @@ const products: Row[] = [
     description:
       "Full access to all 11 modules and 90+ lessons inside the AI Income Systems Lab. Cancel anytime.",
     link: `${BASE_URL}/pricing`,
-    image_link: IMAGE,
+    image_link: `${BASE_URL}/pinterest/pin-monthly.jpg`,
     price: "14.99 USD",
     availability: "in stock",
     condition: "new",
@@ -28,7 +28,7 @@ const products: Row[] = [
     description:
       "Lifetime access to the Starter tier: foundations to start earning with AI online.",
     link: `${BASE_URL}/pricing`,
-    image_link: IMAGE,
+    image_link: `${BASE_URL}/pinterest/pin-starter.jpg`,
     price: "29.00 USD",
     availability: "in stock",
     condition: "new",
@@ -42,7 +42,7 @@ const products: Row[] = [
     description:
       "Lifetime access to Builder tier: every module plus the AI Agents & Skills builders and templates.",
     link: `${BASE_URL}/pricing`,
-    image_link: IMAGE,
+    image_link: `${BASE_URL}/pinterest/pin-builder.jpg`,
     price: "79.00 USD",
     availability: "in stock",
     condition: "new",
@@ -56,7 +56,7 @@ const products: Row[] = [
     description:
       "Top tier lifetime access: full curriculum, all builders, Pro Systems Lab, and every future update.",
     link: `${BASE_URL}/pricing`,
-    image_link: IMAGE,
+    image_link: `${BASE_URL}/pinterest/pin-pro.jpg`,
     price: "149.00 USD",
     availability: "in stock",
     condition: "new",
@@ -70,7 +70,7 @@ const products: Row[] = [
     description:
       "Free 14-page guide + prompt pack to start earning with AI. Instant download, no credit card required.",
     link: `${BASE_URL}/#lead-capture`,
-    image_link: IMAGE,
+    image_link: `${BASE_URL}/pinterest/pin-starter-kit.jpg`,
     price: "0.00 USD",
     availability: "in stock",
     condition: "new",
@@ -84,7 +84,7 @@ const products: Row[] = [
     description:
       "Free interactive prompt engine that generates a customized AI business plan in minutes.",
     link: "https://ai-income-systems.netlify.app/prompt-engine",
-    image_link: IMAGE,
+    image_link: `${BASE_URL}/pinterest/pin-prompt-engine.jpg`,
     price: "0.00 USD",
     availability: "in stock",
     condition: "new",
@@ -98,7 +98,7 @@ const products: Row[] = [
     description:
       "Free weekly newsletter: the AI tools, prompts, and workflows actually making money this week.",
     link: `${BASE_URL}/newsletter`,
-    image_link: IMAGE,
+    image_link: `${BASE_URL}/pinterest/pin-newsletter.jpg`,
     price: "0.00 USD",
     availability: "in stock",
     condition: "new",
