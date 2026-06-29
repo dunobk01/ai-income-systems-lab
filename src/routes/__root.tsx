@@ -76,6 +76,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "google-site-verification", content: "8HOsPtjN19kPsUFU_8CGyWZ7YlB0ogYjA0pXIrNldpM" },
+      { name: "p:domain_verify", content: "964370f2f81337f7db6b2575b2fd55da" },
       { title: "AI Income Systems Lab — Build Real AI Income Systems" },
       { name: "description", content: "Master ChatGPT, Claude, Perplexity, Lovable, and n8n to build digital products, funnels, and automations you can actually sell." },
       { property: "og:site_name", content: "AI Income Systems Lab" },
