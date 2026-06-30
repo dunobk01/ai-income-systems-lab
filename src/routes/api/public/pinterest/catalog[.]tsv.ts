@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 
 const BASE_URL = "https://ai-income-systems.com";
 const BRAND = "AI Income Systems Lab";
-const IMAGE = `${BASE_URL}/og-default.jpg`;
+
 
 type Row = Record<string, string>;
 
