@@ -12,11 +12,6 @@ export const Route = createFileRoute("/_authenticated/library/$slug")({
     const t = getTemplate(params.slug);
     return { meta: [{ title: t ? `${t.title} — Template Library` : "Template — Library" }, { name: "robots", content: "noindex" }] };
   },
-  loader: ({ params }) => {
-    const t = getTemplate(params.slug);
-    if (!t) throw notFound();
-    return { template: t };
-  },
   component: TemplatePage,
   notFoundComponent: () => (
     <div className="p-10 text-center text-muted-foreground">Template not found. <Link to="/library" className="underline">Back</Link></div>
@@ -30,10 +25,15 @@ const kindMeta: Record<TemplateKind, { label: string; icon: typeof Sparkles; col
 };
 
 function TemplatePage() {
-  const { template } = Route.useLoaderData();
+  const { slug } = Route.useParams();
+  const template = getTemplate(slug) as Template | undefined;
   const { profile, isAdmin } = useAuth();
   const tier = profile?.tier ?? "none";
   const canAccess = isAdmin || tier === "builder" || tier === "pro";
+
+  if (!template) {
+    throw notFound();
+  }
   const meta = kindMeta[template.kind];
   const Icon = meta.icon;
 
