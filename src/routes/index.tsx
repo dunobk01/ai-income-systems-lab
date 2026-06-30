@@ -69,15 +69,16 @@ const audience = [
 ];
 
 const included = [
-  "100+ structured lessons across 11 modules",
+  "100+ structured lessons across 14 modules",
+  "Faceless video, AI image, and chatbot agency modules (Accelerator)",
   "Searchable prompt library (ChatGPT, Claude, Perplexity, Lovable, n8n)",
-  "Interactive Digital Product Builder",
-  "Interactive Sales Funnel Builder",
+  "Interactive Digital Product Builder + Sales Funnel Builder",
   "n8n workflow templates with setup guides",
   "Local business AI service kit + outreach scripts",
-  "Lifetime access to your tier",
+  "Members community + Wins channel + member DMs (Accelerator)",
   "Progress tracking, notes, and downloadable resources",
 ];
+
 
 const faqs = [
   { q: "Do I need any AI experience?", a: "No. Module 1 starts from zero. If you can write a paragraph and follow steps, you can do this." },
