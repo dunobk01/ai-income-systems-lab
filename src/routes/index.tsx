@@ -41,8 +41,9 @@ const builds = [
   { slug: "simple-saas-mvps", title: "Simple SaaS MVPs", desc: "Working web apps with auth, payments, and a real customer use case.", icon: Bot },
   { slug: "automations", title: "Automations", desc: "n8n workflows that handle delivery, follow-up, and content repurposing.", icon: Zap },
   { slug: "local-ai-services", title: "Local AI services", desc: "Productized offers for small businesses — audits, mockups, automations.", icon: Wand2 },
-  { slug: "content-systems", title: "Content systems", desc: "Repeatable AI content pipelines for Pinterest, TikTok, Shorts, and SEO.", icon: Sparkles },
+  { slug: "content-systems", title: "Faceless video & voiceovers", desc: "AI text-to-video, faceless YouTube/TikTok/Shorts, and ElevenLabs voiceovers — built to scale.", icon: Video },
 ];
+
 
 const modules = [
   { n: "01", title: "AI Money Foundations", lessons: 6, outcome: "Pick a niche, an offer type, and a 90-day income target you can actually hit." },
