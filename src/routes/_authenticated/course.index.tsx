@@ -90,7 +90,8 @@ function CoursePage() {
       <div className="mt-8 space-y-4">
         {modules.map((m, i) => {
           const moduleLessons = lessons.filter((l) => l.module_id === m.id);
-          const locked = !canAccessAll && !m.is_preview;
+          const hasModuleAccess = canAccessModule(profile?.tier, m.required_tier, isAdmin);
+          const locked = !hasModuleAccess && !m.is_preview;
           const doneInMod = moduleLessons.filter((l) => completed.has(l.id)).length;
           return (
             <section key={m.id} className="glass rounded-2xl overflow-hidden">
@@ -102,7 +103,7 @@ function CoursePage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h2 className="font-semibold">{m.title}</h2>
                     <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-white/15">{m.required_tier}</Badge>
-                    {m.is_preview && !canAccessAll && (
+                    {m.is_preview && !hasModuleAccess && (
                       <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free preview</Badge>
                     )}
                     {locked && <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground"><Lock className="h-3 w-3" /> Locked</span>}
