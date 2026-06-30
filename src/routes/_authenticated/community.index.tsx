@@ -29,14 +29,17 @@ const CATS = [
   { value: "help", label: "Help" },
 ] as const;
 
+const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
+
 function CommunityIndex() {
   const { profile, isAdmin } = useAuth();
   const tier = profile?.tier ?? "none";
-  const canAccess = isAdmin || tier === "builder" || tier === "pro";
+  const canAccess = isAdmin || (TIER_RANK[tier] ?? 0) >= 1;
+  const canDM = isAdmin || (TIER_RANK[tier] ?? 0) >= 3; // Accelerator/Pro only
 
   if (!canAccess) return <Gate />;
 
-  return <CommunityFeed />;
+  return <CommunityFeed canDM={canDM} />;
 }
 
 function Gate() {
@@ -46,9 +49,9 @@ function Gate() {
         <div className="mx-auto h-14 w-14 grid place-items-center rounded-2xl mb-4" style={{ background: "var(--gradient-soft)" }}>
           <Lock className="h-6 w-6 text-[color:var(--brand)]" />
         </div>
-        <h1 className="text-2xl font-bold">Community is a Builder & Pro perk</h1>
+        <h1 className="text-2xl font-bold">Community is for paying members</h1>
         <p className="mt-3 text-muted-foreground max-w-md mx-auto">
-          The members-only community is where builders share wins, post real workflows, and get peer feedback. Upgrade to Builder or Pro to join the conversation.
+          The members-only community is where builders share wins, post real workflows, and get peer feedback. Subscribe to Starter, Builder, or Accelerator to join the conversation.
         </p>
         <div className="mt-6 flex justify-center gap-3">
           <Button asChild variant="brand"><Link to="/pricing">See plans <ArrowRight className="h-4 w-4" /></Link></Button>
