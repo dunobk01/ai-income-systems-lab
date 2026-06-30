@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { dlCourseProgress } from "@/lib/datalayer";
 
-type Tier = "starter" | "builder" | "pro";
+type Tier = "starter" | "builder" | "pro" | "accelerator";
 type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number; is_preview: boolean };
 type Lesson = {
   id: string; slug: string; title: string; module_id: string;
@@ -20,8 +20,9 @@ type Lesson = {
   duration_minutes: number | null; order_index: number;
 };
 
-const hasCurriculumAccess = (tier?: string, isAdmin?: boolean) =>
-  isAdmin === true || tier === "monthly" || tier === "starter" || tier === "builder" || tier === "pro";
+const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
+const hasCurriculumAccess = (tier?: string, requiredTier?: string, isAdmin?: boolean) =>
+  isAdmin === true || (TIER_RANK[tier ?? "none"] ?? 0) >= (TIER_RANK[requiredTier ?? "starter"] ?? 1);
 
 export const Route = createFileRoute("/_authenticated/course/$moduleSlug/$lessonSlug")({
   head: () => ({ meta: [{ title: "Lesson — AI Income Systems Lab" }] }),
