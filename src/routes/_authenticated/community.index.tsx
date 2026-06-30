@@ -62,7 +62,7 @@ function Gate() {
   );
 }
 
-function CommunityFeed() {
+function CommunityFeed({ canDM }: { canDM: boolean }) {
   const qc = useQueryClient();
   const listFn = useServerFn(listThreads);
   const createFn = useServerFn(createThread);
@@ -88,13 +88,28 @@ function CommunityFeed() {
           <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--brand-2)]">Members-only</p>
           <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Community</h1>
           <p className="mt-2 text-muted-foreground max-w-xl">
-            Share wins, post workflows, get peer feedback. Builder & Pro members only.
+            Share wins, post workflows, get peer feedback. Open to all paying members.
           </p>
         </div>
-        <Button variant="brand" onClick={() => setComposerOpen((v) => !v)}>
-          <Plus className="h-4 w-4" /> New post
-        </Button>
+        <div className="flex gap-2">
+          {canDM && (
+            <Button asChild variant="glass">
+              <Link to="/messages"><MessageSquare className="h-4 w-4" /> DMs</Link>
+            </Button>
+          )}
+          <Button variant="brand" onClick={() => setComposerOpen((v) => !v)}>
+            <Plus className="h-4 w-4" /> New post
+          </Button>
+        </div>
       </div>
+
+      {!canDM && (
+        <div className="mb-6 glass rounded-2xl px-4 py-3 text-xs text-muted-foreground flex items-center justify-between flex-wrap gap-2">
+          <span>💬 Direct messages between members are an <span className="text-[color:var(--brand-2)] font-semibold">Accelerator</span> perk.</span>
+          <Link to="/pricing" className="text-[color:var(--brand)] hover:underline">Upgrade →</Link>
+        </div>
+      )}
+
 
       {composerOpen && (
         <div className="glass-strong rounded-2xl p-5 mb-8">
