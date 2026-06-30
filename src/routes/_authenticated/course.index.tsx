@@ -65,7 +65,7 @@ function CoursePage() {
     })();
   }, [user]);
 
-  const canAccessAll = hasCurriculumAccess(profile?.tier, isAdmin);
+  // (canAccessAll removed — gating is now per-module via canAccessModule)
   const totalLessons = lessons.length;
   const completedCount = completed.size;
   const pct = totalLessons ? Math.round((completedCount / totalLessons) * 100) : 0;
