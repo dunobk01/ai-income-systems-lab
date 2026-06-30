@@ -371,18 +371,17 @@ export default function LandingPage() {
         <div className="glass-strong rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
           <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Pricing</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Monthly or lifetime. Your call.</h2>
-          <p className="mt-3 text-muted-foreground">Start month-to-month, or own it forever with a one-time payment.</p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-left">
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Pick your plan. Cancel anytime.</h2>
+          <p className="mt-3 text-muted-foreground">Three subscription tiers — monthly or annual. Annual plans get <strong className="text-foreground">2 months free</strong>.</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3 text-left">
             {[
-              { name: "All-Access Monthly", price: "$14.99", note: "/mo · cancel anytime" },
-              { name: "Starter Lab", price: "$29", note: "Course + prompts" },
-              { name: "Builder Lab", price: "$79", note: "+ builders + workflows", featured: true },
-              { name: "Pro Systems Lab", price: "$149", note: "+ local kit + templates" },
+              { name: "Starter", price: "$29", note: "/mo · Core course + prompts" },
+              { name: "Builder", price: "$79", note: "/mo · + community, builders, templates", featured: true },
+              { name: "Accelerator", price: "$149", note: "/mo · + faceless video, AI image, chatbot agency, DMs" },
             ].map((p) => (
               <div key={p.name} className={`rounded-2xl p-5 ${p.featured ? "ring-brand bg-white/5" : "glass"}`}>
                 <p className="text-sm text-muted-foreground">{p.name}</p>
-                <p className="mt-2 text-3xl font-bold">{p.price}</p>
+                <p className="mt-2 text-3xl font-bold">{p.price}<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
                 <p className="mt-1 text-xs text-muted-foreground">{p.note}</p>
               </div>
             ))}
