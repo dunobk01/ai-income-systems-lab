@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Sparkles, Rocket, Zap, Brain, Workflow, Bot, Search, Layers,
   ArrowRight, Check, Shield, MessageSquare, Wand2, FileCode2,
+  Video, Image as ImageIcon, Mic,
 } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -40,8 +41,9 @@ const builds = [
   { slug: "simple-saas-mvps", title: "Simple SaaS MVPs", desc: "Working web apps with auth, payments, and a real customer use case.", icon: Bot },
   { slug: "automations", title: "Automations", desc: "n8n workflows that handle delivery, follow-up, and content repurposing.", icon: Zap },
   { slug: "local-ai-services", title: "Local AI services", desc: "Productized offers for small businesses — audits, mockups, automations.", icon: Wand2 },
-  { slug: "content-systems", title: "Content systems", desc: "Repeatable AI content pipelines for Pinterest, TikTok, Shorts, and SEO.", icon: Sparkles },
+  { slug: "content-systems", title: "Faceless video & voiceovers", desc: "AI text-to-video, faceless YouTube/TikTok/Shorts, and ElevenLabs voiceovers — built to scale.", icon: Video },
 ];
+
 
 const modules = [
   { n: "01", title: "AI Money Foundations", lessons: 6, outcome: "Pick a niche, an offer type, and a 90-day income target you can actually hit." },
@@ -55,6 +57,9 @@ const modules = [
   { n: "09", title: "n8n Automation Lab", lessons: 11, outcome: "Build workflows that deliver products, follow up with buyers, and repurpose content on autopilot." },
   { n: "10", title: "Local Business AI Service Kit", lessons: 7, outcome: "Sell a productized AI service (audits, content, automations) to local clients for $500–$2k." },
   { n: "11", title: "Launch Your First Income System", lessons: 8, outcome: "Combine product + funnel + automation into a live offer in 7 days." },
+  { n: "12", title: "Faceless Video Income", lessons: 8, outcome: "Faceless YouTube/TikTok/Shorts with ElevenLabs voiceovers + HeyGen/Synthesia AI avatars." },
+  { n: "13", title: "AI Image Income", lessons: 7, outcome: "Midjourney / Flux 2 for print-on-demand, ads, and thumbnails that actually sell." },
+  { n: "14", title: "Chatbot Agency (Botpress)", lessons: 8, outcome: "Build and resell AI chatbots to local businesses for $1k–$5k setup deals." },
 ];
 
 const audience = [
@@ -67,15 +72,16 @@ const audience = [
 ];
 
 const included = [
-  "100+ structured lessons across 11 modules",
+  "100+ structured lessons across 14 modules",
+  "Faceless video, AI image, and chatbot agency modules (Accelerator)",
   "Searchable prompt library (ChatGPT, Claude, Perplexity, Lovable, n8n)",
-  "Interactive Digital Product Builder",
-  "Interactive Sales Funnel Builder",
+  "Interactive Digital Product Builder + Sales Funnel Builder",
   "n8n workflow templates with setup guides",
   "Local business AI service kit + outreach scripts",
-  "Lifetime access to your tier",
+  "Members community + Wins channel + member DMs (Accelerator)",
   "Progress tracking, notes, and downloadable resources",
 ];
+
 
 const faqs = [
   { q: "Do I need any AI experience?", a: "No. Module 1 starts from zero. If you can write a paragraph and follow steps, you can do this." },
@@ -126,6 +132,49 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* NEW MODULES HIGHLIGHT */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 pt-4 pb-12">
+        <div className="glass-strong rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+          <div className="absolute inset-0 -z-10 opacity-50" style={{ background: "var(--gradient-hero)" }} />
+          <div className="flex items-center gap-2 justify-center">
+            <span className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold text-background" style={{ background: "var(--gradient-brand)" }}>
+              <Sparkles className="h-3 w-3" /> New in the Lab
+            </span>
+          </div>
+          <h2 className="mt-4 text-center text-2xl sm:text-4xl font-bold tracking-tight">
+            Now teaching <span className="text-gradient">faceless video, AI image & chatbot agency</span> income
+          </h2>
+          <p className="mt-3 text-center text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+            Three new modules unlock with the Accelerator tier — built around the tools creators are using right now to scale without showing their face.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {[
+              { icon: Video, title: "Faceless Video Income", body: "AI text-to-video, faceless YouTube/TikTok/Shorts pipelines, HeyGen & Synthesia avatars." },
+              { icon: Mic, title: "AI Voiceovers (ElevenLabs)", body: "Studio-quality voiceovers for video, ads, courses, and audiobooks — at scale." },
+              { icon: ImageIcon, title: "AI Image Income", body: "Midjourney / Flux 2 for print-on-demand, social ads, thumbnails, and product mockups." },
+            ].map((h) => (
+              <div key={h.title} className="glass rounded-2xl p-5">
+                <div className="grid h-10 w-10 place-items-center rounded-lg" style={{ background: "var(--gradient-soft)" }}>
+                  <h.icon className="h-5 w-5 text-[color:var(--brand-2)]" />
+                </div>
+                <p className="mt-4 font-semibold">{h.title}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{h.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-7 flex flex-col sm:flex-row justify-center gap-3">
+            <Button asChild variant="brand" className="h-11 px-6">
+              <Link to="/pricing">Unlock with Accelerator <ArrowRight className="h-4 w-4" /></Link>
+            </Button>
+            <Button asChild variant="glass" className="h-11 px-6">
+              <Link to="/curriculum">See the new lessons</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+
 
       {/* PROBLEM */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
@@ -206,7 +255,7 @@ export default function LandingPage() {
       <section id="curriculum" className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Curriculum</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">11 modules. 90+ lessons.</h2>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">14 modules. 110+ lessons.</h2>
           <p className="mt-3 text-muted-foreground">Sequenced so each module builds on the last.</p>
         </div>
         <div className="glass-strong rounded-2xl overflow-hidden divide-y divide-white/5">
@@ -348,9 +397,9 @@ export default function LandingPage() {
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-10">
         <div className="grid gap-3 sm:grid-cols-3">
           {[
-            { k: "14-day", v: "Refund window on every one-time tier" },
-            { k: "0", v: "Subscriptions, upsells, or hidden fees" },
-            { k: "Cancel", v: "Anytime on monthly — keep what you've built" },
+            { k: "Cancel", v: "Anytime — keep access through your billing period" },
+            { k: "0", v: "Hidden fees, upsells, or surprise charges" },
+            { k: "2 mo", v: "Free when you choose any annual plan" },
           ].map((t) => (
             <div key={t.v} className="glass rounded-2xl p-5 text-center">
               <p className="text-2xl font-black text-gradient">{t.k}</p>
@@ -368,18 +417,17 @@ export default function LandingPage() {
         <div className="glass-strong rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
           <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Pricing</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Monthly or lifetime. Your call.</h2>
-          <p className="mt-3 text-muted-foreground">Start month-to-month, or own it forever with a one-time payment.</p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-left">
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Pick your plan. Cancel anytime.</h2>
+          <p className="mt-3 text-muted-foreground">Three subscription tiers — monthly or annual. Annual plans get <strong className="text-foreground">2 months free</strong>.</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3 text-left">
             {[
-              { name: "All-Access Monthly", price: "$14.99", note: "/mo · cancel anytime" },
-              { name: "Starter Lab", price: "$29", note: "Course + prompts" },
-              { name: "Builder Lab", price: "$79", note: "+ builders + workflows", featured: true },
-              { name: "Pro Systems Lab", price: "$149", note: "+ local kit + templates" },
+              { name: "Starter", price: "$29", note: "/mo · Core course + prompts" },
+              { name: "Builder", price: "$79", note: "/mo · + community, builders, templates", featured: true },
+              { name: "Accelerator", price: "$149", note: "/mo · + faceless video, AI image, chatbot agency, DMs" },
             ].map((p) => (
               <div key={p.name} className={`rounded-2xl p-5 ${p.featured ? "ring-brand bg-white/5" : "glass"}`}>
                 <p className="text-sm text-muted-foreground">{p.name}</p>
-                <p className="mt-2 text-3xl font-bold">{p.price}</p>
+                <p className="mt-2 text-3xl font-bold">{p.price}<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
                 <p className="mt-1 text-xs text-muted-foreground">{p.note}</p>
               </div>
             ))}
