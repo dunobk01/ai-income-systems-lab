@@ -2,7 +2,19 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
-type Tier = "none" | "monthly" | "starter" | "builder" | "pro";
+type Tier = "none" | "monthly" | "starter" | "builder" | "pro" | "accelerator";
+
+export const TIER_RANK: Record<string, number> = {
+  none: 0,
+  monthly: 1,
+  starter: 1,
+  builder: 2,
+  pro: 3,
+  accelerator: 3,
+};
+
+export const hasTier = (userTier: string | undefined | null, requiredTier: string): boolean =>
+  (TIER_RANK[userTier ?? "none"] ?? 0) >= (TIER_RANK[requiredTier] ?? 0);
 
 type Profile = {
   user_id: string;
