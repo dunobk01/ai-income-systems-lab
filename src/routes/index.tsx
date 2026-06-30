@@ -133,6 +133,49 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* NEW MODULES HIGHLIGHT */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 pt-4 pb-12">
+        <div className="glass-strong rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+          <div className="absolute inset-0 -z-10 opacity-50" style={{ background: "var(--gradient-hero)" }} />
+          <div className="flex items-center gap-2 justify-center">
+            <span className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold text-background" style={{ background: "var(--gradient-brand)" }}>
+              <Sparkles className="h-3 w-3" /> New in the Lab
+            </span>
+          </div>
+          <h2 className="mt-4 text-center text-2xl sm:text-4xl font-bold tracking-tight">
+            Now teaching <span className="text-gradient">faceless video, AI image & chatbot agency</span> income
+          </h2>
+          <p className="mt-3 text-center text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+            Three new modules unlock with the Accelerator tier — built around the tools creators are using right now to scale without showing their face.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {[
+              { icon: Video, title: "Faceless Video Income", body: "AI text-to-video, faceless YouTube/TikTok/Shorts pipelines, HeyGen & Synthesia avatars." },
+              { icon: Mic, title: "AI Voiceovers (ElevenLabs)", body: "Studio-quality voiceovers for video, ads, courses, and audiobooks — at scale." },
+              { icon: ImageIcon, title: "AI Image Income", body: "Midjourney / Flux 2 for print-on-demand, social ads, thumbnails, and product mockups." },
+            ].map((h) => (
+              <div key={h.title} className="glass rounded-2xl p-5">
+                <div className="grid h-10 w-10 place-items-center rounded-lg" style={{ background: "var(--gradient-soft)" }}>
+                  <h.icon className="h-5 w-5 text-[color:var(--brand-2)]" />
+                </div>
+                <p className="mt-4 font-semibold">{h.title}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{h.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-7 flex flex-col sm:flex-row justify-center gap-3">
+            <Button asChild variant="brand" className="h-11 px-6">
+              <Link to="/pricing">Unlock with Accelerator <ArrowRight className="h-4 w-4" /></Link>
+            </Button>
+            <Button asChild variant="glass" className="h-11 px-6">
+              <Link to="/curriculum">See the new lessons</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+
+
       {/* PROBLEM */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="text-center">
