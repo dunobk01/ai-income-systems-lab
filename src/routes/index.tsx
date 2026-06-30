@@ -351,9 +351,9 @@ export default function LandingPage() {
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-10">
         <div className="grid gap-3 sm:grid-cols-3">
           {[
-            { k: "14-day", v: "Refund window on every one-time tier" },
-            { k: "0", v: "Subscriptions, upsells, or hidden fees" },
-            { k: "Cancel", v: "Anytime on monthly — keep what you've built" },
+            { k: "Cancel", v: "Anytime — keep access through your billing period" },
+            { k: "0", v: "Hidden fees, upsells, or surprise charges" },
+            { k: "2 mo", v: "Free when you choose any annual plan" },
           ].map((t) => (
             <div key={t.v} className="glass rounded-2xl p-5 text-center">
               <p className="text-2xl font-black text-gradient">{t.k}</p>
