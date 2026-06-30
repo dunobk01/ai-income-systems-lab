@@ -3,30 +3,16 @@ import type {} from "@tanstack/react-start";
 
 const BASE_URL = "https://ai-income-systems.com";
 const BRAND = "AI Income Systems Lab";
-const IMAGE = `${BASE_URL}/og-default.jpg`;
+
 
 type Row = Record<string, string>;
 
 const products: Row[] = [
   {
-    id: "ailab_monthly_subscription",
-    title: "All-Access Monthly Membership",
+    id: "ailab_starter_monthly",
+    title: "Starter — Monthly Membership",
     description:
-      "Full access to all 11 modules and 90+ lessons inside the AI Income Systems Lab. Cancel anytime.",
-    link: `${BASE_URL}/pricing`,
-    image_link: `${BASE_URL}/pinterest/pin-monthly.jpg`,
-    price: "14.99 USD",
-    availability: "in stock",
-    condition: "new",
-    brand: BRAND,
-    google_product_category: "Education > Online Courses",
-    product_type: "Course > Membership > Monthly",
-  },
-  {
-    id: "ailab_starter_onetime",
-    title: "Starter Lab — Lifetime Access",
-    description:
-      "Lifetime access to the Starter tier: foundations to start earning with AI online.",
+      "Full 11-module course access. Learn the AI Income System end-to-end. Cancel anytime.",
     link: `${BASE_URL}/pricing`,
     image_link: `${BASE_URL}/pinterest/pin-starter.jpg`,
     price: "29.00 USD",
@@ -34,13 +20,27 @@ const products: Row[] = [
     condition: "new",
     brand: BRAND,
     google_product_category: "Education > Online Courses",
-    product_type: "Course > Lifetime > Starter",
+    product_type: "Course > Subscription > Starter Monthly",
   },
   {
-    id: "ailab_builder_onetime",
-    title: "Builder Lab — Lifetime Access",
+    id: "ailab_starter_annual",
+    title: "Starter — Annual Membership (2 months free)",
     description:
-      "Lifetime access to Builder tier: every module plus the AI Agents & Skills builders and templates.",
+      "Annual access to the full 11-module course. Save vs. monthly with 2 months free.",
+    link: `${BASE_URL}/pricing`,
+    image_link: `${BASE_URL}/pinterest/pin-starter.jpg`,
+    price: "290.00 USD",
+    availability: "in stock",
+    condition: "new",
+    brand: BRAND,
+    google_product_category: "Education > Online Courses",
+    product_type: "Course > Subscription > Starter Annual",
+  },
+  {
+    id: "ailab_builder_monthly",
+    title: "Builder — Monthly Membership",
+    description:
+      "Course + members-only community + template library + interactive builders. Most popular tier.",
     link: `${BASE_URL}/pricing`,
     image_link: `${BASE_URL}/pinterest/pin-builder.jpg`,
     price: "79.00 USD",
@@ -48,13 +48,27 @@ const products: Row[] = [
     condition: "new",
     brand: BRAND,
     google_product_category: "Education > Online Courses",
-    product_type: "Course > Lifetime > Builder",
+    product_type: "Course > Subscription > Builder Monthly",
   },
   {
-    id: "ailab_pro_onetime",
-    title: "Pro Systems Lab — Lifetime Access",
+    id: "ailab_builder_annual",
+    title: "Builder — Annual Membership (2 months free)",
     description:
-      "Top tier lifetime access: full curriculum, all builders, Pro Systems Lab, and every future update.",
+      "Annual Builder access: course, community, templates, and builders. 2 months free vs. monthly.",
+    link: `${BASE_URL}/pricing`,
+    image_link: `${BASE_URL}/pinterest/pin-builder.jpg`,
+    price: "790.00 USD",
+    availability: "in stock",
+    condition: "new",
+    brand: BRAND,
+    google_product_category: "Education > Online Courses",
+    product_type: "Course > Subscription > Builder Annual",
+  },
+  {
+    id: "ailab_accelerator_monthly",
+    title: "Accelerator — Monthly Membership",
+    description:
+      "Everything in Builder plus Faceless Video, AI Image Income, Chatbot Agency (Botpress), Agent Generator, and member DMs.",
     link: `${BASE_URL}/pricing`,
     image_link: `${BASE_URL}/pinterest/pin-pro.jpg`,
     price: "149.00 USD",
@@ -62,7 +76,21 @@ const products: Row[] = [
     condition: "new",
     brand: BRAND,
     google_product_category: "Education > Online Courses",
-    product_type: "Course > Lifetime > Pro",
+    product_type: "Course > Subscription > Accelerator Monthly",
+  },
+  {
+    id: "ailab_accelerator_annual",
+    title: "Accelerator — Annual Membership (2 months free)",
+    description:
+      "Annual Accelerator access: every module, every builder, faceless video + image + chatbot tracks, and member DMs.",
+    link: `${BASE_URL}/pricing`,
+    image_link: `${BASE_URL}/pinterest/pin-pro.jpg`,
+    price: "1490.00 USD",
+    availability: "in stock",
+    condition: "new",
+    brand: BRAND,
+    google_product_category: "Education > Online Courses",
+    product_type: "Course > Subscription > Accelerator Annual",
   },
   {
     id: "ailab_starter_kit_free",

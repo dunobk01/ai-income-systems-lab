@@ -29,14 +29,17 @@ const CATS = [
   { value: "help", label: "Help" },
 ] as const;
 
+const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
+
 function CommunityIndex() {
   const { profile, isAdmin } = useAuth();
   const tier = profile?.tier ?? "none";
-  const canAccess = isAdmin || tier === "builder" || tier === "pro";
+  const canAccess = isAdmin || (TIER_RANK[tier] ?? 0) >= 1;
+  const canDM = isAdmin || (TIER_RANK[tier] ?? 0) >= 3; // Accelerator/Pro only
 
   if (!canAccess) return <Gate />;
 
-  return <CommunityFeed />;
+  return <CommunityFeed canDM={canDM} />;
 }
 
 function Gate() {
@@ -46,9 +49,9 @@ function Gate() {
         <div className="mx-auto h-14 w-14 grid place-items-center rounded-2xl mb-4" style={{ background: "var(--gradient-soft)" }}>
           <Lock className="h-6 w-6 text-[color:var(--brand)]" />
         </div>
-        <h1 className="text-2xl font-bold">Community is a Builder & Pro perk</h1>
+        <h1 className="text-2xl font-bold">Community is for paying members</h1>
         <p className="mt-3 text-muted-foreground max-w-md mx-auto">
-          The members-only community is where builders share wins, post real workflows, and get peer feedback. Upgrade to Builder or Pro to join the conversation.
+          The members-only community is where builders share wins, post real workflows, and get peer feedback. Subscribe to Starter, Builder, or Accelerator to join the conversation.
         </p>
         <div className="mt-6 flex justify-center gap-3">
           <Button asChild variant="brand"><Link to="/pricing">See plans <ArrowRight className="h-4 w-4" /></Link></Button>
@@ -59,7 +62,7 @@ function Gate() {
   );
 }
 
-function CommunityFeed() {
+function CommunityFeed({ canDM }: { canDM: boolean }) {
   const qc = useQueryClient();
   const listFn = useServerFn(listThreads);
   const createFn = useServerFn(createThread);
@@ -85,13 +88,28 @@ function CommunityFeed() {
           <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--brand-2)]">Members-only</p>
           <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Community</h1>
           <p className="mt-2 text-muted-foreground max-w-xl">
-            Share wins, post workflows, get peer feedback. Builder & Pro members only.
+            Share wins, post workflows, get peer feedback. Open to all paying members.
           </p>
         </div>
-        <Button variant="brand" onClick={() => setComposerOpen((v) => !v)}>
-          <Plus className="h-4 w-4" /> New post
-        </Button>
+        <div className="flex gap-2">
+          {canDM && (
+            <Button asChild variant="glass">
+              <Link to="/messages"><MessageSquare className="h-4 w-4" /> DMs</Link>
+            </Button>
+          )}
+          <Button variant="brand" onClick={() => setComposerOpen((v) => !v)}>
+            <Plus className="h-4 w-4" /> New post
+          </Button>
+        </div>
       </div>
+
+      {!canDM && (
+        <div className="mb-6 glass rounded-2xl px-4 py-3 text-xs text-muted-foreground flex items-center justify-between flex-wrap gap-2">
+          <span>💬 Direct messages between members are an <span className="text-[color:var(--brand-2)] font-semibold">Accelerator</span> perk.</span>
+          <Link to="/pricing" className="text-[color:var(--brand)] hover:underline">Upgrade →</Link>
+        </div>
+      )}
+
 
       {composerOpen && (
         <div className="glass-strong rounded-2xl p-5 mb-8">

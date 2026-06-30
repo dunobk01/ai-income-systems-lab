@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { z } from "zod";
-import { Check, Sparkles, ArrowRight, X as XIcon, Calendar } from "lucide-react";
+import { Check, Sparkles, ArrowRight, X as XIcon } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
@@ -14,9 +14,9 @@ export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing — AI Income Systems Lab" },
-      { name: "description", content: "All-Access Monthly at $14.99/mo, or one-time Starter ($29), Builder ($79), Pro ($149) — lifetime access. Pick the level that fits your goals." },
+      { name: "description", content: "Monthly or annual memberships. Starter $29/mo, Builder $79/mo, Accelerator $149/mo. Annual plans get 2 months free. Cancel anytime." },
       { property: "og:title", content: "Pricing — AI Income Systems Lab" },
-      { property: "og:description", content: "Monthly membership or one-time lifetime. Three lifetime tiers plus a flexible monthly plan." },
+      { property: "og:description", content: "Three subscription tiers — Starter, Builder, Accelerator. Monthly or annual. Cancel anytime." },
       { property: "og:url", content: "https://ai-income-systems.com/pricing" },
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/pricing" }],
@@ -27,13 +27,12 @@ export const Route = createFileRoute("/pricing")({
           "@context": "https://schema.org",
           "@type": "Product",
           name: "AI Income Systems Lab",
-          description: "Course + interactive builders teaching AI-powered digital products, funnels, and automations.",
+          description: "Course + interactive builders teaching AI-powered digital products, funnels, automations, faceless video, image gen, and chatbots.",
           brand: { "@type": "Brand", name: "AI Income Systems Lab" },
           offers: [
-            { "@type": "Offer", name: "All-Access Monthly", price: "14.99", priceCurrency: "USD", priceSpecification: { "@type": "UnitPriceSpecification", price: "14.99", priceCurrency: "USD", billingDuration: "P1M" }, url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
-            { "@type": "Offer", name: "Starter Lab", price: "29", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
-            { "@type": "Offer", name: "Builder Lab", price: "79", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
-            { "@type": "Offer", name: "Pro Systems Lab", price: "149", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Starter Monthly", price: "29", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Builder Monthly", price: "79", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Accelerator Monthly", price: "149", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
           ],
         }),
       },
@@ -42,11 +41,15 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
+type TierKey = "starter" | "builder" | "accelerator";
 type Tier = {
   name: string;
-  price: number;
+  key: TierKey;
+  monthly: number;
+  annual: number;
+  monthlyPriceId: string;
+  annualPriceId: string;
   tag: string;
-  tier: "starter" | "builder" | "pro";
   featured?: boolean;
   bestFor: string;
   whyUpgrade: string;
@@ -55,91 +58,108 @@ type Tier = {
 
 const tiers: Tier[] = [
   {
-    name: "Starter Lab",
-    price: 29,
-    tag: "Try the system",
-    tier: "starter",
-    bestFor: "Beginners who want to learn the system and ship one small offer.",
-    whyUpgrade: "Best entry point — full curriculum, no builders.",
+    name: "Starter",
+    key: "starter",
+    monthly: 29,
+    annual: 290,
+    monthlyPriceId: "starter_monthly",
+    annualPriceId: "starter_annual",
+    tag: "Core course",
+    bestFor: "Beginners who want the full curriculum and a shippable first offer.",
+    whyUpgrade: "All 11 core modules + 90+ lessons. Learn the system end-to-end.",
     features: [
       "Full 11-module course access",
       "Searchable prompt library (12 starter prompts)",
       "Action steps + downloads on every lesson",
       "Progress tracking + private notes",
-      "Lifetime access — pay once",
+      "Cancel anytime · Upgrade anytime",
     ],
   },
   {
-    name: "Builder Lab",
-    price: 79,
+    name: "Builder",
+    key: "builder",
+    monthly: 79,
+    annual: 790,
+    monthlyPriceId: "builder_monthly",
+    annualPriceId: "builder_annual",
     tag: "Most popular",
     featured: true,
-    tier: "builder",
-    bestFor: "Creators ready to launch products and funnels with AI shortcuts.",
-    whyUpgrade: "Unlocks the interactive builders that turn ideas into ship-ready plans in minutes.",
+    bestFor: "Creators ready to launch products, funnels, and offers with AI shortcuts.",
+    whyUpgrade: "Courses + community + templates + the interactive builders that turn ideas into ship-ready plans in minutes.",
     features: [
       "Everything in Starter",
-      "Digital Product Builder — generates a full product blueprint (positioning, outline, 3-week plan, launch hooks) from your niche",
-      "Sales Funnel Builder — full lead magnet → landing → tripwire → upsell plan with copy angles",
-      "n8n Workflow Library — drop-in templates for delivery, follow-up, content repurposing, and lead routing",
-      "AI Tool Stack Guide (when to use which model & why)",
-      "20 Builder-tier prompts (hooks, niche research, brand voice, customer voice mining…)",
+      "Members-only Community + Wins channel",
+      "Template Library (prompts, n8n workflows, Lovable scaffolds)",
+      "Digital Product Builder + Sales Funnel Builder",
+      "AI Tool Stack Guide & 20 Builder-tier prompts",
     ],
   },
   {
-    name: "Pro Systems Lab",
-    price: 149,
-    tag: "Go pro",
-    tier: "pro",
+    name: "Accelerator",
+    key: "accelerator",
+    monthly: 149,
+    annual: 1490,
+    monthlyPriceId: "accelerator_monthly",
+    annualPriceId: "accelerator_annual",
+    tag: "All-in",
     bestFor: "Operators selling AI services or running multiple income systems.",
-    whyUpgrade: "Adds the agent generator, local-service kit, and pro-grade prompt frameworks for higher-ticket work.",
+    whyUpgrade: "Everything above + faceless video, image gen, and chatbot agency modules. All builders + member DMs unlocked.",
     features: [
       "Everything in Builder",
-      "AI Agents & Skills module (8 deep lessons)",
-      "Agent Generator — turn any prompt into a full agent spec",
-      "Local Business AI Service Kit (audit, outreach, fulfilment)",
-      "25 Pro prompts (multi-agent workflows, RAG specs, launch command center, VOC mining…)",
-      "Priority access to new content & builders",
+      "Faceless Video Income (ElevenLabs + HeyGen/Synthesia)",
+      "AI Image Income (Midjourney / Flux 2 for POD, ads, thumbnails)",
+      "Chatbot Agency module (Botpress — $1k–5k setup deals)",
+      "Agent Generator + AI Agents & Skills (8 deep lessons)",
+      "Local Business AI Service Kit + 25 Pro prompts",
+      "Direct messages between members",
     ],
   },
 ];
 
-const tierRank: Record<string, number> = { none: 0, monthly: 0, starter: 1, builder: 2, pro: 3 };
+const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
 
-type Row = { label: string; starter: boolean | string; builder: boolean | string; pro: boolean | string };
+type Row = { label: string; starter: boolean | string; builder: boolean | string; accelerator: boolean | string };
 const compare: { section: string; rows: Row[] }[] = [
   {
     section: "Learning",
     rows: [
-      { label: "Course modules", starter: "11 modules · 90+ lessons", builder: "11 modules · 90+ lessons", pro: "12 modules · 100+ lessons" },
-      { label: "AI Agents & Skills module", starter: false, builder: false, pro: true },
-      { label: "Lifetime access", starter: true, builder: true, pro: true },
-      { label: "Progress tracking & notes", starter: true, builder: true, pro: true },
+      { label: "Core course (11 modules · 90+ lessons)", starter: true, builder: true, accelerator: true },
+      { label: "AI Agents & Skills module", starter: false, builder: false, accelerator: true },
+      { label: "Faceless Video Income module", starter: false, builder: false, accelerator: true },
+      { label: "AI Image Income module", starter: false, builder: false, accelerator: true },
+      { label: "Chatbot Agency (Botpress) module", starter: false, builder: false, accelerator: true },
+    ],
+  },
+  {
+    section: "Community & support",
+    rows: [
+      { label: "Members-only community + Wins channel", starter: false, builder: true, accelerator: true },
+      { label: "Direct messages between members", starter: false, builder: false, accelerator: true },
+      { label: "Progress tracking & notes", starter: true, builder: true, accelerator: true },
     ],
   },
   {
     section: "Prompt library",
     rows: [
-      { label: "Starter prompts", starter: "12", builder: "12", pro: "12" },
-      { label: "Builder prompts", starter: false, builder: "20", pro: "20" },
-      { label: "Pro prompts (agents, skills, systems)", starter: false, builder: false, pro: "25" },
+      { label: "Starter prompts", starter: "12", builder: "12", accelerator: "12" },
+      { label: "Builder prompts", starter: false, builder: "20", accelerator: "20" },
+      { label: "Pro/Accelerator prompts", starter: false, builder: false, accelerator: "25" },
     ],
   },
   {
     section: "Interactive builders",
     rows: [
-      { label: "Digital Product Builder", starter: false, builder: true, pro: true },
-      { label: "Sales Funnel Builder", starter: false, builder: true, pro: true },
-      { label: "Agent Generator (prompt → spec)", starter: false, builder: false, pro: true },
+      { label: "Digital Product Builder", starter: false, builder: true, accelerator: true },
+      { label: "Sales Funnel Builder", starter: false, builder: true, accelerator: true },
+      { label: "Agent Generator (prompt → spec)", starter: false, builder: false, accelerator: true },
     ],
   },
   {
     section: "Templates & kits",
     rows: [
-      { label: "n8n Workflow Library", starter: false, builder: true, pro: true },
-      { label: "AI Tool Stack Guide", starter: false, builder: true, pro: true },
-      { label: "Local Business AI Service Kit", starter: false, builder: false, pro: true },
-      { label: "Outreach scripts + audit templates", starter: false, builder: false, pro: true },
+      { label: "n8n Workflow Library", starter: false, builder: true, accelerator: true },
+      { label: "AI Tool Stack Guide", starter: false, builder: true, accelerator: true },
+      { label: "Local Business AI Service Kit", starter: false, builder: false, accelerator: true },
     ],
   },
 ];
@@ -154,10 +174,9 @@ function PricingPage() {
   const { user, profile } = useAuth();
   const { expired } = Route.useSearch();
   const currentTier = profile?.tier ?? "none";
-  const currentRank = tierRank[currentTier];
-  const hasOneTime = currentTier === "starter" || currentTier === "builder" || currentTier === "pro";
-  const isMonthly = currentTier === "monthly";
+  const currentRank = TIER_RANK[currentTier] ?? 0;
   const ctaTo = user ? "/checkout" : "/signup";
+  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
 
   return (
     <div className="min-h-screen">
@@ -167,91 +186,55 @@ function PricingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-10 text-center">
           {expired && (
             <div className="mx-auto mb-6 max-w-2xl rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-sm text-amber-100">
-              <strong className="font-semibold">Your membership has ended.</strong> Resubscribe to All-Access Monthly anytime, or grab lifetime access below.
+              <strong className="font-semibold">Your membership has ended.</strong> Resubscribe anytime to pick up where you left off.
             </div>
           )}
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Two ways to learn · Monthly or lifetime
+            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Monthly or annual · Cancel anytime
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl font-black tracking-tight">
             Pick your <span className="text-gradient">level</span>
           </h1>
           <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-            Start monthly and cancel anytime — or own it forever with a one-time payment. Cohort pricing closes monthly.
+            Three tiers built around what you actually ship. Switch or cancel from Settings anytime. Annual plans get <strong className="text-foreground">2 months free</strong>.
           </p>
+
+          {/* Billing toggle */}
+          <div className="mt-7 inline-flex rounded-full glass p-1 text-sm">
+            <button
+              type="button"
+              onClick={() => setBilling("monthly")}
+              className={`px-5 py-2 rounded-full transition ${billing === "monthly" ? "bg-white/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              onClick={() => setBilling("annual")}
+              className={`px-5 py-2 rounded-full transition flex items-center gap-2 ${billing === "annual" ? "bg-white/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              Annual
+              <span className="text-[10px] font-semibold text-background px-2 py-0.5 rounded-full" style={{ background: "var(--gradient-brand)" }}>
+                2 months free
+              </span>
+            </button>
+          </div>
+
           <div className="mt-6 flex justify-center">
             <CohortCountdown label="Current cohort pricing closes in" />
           </div>
         </div>
       </section>
 
-      {/* MONTHLY — hidden for users who already own a one-time tier */}
-      {!hasOneTime && (
-        <section className="mx-auto max-w-4xl px-4 sm:px-6 pb-10">
-          <div className="relative rounded-3xl glass-strong p-7 sm:p-8 ring-brand overflow-hidden">
-            <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
-            <span
-              className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold text-background px-3 py-1 rounded-full"
-              style={{ background: "var(--gradient-brand)" }}
-            >
-              ★ Most Flexible
-            </span>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-[color:var(--brand-2)]" />
-                  <h2 className="text-2xl font-bold">All-Access Monthly</h2>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Full curriculum access · Cancel anytime · No builders or bonus tools.
-                </p>
-                <ul className="mt-4 grid sm:grid-cols-2 gap-y-2 gap-x-6 text-sm">
-                  <li className="flex items-start gap-2"><Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" /><span>All 11 modules · 90+ lessons</span></li>
-                  <li className="flex items-start gap-2"><Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" /><span>Progress tracking + notes</span></li>
-                  <li className="flex items-start gap-2"><Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" /><span>Cancel anytime from Settings</span></li>
-                  <li className="flex items-start gap-2"><Check className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" /><span>Upgrade to lifetime anytime</span></li>
-                </ul>
-              </div>
-              <div className="md:text-right shrink-0">
-                <div className="flex items-baseline gap-1 md:justify-end">
-                  <span className="text-5xl font-black">$14.99</span>
-                  <span className="text-sm text-muted-foreground">/month</span>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground">Less than 2 months of Starter</p>
-                {isMonthly ? (
-                  <Button disabled variant="glass" className="mt-4 h-11 w-full md:w-auto opacity-70 cursor-default">
-                    Current plan
-                  </Button>
-                ) : (
-                  <Button asChild variant="brand" className="mt-4 h-11 w-full md:w-auto">
-                    <Link to={ctaTo} search={{ tier: "monthly" }}>
-                      Start membership <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* DIVIDER */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-2 pb-6">
-        <div className="flex items-center gap-4">
-          <div className="h-px flex-1 bg-white/10" />
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">
-            Or own it forever — one-time payment
-          </p>
-          <div className="h-px flex-1 bg-white/10" />
-        </div>
-      </section>
-
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-10">
         <div className="grid gap-6 lg:grid-cols-3">
           {tiers.map((t) => {
-            const tierR = tierRank[t.tier];
-            const isCurrent = user && currentTier === t.tier;
-            const isIncluded = user && hasOneTime && currentRank > tierR;
+            const tierR = TIER_RANK[t.key];
+            const isCurrent = !!user && currentTier === t.key;
+            const isIncluded = !!user && currentRank > tierR;
+            const price = billing === "monthly" ? t.monthly : t.annual;
+            const suffix = billing === "monthly" ? "/month" : "/year";
+            const priceId = billing === "monthly" ? t.monthlyPriceId : t.annualPriceId;
             return (
               <div
                 key={t.name}
@@ -271,9 +254,14 @@ function PricingPage() {
                 <h2 className="mt-2 text-xl font-bold">{t.name}</h2>
                 <p className="mt-1 text-xs text-muted-foreground">{t.bestFor}</p>
                 <div className="mt-4 flex items-baseline gap-1">
-                  <span className="text-5xl font-black">${t.price}</span>
-                  <span className="text-sm text-muted-foreground">one-time</span>
+                  <span className="text-5xl font-black">${price}</span>
+                  <span className="text-sm text-muted-foreground">{suffix}</span>
                 </div>
+                {billing === "annual" && (
+                  <p className="mt-1 text-xs text-[color:var(--brand-2)]">
+                    Just ${Math.round(t.annual / 12)}/mo · Save ${t.monthly * 12 - t.annual}/year
+                  </p>
+                )}
                 <p className="mt-3 text-xs leading-relaxed text-[color:var(--brand-2)]/90 bg-[color:var(--brand-2)]/5 border border-[color:var(--brand-2)]/15 rounded-lg px-3 py-2">
                   <span className="font-semibold">Why this tier:</span> {t.whyUpgrade}
                 </p>
@@ -295,8 +283,8 @@ function PricingPage() {
                   </Button>
                 ) : (
                   <Button asChild variant={t.featured ? "brand" : "glass"} className="mt-7 h-11">
-                    <Link to={ctaTo} search={{ tier: t.tier }}>
-                      Get Instant Access <ArrowRight className="h-4 w-4" />
+                    <Link to={ctaTo} search={{ tier: priceId }}>
+                      Start {t.name} <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>
                 )}
@@ -306,7 +294,7 @@ function PricingPage() {
         </div>
 
         <p className="mt-8 text-center text-xs text-muted-foreground">
-          Prices in USD. Stripe-secured checkout. One-time tiers include a 14-day refund window. Monthly: cancel anytime.
+          Prices in USD. Stripe-secured checkout. Cancel anytime from Settings — keep access through the end of your billing period.
         </p>
       </section>
 
@@ -322,12 +310,12 @@ function PricingPage() {
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-muted-foreground">
                   <th className="text-left font-medium px-5 py-4 w-1/3">Feature</th>
-                  <th className="text-center font-medium px-3 py-4">Starter<br /><span className="text-foreground font-bold normal-case tracking-normal">$29</span></th>
+                  <th className="text-center font-medium px-3 py-4">Starter<br /><span className="text-foreground font-bold normal-case tracking-normal">$29/mo</span></th>
                   <th className="text-center font-medium px-3 py-4 bg-white/5">
-                    Builder<br /><span className="text-foreground font-bold normal-case tracking-normal">$79</span>
+                    Builder<br /><span className="text-foreground font-bold normal-case tracking-normal">$79/mo</span>
                     <div className="mt-1 inline-block text-[10px] px-2 py-0.5 rounded-full text-background font-semibold" style={{ background: "var(--gradient-brand)" }}>Most popular</div>
                   </th>
-                  <th className="text-center font-medium px-3 py-4">Pro<br /><span className="text-foreground font-bold normal-case tracking-normal">$149</span></th>
+                  <th className="text-center font-medium px-3 py-4">Accelerator<br /><span className="text-foreground font-bold normal-case tracking-normal">$149/mo</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -341,7 +329,7 @@ function PricingPage() {
                         <td className="px-5 py-3">{r.label}</td>
                         <td className="px-3 py-3 text-center"><Cell v={r.starter} /></td>
                         <td className="px-3 py-3 text-center bg-white/5"><Cell v={r.builder} /></td>
-                        <td className="px-3 py-3 text-center"><Cell v={r.pro} /></td>
+                        <td className="px-3 py-3 text-center"><Cell v={r.accelerator} /></td>
                       </tr>
                     ))}
                   </Fragment>
@@ -351,7 +339,7 @@ function PricingPage() {
           </div>
         </div>
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          All-Access Monthly includes the full course (all 11 modules · 90+ lessons) but no builders or templates — those stay exclusive to lifetime Builder &amp; Pro.
+          Annual plans pay the same per-month rate × 10 (2 months free). Cancel anytime — your access continues through the end of your billing period.
         </p>
       </section>
 

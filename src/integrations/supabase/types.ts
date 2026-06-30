@@ -121,6 +121,7 @@ export type Database = {
           category: string
           created_at: string
           id: string
+          kind: string
           last_activity_at: string
           pinned: boolean
           title: string
@@ -132,6 +133,7 @@ export type Database = {
           category?: string
           created_at?: string
           id?: string
+          kind?: string
           last_activity_at?: string
           pinned?: boolean
           title: string
@@ -143,6 +145,7 @@ export type Database = {
           category?: string
           created_at?: string
           id?: string
+          kind?: string
           last_activity_at?: string
           pinned?: boolean
           title?: string
@@ -205,6 +208,33 @@ export type Database = {
           title?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      direct_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          read_at: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          recipient_id?: string
+          sender_id?: string
         }
         Relationships: []
       }
@@ -873,7 +903,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
-      subscription_tier: "none" | "monthly" | "starter" | "builder" | "pro"
+      subscription_tier:
+        | "none"
+        | "monthly"
+        | "starter"
+        | "builder"
+        | "pro"
+        | "accelerator"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1002,7 +1038,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      subscription_tier: ["none", "monthly", "starter", "builder", "pro"],
+      subscription_tier: [
+        "none",
+        "monthly",
+        "starter",
+        "builder",
+        "pro",
+        "accelerator",
+      ],
     },
   },
 } as const

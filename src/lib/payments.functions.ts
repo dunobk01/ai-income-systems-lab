@@ -46,13 +46,22 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     try {
       const { userId, supabase } = context;
 
-      // Tier mapping. Monthly is its own tier; one-time tiers are ranked.
-      const oneTimeRank: Record<string, number> = { starter: 1, builder: 2, pro: 3 };
-      const priceToTier: Record<string, "starter" | "builder" | "pro" | "monthly"> = {
+      // Tier rank: monthly subs and one-time tiers map to the same enum.
+      const tierRank: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
+      const priceToTier: Record<string, "starter" | "builder" | "pro" | "monthly" | "accelerator"> = {
+        // Legacy lifetime
         ailab_starter_onetime: "starter",
         ailab_builder_onetime: "builder",
         ailab_pro_onetime: "pro",
+        // Legacy monthly
         ailab_monthly_subscription: "monthly",
+        // New monthly + annual recurring tiers
+        ailab_starter_monthly: "starter",
+        ailab_starter_annual: "starter",
+        ailab_builder_monthly: "builder",
+        ailab_builder_annual: "builder",
+        ailab_accelerator_monthly: "accelerator",
+        ailab_accelerator_annual: "accelerator",
       };
       const requested = priceToTier[data.priceId];
       if (!requested) throw new Error("Unknown price");
@@ -60,22 +69,14 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       const { data: prof } = await supabase
         .from("profiles").select("tier").eq("user_id", userId).maybeSingle();
       const currentTier = (prof?.tier as string | undefined) ?? "none";
+      const haveRank = tierRank[currentTier] ?? 0;
+      const wantRank = tierRank[requested] ?? 0;
 
-      if (requested === "monthly") {
-        // Hide monthly for anyone with a lifetime tier OR already on monthly.
-        if (currentTier === "monthly") {
-          return { error: "You already have an active monthly membership." };
-        }
-        if (oneTimeRank[currentTier]) {
-          return { error: `You already have lifetime ${currentTier} access — the monthly plan is included.` };
-        }
-      } else {
-        // One-time tier: block if user already owns this tier or higher.
-        const wantRank = oneTimeRank[requested];
-        const haveRank = oneTimeRank[currentTier] ?? 0;
-        if (haveRank >= wantRank) {
-          return { error: `You already have ${currentTier} access — this plan is included.` };
-        }
+      if (haveRank > wantRank) {
+        return { error: `You already have ${currentTier} access — this plan is included.` };
+      }
+      if (haveRank === wantRank && haveRank > 0) {
+        return { error: `You already have an active ${currentTier} plan.` };
       }
 
       const stripe = createStripeClient(data.environment);

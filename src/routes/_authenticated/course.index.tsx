@@ -5,14 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
 
-type Tier = "starter" | "builder" | "pro";
+type Tier = "starter" | "builder" | "pro" | "accelerator";
 type Module = { id: string; slug: string; title: string; summary: string | null; required_tier: Tier; order_index: number; is_preview: boolean };
 type Lesson = { id: string; slug: string; title: string; module_id: string; order_index: number; duration_minutes: number | null };
 
-// Monthly subscribers get full curriculum access — treat them as having any
-// required curriculum tier. Builder/Pro-exclusive surfaces are gated elsewhere.
-const hasCurriculumAccess = (tier?: string, isAdmin?: boolean) =>
-  isAdmin === true || tier === "monthly" || tier === "starter" || tier === "builder" || tier === "pro";
+const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
+const canAccessModule = (userTier: string | undefined, requiredTier: string, isAdmin?: boolean) =>
+  isAdmin === true || (TIER_RANK[userTier ?? "none"] ?? 0) >= (TIER_RANK[requiredTier] ?? 0);
 
 export const Route = createFileRoute("/_authenticated/course/")({
   head: () => ({
@@ -66,7 +65,7 @@ function CoursePage() {
     })();
   }, [user]);
 
-  const canAccessAll = hasCurriculumAccess(profile?.tier, isAdmin);
+  // (canAccessAll removed — gating is now per-module via canAccessModule)
   const totalLessons = lessons.length;
   const completedCount = completed.size;
   const pct = totalLessons ? Math.round((completedCount / totalLessons) * 100) : 0;
@@ -91,7 +90,8 @@ function CoursePage() {
       <div className="mt-8 space-y-4">
         {modules.map((m, i) => {
           const moduleLessons = lessons.filter((l) => l.module_id === m.id);
-          const locked = !canAccessAll && !m.is_preview;
+          const hasModuleAccess = canAccessModule(profile?.tier, m.required_tier, isAdmin);
+          const locked = !hasModuleAccess && !m.is_preview;
           const doneInMod = moduleLessons.filter((l) => completed.has(l.id)).length;
           return (
             <section key={m.id} className="glass rounded-2xl overflow-hidden">
@@ -103,7 +103,7 @@ function CoursePage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h2 className="font-semibold">{m.title}</h2>
                     <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-white/15">{m.required_tier}</Badge>
-                    {m.is_preview && !canAccessAll && (
+                    {m.is_preview && !hasModuleAccess && (
                       <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free preview</Badge>
                     )}
                     {locked && <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground"><Lock className="h-3 w-3" /> Locked</span>}
