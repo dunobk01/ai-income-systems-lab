@@ -87,7 +87,7 @@ function LessonPage() {
     });
   }, [lesson?.id, module?.id]);
 
-  const canAccess = hasCurriculumAccess(profile?.tier, isAdmin);
+  const canAccess = hasCurriculumAccess(profile?.tier, module?.required_tier, isAdmin);
   const locked = module ? (!canAccess && !module.is_preview) : false;
 
   const idx = useMemo(() => siblings.findIndex((l) => l.id === lesson?.id), [siblings, lesson]);
