@@ -212,7 +212,7 @@ export default function LandingPage() {
       <section id="curriculum" className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Curriculum</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">11 modules. 90+ lessons.</h2>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">14 modules. 110+ lessons.</h2>
           <p className="mt-3 text-muted-foreground">Sequenced so each module builds on the last.</p>
         </div>
         <div className="glass-strong rounded-2xl overflow-hidden divide-y divide-white/5">
