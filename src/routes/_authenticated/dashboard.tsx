@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, BookOpen, Sparkles, Workflow, Package, Megaphone, Lock, X } from "lucide-react";
+import { ArrowRight, BookOpen, Sparkles, Workflow, Package, Megaphone, Lock, X, Users, Library, Wrench } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -17,11 +17,14 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 const quickStart = [
-  { to: "/course", title: "Continue the course", desc: "11 modules · 90+ lessons", icon: BookOpen, monthlyOk: true },
-  { to: "/prompts", title: "Open prompt library", desc: "Browse and save prompts", icon: Sparkles, monthlyOk: true },
-  { to: "/builders/product", title: "Plan a digital product", desc: "Generate an offer in minutes", icon: Package, monthlyOk: false },
-  { to: "/builders/funnel", title: "Map a sales funnel", desc: "End-to-end funnel blueprint", icon: Megaphone, monthlyOk: false },
-  { to: "/workflows", title: "Browse n8n workflows", desc: "Templates to copy and run", icon: Workflow, monthlyOk: false },
+  { to: "/course", title: "Continue the course", desc: "11 modules · 90+ lessons", icon: BookOpen, monthlyOk: true, builderOnly: false },
+  { to: "/prompts", title: "Open prompt library", desc: "Browse and save prompts", icon: Sparkles, monthlyOk: true, builderOnly: false },
+  { to: "/starter-kit", title: "AI Tool Starter Kit", desc: "Tools, setup, recommended config", icon: Wrench, monthlyOk: true, builderOnly: false },
+  { to: "/library", title: "Template Library", desc: "Flagship prompts, workflows, starters", icon: Library, monthlyOk: false, builderOnly: true },
+  { to: "/community", title: "Community", desc: "Wins, workflows, peer feedback", icon: Users, monthlyOk: false, builderOnly: true },
+  { to: "/builders/product", title: "Plan a digital product", desc: "Generate an offer in minutes", icon: Package, monthlyOk: false, builderOnly: false },
+  { to: "/builders/funnel", title: "Map a sales funnel", desc: "End-to-end funnel blueprint", icon: Megaphone, monthlyOk: false, builderOnly: false },
+  { to: "/workflows", title: "Browse n8n workflows", desc: "Templates to copy and run", icon: Workflow, monthlyOk: false, builderOnly: false },
 ];
 
 const BANNER_DISMISS_KEY = "ails:monthly-upgrade-banner-dismissed";
