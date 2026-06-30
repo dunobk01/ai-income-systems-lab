@@ -57,6 +57,9 @@ const modules = [
   { n: "09", title: "n8n Automation Lab", lessons: 11, outcome: "Build workflows that deliver products, follow up with buyers, and repurpose content on autopilot." },
   { n: "10", title: "Local Business AI Service Kit", lessons: 7, outcome: "Sell a productized AI service (audits, content, automations) to local clients for $500–$2k." },
   { n: "11", title: "Launch Your First Income System", lessons: 8, outcome: "Combine product + funnel + automation into a live offer in 7 days." },
+  { n: "12", title: "Faceless Video Income", lessons: 8, outcome: "Faceless YouTube/TikTok/Shorts with ElevenLabs voiceovers + HeyGen/Synthesia AI avatars." },
+  { n: "13", title: "AI Image Income", lessons: 7, outcome: "Midjourney / Flux 2 for print-on-demand, ads, and thumbnails that actually sell." },
+  { n: "14", title: "Chatbot Agency (Botpress)", lessons: 8, outcome: "Build and resell AI chatbots to local businesses for $1k–$5k setup deals." },
 ];
 
 const audience = [
