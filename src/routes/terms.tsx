@@ -107,7 +107,7 @@ function TermsPage() {
           </p>
         </div>
 
-        <div className="glass rounded-STAR rounded-2xl p-6 sm:p-8 space-y-4">
+        <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
           <h2 className="text-lg font-semibold">9. Limitation of Liability</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
             To the maximum extent permitted by law, AI Income Systems Lab shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the Platform.
@@ -123,7 +123,7 @@ function TermsPage() {
 
         <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
           <h2 className="text-lg font-semibold">11. Changes to Terms</h2>
-          <p className="0="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed">
             We may modify these Terms at any time. Material changes will be posted on this page with an updated effective date. Continued use after changes constitutes acceptance of the revised Terms.
           </p>
         </div>

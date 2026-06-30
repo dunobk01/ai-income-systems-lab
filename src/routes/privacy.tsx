@@ -47,7 +47,7 @@ function PrivacyPage() {
 
       <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-24 space-y-10">
         <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
-          <h2 className="text-lg font-semibold">b">1. Information We Collect</h2>
+          <h2 className="text-lg font-semibold">1. Information We Collect</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
             We collect information you provide directly, such as your name, email address, and payment details when you register, subscribe, or contact us. We also collect usage data and device information automatically through cookies and similar technologies.
           </p>
