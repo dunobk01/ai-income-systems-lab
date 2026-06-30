@@ -5,14 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
 
-type Tier = "starter" | "builder" | "pro";
+type Tier = "starter" | "builder" | "pro" | "accelerator";
 type Module = { id: string; slug: string; title: string; summary: string | null; required_tier: Tier; order_index: number; is_preview: boolean };
 type Lesson = { id: string; slug: string; title: string; module_id: string; order_index: number; duration_minutes: number | null };
 
-// Monthly subscribers get full curriculum access — treat them as having any
-// required curriculum tier. Builder/Pro-exclusive surfaces are gated elsewhere.
-const hasCurriculumAccess = (tier?: string, isAdmin?: boolean) =>
-  isAdmin === true || tier === "monthly" || tier === "starter" || tier === "builder" || tier === "pro";
+const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
+const canAccessModule = (userTier: string | undefined, requiredTier: string, isAdmin?: boolean) =>
+  isAdmin === true || (TIER_RANK[userTier ?? "none"] ?? 0) >= (TIER_RANK[requiredTier] ?? 0);
 
 export const Route = createFileRoute("/_authenticated/course/")({
   head: () => ({
