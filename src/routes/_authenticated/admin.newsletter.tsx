@@ -47,8 +47,10 @@ function AdminNewsletter() {
   const delFn = useServerFn(deletePost);
   const pubFn = useServerFn(publishPost);
   const unpubFn = useServerFn(unpublishPost);
+  const pillarsFn = useServerFn(listAllPillarsAdmin);
 
   const [posts, setPosts] = useState<Listed[]>([]);
+  const [pillars, setPillars] = useState<Array<{ id: string; slug: string; title: string }>>([]);
   const [editing, setEditing] = useState<null | {
     id?: string;
     slug: string;
@@ -56,7 +58,10 @@ function AdminNewsletter() {
     excerpt: string;
     content: string;
     cover_image_url: string;
+    tags: string[];
+    pillar_slug: string;
   }>(null);
+  const [tagInput, setTagInput] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -74,15 +79,22 @@ function AdminNewsletter() {
     }
   };
 
+  const reloadPillars = async () => {
+    try {
+      const r = await pillarsFn();
+      setPillars(r.pillars.map((p: any) => ({ id: p.id, slug: p.slug, title: p.title })));
+    } catch {}
+  };
+
   useEffect(() => {
-    if (isAdmin) void reload();
+    if (isAdmin) { void reload(); void reloadPillars(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
   if (!isAdmin) return null;
 
   const startNew = () =>
-    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "" });
+    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "" });
 
   const startEdit = async (id: string) => {
     setErr(null);
@@ -97,11 +109,21 @@ function AdminNewsletter() {
         excerpt: post.excerpt ?? "",
         content: post.content ?? "",
         cover_image_url: post.cover_image_url ?? "",
+        tags: (post as any).tags ?? [],
+        pillar_slug: (post as any).pillar_slug ?? "",
       });
     } catch (e: any) {
       setErr(e?.message ?? "Failed to load post");
     }
   };
+
+  const addTag = (raw: string) => {
+    const t = raw.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "");
+    if (!t) return;
+    setEditing((p) => (p && !p.tags.includes(t) ? { ...p, tags: [...p.tags, t].slice(0, 20) } : p));
+    setTagInput("");
+  };
+  const removeTag = (t: string) => setEditing((p) => (p ? { ...p, tags: p.tags.filter((x) => x !== t) } : p));
 
   const save = async () => {
     if (!editing) return;
@@ -118,8 +140,11 @@ function AdminNewsletter() {
           excerpt: editing.excerpt.trim() || null,
           content: editing.content,
           cover_image_url: editing.cover_image_url.trim() || null,
+          tags: editing.tags,
+          pillar_slug: editing.pillar_slug.trim() || null,
         },
       });
+
       setMsg("Saved.");
       setEditing((p) => (p ? { ...p, id: res.id, slug } : p));
       await reload();
