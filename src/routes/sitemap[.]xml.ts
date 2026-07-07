@@ -21,6 +21,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/pricing", changefreq: "weekly", priority: "0.9" },
           { path: "/curriculum", changefreq: "weekly", priority: "0.8" },
           { path: "/tools", changefreq: "weekly", priority: "0.7" },
+          { path: "/blog", changefreq: "daily", priority: "0.9" },
+          { path: "/guides", changefreq: "weekly", priority: "0.9" },
           { path: "/newsletter", changefreq: "weekly", priority: "0.8" },
           { path: "/faq", changefreq: "monthly", priority: "0.6" },
           { path: "/contact", changefreq: "monthly", priority: "0.5" },
@@ -30,31 +32,53 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/signup", changefreq: "monthly", priority: "0.5" },
         ];
 
-        // Dynamic: published newsletter posts
         try {
           const sb = createClient<Database>(
             process.env.SUPABASE_URL!,
             process.env.SUPABASE_PUBLISHABLE_KEY!,
             { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
           );
-          const { data } = await sb
+
+          // Published newsletter posts + tag pages
+          const { data: posts } = await sb
             .from("newsletter_posts")
-            .select("slug, published_at, updated_at")
+            .select("slug, published_at, updated_at, tags")
             .not("published_at", "is", null)
             .lte("published_at", new Date().toISOString())
             .order("published_at", { ascending: false })
             .limit(1000);
-          for (const p of data ?? []) {
+          const tagSet = new Set<string>();
+          for (const p of posts ?? []) {
             entries.push({
               path: `/newsletter/${p.slug}`,
               lastmod: (p.updated_at ?? p.published_at ?? undefined)?.slice(0, 10),
               changefreq: "monthly",
               priority: "0.7",
             });
+            for (const t of (p.tags ?? [])) tagSet.add(t);
+          }
+          for (const t of Array.from(tagSet).sort()) {
+            entries.push({ path: `/blog/tag/${t}`, changefreq: "weekly", priority: "0.6" });
+          }
+
+          // Pillar guides
+          const { data: pillars } = await sb
+            .from("blog_pillars")
+            .select("slug, published_at, updated_at")
+            .not("published_at", "is", null)
+            .lte("published_at", new Date().toISOString());
+          for (const p of pillars ?? []) {
+            entries.push({
+              path: `/guides/${p.slug}`,
+              lastmod: (p.updated_at ?? p.published_at ?? undefined)?.slice(0, 10),
+              changefreq: "monthly",
+              priority: "0.8",
+            });
           }
         } catch (e) {
-          console.error("[sitemap] newsletter fetch failed", e);
+          console.error("[sitemap] dynamic fetch failed", e);
         }
+
 
         const urls = entries.map((e) =>
           [

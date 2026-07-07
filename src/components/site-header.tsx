@@ -8,9 +8,10 @@ import { useAuth } from "@/lib/auth-context";
 const nav = [
   { label: "Curriculum", to: "/curriculum" as const },
   { label: "Tools", to: "/tools" as const },
+  { label: "Blog", to: "/blog" as const },
+  { label: "Guides", to: "/guides" as const },
   { label: "Newsletter", to: "/newsletter" as const },
   { label: "Pricing", to: "/pricing" as const },
-  { label: "FAQ", to: "/faq" as const },
 ];
 
 export function SiteHeader() {

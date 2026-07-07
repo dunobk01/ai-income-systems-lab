@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Plus, Trash2, Send, Eye, EyeOff, ExternalLink, Loader2, ArrowLeft } from "lucide-react";
+import { Plus, Trash2, Send, Eye, EyeOff, ExternalLink, Loader2, ArrowLeft, X } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,8 @@ import {
   publishPost,
   unpublishPost,
 } from "@/lib/newsletter.functions";
+import { listAllPillarsAdmin } from "@/lib/blog.functions";
+
 
 export const Route = createFileRoute("/_authenticated/admin/newsletter")({
   head: () => ({ meta: [{ title: "Newsletter — Admin" }] }),
@@ -45,8 +47,10 @@ function AdminNewsletter() {
   const delFn = useServerFn(deletePost);
   const pubFn = useServerFn(publishPost);
   const unpubFn = useServerFn(unpublishPost);
+  const pillarsFn = useServerFn(listAllPillarsAdmin);
 
   const [posts, setPosts] = useState<Listed[]>([]);
+  const [pillars, setPillars] = useState<Array<{ id: string; slug: string; title: string }>>([]);
   const [editing, setEditing] = useState<null | {
     id?: string;
     slug: string;
@@ -54,7 +58,10 @@ function AdminNewsletter() {
     excerpt: string;
     content: string;
     cover_image_url: string;
+    tags: string[];
+    pillar_slug: string;
   }>(null);
+  const [tagInput, setTagInput] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -72,15 +79,22 @@ function AdminNewsletter() {
     }
   };
 
+  const reloadPillars = async () => {
+    try {
+      const r = await pillarsFn();
+      setPillars(r.pillars.map((p: any) => ({ id: p.id, slug: p.slug, title: p.title })));
+    } catch {}
+  };
+
   useEffect(() => {
-    if (isAdmin) void reload();
+    if (isAdmin) { void reload(); void reloadPillars(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
   if (!isAdmin) return null;
 
   const startNew = () =>
-    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "" });
+    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "" });
 
   const startEdit = async (id: string) => {
     setErr(null);
@@ -95,11 +109,21 @@ function AdminNewsletter() {
         excerpt: post.excerpt ?? "",
         content: post.content ?? "",
         cover_image_url: post.cover_image_url ?? "",
+        tags: (post as any).tags ?? [],
+        pillar_slug: (post as any).pillar_slug ?? "",
       });
     } catch (e: any) {
       setErr(e?.message ?? "Failed to load post");
     }
   };
+
+  const addTag = (raw: string) => {
+    const t = raw.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "");
+    if (!t) return;
+    setEditing((p) => (p && !p.tags.includes(t) ? { ...p, tags: [...p.tags, t].slice(0, 20) } : p));
+    setTagInput("");
+  };
+  const removeTag = (t: string) => setEditing((p) => (p ? { ...p, tags: p.tags.filter((x) => x !== t) } : p));
 
   const save = async () => {
     if (!editing) return;
@@ -116,8 +140,11 @@ function AdminNewsletter() {
           excerpt: editing.excerpt.trim() || null,
           content: editing.content,
           cover_image_url: editing.cover_image_url.trim() || null,
+          tags: editing.tags,
+          pillar_slug: editing.pillar_slug.trim() || null,
         },
       });
+
       setMsg("Saved.");
       setEditing((p) => (p ? { ...p, id: res.id, slug } : p));
       await reload();
@@ -290,6 +317,46 @@ function AdminNewsletter() {
                   placeholder="https://..."
                 />
               </div>
+              <div>
+                <Label>Tags (topic keywords — power /blog/tag/… pages)</Label>
+                <div className="mt-1 flex flex-wrap gap-1.5">
+                  {editing.tags.map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs">
+                      #{t}
+                      <button onClick={() => removeTag(t)} className="text-muted-foreground hover:text-foreground"><X className="h-3 w-3" /></button>
+                    </span>
+                  ))}
+                </div>
+                <Input
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addTag(tagInput); }
+                  }}
+                  onBlur={() => tagInput && addTag(tagInput)}
+                  placeholder="Type a tag and press Enter (e.g. prompts, upwork, automation)"
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="pillar">Pillar guide (optional)</Label>
+                <select
+                  id="pillar"
+                  value={editing.pillar_slug}
+                  onChange={(e) => setEditing((p) => p ? { ...p, pillar_slug: e.target.value } : p)}
+                  className="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm"
+                >
+                  <option value="">— None —</option>
+                  {pillars.map((pl) => (
+                    <option key={pl.id} value={pl.slug}>{pl.title} (/guides/{pl.slug})</option>
+                  ))}
+                </select>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Attach this post to a pillar so it shows up inside that guide.{" "}
+                  <Link to="/admin/pillars" className="underline">Manage pillars</Link>
+                </p>
+              </div>
+
               <div>
                 <Label htmlFor="content">Content</Label>
                 <Textarea

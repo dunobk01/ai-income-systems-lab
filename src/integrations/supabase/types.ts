@@ -44,6 +44,42 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_pillars: {
+        Row: {
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          intro: string | null
+          published_at: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          intro?: string | null
+          published_at?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          intro?: string | null
+          published_at?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       community_likes: {
         Row: {
           created_at: string
@@ -584,8 +620,10 @@ export type Database = {
           email_sent_at: string | null
           excerpt: string | null
           id: string
+          pillar_slug: string | null
           published_at: string | null
           slug: string
+          tags: string[]
           title: string
           updated_at: string
         }
@@ -597,8 +635,10 @@ export type Database = {
           email_sent_at?: string | null
           excerpt?: string | null
           id?: string
+          pillar_slug?: string | null
           published_at?: string | null
           slug: string
+          tags?: string[]
           title: string
           updated_at?: string
         }
@@ -610,8 +650,10 @@ export type Database = {
           email_sent_at?: string | null
           excerpt?: string | null
           id?: string
+          pillar_slug?: string | null
           published_at?: string | null
           slug?: string
+          tags?: string[]
           title?: string
           updated_at?: string
         }
