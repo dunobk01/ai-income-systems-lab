@@ -12,8 +12,17 @@ import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import { dlSignUp } from "@/lib/datalayer";
 import { toast } from "sonner";
 
+const TIER_KEYS = [
+  "starter_monthly", "builder_monthly", "accelerator_monthly",
+  "starter_annual", "builder_annual", "accelerator_annual",
+  "starter", "builder", "pro", "monthly",
+] as const;
+
 const searchSchema = z.object({
-  tier: z.enum(["starter", "builder", "pro", "monthly"]).optional(),
+  tier: z
+    .string()
+    .optional()
+    .transform((v) => (v && (TIER_KEYS as readonly string[]).includes(v) ? (v as (typeof TIER_KEYS)[number]) : undefined)),
 });
 
 export const Route = createFileRoute("/signup")({
