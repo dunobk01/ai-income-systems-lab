@@ -318,6 +318,46 @@ function AdminNewsletter() {
                 />
               </div>
               <div>
+                <Label>Tags (topic keywords — power /blog/tag/… pages)</Label>
+                <div className="mt-1 flex flex-wrap gap-1.5">
+                  {editing.tags.map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs">
+                      #{t}
+                      <button onClick={() => removeTag(t)} className="text-muted-foreground hover:text-foreground"><X className="h-3 w-3" /></button>
+                    </span>
+                  ))}
+                </div>
+                <Input
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addTag(tagInput); }
+                  }}
+                  onBlur={() => tagInput && addTag(tagInput)}
+                  placeholder="Type a tag and press Enter (e.g. prompts, upwork, automation)"
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="pillar">Pillar guide (optional)</Label>
+                <select
+                  id="pillar"
+                  value={editing.pillar_slug}
+                  onChange={(e) => setEditing((p) => p ? { ...p, pillar_slug: e.target.value } : p)}
+                  className="mt-1 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm"
+                >
+                  <option value="">— None —</option>
+                  {pillars.map((pl) => (
+                    <option key={pl.id} value={pl.slug}>{pl.title} (/guides/{pl.slug})</option>
+                  ))}
+                </select>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Attach this post to a pillar so it shows up inside that guide.{" "}
+                  <Link to="/admin/pillars" className="underline">Manage pillars</Link>
+                </p>
+              </div>
+
+              <div>
                 <Label htmlFor="content">Content</Label>
                 <Textarea
                   id="content"
