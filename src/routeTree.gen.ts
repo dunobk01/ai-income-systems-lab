@@ -18,6 +18,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as NewsletterRouteImport } from './routes/newsletter'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CurriculumRouteImport } from './routes/curriculum'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -104,6 +105,11 @@ const NewsletterRoute = NewsletterRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesRoute = GuidesRouteImport.update({
+  id: '/guides',
+  path: '/guides',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -337,6 +343,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
+  '/guides': typeof GuidesRoute
   '/login': typeof LoginRoute
   '/newsletter': typeof NewsletterRouteWithChildren
   '/pricing': typeof PricingRoute
@@ -389,6 +396,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
+  '/guides': typeof GuidesRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -441,6 +449,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
+  '/guides': typeof GuidesRoute
   '/login': typeof LoginRoute
   '/newsletter': typeof NewsletterRouteWithChildren
   '/pricing': typeof PricingRoute
@@ -495,6 +504,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/curriculum'
     | '/faq'
+    | '/guides'
     | '/login'
     | '/newsletter'
     | '/pricing'
@@ -547,6 +557,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/curriculum'
     | '/faq'
+    | '/guides'
     | '/login'
     | '/pricing'
     | '/privacy'
@@ -598,6 +609,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/curriculum'
     | '/faq'
+    | '/guides'
     | '/login'
     | '/newsletter'
     | '/pricing'
@@ -652,6 +664,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
+  GuidesRoute: typeof GuidesRoute
   LoginRoute: typeof LoginRoute
   NewsletterRoute: typeof NewsletterRouteWithChildren
   PricingRoute: typeof PricingRoute
@@ -737,6 +750,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides': {
+      id: '/guides'
+      path: '/guides'
+      fullPath: '/guides'
+      preLoaderRoute: typeof GuidesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -1139,6 +1159,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,
+  GuidesRoute: GuidesRoute,
   LoginRoute: LoginRoute,
   NewsletterRoute: NewsletterRouteWithChildren,
   PricingRoute: PricingRoute,
