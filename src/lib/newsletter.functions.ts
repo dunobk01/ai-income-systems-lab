@@ -97,6 +97,8 @@ const upsertSchema = z.object({
   excerpt: z.string().max(500).optional().nullable(),
   content: z.string().max(50000),
   cover_image_url: z.string().url().max(500).optional().nullable(),
+  tags: z.array(z.string().min(1).max(40)).max(20).optional().default([]),
+  pillar_slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/).optional().nullable(),
 });
 
 export const upsertPost = createServerFn({ method: "POST" })
@@ -110,6 +112,8 @@ export const upsertPost = createServerFn({ method: "POST" })
       excerpt: data.excerpt ?? null,
       content: data.content,
       cover_image_url: data.cover_image_url ?? null,
+      tags: (data.tags ?? []).map((t) => t.trim().toLowerCase()).filter(Boolean),
+      pillar_slug: data.pillar_slug ?? null,
       author_id: context.userId,
     };
     if (data.id) {
@@ -131,6 +135,7 @@ export const upsertPost = createServerFn({ method: "POST" })
       return { id: inserted.id };
     }
   });
+
 
 export const deletePost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
