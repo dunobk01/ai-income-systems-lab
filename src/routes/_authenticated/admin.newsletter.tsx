@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Plus, Trash2, Send, Eye, EyeOff, ExternalLink, Loader2, ArrowLeft } from "lucide-react";
+import { Plus, Trash2, Send, Eye, EyeOff, ExternalLink, Loader2, ArrowLeft, X } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,8 @@ import {
   publishPost,
   unpublishPost,
 } from "@/lib/newsletter.functions";
+import { listAllPillarsAdmin } from "@/lib/blog.functions";
+
 
 export const Route = createFileRoute("/_authenticated/admin/newsletter")({
   head: () => ({ meta: [{ title: "Newsletter — Admin" }] }),

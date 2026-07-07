@@ -53,6 +53,7 @@ import { Route as AuthenticatedCommunityThreadIdRouteImport } from './routes/_au
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
 import { Route as AuthenticatedBuildersAgentRouteImport } from './routes/_authenticated/builders/agent'
+import { Route as AuthenticatedAdminPillarsRouteImport } from './routes/_authenticated/admin.pillars'
 import { Route as AuthenticatedAdminNewsletterRouteImport } from './routes/_authenticated/admin.newsletter'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -290,6 +291,12 @@ const AuthenticatedBuildersAgentRoute =
     path: '/builders/agent',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminPillarsRoute =
+  AuthenticatedAdminPillarsRouteImport.update({
+    id: '/pillars',
+    path: '/pillars',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminNewsletterRoute =
   AuthenticatedAdminNewsletterRouteImport.update({
     id: '/newsletter',
@@ -378,6 +385,7 @@ export interface FileRoutesByFullPath {
   '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
+  '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -430,6 +438,7 @@ export interface FileRoutesByTo {
   '/newsletter': typeof NewsletterIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
+  '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -486,6 +495,7 @@ export interface FileRoutesById {
   '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/_authenticated/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
+  '/_authenticated/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/_authenticated/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -542,6 +552,7 @@ export interface FileRouteTypes {
     | '/newsletter/'
     | '/tools/'
     | '/admin/newsletter'
+    | '/admin/pillars'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
@@ -594,6 +605,7 @@ export interface FileRouteTypes {
     | '/newsletter'
     | '/tools'
     | '/admin/newsletter'
+    | '/admin/pillars'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
@@ -649,6 +661,7 @@ export interface FileRouteTypes {
     | '/newsletter/'
     | '/tools/'
     | '/_authenticated/admin/newsletter'
+    | '/_authenticated/admin/pillars'
     | '/_authenticated/builders/agent'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
@@ -1009,6 +1022,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBuildersAgentRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/pillars': {
+      id: '/_authenticated/admin/pillars'
+      path: '/pillars'
+      fullPath: '/admin/pillars'
+      preLoaderRoute: typeof AuthenticatedAdminPillarsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/newsletter': {
       id: '/_authenticated/admin/newsletter'
       path: '/newsletter'
@@ -1077,10 +1097,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminNewsletterRoute: typeof AuthenticatedAdminNewsletterRoute
+  AuthenticatedAdminPillarsRoute: typeof AuthenticatedAdminPillarsRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminNewsletterRoute: AuthenticatedAdminNewsletterRoute,
+  AuthenticatedAdminPillarsRoute: AuthenticatedAdminPillarsRoute,
 }
 
 const AuthenticatedAdminRouteWithChildren =
