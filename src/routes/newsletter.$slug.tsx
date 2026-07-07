@@ -22,6 +22,32 @@ export const Route = createFileRoute("/newsletter/$slug")({
     if (!p) return {};
     const url = `https://ai-income-systems.com/newsletter/${p.slug}`;
     const desc = p.excerpt ?? p.content.slice(0, 160);
+    const published = p.published_at ?? new Date().toISOString();
+    const articleLd = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: p.title,
+      description: desc,
+      datePublished: published,
+      dateModified: published,
+      author: { "@type": "Person", name: "Dustin", url: "https://ai-income-systems.com" },
+      publisher: {
+        "@type": "Organization",
+        name: "AI Income Systems",
+        url: "https://ai-income-systems.com",
+      },
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+      ...(p.cover_image_url ? { image: p.cover_image_url } : {}),
+    };
+    const breadcrumbLd = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://ai-income-systems.com/" },
+        { "@type": "ListItem", position: 2, name: "Newsletter", item: "https://ai-income-systems.com/newsletter" },
+        { "@type": "ListItem", position: 3, name: p.title, item: url },
+      ],
+    };
     return {
       meta: [
         { title: `${p.title} — AI Income Weekly` },
@@ -30,11 +56,19 @@ export const Route = createFileRoute("/newsletter/$slug")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
+        { property: "article:published_time", content: published },
+        { property: "article:author", content: "Dustin" },
+        { name: "twitter:card", content: p.cover_image_url ? "summary_large_image" : "summary" },
         ...(p.cover_image_url ? [{ property: "og:image", content: p.cover_image_url }, { name: "twitter:image", content: p.cover_image_url }] : []),
-        { rel: "canonical", href: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(articleLd) },
+        { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
       ],
     };
   },
+
   notFoundComponent: () => (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
