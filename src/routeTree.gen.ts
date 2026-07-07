@@ -45,6 +45,7 @@ import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedCommunityIndexRouteImport } from './routes/_authenticated/community.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as AuthenticatedLibrarySlugRouteImport } from './routes/_authenticated/library.$slug'
 import { Route as AuthenticatedCommunityThreadIdRouteImport } from './routes/_authenticated/community.$threadId'
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
@@ -242,6 +243,11 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogTagTagRoute = BlogTagTagRouteImport.update({
+  id: '/tag/$tag',
+  path: '/tag/$tag',
+  getParentRoute: () => BlogRoute,
+} as any)
 const AuthenticatedLibrarySlugRoute =
   AuthenticatedLibrarySlugRouteImport.update({
     id: '/library/$slug',
@@ -327,7 +333,7 @@ const AuthenticatedCourseModuleSlugLessonSlugRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -363,6 +369,7 @@ export interface FileRoutesByFullPath {
   '/builders/product': typeof AuthenticatedBuildersProductRoute
   '/community/$threadId': typeof AuthenticatedCommunityThreadIdRoute
   '/library/$slug': typeof AuthenticatedLibrarySlugRoute
+  '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/community/': typeof AuthenticatedCommunityIndexRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
@@ -378,7 +385,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -412,6 +419,7 @@ export interface FileRoutesByTo {
   '/builders/product': typeof AuthenticatedBuildersProductRoute
   '/community/$threadId': typeof AuthenticatedCommunityThreadIdRoute
   '/library/$slug': typeof AuthenticatedLibrarySlugRoute
+  '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/community': typeof AuthenticatedCommunityIndexRoute
   '/course': typeof AuthenticatedCourseIndexRoute
@@ -429,7 +437,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -465,6 +473,7 @@ export interface FileRoutesById {
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
   '/_authenticated/community/$threadId': typeof AuthenticatedCommunityThreadIdRoute
   '/_authenticated/library/$slug': typeof AuthenticatedLibrarySlugRoute
+  '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/community/': typeof AuthenticatedCommunityIndexRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
@@ -518,6 +527,7 @@ export interface FileRouteTypes {
     | '/builders/product'
     | '/community/$threadId'
     | '/library/$slug'
+    | '/blog/tag/$tag'
     | '/lovable/email/suppression'
     | '/community/'
     | '/course/'
@@ -567,6 +577,7 @@ export interface FileRouteTypes {
     | '/builders/product'
     | '/community/$threadId'
     | '/library/$slug'
+    | '/blog/tag/$tag'
     | '/lovable/email/suppression'
     | '/community'
     | '/course'
@@ -619,6 +630,7 @@ export interface FileRouteTypes {
     | '/_authenticated/builders/product'
     | '/_authenticated/community/$threadId'
     | '/_authenticated/library/$slug'
+    | '/blog/tag/$tag'
     | '/lovable/email/suppression'
     | '/_authenticated/community/'
     | '/_authenticated/course/'
@@ -636,7 +648,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  BlogRoute: typeof BlogRoute
+  BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
@@ -916,6 +928,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/tag/$tag': {
+      id: '/blog/tag/$tag'
+      path: '/tag/$tag'
+      fullPath: '/blog/tag/$tag'
+      preLoaderRoute: typeof BlogTagTagRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/_authenticated/library/$slug': {
       id: '/_authenticated/library/$slug'
       path: '/library/$slug'
@@ -1077,6 +1096,16 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface BlogRouteChildren {
+  BlogTagTagRoute: typeof BlogTagTagRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogTagTagRoute: BlogTagTagRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 interface NewsletterRouteChildren {
   NewsletterSlugRoute: typeof NewsletterSlugRoute
   NewsletterIndexRoute: typeof NewsletterIndexRoute
@@ -1106,7 +1135,7 @@ const ToolsRouteWithChildren = ToolsRoute._addFileChildren(ToolsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  BlogRoute: BlogRoute,
+  BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,
