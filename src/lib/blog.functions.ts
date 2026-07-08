@@ -21,27 +21,29 @@ async function assertAdmin(supabase: any, userId: string) {
 
 export const listAllBlogPosts = createServerFn({ method: "GET" }).handler(async () => {
   const sb = serverPublic();
-  const { data, error } = await sb
-    .from("newsletter_posts")
+  const { data, error } = await (sb
+    .from("newsletter_posts") as any)
     .select("id, slug, title, excerpt, cover_image_url, published_at, tags, pillar_slug")
+    .eq("post_type", "blog")
     .not("published_at", "is", null)
     .lte("published_at", new Date().toISOString())
     .order("published_at", { ascending: false })
     .limit(500);
   if (error) throw new Error(error.message);
-  const posts = data ?? [];
+  const posts = (data ?? []) as Array<{ tags?: string[] | null }>;
   const tagSet = new Set<string>();
   for (const p of posts) for (const t of (p.tags ?? [])) tagSet.add(t);
-  return { posts, tags: Array.from(tagSet).sort() };
+  return { posts: data ?? [], tags: Array.from(tagSet).sort() };
 });
 
 export const listPostsByTag = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ tag: z.string().min(1).max(80) }).parse(d))
   .handler(async ({ data }) => {
     const sb = serverPublic();
-    const { data: posts, error } = await sb
-      .from("newsletter_posts")
+    const { data: posts, error } = await (sb
+      .from("newsletter_posts") as any)
       .select("id, slug, title, excerpt, cover_image_url, published_at, tags, pillar_slug")
+      .eq("post_type", "blog")
       .contains("tags", [data.tag])
       .not("published_at", "is", null)
       .lte("published_at", new Date().toISOString())
