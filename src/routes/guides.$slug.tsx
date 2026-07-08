@@ -5,18 +5,68 @@ import { getPillarBySlug } from "@/lib/blog.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Linkify } from "@/components/linkify";
+import { GuideView } from "@/components/guide-view";
+import { getStaticGuideBySlug } from "@/lib/guides-content";
 
 export const Route = createFileRoute("/guides/$slug")({
   loader: async ({ context, params }) => {
+    // Static guides take precedence — they are hand-written pillar guides.
+    const staticGuide = getStaticGuideBySlug(params.slug);
+    if (staticGuide) return { kind: "static" as const, staticGuide };
+
     const res = await context.queryClient.ensureQueryData({
       queryKey: ["pillar", params.slug],
       queryFn: () => getPillarBySlug({ data: { slug: params.slug } }),
     });
     if (!res.pillar) throw notFound();
-    return res;
+    return { kind: "pillar" as const, ...res };
   },
   head: ({ params, loaderData }) => {
-    const p = loaderData?.pillar;
+    // Static-guide metadata
+    if (loaderData?.kind === "static") {
+      const g = loaderData.staticGuide;
+      const url = `https://ai-income-systems.com/guides/${g.slug}`;
+      const articleLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: g.title,
+        description: g.description,
+        datePublished: g.publishedAt,
+        dateModified: g.publishedAt,
+        author: { "@type": "Person", name: "Dustin", url: "https://ai-income-systems.com" },
+        publisher: { "@type": "Organization", name: "AI Income Systems", url: "https://ai-income-systems.com" },
+        mainEntityOfPage: { "@type": "WebPage", "@id": url },
+      };
+      const breadcrumbLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://ai-income-systems.com/" },
+          { "@type": "ListItem", position: 2, name: "Guides", item: "https://ai-income-systems.com/guides" },
+          { "@type": "ListItem", position: 3, name: g.title, item: url },
+        ],
+      };
+      return {
+        meta: [
+          { title: `${g.title} | AI Income Systems` },
+          { name: "description", content: g.description },
+          { property: "og:title", content: g.title },
+          { property: "og:description", content: g.description },
+          { property: "og:type", content: "article" },
+          { property: "og:url", content: url },
+          { name: "twitter:card", content: "summary" },
+          { name: "twitter:title", content: g.title },
+          { name: "twitter:description", content: g.description },
+        ],
+        links: [{ rel: "canonical", href: url }],
+        scripts: [
+          { type: "application/ld+json", children: JSON.stringify(articleLd) },
+          { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
+        ],
+      };
+    }
+
+    const p = loaderData?.kind === "pillar" ? loaderData.pillar : null;
     if (!p) return { meta: [{ title: "Guide" }, { name: "robots", content: "noindex" }] };
     const url = `https://ai-income-systems.com/guides/${p.slug}`;
     const desc = p.description ?? `Complete guide to ${p.title}.`;
@@ -81,8 +131,27 @@ export const Route = createFileRoute("/guides/$slug")({
       <SiteFooter />
     </div>
   ),
-  component: PillarPage,
+  component: GuideRouteComponent,
 });
+
+function GuideRouteComponent() {
+  const params = Route.useParams();
+  const staticGuide = getStaticGuideBySlug(params.slug);
+
+  if (staticGuide) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <SiteHeader />
+        <main className="flex-1">
+          <GuideView guide={staticGuide} />
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  return <PillarPage />;
+}
 
 function PillarPage() {
   const params = Route.useParams();
