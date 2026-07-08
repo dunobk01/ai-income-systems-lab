@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { STATIC_GUIDES } from "@/lib/guides-content";
 
-export const Route = createFileRoute("/guides")({
+export const Route = createFileRoute("/guides/")({
   head: () => ({
     meta: [
       { title: "Guides — AI Income Systems | Complete Playbooks" },

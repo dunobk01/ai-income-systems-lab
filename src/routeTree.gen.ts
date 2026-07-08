@@ -18,7 +18,6 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as NewsletterRouteImport } from './routes/newsletter'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CurriculumRouteImport } from './routes/curriculum'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -27,6 +26,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
@@ -109,11 +109,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuidesRoute = GuidesRouteImport.update({
-  id: '/guides',
-  path: '/guides',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
@@ -153,6 +148,11 @@ const NewsletterIndexRoute = NewsletterIndexRouteImport.update({
   path: '/',
   getParentRoute: () => NewsletterRoute,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -169,9 +169,9 @@ const NewsletterSlugRoute = NewsletterSlugRouteImport.update({
   getParentRoute: () => NewsletterRoute,
 } as any)
 const GuidesSlugRoute = GuidesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => GuidesRoute,
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -356,7 +356,6 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
-  '/guides': typeof GuidesRouteWithChildren
   '/login': typeof LoginRoute
   '/newsletter': typeof NewsletterRouteWithChildren
   '/pricing': typeof PricingRoute
@@ -382,6 +381,7 @@ export interface FileRoutesByFullPath {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
@@ -411,7 +411,6 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
-  '/guides': typeof GuidesRouteWithChildren
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -435,6 +434,7 @@ export interface FileRoutesByTo {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
@@ -466,7 +466,6 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
-  '/guides': typeof GuidesRouteWithChildren
   '/login': typeof LoginRoute
   '/newsletter': typeof NewsletterRouteWithChildren
   '/pricing': typeof PricingRoute
@@ -492,6 +491,7 @@ export interface FileRoutesById {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/_authenticated/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
@@ -523,7 +523,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/curriculum'
     | '/faq'
-    | '/guides'
     | '/login'
     | '/newsletter'
     | '/pricing'
@@ -549,6 +548,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/guides/'
     | '/newsletter/'
     | '/tools/'
     | '/admin/newsletter'
@@ -578,7 +578,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/curriculum'
     | '/faq'
-    | '/guides'
     | '/login'
     | '/pricing'
     | '/privacy'
@@ -602,6 +601,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/guides'
     | '/newsletter'
     | '/tools'
     | '/admin/newsletter'
@@ -632,7 +632,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/curriculum'
     | '/faq'
-    | '/guides'
     | '/login'
     | '/newsletter'
     | '/pricing'
@@ -658,6 +657,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/guides/'
     | '/newsletter/'
     | '/tools/'
     | '/_authenticated/admin/newsletter'
@@ -689,7 +689,6 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
-  GuidesRoute: typeof GuidesRouteWithChildren
   LoginRoute: typeof LoginRoute
   NewsletterRoute: typeof NewsletterRouteWithChildren
   PricingRoute: typeof PricingRoute
@@ -701,7 +700,9 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicPinterestCatalogDottsvRoute: typeof ApiPublicPinterestCatalogDottsvRoute
@@ -777,13 +778,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/guides': {
-      id: '/guides'
-      path: '/guides'
-      fullPath: '/guides'
-      preLoaderRoute: typeof GuidesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/faq': {
       id: '/faq'
       path: '/faq'
@@ -840,6 +834,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsletterIndexRouteImport
       parentRoute: typeof NewsletterRoute
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/$slug': {
       id: '/tools/$slug'
       path: '/$slug'
@@ -863,10 +864,10 @@ declare module '@tanstack/react-router' {
     }
     '/guides/$slug': {
       id: '/guides/$slug'
-      path: '/$slug'
+      path: '/guides/$slug'
       fullPath: '/guides/$slug'
       preLoaderRoute: typeof GuidesSlugRouteImport
-      parentRoute: typeof GuidesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -1167,17 +1168,6 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
-interface GuidesRouteChildren {
-  GuidesSlugRoute: typeof GuidesSlugRoute
-}
-
-const GuidesRouteChildren: GuidesRouteChildren = {
-  GuidesSlugRoute: GuidesSlugRoute,
-}
-
-const GuidesRouteWithChildren =
-  GuidesRoute._addFileChildren(GuidesRouteChildren)
-
 interface NewsletterRouteChildren {
   NewsletterSlugRoute: typeof NewsletterSlugRoute
   NewsletterIndexRoute: typeof NewsletterIndexRoute
@@ -1211,7 +1201,6 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,
-  GuidesRoute: GuidesRouteWithChildren,
   LoginRoute: LoginRoute,
   NewsletterRoute: NewsletterRouteWithChildren,
   PricingRoute: PricingRoute,
@@ -1223,7 +1212,9 @@ const rootRouteChildren: RootRouteChildren = {
   UnsubscribeRoute: UnsubscribeRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
   SystemsSlugRoute: SystemsSlugRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicPinterestCatalogDottsvRoute: ApiPublicPinterestCatalogDottsvRoute,
