@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { STATIC_GUIDES } from "@/lib/guides-content";
 
 const BASE_URL = "https://ai-income-systems.com";
 
@@ -31,6 +32,16 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/login", changefreq: "monthly", priority: "0.3" },
           { path: "/signup", changefreq: "monthly", priority: "0.5" },
         ];
+
+        // Static long-form guides
+        for (const g of STATIC_GUIDES) {
+          entries.push({
+            path: `/guides/${g.slug}`,
+            lastmod: g.publishedAt.slice(0, 10),
+            changefreq: "monthly",
+            priority: "0.85",
+          });
+        }
 
         try {
           const sb = createClient<Database>(
