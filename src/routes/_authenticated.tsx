@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import {
   LayoutDashboard, BookOpen, Sparkles, Wrench, Workflow, Package,
   Megaphone, BarChart3, Settings, Shield, LogOut, ChevronLeft, Menu, Bot,
+  Users, Trophy,
 } from "lucide-react";
 
 import { useAuth } from "@/lib/auth-context";
@@ -27,6 +28,8 @@ const nav = [
   { label: "Product Builder", to: "/builders/product", icon: Package },
   { label: "Funnel Builder", to: "/builders/funnel", icon: Megaphone },
   { label: "Agent Generator", to: "/builders/agent", icon: Bot },
+  { label: "The Lab", to: "/community", icon: Users },
+  { label: "Wall of Wins", to: "/wins", icon: Trophy },
   { label: "Progress", to: "/progress", icon: BarChart3 },
 ];
 

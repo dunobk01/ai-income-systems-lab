@@ -35,6 +35,7 @@ import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
+import { Route as AuthenticatedWinsRouteImport } from './routes/_authenticated/wins'
 import { Route as AuthenticatedWelcomeRouteImport } from './routes/_authenticated/welcome'
 import { Route as AuthenticatedStarterKitRouteImport } from './routes/_authenticated/starter-kit'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -192,6 +193,11 @@ const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
 const AuthenticatedWorkflowsRoute = AuthenticatedWorkflowsRouteImport.update({
   id: '/workflows',
   path: '/workflows',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedWinsRoute = AuthenticatedWinsRouteImport.update({
+  id: '/wins',
+  path: '/wins',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedWelcomeRoute = AuthenticatedWelcomeRouteImport.update({
@@ -381,6 +387,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/starter-kit': typeof AuthenticatedStarterKitRoute
   '/welcome': typeof AuthenticatedWelcomeRoute
+  '/wins': typeof AuthenticatedWinsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -434,6 +441,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/starter-kit': typeof AuthenticatedStarterKitRoute
   '/welcome': typeof AuthenticatedWelcomeRoute
+  '/wins': typeof AuthenticatedWinsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -492,6 +500,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/starter-kit': typeof AuthenticatedStarterKitRoute
   '/_authenticated/welcome': typeof AuthenticatedWelcomeRoute
+  '/_authenticated/wins': typeof AuthenticatedWinsRoute
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -550,6 +559,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/starter-kit'
     | '/welcome'
+    | '/wins'
     | '/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
@@ -603,6 +613,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/starter-kit'
     | '/welcome'
+    | '/wins'
     | '/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
@@ -660,6 +671,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/starter-kit'
     | '/_authenticated/welcome'
+    | '/_authenticated/wins'
     | '/_authenticated/workflows'
     | '/checkout/return'
     | '/email/unsubscribe'
@@ -906,6 +918,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWorkflowsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/wins': {
+      id: '/_authenticated/wins'
+      path: '/wins'
+      fullPath: '/wins'
+      preLoaderRoute: typeof AuthenticatedWinsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/welcome': {
       id: '/_authenticated/welcome'
       path: '/welcome'
@@ -1135,6 +1154,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedStarterKitRoute: typeof AuthenticatedStarterKitRoute
   AuthenticatedWelcomeRoute: typeof AuthenticatedWelcomeRoute
+  AuthenticatedWinsRoute: typeof AuthenticatedWinsRoute
   AuthenticatedWorkflowsRoute: typeof AuthenticatedWorkflowsRoute
   AuthenticatedBuildersAgentRoute: typeof AuthenticatedBuildersAgentRoute
   AuthenticatedBuildersFunnelRoute: typeof AuthenticatedBuildersFunnelRoute
@@ -1157,6 +1177,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedStarterKitRoute: AuthenticatedStarterKitRoute,
   AuthenticatedWelcomeRoute: AuthenticatedWelcomeRoute,
+  AuthenticatedWinsRoute: AuthenticatedWinsRoute,
   AuthenticatedWorkflowsRoute: AuthenticatedWorkflowsRoute,
   AuthenticatedBuildersAgentRoute: AuthenticatedBuildersAgentRoute,
   AuthenticatedBuildersFunnelRoute: AuthenticatedBuildersFunnelRoute,
