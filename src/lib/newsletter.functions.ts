@@ -39,6 +39,7 @@ export const listPublishedPosts = createServerFn({ method: "GET" }).handler(asyn
   const { data, error } = await sb
     .from("newsletter_posts")
     .select("id, slug, title, excerpt, cover_image_url, published_at")
+    .eq("post_type" as any, "newsletter")
     .not("published_at", "is", null)
     .lte("published_at", new Date().toISOString())
     .order("published_at", { ascending: false })
