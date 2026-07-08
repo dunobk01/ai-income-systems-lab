@@ -621,6 +621,7 @@ export type Database = {
           excerpt: string | null
           id: string
           pillar_slug: string | null
+          post_type: string
           published_at: string | null
           slug: string
           tags: string[]
@@ -636,6 +637,7 @@ export type Database = {
           excerpt?: string | null
           id?: string
           pillar_slug?: string | null
+          post_type?: string
           published_at?: string | null
           slug: string
           tags?: string[]
@@ -651,6 +653,7 @@ export type Database = {
           excerpt?: string | null
           id?: string
           pillar_slug?: string | null
+          post_type?: string
           published_at?: string | null
           slug?: string
           tags?: string[]
