@@ -86,7 +86,7 @@ function CommunityFeed({ canDM }: { canDM: boolean }) {
       <div className="flex items-start justify-between gap-4 mb-8">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--brand-2)]">Members-only</p>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Community</h1>
+          <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">The Lab</h1>
           <p className="mt-2 text-muted-foreground max-w-xl">
             Share wins, post workflows, get peer feedback. Open to all paying members.
           </p>
