@@ -24,6 +24,8 @@ type Listed = {
   slug: string;
   title: string;
   description: string | null;
+  intro: string | null;
+  cover_image_url: string | null;
   published_at: string | null;
   updated_at: string;
   created_at: string;
@@ -81,8 +83,8 @@ function AdminPillars() {
       slug: p.slug,
       title: p.title,
       description: p.description ?? "",
-      intro: "",
-      cover_image_url: "",
+      intro: p.intro ?? "",
+      cover_image_url: p.cover_image_url ?? "",
       publish: !!p.published_at,
     });
 

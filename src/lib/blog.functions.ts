@@ -99,7 +99,7 @@ export const listAllPillarsAdmin = createServerFn({ method: "GET" })
     await assertAdmin(context.supabase, context.userId);
     const { data, error } = await context.supabase
       .from("blog_pillars")
-      .select("id, slug, title, description, published_at, updated_at, created_at")
+      .select("id, slug, title, description, intro, cover_image_url, published_at, updated_at, created_at")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return { pillars: data ?? [] };

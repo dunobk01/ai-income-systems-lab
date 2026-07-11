@@ -129,7 +129,7 @@ export const upsertPost = createServerFn({ method: "POST" })
     } else {
       const { data: inserted, error } = await context.supabase
         .from("newsletter_posts")
-        .insert(row)
+        .insert({ ...row, post_type: "newsletter" } as any)
         .select("id")
         .single();
       if (error) throw new Error(error.message);
