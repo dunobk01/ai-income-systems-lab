@@ -8,18 +8,6 @@ type Row = Record<string, string>;
 
 const products: Row[] = [
   {
-    id: "ailab_starter_onetime",
-    title: "Starter — Monthly Membership",
-    description: "Full 11-module course access. Learn the AI Income System end-to-end. Cancel anytime.",
-    link: `${BASE_URL}/pricing`,
-    image_link: `${BASE_URL}/pinterest/pin-starter-monthly-v2.jpg`,
-    price: "29.00 USD",
-    availability: "in stock",
-    condition: "new",
-    brand: BRAND,
-    product_type: "Course > Subscription > Starter Monthly",
-  },
-  {
     id: "ailab_starter_monthly",
     title: "Starter — Monthly Membership",
     description: "Full 11-module course access. Learn the AI Income System end-to-end. Cancel anytime.",
@@ -32,18 +20,6 @@ const products: Row[] = [
     product_type: "Course > Subscription > Starter Monthly",
   },
   {
-    id: "ailab_builder_onetime",
-    title: "Builder — Monthly Membership",
-    description: "Course + members-only community + template library + interactive builders. Most popular tier.",
-    link: `${BASE_URL}/pricing`,
-    image_link: `${BASE_URL}/pinterest/pin-builder-monthly-v2.jpg`,
-    price: "79.00 USD",
-    availability: "in stock",
-    condition: "new",
-    brand: BRAND,
-    product_type: "Course > Subscription > Builder Monthly",
-  },
-  {
     id: "ailab_builder_monthly",
     title: "Builder — Monthly Membership",
     description: "Course + members-only community + template library + interactive builders. Most popular tier.",
@@ -54,19 +30,6 @@ const products: Row[] = [
     condition: "new",
     brand: BRAND,
     product_type: "Course > Subscription > Builder Monthly",
-  },
-  {
-    id: "ailab_pro_onetime",
-    title: "Accelerator — Monthly Membership",
-    description:
-      "Everything in Builder plus Faceless Video, AI Image Income, Chatbot Agency, Agent Generator, and member DMs.",
-    link: `${BASE_URL}/pricing`,
-    image_link: `${BASE_URL}/pinterest/pin-accelerator-monthly-v2.jpg`,
-    price: "149.00 USD",
-    availability: "in stock",
-    condition: "new",
-    brand: BRAND,
-    product_type: "Course > Subscription > Accelerator Monthly",
   },
   {
     id: "ailab_accelerator_monthly",
