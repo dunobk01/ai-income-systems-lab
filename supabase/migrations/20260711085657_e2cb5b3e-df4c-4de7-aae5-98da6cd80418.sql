@@ -1,0 +1,1 @@
+set local session_replication_role = replica; update public.profiles set tier = 'accelerator', updated_at = now() where user_id = '83881e4d-bb0a-4274-8f9e-4345b1bfc255';
