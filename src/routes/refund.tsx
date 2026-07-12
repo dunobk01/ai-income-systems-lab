@@ -55,7 +55,7 @@ function RefundPage() {
             Refund & <span className="text-gradient">Cancellation</span>
           </h1>
           <p className="mt-4 text-muted-foreground">
-            Last updated: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+            Last updated: July 12, 2026
           </p>
         </div>
       </section>
