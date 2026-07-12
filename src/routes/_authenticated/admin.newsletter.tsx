@@ -62,6 +62,8 @@ function AdminNewsletter() {
     tags: string[];
     pillar_slug: string;
     post_type: "newsletter" | "blog";
+    seo_title: string;
+    seo_description: string;
   }>(null);
   const [tagInput, setTagInput] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
