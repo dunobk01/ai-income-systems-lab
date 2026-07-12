@@ -422,6 +422,14 @@ export default function LandingPage() {
                 </li>
               ))}
             </ul>
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-xs">
+              <Link to="/security" className="inline-flex items-center gap-1 text-[color:var(--brand)] hover:underline">
+                Security Policy <ArrowRight className="h-3 w-3" />
+              </Link>
+              <Link to="/privacy" className="inline-flex items-center gap-1 text-[color:var(--brand)] hover:underline">
+                Privacy Policy <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
           </div>
           {/* Risk-free */}
           <div className="glass-strong rounded-2xl p-6">
@@ -442,6 +450,11 @@ export default function LandingPage() {
                 </li>
               ))}
             </ul>
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-xs">
+              <Link to="/refund" className="inline-flex items-center gap-1 text-[color:var(--brand)] hover:underline">
+                Refund & Cancellation Policy <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
           </div>
           {/* What you get */}
           <div className="glass-strong rounded-2xl p-6">
