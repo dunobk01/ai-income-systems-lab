@@ -129,8 +129,13 @@ html { color-scheme: dark; }
     -webkit-font-smoothing: antialiased;
   }
 
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
   ::selection {
-    background: oklch(0.68 0.20 275 / 35%);
+    background: oklch(0.78 0.13 88 / 30%);
     color: var(--color-foreground);
   }
 }
