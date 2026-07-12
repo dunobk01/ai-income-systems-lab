@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, Sparkles, Workflow, Package, Megaphone, Lock, X, 
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { OnboardingChecklist } from "@/components/onboarding-checklist";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
