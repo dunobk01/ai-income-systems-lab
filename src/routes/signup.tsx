@@ -85,6 +85,15 @@ function SignupPage() {
     });
     dlSignUp({ method: "email" });
     pinSignUp({ lead_type: tier ? `plan-${tier}` : "Account" });
+    // Attach referral if one was captured in sessionStorage
+    try {
+      const ref = typeof window !== "undefined" ? sessionStorage.getItem("ails:ref") : null;
+      if (ref) {
+        // fire-and-forget; auth session is now set, so bearer middleware attaches
+        attachRef({ data: { code: ref } }).catch(() => {});
+        sessionStorage.removeItem("ails:ref");
+      }
+    } catch {}
     void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   };
 
