@@ -235,6 +235,16 @@ function RootComponent() {
     return () => document.removeEventListener("click", onClick, { capture: true } as EventListenerOptions);
   }, []);
 
+  // Capture ?ref=<code> for referral attribution on signup.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+    if (ref && /^[a-z0-9]{6,32}$/i.test(ref)) {
+      try { sessionStorage.setItem("ails:ref", ref); } catch {}
+    }
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
