@@ -9,6 +9,7 @@ import { CohortCountdown } from "@/components/cohort-countdown";
 import { LeadCapture } from "@/components/lead-capture";
 import { useAuth } from "@/lib/auth-context";
 import { ogImageMeta } from "@/lib/og";
+import { ExitIntentModal } from "@/components/exit-intent-modal";
 
 const pricingFaqs = [
   { q: "Can I cancel anytime?", a: "Yes. Cancel from Settings in one click; access continues through the end of your billing period." },
