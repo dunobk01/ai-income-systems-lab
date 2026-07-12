@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Linkify } from "@/components/linkify";
 import { GuideView } from "@/components/guide-view";
-import { getStaticGuideBySlug } from "@/lib/guides-content";
+import { getStaticGuideBySlug, STATIC_GUIDES } from "@/lib/guides-content";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/guides/$slug")({
