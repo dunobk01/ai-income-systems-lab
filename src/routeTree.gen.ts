@@ -54,6 +54,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedCommunityIndexRouteImport } from './routes/_authenticated/community.index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as AuthenticatedLibrarySlugRouteImport } from './routes/_authenticated/library.$slug'
@@ -299,6 +300,11 @@ const AuthenticatedCommunityIndexRoute =
     path: '/community/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -449,6 +455,7 @@ export interface FileRoutesByFullPath {
   '/library/$slug': typeof AuthenticatedLibrarySlugRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/community/': typeof AuthenticatedCommunityIndexRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
   '/library/': typeof AuthenticatedLibraryIndexRoute
@@ -476,7 +483,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
-  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/messages': typeof AuthenticatedMessagesRoute
@@ -509,6 +515,7 @@ export interface FileRoutesByTo {
   '/library/$slug': typeof AuthenticatedLibrarySlugRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/community': typeof AuthenticatedCommunityIndexRoute
   '/course': typeof AuthenticatedCourseIndexRoute
   '/library': typeof AuthenticatedLibraryIndexRoute
@@ -574,6 +581,7 @@ export interface FileRoutesById {
   '/_authenticated/library/$slug': typeof AuthenticatedLibrarySlugRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/community/': typeof AuthenticatedCommunityIndexRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
   '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
@@ -639,6 +647,7 @@ export interface FileRouteTypes {
     | '/library/$slug'
     | '/blog/tag/$tag'
     | '/lovable/email/suppression'
+    | '/admin/'
     | '/community/'
     | '/course/'
     | '/library/'
@@ -666,7 +675,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/unsubscribe'
-    | '/admin'
     | '/checkout'
     | '/dashboard'
     | '/messages'
@@ -699,6 +707,7 @@ export interface FileRouteTypes {
     | '/library/$slug'
     | '/blog/tag/$tag'
     | '/lovable/email/suppression'
+    | '/admin'
     | '/community'
     | '/course'
     | '/library'
@@ -763,6 +772,7 @@ export interface FileRouteTypes {
     | '/_authenticated/library/$slug'
     | '/blog/tag/$tag'
     | '/lovable/email/suppression'
+    | '/_authenticated/admin/'
     | '/_authenticated/community/'
     | '/_authenticated/course/'
     | '/_authenticated/library/'
@@ -1128,6 +1138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommunityIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -1253,11 +1270,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminNewsletterRoute: typeof AuthenticatedAdminNewsletterRoute
   AuthenticatedAdminPillarsRoute: typeof AuthenticatedAdminPillarsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminNewsletterRoute: AuthenticatedAdminNewsletterRoute,
   AuthenticatedAdminPillarsRoute: AuthenticatedAdminPillarsRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
 const AuthenticatedAdminRouteWithChildren =
