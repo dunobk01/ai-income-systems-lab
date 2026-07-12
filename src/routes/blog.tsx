@@ -5,6 +5,7 @@ import { listAllBlogPosts, listPublishedPillars } from "@/lib/blog.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ogImageMeta } from "@/lib/og";
+import { ExitIntentModal } from "@/components/exit-intent-modal";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
