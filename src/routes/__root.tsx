@@ -177,6 +177,7 @@ function RootComponent() {
     if (typeof window !== "undefined" && (window as any).pintrk) {
       try { (window as any).pintrk("page"); } catch {}
     }
+    import("@/lib/pinterest").then((m) => m.pinPageVisit({ page_path: pathname })).catch(() => {});
     // Standardized GTM page_view.
     import("@/lib/datalayer").then((m) =>
       m.dlPageView({ path: pathname, title: typeof document !== "undefined" ? document.title : "" }),

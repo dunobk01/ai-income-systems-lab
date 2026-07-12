@@ -4,6 +4,7 @@ import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { tiktokTrack } from "@/lib/tiktok";
 import { dlPurchase } from "@/lib/datalayer";
+import { pinCheckout } from "@/lib/pinterest";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -26,6 +27,7 @@ function ReturnPage() {
       currency: "USD",
       items: [{ item_id: "ai-income-systems-lab", item_name: "AI Income Systems Lab" }],
     });
+    pinCheckout({ order_id: session_id, currency: "USD", order_quantity: 1, product_id: "ai-income-systems-lab" });
   }, [session_id]);
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
