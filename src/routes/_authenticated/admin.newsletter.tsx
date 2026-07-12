@@ -145,6 +145,7 @@ function AdminNewsletter() {
           cover_image_url: editing.cover_image_url.trim() || null,
           tags: editing.tags,
           pillar_slug: editing.pillar_slug.trim() || null,
+          post_type: editing.post_type,
         },
       });
 
