@@ -367,6 +367,24 @@ function PricingPage() {
         </p>
       </section>
 
+      <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-16">
+        <div className="text-center mb-6">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">FAQ</p>
+          <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight">Pricing questions</h2>
+        </div>
+        <div className="space-y-3">
+          {pricingFaqs.map((f) => (
+            <details key={f.q} className="glass rounded-xl px-5 py-4 group">
+              <summary className="font-medium cursor-pointer list-none flex justify-between items-center gap-3">
+                <span>{f.q}</span>
+                <span className="text-muted-foreground group-open:rotate-45 transition shrink-0">+</span>
+              </summary>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-20">
         <LeadCapture source="pricing" />
       </section>
