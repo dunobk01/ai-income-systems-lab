@@ -98,7 +98,7 @@ function AdminNewsletter() {
   if (!isAdmin) return null;
 
   const startNew = (post_type: "newsletter" | "blog" = "newsletter") =>
-    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "", post_type });
+    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "", post_type, seo_title: "", seo_description: "" });
 
   const startEdit = async (id: string) => {
     setErr(null);
@@ -116,6 +116,8 @@ function AdminNewsletter() {
         tags: (post as any).tags ?? [],
         pillar_slug: (post as any).pillar_slug ?? "",
         post_type: ((post as any).post_type ?? "newsletter") as "newsletter" | "blog",
+        seo_title: (post as any).seo_title ?? "",
+        seo_description: (post as any).seo_description ?? "",
       });
     } catch (e: any) {
       setErr(e?.message ?? "Failed to load post");
