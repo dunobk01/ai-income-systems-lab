@@ -10,6 +10,7 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
 import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import { dlSignUp } from "@/lib/datalayer";
+import { pinSignUp } from "@/lib/pinterest";
 import { toast } from "sonner";
 
 const TIER_KEYS = [
