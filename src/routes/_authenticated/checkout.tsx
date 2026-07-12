@@ -44,6 +44,10 @@ function CheckoutPage() {
   const returnUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
   const suffix = plan.recurring === "month" ? "/mo" : plan.recurring === "year" ? "/yr" : "";
 
+  useEffect(() => {
+    pinAddToCart({ value: plan.price, currency: "USD", order_quantity: 1, product_id: plan.priceId });
+  }, [plan.priceId, plan.price]);
+
   return (
     <div className="min-h-screen">
       <PaymentTestModeBanner />
