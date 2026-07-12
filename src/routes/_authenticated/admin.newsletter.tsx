@@ -32,6 +32,7 @@ type Listed = {
   email_sent_at: string | null;
   created_at: string;
   updated_at: string;
+  post_type?: "newsletter" | "blog" | null;
 };
 
 function slugify(s: string) {
