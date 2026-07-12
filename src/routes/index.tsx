@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { CohortCountdown } from "@/components/cohort-countdown";
 import { LeadCapture } from "@/components/lead-capture";
 import dustinPhoto from "@/assets/dustin.jpg.asset.json";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,9 +19,9 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Learn how to combine ChatGPT, Claude, Perplexity, Lovable, and n8n to create digital products, funnels, automations, and simple apps you can actually sell." },
       { property: "og:title", content: "AI Income Systems Lab — Build Real AI Income Systems" },
       { property: "og:description", content: "Learn how to combine ChatGPT, Claude, Perplexity, Lovable, and n8n to create digital products, funnels, automations, and simple apps you can actually sell." },
+      { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ai-income-systems.com/" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/482ab1b5-41be-4f5f-a537-63fb59a87231" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/482ab1b5-41be-4f5f-a537-63fb59a87231" },
+      ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/" }],
   }),
