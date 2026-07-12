@@ -150,6 +150,8 @@ function AdminNewsletter() {
           tags: editing.tags,
           pillar_slug: editing.pillar_slug.trim() || null,
           post_type: editing.post_type,
+          seo_title: editing.seo_title.trim() || null,
+          seo_description: editing.seo_description.trim() || null,
         },
       });
 
