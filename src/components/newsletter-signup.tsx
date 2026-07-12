@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { submitLead } from "@/lib/leads.functions";
 import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import { dlLead } from "@/lib/datalayer";
+import { pinLead } from "@/lib/pinterest";
 
 export function NewsletterSignup({ source = "newsletter" }: { source?: string }) {
   const fn = useServerFn(submitLead);
