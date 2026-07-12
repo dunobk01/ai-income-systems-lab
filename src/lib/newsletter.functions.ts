@@ -69,12 +69,12 @@ export const listAllPostsAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { data, error } = await context.supabase
+    const { data, error } = await (context.supabase as any)
       .from("newsletter_posts")
-      .select("id, slug, title, excerpt, published_at, email_sent_at, updated_at, created_at")
+      .select("id, slug, title, excerpt, published_at, email_sent_at, updated_at, created_at, post_type")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
-    return { posts: data ?? [] };
+    return { posts: (data ?? []) as any[] };
   });
 
 export const getPostAdmin = createServerFn({ method: "GET" })
@@ -100,6 +100,7 @@ const upsertSchema = z.object({
   cover_image_url: z.string().url().max(500).optional().nullable(),
   tags: z.array(z.string().min(1).max(40)).max(20).optional().default([]),
   pillar_slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/).optional().nullable(),
+  post_type: z.enum(["newsletter", "blog"]).optional().default("newsletter"),
 });
 
 export const upsertPost = createServerFn({ method: "POST" })
@@ -115,10 +116,11 @@ export const upsertPost = createServerFn({ method: "POST" })
       cover_image_url: data.cover_image_url ?? null,
       tags: (data.tags ?? []).map((t) => t.trim().toLowerCase()).filter(Boolean),
       pillar_slug: data.pillar_slug ?? null,
+      post_type: data.post_type ?? "newsletter",
       author_id: context.userId,
     };
     if (data.id) {
-      const { data: updated, error } = await context.supabase
+      const { data: updated, error } = await (context.supabase as any)
         .from("newsletter_posts")
         .update(row)
         .eq("id", data.id)
@@ -127,9 +129,9 @@ export const upsertPost = createServerFn({ method: "POST" })
       if (error) throw new Error(error.message);
       return { id: updated.id };
     } else {
-      const { data: inserted, error } = await context.supabase
+      const { data: inserted, error } = await (context.supabase as any)
         .from("newsletter_posts")
-        .insert({ ...row, post_type: "newsletter" } as any)
+        .insert(row)
         .select("id")
         .single();
       if (error) throw new Error(error.message);

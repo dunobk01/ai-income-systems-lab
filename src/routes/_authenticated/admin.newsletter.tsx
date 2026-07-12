@@ -32,6 +32,7 @@ type Listed = {
   email_sent_at: string | null;
   created_at: string;
   updated_at: string;
+  post_type?: "newsletter" | "blog" | null;
 };
 
 function slugify(s: string) {
@@ -60,6 +61,7 @@ function AdminNewsletter() {
     cover_image_url: string;
     tags: string[];
     pillar_slug: string;
+    post_type: "newsletter" | "blog";
   }>(null);
   const [tagInput, setTagInput] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
@@ -93,8 +95,8 @@ function AdminNewsletter() {
 
   if (!isAdmin) return null;
 
-  const startNew = () =>
-    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "" });
+  const startNew = (post_type: "newsletter" | "blog" = "newsletter") =>
+    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "", post_type });
 
   const startEdit = async (id: string) => {
     setErr(null);
@@ -111,6 +113,7 @@ function AdminNewsletter() {
         cover_image_url: post.cover_image_url ?? "",
         tags: (post as any).tags ?? [],
         pillar_slug: (post as any).pillar_slug ?? "",
+        post_type: ((post as any).post_type ?? "newsletter") as "newsletter" | "blog",
       });
     } catch (e: any) {
       setErr(e?.message ?? "Failed to load post");
@@ -142,6 +145,7 @@ function AdminNewsletter() {
           cover_image_url: editing.cover_image_url.trim() || null,
           tags: editing.tags,
           pillar_slug: editing.pillar_slug.trim() || null,
+          post_type: editing.post_type,
         },
       });
 
@@ -209,12 +213,17 @@ function AdminNewsletter() {
           <Link to="/admin" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3 w-3" /> Admin
           </Link>
-          <h1 className="mt-1 text-3xl font-black tracking-tight">Weekly Newsletter</h1>
-          <p className="text-sm text-muted-foreground mt-1">Write tips, publish to the site, and send to your MailerLite list.</p>
+          <h1 className="mt-1 text-3xl font-black tracking-tight">Newsletter & Blog</h1>
+          <p className="text-sm text-muted-foreground mt-1">Write newsletter issues or blog posts, publish to the site, and (for newsletters) send to your MailerLite list.</p>
         </div>
-        <Button variant="brand" onClick={startNew}>
-          <Plus className="h-4 w-4" /> New post
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => startNew("blog")}>
+            <Plus className="h-4 w-4" /> New blog post
+          </Button>
+          <Button variant="brand" onClick={() => startNew("newsletter")}>
+            <Plus className="h-4 w-4" /> New newsletter
+          </Button>
+        </div>
       </div>
 
       {msg && <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">{msg}</div>}
@@ -234,26 +243,41 @@ function AdminNewsletter() {
                       <div className="font-medium text-sm">{p.title || "(untitled)"}</div>
                       <div className="text-xs text-muted-foreground mt-0.5">/{p.slug}</div>
                     </button>
-                    <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${p.published_at ? "bg-emerald-500/15 text-emerald-300" : "bg-white/5 text-muted-foreground"}`}>
-                      {p.published_at ? "live" : "draft"}
-                    </span>
+                    <div className="flex flex-col items-end gap-1">
+                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${p.published_at ? "bg-emerald-500/15 text-emerald-300" : "bg-white/5 text-muted-foreground"}`}>
+                        {p.published_at ? "live" : "draft"}
+                      </span>
+                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${p.post_type === "blog" ? "bg-sky-500/15 text-sky-300" : "bg-amber-500/15 text-amber-300"}`}>
+                        {p.post_type === "blog" ? "blog" : "newsletter"}
+                      </span>
+                    </div>
                   </div>
                   <div className="mt-2 flex items-center gap-2 text-xs">
                     {p.published_at ? (
                       <>
-                        <Link to="/newsletter/$slug" params={{ slug: p.slug }} target="_blank" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
-                          <ExternalLink className="h-3 w-3" /> View
-                        </Link>
+                        {p.post_type === "blog" ? (
+                          <Link to="/blog/$slug" params={{ slug: p.slug }} target="_blank" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+                            <ExternalLink className="h-3 w-3" /> View
+                          </Link>
+                        ) : (
+                          <Link to="/newsletter/$slug" params={{ slug: p.slug }} target="_blank" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+                            <ExternalLink className="h-3 w-3" /> View
+                          </Link>
+                        )}
                         <button disabled={busy === `unpub-${p.id}`} onClick={() => unpublish(p.id)} className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
                           <EyeOff className="h-3 w-3" /> Unpublish
                         </button>
                       </>
+                    ) : p.post_type === "blog" ? (
+                      <button disabled={busy === `pub-${p.id}`} onClick={() => publish(p.id, false)} className="inline-flex items-center gap-1 text-[color:var(--brand)] hover:underline">
+                        {busy === `pub-${p.id}` ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3 w-3" />} Publish
+                      </button>
                     ) : (
                       <button disabled={busy === `pub-${p.id}`} onClick={() => publish(p.id, true)} className="inline-flex items-center gap-1 text-[color:var(--brand)] hover:underline">
                         {busy === `pub-${p.id}` ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3 w-3" />} Publish + email
                       </button>
                     )}
-                    {!p.published_at && (
+                    {!p.published_at && p.post_type !== "blog" && (
                       <button disabled={busy === `pub-${p.id}`} onClick={() => publish(p.id, false)} className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
                         <Eye className="h-3 w-3" /> Publish only
                       </button>
@@ -277,6 +301,30 @@ function AdminNewsletter() {
           ) : (
             <div className="space-y-4">
               <div>
+                <Label htmlFor="post_type">Post type</Label>
+                <div className="mt-1 flex gap-2">
+                  {(["newsletter", "blog"] as const).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setEditing((p) => (p ? { ...p, post_type: t } : p))}
+                      className={`rounded-full border px-3 py-1 text-xs capitalize transition ${
+                        editing.post_type === t
+                          ? "border-[color:var(--brand)]/60 bg-[color:var(--brand)]/10 text-foreground"
+                          : "border-white/10 bg-white/5 text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {editing.post_type === "blog"
+                    ? "Blog posts appear on /blog and are indexed for SEO. No email is sent."
+                    : "Newsletter issues appear on /newsletter and can be emailed to your MailerLite list on publish."}
+                </p>
+              </div>
+              <div>
                 <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
@@ -285,7 +333,7 @@ function AdminNewsletter() {
                     const title = e.target.value;
                     setEditing((p) => p ? { ...p, title, slug: p.slug || slugify(title) } : p);
                   }}
-                  placeholder="Week 1: The one prompt that doubled my Upwork replies"
+                  placeholder={editing.post_type === "blog" ? "How to use AI to land your first $1k client" : "Week 1: The one prompt that doubled my Upwork replies"}
                 />
               </div>
               <div>
@@ -294,9 +342,9 @@ function AdminNewsletter() {
                   id="slug"
                   value={editing.slug}
                   onChange={(e) => setEditing((p) => p ? { ...p, slug: slugify(e.target.value) } : p)}
-                  placeholder="week-1-the-one-prompt"
+                  placeholder="your-post-slug"
                 />
-                <p className="text-xs text-muted-foreground mt-1">Goes live at /newsletter/{editing.slug || "your-slug"}</p>
+                <p className="text-xs text-muted-foreground mt-1">Goes live at /{editing.post_type === "blog" ? "blog" : "newsletter"}/{editing.slug || "your-slug"}</p>
               </div>
               <div>
                 <Label htmlFor="excerpt">Excerpt (1–2 sentences, used as preview + email subtitle)</Label>
@@ -377,16 +425,18 @@ function AdminNewsletter() {
                 {editing.id && (
                   <Button
                     variant="outline"
-                    onClick={() => publish(editing.id!, true)}
+                    onClick={() => publish(editing.id!, editing.post_type === "newsletter")}
                     disabled={busy === `pub-${editing.id}`}
                   >
-                    <Send className="h-4 w-4" /> Publish + email subscribers
+                    <Send className="h-4 w-4" /> {editing.post_type === "blog" ? "Publish blog post" : "Publish + email subscribers"}
                   </Button>
                 )}
                 <Button variant="ghost" onClick={() => setEditing(null)}>Close</Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Tip: save first, then click <span className="text-foreground">Publish + email</span> when you're ready. Email is sent once per post.
+                {editing.post_type === "blog"
+                  ? "Blog posts go live immediately on /blog after publish. No email sent."
+                  : "Tip: save first, then click Publish + email when you're ready. Email is sent once per post."}
               </p>
             </div>
           )}
