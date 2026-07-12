@@ -122,7 +122,7 @@ function PostPage() {
             <img src={post.cover_image_url} alt="" className="mt-8 w-full rounded-2xl border border-white/10" />
           )}
           <div className="mt-10 text-base leading-relaxed text-foreground/90 space-y-5">
-            {post.content.split(/\n{2,}/).map((para, i) => (
+            {post.content.split(/\n{2,}/).map((para: string, i: number) => (
               <p key={i} className="whitespace-pre-wrap"><Linkify text={para} /></p>
             ))}
           </div>
