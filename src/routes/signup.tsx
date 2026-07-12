@@ -13,6 +13,8 @@ import { dlSignUp } from "@/lib/datalayer";
 import { pinSignUp } from "@/lib/pinterest";
 import { toast } from "sonner";
 import { ogImageMeta } from "@/lib/og";
+import { useServerFn } from "@tanstack/react-start";
+import { attachReferral } from "@/lib/referrals.functions";
 
 const TIER_KEYS = [
   "starter_monthly", "builder_monthly", "accelerator_monthly",
