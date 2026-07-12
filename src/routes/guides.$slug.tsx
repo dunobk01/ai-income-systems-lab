@@ -195,7 +195,7 @@ function PillarPage() {
         <h1 className="mt-2 text-4xl sm:text-5xl font-black tracking-tight">{pillar.title}</h1>
         {pillar.description && <p className="mt-4 text-lg text-muted-foreground">{pillar.description}</p>}
         {pillar.cover_image_url && (
-          <img src={pillar.cover_image_url} alt="" className="mt-8 w-full rounded-2xl border border-white/10" />
+          <img src={pillar.cover_image_url} alt={`${pillar.title} — pillar guide cover`} className="mt-8 w-full rounded-2xl border border-white/10" />
         )}
 
         {pillar.intro && (
