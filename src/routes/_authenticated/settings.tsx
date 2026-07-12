@@ -167,6 +167,23 @@ function SettingsPage() {
       )}
 
       <section className="mt-6 glass rounded-2xl p-6">
+        <h2 className="font-semibold">Referral link</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Share your link. When someone signs up, they're credited to you — {referralCount} member{referralCount === 1 ? "" : "s"} referred so far.
+        </p>
+        {referralCode ? (
+          <div className="mt-4 flex gap-2">
+            <Input readOnly value={referralUrl} className="font-mono text-xs" />
+            <Button variant="glass" onClick={copyReferral} className="shrink-0">
+              <Copy className="h-4 w-4" /> Copy
+            </Button>
+          </div>
+        ) : (
+          <p className="mt-3 text-xs text-muted-foreground">Generating your referral link…</p>
+        )}
+      </section>
+
+      <section className="mt-6 glass rounded-2xl p-6">
         <h2 className="font-semibold">Purchase history</h2>
         {purchases.length === 0 ? (
           <p className="mt-3 text-sm text-muted-foreground">No purchases yet.</p>
