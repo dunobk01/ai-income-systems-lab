@@ -242,16 +242,27 @@ function AdminNewsletter() {
                       <div className="font-medium text-sm">{p.title || "(untitled)"}</div>
                       <div className="text-xs text-muted-foreground mt-0.5">/{p.slug}</div>
                     </button>
-                    <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${p.published_at ? "bg-emerald-500/15 text-emerald-300" : "bg-white/5 text-muted-foreground"}`}>
-                      {p.published_at ? "live" : "draft"}
-                    </span>
+                    <div className="flex flex-col items-end gap-1">
+                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${p.published_at ? "bg-emerald-500/15 text-emerald-300" : "bg-white/5 text-muted-foreground"}`}>
+                        {p.published_at ? "live" : "draft"}
+                      </span>
+                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${p.post_type === "blog" ? "bg-sky-500/15 text-sky-300" : "bg-amber-500/15 text-amber-300"}`}>
+                        {p.post_type === "blog" ? "blog" : "newsletter"}
+                      </span>
+                    </div>
                   </div>
                   <div className="mt-2 flex items-center gap-2 text-xs">
                     {p.published_at ? (
                       <>
-                        <Link to="/newsletter/$slug" params={{ slug: p.slug }} target="_blank" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
-                          <ExternalLink className="h-3 w-3" /> View
-                        </Link>
+                        {p.post_type === "blog" ? (
+                          <Link to="/blog/$slug" params={{ slug: p.slug }} target="_blank" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+                            <ExternalLink className="h-3 w-3" /> View
+                          </Link>
+                        ) : (
+                          <Link to="/newsletter/$slug" params={{ slug: p.slug }} target="_blank" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+                            <ExternalLink className="h-3 w-3" /> View
+                          </Link>
+                        )}
                         <button disabled={busy === `unpub-${p.id}`} onClick={() => unpublish(p.id)} className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
                           <EyeOff className="h-3 w-3" /> Unpublish
                         </button>
