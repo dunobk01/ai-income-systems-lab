@@ -163,7 +163,7 @@ html { color-scheme: dark; }
     background-image: var(--gradient-hero);
   }
   .ring-brand {
-    box-shadow: 0 0 0 1px oklch(0.68 0.20 275 / 35%), var(--shadow-glow);
+    box-shadow: 0 0 0 1px oklch(0.78 0.13 88 / 40%), var(--shadow-glow);
   }
   .grid-fade {
     background-image:
