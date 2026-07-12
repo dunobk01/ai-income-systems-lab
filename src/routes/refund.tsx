@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/refund")({
   head: () => ({
@@ -19,23 +20,13 @@ export const Route = createFileRoute("/refund")({
       },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://ai-income-systems.com/refund" },
-      {
-        property: "og:image",
-        content: "https://ai-income-systems.com/__l5e/assets-v1/9053bc09-99f9-4de8-9ff8-ad1634bd23d2/og-brand.jpg",
-      },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Refund & Cancellation Policy — AI Income Systems Lab" },
       {
         name: "twitter:description",
         content:
           "14-day money-back guarantee, cancel anytime, no hidden fees.",
       },
-      {
-        name: "twitter:image",
-        content: "https://ai-income-systems.com/__l5e/assets-v1/9053bc09-99f9-4de8-9ff8-ad1634bd23d2/og-brand.jpg",
-      },
+      ...ogImageMeta(),
     ],
     links: [
       { rel: "canonical", href: "https://ai-income-systems.com/refund" },
