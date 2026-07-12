@@ -114,7 +114,7 @@ function BlogIndex() {
                   className="glass rounded-2xl p-6 hover:border-[color:var(--brand)]/40 transition group"
                 >
                   <div className="text-xs text-muted-foreground">
-                    {p.published_at ? new Date(p.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : ""}
+                    {p.published_at ? new Date(p.published_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : ""}
                   </div>
                   <h3 className="mt-1 text-xl font-bold group-hover:text-[color:var(--brand)] transition">{p.title}</h3>
                   {p.excerpt && <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>}
