@@ -43,6 +43,7 @@ export function LeadCapture({
         currency: "USD",
       });
       dlLead({ lead_source: source, lead_magnet: leadMagnet });
+      pinLead({ lead_type: leadMagnet });
     } catch (err) {
       setState("error");
       setError((err as Error).message ?? "Couldn't sign you up. Try again.");
