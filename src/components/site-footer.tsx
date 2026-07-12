@@ -25,6 +25,8 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><Link to="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>
             <li><Link to="/terms" className="hover:text-foreground">Terms of Service</Link></li>
+            <li><Link to="/security" className="hover:text-foreground">Security Policy</Link></li>
+            <li><Link to="/refund" className="hover:text-foreground">Refund & Cancellation</Link></li>
           </ul>
         </div>
         <div>
