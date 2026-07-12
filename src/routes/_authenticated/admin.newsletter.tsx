@@ -267,12 +267,16 @@ function AdminNewsletter() {
                           <EyeOff className="h-3 w-3" /> Unpublish
                         </button>
                       </>
+                    ) : p.post_type === "blog" ? (
+                      <button disabled={busy === `pub-${p.id}`} onClick={() => publish(p.id, false)} className="inline-flex items-center gap-1 text-[color:var(--brand)] hover:underline">
+                        {busy === `pub-${p.id}` ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3 w-3" />} Publish
+                      </button>
                     ) : (
                       <button disabled={busy === `pub-${p.id}`} onClick={() => publish(p.id, true)} className="inline-flex items-center gap-1 text-[color:var(--brand)] hover:underline">
                         {busy === `pub-${p.id}` ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3 w-3" />} Publish + email
                       </button>
                     )}
-                    {!p.published_at && (
+                    {!p.published_at && p.post_type !== "blog" && (
                       <button disabled={busy === `pub-${p.id}`} onClick={() => publish(p.id, false)} className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
                         <Eye className="h-3 w-3" /> Publish only
                       </button>
