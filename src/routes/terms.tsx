@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
@@ -21,6 +22,8 @@ export const Route = createFileRoute("/terms")({
           "AI Income Systems Lab terms of service. Read the rules and conditions for using our platform.",
       },
       { property: "og:url", content: "https://ai-income-systems.com/terms" },
+    
+      ...ogImageMeta(),
     ],
     links: [
       { rel: "canonical", href: "https://ai-income-systems.com/terms" },

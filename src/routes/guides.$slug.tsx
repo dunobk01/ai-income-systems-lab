@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Linkify } from "@/components/linkify";
 import { GuideView } from "@/components/guide-view";
 import { getStaticGuideBySlug } from "@/lib/guides-content";
+import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/guides/$slug")({
   loader: async ({ context, params }) => {
@@ -36,6 +37,7 @@ export const Route = createFileRoute("/guides/$slug")({
         author: { "@type": "Person", name: "Dustin", url: "https://ai-income-systems.com" },
         publisher: { "@type": "Organization", name: "AI Income Systems", url: "https://ai-income-systems.com" },
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
+        image: DEFAULT_OG_IMAGE,
       };
       const breadcrumbLd = {
         "@context": "https://schema.org",
@@ -54,9 +56,9 @@ export const Route = createFileRoute("/guides/$slug")({
           { property: "og:description", content: g.description },
           { property: "og:type", content: "article" },
           { property: "og:url", content: url },
-          { name: "twitter:card", content: "summary" },
           { name: "twitter:title", content: g.title },
           { name: "twitter:description", content: g.description },
+          ...ogImageMeta(DEFAULT_OG_IMAGE, g.title),
         ],
         links: [{ rel: "canonical", href: url }],
         scripts: [
@@ -80,7 +82,7 @@ export const Route = createFileRoute("/guides/$slug")({
       author: { "@type": "Person", name: "Dustin", url: "https://ai-income-systems.com" },
       publisher: { "@type": "Organization", name: "AI Income Systems", url: "https://ai-income-systems.com" },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
-      ...(p.cover_image_url ? { image: p.cover_image_url } : {}),
+      image: p.cover_image_url ?? DEFAULT_OG_IMAGE,
     };
     const breadcrumbLd = {
       "@context": "https://schema.org",
@@ -99,8 +101,7 @@ export const Route = createFileRoute("/guides/$slug")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
-        { name: "twitter:card", content: p.cover_image_url ? "summary_large_image" : "summary" },
-        ...(p.cover_image_url ? [{ property: "og:image", content: p.cover_image_url }, { name: "twitter:image", content: p.cover_image_url }] : []),
+        ...ogImageMeta(p.cover_image_url ?? DEFAULT_OG_IMAGE, p.title),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [

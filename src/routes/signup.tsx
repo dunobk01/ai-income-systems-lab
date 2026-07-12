@@ -12,6 +12,7 @@ import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import { dlSignUp } from "@/lib/datalayer";
 import { pinSignUp } from "@/lib/pinterest";
 import { toast } from "sonner";
+import { ogImageMeta } from "@/lib/og";
 
 const TIER_KEYS = [
   "starter_monthly", "builder_monthly", "accelerator_monthly",
@@ -35,6 +36,8 @@ export const Route = createFileRoute("/signup")({
       { property: "og:title", content: "Sign up — AI Income Systems Lab" },
       { property: "og:description", content: "Create your account and start building real AI income systems." },
       { property: "og:url", content: "https://ai-income-systems.com/signup" },
+    
+      ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/signup" }],
   }),

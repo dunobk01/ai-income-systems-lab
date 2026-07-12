@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getSystemBySlug, systems } from "@/lib/systems-data";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/systems/$slug")({
   head: ({ params }) => {
@@ -15,6 +16,8 @@ export const Route = createFileRoute("/systems/$slug")({
         { name: "description", content: s?.tagline ?? "Build real AI income systems" },
         { property: "og:title", content: s ? `${s.title} — Build with AI Income Systems Lab` : "System" },
         { property: "og:description", content: s?.summary ?? "Build real AI income systems" },
+      
+        ...ogImageMeta(),
       ],
     };
   },

@@ -4,6 +4,7 @@ import { ArrowRight, Tag as TagIcon, Compass } from "lucide-react";
 import { listAllBlogPosts, listPublishedPillars } from "@/lib/blog.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -14,6 +15,8 @@ export const Route = createFileRoute("/blog")({
       { property: "og:description", content: "Real systems, prompts, and playbooks for making money online with AI." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ai-income-systems.com/blog" },
+    
+      ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/blog" }],
   }),

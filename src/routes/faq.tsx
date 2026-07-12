@@ -3,6 +3,7 @@ import { HelpCircle, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/faq")({
   head: () => ({
@@ -12,6 +13,8 @@ export const Route = createFileRoute("/faq")({
       { property: "og:title", content: "FAQ — AI Income Systems Lab" },
       { property: "og:description", content: "Honest answers about how the program works, what's included, refunds, pacing, and who it's for." },
       { property: "og:url", content: "https://ai-income-systems.com/faq" },
+    
+      ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/faq" }],
   }),

@@ -5,6 +5,7 @@ import { listPublishedPillars } from "@/lib/blog.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { STATIC_GUIDES } from "@/lib/guides-content";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/guides/")({
   head: () => ({
@@ -15,6 +16,8 @@ export const Route = createFileRoute("/guides/")({
       { property: "og:description", content: "Complete, end-to-end playbooks for building an AI-powered income." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ai-income-systems.com/guides" },
+    
+      ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/guides" }],
   }),

@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getToolBySlug, tools } from "@/lib/tools-data";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/tools/$slug")({
   head: ({ params }) => {
@@ -15,6 +16,8 @@ export const Route = createFileRoute("/tools/$slug")({
         { name: "description", content: tool?.description ?? "AI tool details" },
         { property: "og:title", content: tool ? `${tool.name} — AI Tool Stack` : "Tool" },
         { property: "og:description", content: tool?.description ?? "AI tool details" },
+      
+        ...ogImageMeta(),
       ],
     };
   },

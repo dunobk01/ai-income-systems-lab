@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { listPostsByTag } from "@/lib/blog.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/blog/tag/$tag")({
   loader: async ({ context, params }) => {
@@ -28,6 +29,8 @@ export const Route = createFileRoute("/blog/tag/$tag")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
+      
+        ...ogImageMeta(),
       ],
       links: [{ rel: "canonical", href: url }],
     };

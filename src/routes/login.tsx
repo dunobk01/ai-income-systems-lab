@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
+import { ogImageMeta } from "@/lib/og";
 
 const searchSchema = z.object({
   redirect: z
@@ -28,6 +29,8 @@ export const Route = createFileRoute("/login")({
       { property: "og:description", content: "Log in to your AI Income Systems Lab account." },
       { property: "og:url", content: "https://ai-income-systems.com/login" },
       { name: "robots", content: "noindex" },
+    
+      ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/login" }],
   }),

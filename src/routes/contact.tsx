@@ -3,6 +3,7 @@ import { Mail, MapPin, MessageSquare } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -23,6 +24,8 @@ export const Route = createFileRoute("/contact")({
           "Get in touch with AI Income Systems Lab. Support, partnerships, and general inquiries.",
       },
       { property: "og:url", content: "https://ai-income-systems.com/contact" },
+    
+      ...ogImageMeta(),
     ],
     links: [
       { rel: "canonical", href: "https://ai-income-systems.com/contact" },

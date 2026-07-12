@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { NewsletterEngagement } from "@/components/newsletter-engagement";
 import { Linkify } from "@/components/linkify";
+import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/newsletter/$slug")({
   loader: async ({ context, params }) => {
@@ -37,7 +38,7 @@ export const Route = createFileRoute("/newsletter/$slug")({
         url: "https://ai-income-systems.com",
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
-      ...(p.cover_image_url ? { image: p.cover_image_url } : {}),
+      image: p.cover_image_url ?? DEFAULT_OG_IMAGE,
     };
     const breadcrumbLd = {
       "@context": "https://schema.org",
@@ -58,8 +59,7 @@ export const Route = createFileRoute("/newsletter/$slug")({
         { property: "og:url", content: url },
         { property: "article:published_time", content: published },
         { property: "article:author", content: "Dustin" },
-        { name: "twitter:card", content: p.cover_image_url ? "summary_large_image" : "summary" },
-        ...(p.cover_image_url ? [{ property: "og:image", content: p.cover_image_url }, { name: "twitter:image", content: p.cover_image_url }] : []),
+        ...ogImageMeta(p.cover_image_url ?? DEFAULT_OG_IMAGE, p.title),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [

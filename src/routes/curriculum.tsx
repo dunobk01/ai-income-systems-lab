@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, CheckCircle2 } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/curriculum")({
   head: () => ({
@@ -12,6 +13,8 @@ export const Route = createFileRoute("/curriculum")({
       { property: "og:title", content: "Curriculum — AI Income Systems Lab" },
       { property: "og:description", content: "11 modules, 90+ lessons. The full sequence that takes you from zero to a live AI income system." },
       { property: "og:url", content: "https://ai-income-systems.com/curriculum" },
+    
+      ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/curriculum" }],
   }),
