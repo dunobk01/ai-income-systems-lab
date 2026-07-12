@@ -20,8 +20,8 @@ export const Route = createFileRoute("/_authenticated/library/$slug")({
 
 const kindMeta: Record<TemplateKind, { label: string; icon: typeof Sparkles; color: string }> = {
   prompt: { label: "Prompt", icon: Sparkles, color: "text-amber-300" },
-  n8n: { label: "n8n Workflow", icon: Workflow, color: "text-sky-300" },
-  lovable: { label: "Lovable Starter", icon: Layers, color: "text-violet-300" },
+  n8n: { label: "n8n Workflow", icon: Workflow, color: "text-primary" },
+  lovable: { label: "Lovable Starter", icon: Layers, color: "text-brand-2" },
 };
 
 function TemplatePage() {
