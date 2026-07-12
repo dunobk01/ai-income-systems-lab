@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { NewsletterEngagement } from "@/components/newsletter-engagement";
 import { Linkify } from "@/components/linkify";
+import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/newsletter/$slug")({
   loader: async ({ context, params }) => {
