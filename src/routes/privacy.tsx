@@ -9,18 +9,33 @@ export const Route = createFileRoute("/privacy")({
       {
         name: "description",
         content:
-          "AI Income Systems Lab privacy policy. Learn how we collect, use, and protect your personal data.",
+          "How AI Income Systems Lab collects, uses, and protects your personal data. Read our full privacy policy.",
       },
-      {
-        property: "og:title",
-        content: "Privacy Policy — AI Income Systems Lab",
-      },
+      { property: "og:title", content: "Privacy Policy — AI Income Systems Lab" },
       {
         property: "og:description",
         content:
-          "AI Income Systems Lab privacy policy. Learn how we collect, use, and protect your personal data.",
+          "How AI Income Systems Lab collects, uses, and protects your personal data.",
       },
+      { property: "og:type", content: "article" },
       { property: "og:url", content: "https://ai-income-systems.com/privacy" },
+      {
+        property: "og:image",
+        content: "https://ai-income-systems.com/__l5e/assets-v1/4fc4935b-005a-45ad-950a-3d437f26a30a/og-brand.jpg",
+      },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Privacy Policy — AI Income Systems Lab" },
+      {
+        name: "twitter:description",
+        content:
+          "How AI Income Systems Lab collects, uses, and protects your personal data.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://ai-income-systems.com/__l5e/assets-v1/4fc4935b-005a-45ad-950a-3d437f26a30a/og-brand.jpg",
+      },
     ],
     links: [
       { rel: "canonical", href: "https://ai-income-systems.com/privacy" },
@@ -40,7 +55,7 @@ function PrivacyPage() {
             Privacy <span className="text-gradient">Policy</span>
           </h1>
           <p className="mt-4 text-muted-foreground">
-            Last updated: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+            Last updated: July 12, 2026
           </p>
         </div>
       </section>
