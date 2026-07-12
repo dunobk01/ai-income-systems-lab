@@ -4,34 +4,54 @@ import { SiteFooter } from "@/components/site-footer";
 import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/security")({
-  head: () => ({
-    meta: [
-      { title: "Security Policy — AI Income Systems Lab" },
-      {
-        name: "description",
-        content:
-          "How AI Income Systems Lab protects your data, payments, and account: TLS, Stripe PCI-DSS, RBAC, and incident response.",
-      },
-      { property: "og:title", content: "Security Policy — AI Income Systems Lab" },
-      {
-        property: "og:description",
-        content:
-          "How AI Income Systems Lab protects your data, payments, and account.",
-      },
-      { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://ai-income-systems.com/security" },
-      { name: "twitter:title", content: "Security Policy — AI Income Systems Lab" },
-      {
-        name: "twitter:description",
-        content:
-          "How AI Income Systems Lab protects your data, payments, and account.",
-      },
-      ...ogImageMeta(),
-    ],
-    links: [
-      { rel: "canonical", href: "https://ai-income-systems.com/security" },
-    ],
-  }),
+  head: () => {
+    const url = "https://ai-income-systems.com/security";
+    const title = "Security Policy — AI Income Systems Lab";
+    const description =
+      "How AI Income Systems Lab protects your data, payments, and account: TLS, Stripe PCI-DSS, RBAC, and incident response.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        ...ogImageMeta(),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: title,
+            description,
+            url,
+            inLanguage: "en",
+            dateModified: "2026-07-12",
+            isPartOf: { "@type": "WebSite", name: "AI Income Systems Lab", url: "https://ai-income-systems.com" },
+            publisher: { "@type": "Organization", name: "AI Income Systems Lab", url: "https://ai-income-systems.com" },
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://ai-income-systems.com/" },
+              { "@type": "ListItem", position: 2, name: "Security Policy", item: url },
+            ],
+          }),
+        },
+      ],
+    };
+  },
   component: SecurityPage,
 });
 
