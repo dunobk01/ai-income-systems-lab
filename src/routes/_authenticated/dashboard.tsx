@@ -78,6 +78,7 @@ function DashboardPage() {
   return (
     <div className="p-6 lg:p-10 max-w-6xl mx-auto">
       {isMonthly && <MonthlyUpgradeBanner />}
+      <OnboardingChecklist />
 
       <div className="relative overflow-hidden rounded-3xl glass-strong p-8 sm:p-10">
         <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
