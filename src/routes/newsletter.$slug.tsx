@@ -38,7 +38,7 @@ export const Route = createFileRoute("/newsletter/$slug")({
         url: "https://ai-income-systems.com",
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
-      ...(p.cover_image_url ? { image: p.cover_image_url } : {}),
+      image: p.cover_image_url ?? DEFAULT_OG_IMAGE,
     };
     const breadcrumbLd = {
       "@context": "https://schema.org",
