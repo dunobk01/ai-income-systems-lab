@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { submitLead } from "@/lib/leads.functions";
 import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import { dlLead, dlButtonClick } from "@/lib/datalayer";
+import { pinLead } from "@/lib/pinterest";
 import kitAsset from "@/assets/ai-income-starter-kit.pdf.asset.json";
 
 type Props = {
