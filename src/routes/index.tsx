@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Sparkles, Rocket, Zap, Brain, Workflow, Bot, Search, Layers,
-  ArrowRight, Check, Shield, MessageSquare, Wand2, FileCode2,
-  Video, Image as ImageIcon, Mic,
+  ArrowRight, Check, Shield, ShieldCheck, MessageSquare, Wand2, FileCode2,
+  Video, Image as ImageIcon, Mic, Lock, CreditCard, RefreshCcw, Users, Headphones,
 } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
