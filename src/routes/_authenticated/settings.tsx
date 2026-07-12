@@ -29,6 +29,34 @@ function SettingsPage() {
   const [cancelOpen, setCancelOpen] = useState(false);
   const [canceling, setCanceling] = useState(false);
   const cancelFn = useServerFn(cancelMonthlySubscription);
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [referralCount, setReferralCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const [{ data: me }, { count }] = await Promise.all([
+        (supabase.from("profiles") as any).select("referral_code").eq("user_id", user.id).maybeSingle(),
+        (supabase.from("profiles") as any).select("id", { count: "exact", head: true }).eq("referred_by", user.id),
+      ]);
+      if (cancelled) return;
+      setReferralCode((me as any)?.referral_code ?? null);
+      setReferralCount(count ?? 0);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  const referralUrl = referralCode ? `https://ai-income-systems.com/?ref=${referralCode}` : "";
+  const copyReferral = async () => {
+    if (!referralUrl) return;
+    try {
+      await navigator.clipboard.writeText(referralUrl);
+      toast.success("Referral link copied");
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
 
   useEffect(() => { setName(profile?.display_name ?? ""); }, [profile?.display_name]);
 
