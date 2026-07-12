@@ -301,6 +301,30 @@ function AdminNewsletter() {
           ) : (
             <div className="space-y-4">
               <div>
+                <Label htmlFor="post_type">Post type</Label>
+                <div className="mt-1 flex gap-2">
+                  {(["newsletter", "blog"] as const).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setEditing((p) => (p ? { ...p, post_type: t } : p))}
+                      className={`rounded-full border px-3 py-1 text-xs capitalize transition ${
+                        editing.post_type === t
+                          ? "border-[color:var(--brand)]/60 bg-[color:var(--brand)]/10 text-foreground"
+                          : "border-white/10 bg-white/5 text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {editing.post_type === "blog"
+                    ? "Blog posts appear on /blog and are indexed for SEO. No email is sent."
+                    : "Newsletter issues appear on /newsletter and can be emailed to your MailerLite list on publish."}
+                </p>
+              </div>
+              <div>
                 <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
@@ -309,7 +333,7 @@ function AdminNewsletter() {
                     const title = e.target.value;
                     setEditing((p) => p ? { ...p, title, slug: p.slug || slugify(title) } : p);
                   }}
-                  placeholder="Week 1: The one prompt that doubled my Upwork replies"
+                  placeholder={editing.post_type === "blog" ? "How to use AI to land your first $1k client" : "Week 1: The one prompt that doubled my Upwork replies"}
                 />
               </div>
               <div>
@@ -318,9 +342,9 @@ function AdminNewsletter() {
                   id="slug"
                   value={editing.slug}
                   onChange={(e) => setEditing((p) => p ? { ...p, slug: slugify(e.target.value) } : p)}
-                  placeholder="week-1-the-one-prompt"
+                  placeholder="your-post-slug"
                 />
-                <p className="text-xs text-muted-foreground mt-1">Goes live at /newsletter/{editing.slug || "your-slug"}</p>
+                <p className="text-xs text-muted-foreground mt-1">Goes live at /{editing.post_type === "blog" ? "blog" : "newsletter"}/{editing.slug || "your-slug"}</p>
               </div>
               <div>
                 <Label htmlFor="excerpt">Excerpt (1–2 sentences, used as preview + email subtitle)</Label>
