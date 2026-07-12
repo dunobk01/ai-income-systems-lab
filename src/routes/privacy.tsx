@@ -4,34 +4,53 @@ import { SiteFooter } from "@/components/site-footer";
 import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy — AI Income Systems Lab" },
-      {
-        name: "description",
-        content:
-          "How AI Income Systems Lab collects, uses, and protects your personal data. Read our full privacy policy.",
-      },
-      { property: "og:title", content: "Privacy Policy — AI Income Systems Lab" },
-      {
-        property: "og:description",
-        content:
-          "How AI Income Systems Lab collects, uses, and protects your personal data.",
-      },
-      { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://ai-income-systems.com/privacy" },
-      { name: "twitter:title", content: "Privacy Policy — AI Income Systems Lab" },
-      {
-        name: "twitter:description",
-        content:
-          "How AI Income Systems Lab collects, uses, and protects your personal data.",
-      },
-      ...ogImageMeta(),
-    ],
-    links: [
-      { rel: "canonical", href: "https://ai-income-systems.com/privacy" },
-    ],
-  }),
+  head: () => {
+    const url = "https://ai-income-systems.com/privacy";
+    const title = "Privacy Policy — AI Income Systems Lab";
+    const description =
+      "How AI Income Systems Lab collects, uses, and protects your personal data. Read our full privacy policy.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        ...ogImageMeta(),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "PrivacyPolicy",
+            name: title,
+            url,
+            inLanguage: "en",
+            dateModified: "2026-07-12",
+            isPartOf: { "@type": "WebSite", name: "AI Income Systems Lab", url: "https://ai-income-systems.com" },
+            publisher: { "@type": "Organization", name: "AI Income Systems Lab", url: "https://ai-income-systems.com" },
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://ai-income-systems.com/" },
+              { "@type": "ListItem", position: 2, name: "Privacy Policy", item: url },
+            ],
+          }),
+        },
+      ],
+    };
+  },
   component: PrivacyPage,
 });
 

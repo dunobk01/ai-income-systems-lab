@@ -4,34 +4,59 @@ import { SiteFooter } from "@/components/site-footer";
 import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/refund")({
-  head: () => ({
-    meta: [
-      { title: "Refund & Cancellation Policy — AI Income Systems Lab" },
-      {
-        name: "description",
-        content:
-          "14-day money-back guarantee, cancel anytime, no hidden fees. Read the AI Income Systems Lab refund and cancellation policy.",
-      },
-      { property: "og:title", content: "Refund & Cancellation Policy — AI Income Systems Lab" },
-      {
-        property: "og:description",
-        content:
-          "14-day money-back guarantee, cancel anytime, no hidden fees.",
-      },
-      { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://ai-income-systems.com/refund" },
-      { name: "twitter:title", content: "Refund & Cancellation Policy — AI Income Systems Lab" },
-      {
-        name: "twitter:description",
-        content:
-          "14-day money-back guarantee, cancel anytime, no hidden fees.",
-      },
-      ...ogImageMeta(),
-    ],
-    links: [
-      { rel: "canonical", href: "https://ai-income-systems.com/refund" },
-    ],
-  }),
+  head: () => {
+    const url = "https://ai-income-systems.com/refund";
+    const title = "Refund & Cancellation Policy — AI Income Systems Lab";
+    const description =
+      "14-day money-back guarantee, cancel anytime, no hidden fees. Read the AI Income Systems Lab refund and cancellation policy.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        ...ogImageMeta(),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": ["WebPage", "MerchantReturnPolicy"],
+            name: title,
+            description,
+            url,
+            inLanguage: "en",
+            dateModified: "2026-07-12",
+            applicableCountry: "US",
+            returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+            merchantReturnDays: 14,
+            returnMethod: "https://schema.org/ReturnByMail",
+            returnFees: "https://schema.org/FreeReturn",
+            isPartOf: { "@type": "WebSite", name: "AI Income Systems Lab", url: "https://ai-income-systems.com" },
+            publisher: { "@type": "Organization", name: "AI Income Systems Lab", url: "https://ai-income-systems.com" },
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://ai-income-systems.com/" },
+              { "@type": "ListItem", position: 2, name: "Refund & Cancellation", item: url },
+            ],
+          }),
+        },
+      ],
+    };
+  },
   component: RefundPage,
 });
 
