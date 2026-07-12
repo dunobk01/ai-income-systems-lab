@@ -24,6 +24,7 @@ export function NewsletterSignup({ source = "newsletter" }: { source?: string })
       void tiktokIdentify({ email });
       tiktokTrack("Lead", { value: 0, currency: "USD" });
       dlLead({ lead_source: source, lead_magnet: "weekly-newsletter" });
+      pinLead({ lead_type: "Newsletter" });
     } catch (err) {
       setState("error");
       setError((err as Error).message ?? "Couldn't sign you up. Try again.");
