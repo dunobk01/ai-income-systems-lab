@@ -51,7 +51,7 @@ const g1: StaticGuide = {
   description:
     "The exact 14-day operating sequence — validation, product, funnel, automation, and traffic — to go from blank page to a live income system, with every prompt included.",
   badge: "System",
-  badgeColor: "bg-violet-500/15 text-violet-300 border-violet-400/30",
+  badgeColor: "bg-primary/15 text-primary border-primary/30",
   readMinutes: 26,
   publishedAt: "2026-07-08T00:00:00.000Z",
   intro: [
@@ -401,7 +401,7 @@ const g2: StaticGuide = {
   description:
     "From blank page to product live on Gumroad — the complete AI-powered product creation system with every prompt included.",
   badge: "Products",
-  badgeColor: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-400/30",
+  badgeColor: "bg-primary/10 text-brand-2 border-brand-2/30",
   readMinutes: 22,
   publishedAt: "2026-07-08T00:00:00.000Z",
   intro: [
@@ -620,7 +620,7 @@ const g3: StaticGuide = {
   description:
     "Seven production-ready n8n workflows for delivery, sequences, repurposing, lead routing, and revenue tracking — with node-by-node setup instructions.",
   badge: "Automation",
-  badgeColor: "bg-cyan-500/15 text-cyan-300 border-cyan-400/30",
+  badgeColor: "bg-white/5 text-foreground/80 border-white/15",
   readMinutes: 28,
   publishedAt: "2026-07-08T00:00:00.000Z",
   intro: [
@@ -810,7 +810,7 @@ const g4: StaticGuide = {
   description:
     "The complete system for selling productized AI services to local businesses — from niche selection and cold outreach to delivery and recurring retainers.",
   badge: "Client Work",
-  badgeColor: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
+  badgeColor: "bg-primary/10 text-primary border-primary/25",
   readMinutes: 20,
   publishedAt: "2026-07-08T00:00:00.000Z",
   intro: [
@@ -1162,7 +1162,7 @@ const g6: StaticGuide = {
   description:
     "The end-to-end funnel build — lead magnet, landing page, email sequence, tripwire, and core offer — written, designed, and automated entirely with AI.",
   badge: "Funnels",
-  badgeColor: "bg-rose-500/15 text-rose-300 border-rose-400/30",
+  badgeColor: "bg-white/5 text-foreground/80 border-white/15",
   readMinutes: 26,
   publishedAt: "2026-07-08T00:00:00.000Z",
   intro: [
