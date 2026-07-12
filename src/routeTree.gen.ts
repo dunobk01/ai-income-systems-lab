@@ -50,6 +50,7 @@ import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedCommunityIndexRouteImport } from './routes/_authenticated/community.index'
@@ -276,6 +277,11 @@ const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedLibraryIndexRoute =
   AuthenticatedLibraryIndexRouteImport.update({
     id: '/library/',
@@ -295,9 +301,9 @@ const AuthenticatedCommunityIndexRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => AuthenticatedRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
@@ -341,15 +347,15 @@ const AuthenticatedBuildersAgentRoute =
   } as any)
 const AuthenticatedAdminPillarsRoute =
   AuthenticatedAdminPillarsRouteImport.update({
-    id: '/admin/pillars',
-    path: '/admin/pillars',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/pillars',
+    path: '/pillars',
+    getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminNewsletterRoute =
   AuthenticatedAdminNewsletterRouteImport.update({
-    id: '/admin/newsletter',
-    path: '/admin/newsletter',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/newsletter',
+    path: '/newsletter',
+    getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
@@ -416,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRouteWithChildren
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/messages': typeof AuthenticatedMessagesRoute
@@ -541,6 +548,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRouteWithChildren
   '/unsubscribe': typeof UnsubscribeRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
@@ -606,6 +614,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/unsubscribe'
+    | '/admin'
     | '/checkout'
     | '/dashboard'
     | '/messages'
@@ -730,6 +739,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/unsubscribe'
+    | '/_authenticated/admin'
     | '/_authenticated/checkout'
     | '/_authenticated/dashboard'
     | '/_authenticated/messages'
@@ -1100,6 +1110,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCheckoutRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/library/': {
       id: '/_authenticated/library/'
       path: '/library'
@@ -1123,10 +1140,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
-      path: '/admin'
+      path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
@@ -1179,17 +1196,17 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/admin/pillars': {
       id: '/_authenticated/admin/pillars'
-      path: '/admin/pillars'
+      path: '/pillars'
       fullPath: '/admin/pillars'
       preLoaderRoute: typeof AuthenticatedAdminPillarsRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/newsletter': {
       id: '/_authenticated/admin/newsletter'
-      path: '/admin/newsletter'
+      path: '/newsletter'
       fullPath: '/admin/newsletter'
       preLoaderRoute: typeof AuthenticatedAdminNewsletterRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
@@ -1250,7 +1267,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminNewsletterRoute: typeof AuthenticatedAdminNewsletterRoute
+  AuthenticatedAdminPillarsRoute: typeof AuthenticatedAdminPillarsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminNewsletterRoute: AuthenticatedAdminNewsletterRoute,
+  AuthenticatedAdminPillarsRoute: AuthenticatedAdminPillarsRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
@@ -1261,14 +1294,11 @@ interface AuthenticatedRouteChildren {
   AuthenticatedWelcomeRoute: typeof AuthenticatedWelcomeRoute
   AuthenticatedWinsRoute: typeof AuthenticatedWinsRoute
   AuthenticatedWorkflowsRoute: typeof AuthenticatedWorkflowsRoute
-  AuthenticatedAdminNewsletterRoute: typeof AuthenticatedAdminNewsletterRoute
-  AuthenticatedAdminPillarsRoute: typeof AuthenticatedAdminPillarsRoute
   AuthenticatedBuildersAgentRoute: typeof AuthenticatedBuildersAgentRoute
   AuthenticatedBuildersFunnelRoute: typeof AuthenticatedBuildersFunnelRoute
   AuthenticatedBuildersProductRoute: typeof AuthenticatedBuildersProductRoute
   AuthenticatedCommunityThreadIdRoute: typeof AuthenticatedCommunityThreadIdRoute
   AuthenticatedLibrarySlugRoute: typeof AuthenticatedLibrarySlugRoute
-  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedCommunityIndexRoute: typeof AuthenticatedCommunityIndexRoute
   AuthenticatedCourseIndexRoute: typeof AuthenticatedCourseIndexRoute
   AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
@@ -1276,6 +1306,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
@@ -1286,14 +1317,11 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWelcomeRoute: AuthenticatedWelcomeRoute,
   AuthenticatedWinsRoute: AuthenticatedWinsRoute,
   AuthenticatedWorkflowsRoute: AuthenticatedWorkflowsRoute,
-  AuthenticatedAdminNewsletterRoute: AuthenticatedAdminNewsletterRoute,
-  AuthenticatedAdminPillarsRoute: AuthenticatedAdminPillarsRoute,
   AuthenticatedBuildersAgentRoute: AuthenticatedBuildersAgentRoute,
   AuthenticatedBuildersFunnelRoute: AuthenticatedBuildersFunnelRoute,
   AuthenticatedBuildersProductRoute: AuthenticatedBuildersProductRoute,
   AuthenticatedCommunityThreadIdRoute: AuthenticatedCommunityThreadIdRoute,
   AuthenticatedLibrarySlugRoute: AuthenticatedLibrarySlugRoute,
-  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedCommunityIndexRoute: AuthenticatedCommunityIndexRoute,
   AuthenticatedCourseIndexRoute: AuthenticatedCourseIndexRoute,
   AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
