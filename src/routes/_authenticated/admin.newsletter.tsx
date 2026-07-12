@@ -212,12 +212,17 @@ function AdminNewsletter() {
           <Link to="/admin" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3 w-3" /> Admin
           </Link>
-          <h1 className="mt-1 text-3xl font-black tracking-tight">Weekly Newsletter</h1>
-          <p className="text-sm text-muted-foreground mt-1">Write tips, publish to the site, and send to your MailerLite list.</p>
+          <h1 className="mt-1 text-3xl font-black tracking-tight">Newsletter & Blog</h1>
+          <p className="text-sm text-muted-foreground mt-1">Write newsletter issues or blog posts, publish to the site, and (for newsletters) send to your MailerLite list.</p>
         </div>
-        <Button variant="brand" onClick={startNew}>
-          <Plus className="h-4 w-4" /> New post
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => startNew("blog")}>
+            <Plus className="h-4 w-4" /> New blog post
+          </Button>
+          <Button variant="brand" onClick={() => startNew("newsletter")}>
+            <Plus className="h-4 w-4" /> New newsletter
+          </Button>
+        </div>
       </div>
 
       {msg && <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">{msg}</div>}
