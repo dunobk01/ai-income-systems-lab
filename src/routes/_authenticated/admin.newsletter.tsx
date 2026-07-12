@@ -425,16 +425,18 @@ function AdminNewsletter() {
                 {editing.id && (
                   <Button
                     variant="outline"
-                    onClick={() => publish(editing.id!, true)}
+                    onClick={() => publish(editing.id!, editing.post_type === "newsletter")}
                     disabled={busy === `pub-${editing.id}`}
                   >
-                    <Send className="h-4 w-4" /> Publish + email subscribers
+                    <Send className="h-4 w-4" /> {editing.post_type === "blog" ? "Publish blog post" : "Publish + email subscribers"}
                   </Button>
                 )}
                 <Button variant="ghost" onClick={() => setEditing(null)}>Close</Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Tip: save first, then click <span className="text-foreground">Publish + email</span> when you're ready. Email is sent once per post.
+                {editing.post_type === "blog"
+                  ? "Blog posts go live immediately on /blog after publish. No email sent."
+                  : "Tip: save first, then click Publish + email when you're ready. Email is sent once per post."}
               </p>
             </div>
           )}
