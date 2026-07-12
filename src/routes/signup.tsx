@@ -54,6 +54,7 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const attachRef = useServerFn(attachReferral);
 
   const postAuthTo = tier ? "/checkout" : "/dashboard";
 
