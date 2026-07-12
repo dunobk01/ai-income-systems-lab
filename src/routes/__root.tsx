@@ -173,11 +173,16 @@ function RootComponent() {
   useEffect(() => {
     // Fire a TikTok pageview on every SPA route change.
     import("@/lib/tiktok").then((m) => m.tiktokPage()).catch(() => {});
+    // Pinterest pageview on SPA route change.
+    if (typeof window !== "undefined" && (window as any).pintrk) {
+      try { (window as any).pintrk("page"); } catch {}
+    }
     // Standardized GTM page_view.
     import("@/lib/datalayer").then((m) =>
       m.dlPageView({ path: pathname, title: typeof document !== "undefined" ? document.title : "" }),
     ).catch(() => {});
   }, [pathname]);
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
