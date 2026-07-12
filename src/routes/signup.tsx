@@ -78,6 +78,7 @@ function SignupPage() {
       currency: "USD",
     });
     dlSignUp({ method: "email" });
+    pinSignUp({ lead_type: tier ? `plan-${tier}` : "Account" });
     void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   };
 
