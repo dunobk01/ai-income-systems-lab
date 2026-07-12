@@ -31,6 +31,7 @@ import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as VsSkoolRouteImport } from './routes/vs.skool'
+import { Route as VsMightyNetworksRouteImport } from './routes/vs.mighty-networks'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
@@ -176,6 +177,11 @@ const GuidesIndexRoute = GuidesIndexRouteImport.update({
 const VsSkoolRoute = VsSkoolRouteImport.update({
   id: '/vs/skool',
   path: '/vs/skool',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VsMightyNetworksRoute = VsMightyNetworksRouteImport.update({
+  id: '/vs/mighty-networks',
+  path: '/vs/mighty-networks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
@@ -415,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -472,6 +479,7 @@ export interface FileRoutesByTo {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
@@ -534,6 +542,7 @@ export interface FileRoutesById {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -596,6 +605,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/vs/mighty-networks'
     | '/vs/skool'
     | '/guides/'
     | '/newsletter/'
@@ -653,6 +663,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/vs/mighty-networks'
     | '/vs/skool'
     | '/guides'
     | '/newsletter'
@@ -714,6 +725,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/vs/mighty-networks'
     | '/vs/skool'
     | '/guides/'
     | '/newsletter/'
@@ -762,6 +774,7 @@ export interface RootRouteChildren {
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
+  VsMightyNetworksRoute: typeof VsMightyNetworksRoute
   VsSkoolRoute: typeof VsSkoolRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -927,6 +940,13 @@ declare module '@tanstack/react-router' {
       path: '/vs/skool'
       fullPath: '/vs/skool'
       preLoaderRoute: typeof VsSkoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vs/mighty-networks': {
+      id: '/vs/mighty-networks'
+      path: '/vs/mighty-networks'
+      fullPath: '/vs/mighty-networks'
+      preLoaderRoute: typeof VsMightyNetworksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tools/$slug': {
@@ -1326,6 +1346,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   SystemsSlugRoute: SystemsSlugRoute,
+  VsMightyNetworksRoute: VsMightyNetworksRoute,
   VsSkoolRoute: VsSkoolRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
