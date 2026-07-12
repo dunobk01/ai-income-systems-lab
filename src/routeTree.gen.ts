@@ -39,6 +39,7 @@ import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
 import { Route as AuthenticatedWinsRouteImport } from './routes/_authenticated/wins'
 import { Route as AuthenticatedWelcomeRouteImport } from './routes/_authenticated/welcome'
@@ -219,6 +220,11 @@ const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
   path: '/checkout/return',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const AuthenticatedWorkflowsRoute = AuthenticatedWorkflowsRouteImport.update({
   id: '/workflows',
@@ -421,6 +427,7 @@ export interface FileRoutesByFullPath {
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/wins': typeof AuthenticatedWinsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -480,6 +487,7 @@ export interface FileRoutesByTo {
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/wins': typeof AuthenticatedWinsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -544,6 +552,7 @@ export interface FileRoutesById {
   '/_authenticated/welcome': typeof AuthenticatedWelcomeRoute
   '/_authenticated/wins': typeof AuthenticatedWinsRoute
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -608,6 +617,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/wins'
     | '/workflows'
+    | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/guides/$slug'
@@ -667,6 +677,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/wins'
     | '/workflows'
+    | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/guides/$slug'
@@ -730,6 +741,7 @@ export interface FileRouteTypes {
     | '/_authenticated/welcome'
     | '/_authenticated/wins'
     | '/_authenticated/workflows'
+    | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/guides/$slug'
@@ -1010,6 +1022,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/checkout/return'
       preLoaderRoute: typeof CheckoutReturnRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/_authenticated/workflows': {
       id: '/_authenticated/workflows'
@@ -1296,10 +1315,12 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
 }
 
 const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
   BlogTagTagRoute: BlogTagTagRoute,
 }
 
