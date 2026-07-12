@@ -9,18 +9,33 @@ export const Route = createFileRoute("/refund")({
       {
         name: "description",
         content:
-          "AI Income Systems Lab refund and cancellation policy. 14-day money-back guarantee, cancel anytime.",
+          "14-day money-back guarantee, cancel anytime, no hidden fees. Read the AI Income Systems Lab refund and cancellation policy.",
       },
-      {
-        property: "og:title",
-        content: "Refund & Cancellation Policy — AI Income Systems Lab",
-      },
+      { property: "og:title", content: "Refund & Cancellation Policy — AI Income Systems Lab" },
       {
         property: "og:description",
         content:
-          "AI Income Systems Lab refund and cancellation policy. 14-day money-back guarantee, cancel anytime.",
+          "14-day money-back guarantee, cancel anytime, no hidden fees.",
       },
+      { property: "og:type", content: "article" },
       { property: "og:url", content: "https://ai-income-systems.com/refund" },
+      {
+        property: "og:image",
+        content: "https://ai-income-systems.com/__l5e/assets-v1/4fc4935b-005a-45ad-950a-3d437f26a30a/og-brand.jpg",
+      },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Refund & Cancellation Policy — AI Income Systems Lab" },
+      {
+        name: "twitter:description",
+        content:
+          "14-day money-back guarantee, cancel anytime, no hidden fees.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://ai-income-systems.com/__l5e/assets-v1/4fc4935b-005a-45ad-950a-3d437f26a30a/og-brand.jpg",
+      },
     ],
     links: [
       { rel: "canonical", href: "https://ai-income-systems.com/refund" },
