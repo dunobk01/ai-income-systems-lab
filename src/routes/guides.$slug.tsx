@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Linkify } from "@/components/linkify";
 import { GuideView } from "@/components/guide-view";
 import { getStaticGuideBySlug } from "@/lib/guides-content";
+import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/guides/$slug")({
   loader: async ({ context, params }) => {
