@@ -5,6 +5,7 @@ import { listPublishedPosts } from "@/lib/newsletter.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/newsletter/")({
   head: () => ({
@@ -14,6 +15,8 @@ export const Route = createFileRoute("/newsletter/")({
       { property: "og:title", content: "AI Income Weekly — Tips From the Lab" },
       { property: "og:description", content: "Weekly tips and tricks I'm actually using to make money with AI online." },
       { rel: "canonical", href: "https://ai-income-systems.com/newsletter" },
+    
+      ...ogImageMeta(),
     ],
   }),
   loader: async ({ context }) =>

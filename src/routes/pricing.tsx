@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CohortCountdown } from "@/components/cohort-countdown";
 import { LeadCapture } from "@/components/lead-capture";
 import { useAuth } from "@/lib/auth-context";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/pricing")({
   validateSearch: z.object({ expired: z.coerce.boolean().optional() }),
@@ -18,6 +19,8 @@ export const Route = createFileRoute("/pricing")({
       { property: "og:title", content: "Pricing — AI Income Systems Lab" },
       { property: "og:description", content: "Three subscription tiers — Starter, Builder, Accelerator. Monthly or annual. Cancel anytime." },
       { property: "og:url", content: "https://ai-income-systems.com/pricing" },
+    
+      ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/pricing" }],
     scripts: [

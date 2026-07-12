@@ -1,12 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/unsubscribe")({
   head: () => ({
     meta: [
       { title: "Unsubscribe — AI Income Systems Lab" },
       { name: "robots", content: "noindex" },
+    
+      ...ogImageMeta(),
     ],
   }),
   validateSearch: (search: Record<string, unknown>) => ({
