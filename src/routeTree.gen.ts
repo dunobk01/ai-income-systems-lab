@@ -30,6 +30,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as VsSkoolRouteImport } from './routes/vs.skool'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
@@ -171,6 +172,11 @@ const GuidesIndexRoute = GuidesIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => GuidesRoute,
+} as any)
+const VsSkoolRoute = VsSkoolRouteImport.update({
+  id: '/vs/skool',
+  path: '/vs/skool',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/$slug',
@@ -409,6 +415,7 @@ export interface FileRoutesByFullPath {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/vs/skool': typeof VsSkoolRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
@@ -465,6 +472,7 @@ export interface FileRoutesByTo {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/vs/skool': typeof VsSkoolRoute
   '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
   '/tools': typeof ToolsIndexRoute
@@ -526,6 +534,7 @@ export interface FileRoutesById {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/vs/skool': typeof VsSkoolRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
@@ -587,6 +596,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/vs/skool'
     | '/guides/'
     | '/newsletter/'
     | '/tools/'
@@ -643,6 +653,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/vs/skool'
     | '/guides'
     | '/newsletter'
     | '/tools'
@@ -703,6 +714,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/systems/$slug'
     | '/tools/$slug'
+    | '/vs/skool'
     | '/guides/'
     | '/newsletter/'
     | '/tools/'
@@ -750,6 +762,7 @@ export interface RootRouteChildren {
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
+  VsSkoolRoute: typeof VsSkoolRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicPinterestCatalogDottsvRoute: typeof ApiPublicPinterestCatalogDottsvRoute
@@ -908,6 +921,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/guides/'
       preLoaderRoute: typeof GuidesIndexRouteImport
       parentRoute: typeof GuidesRoute
+    }
+    '/vs/skool': {
+      id: '/vs/skool'
+      path: '/vs/skool'
+      fullPath: '/vs/skool'
+      preLoaderRoute: typeof VsSkoolRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/tools/$slug': {
       id: '/tools/$slug'
@@ -1306,6 +1326,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   SystemsSlugRoute: SystemsSlugRoute,
+  VsSkoolRoute: VsSkoolRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicPinterestCatalogDottsvRoute: ApiPublicPinterestCatalogDottsvRoute,
