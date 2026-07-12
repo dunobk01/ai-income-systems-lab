@@ -69,12 +69,12 @@ export const listAllPostsAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { data, error } = await context.supabase
+    const { data, error } = await (context.supabase as any)
       .from("newsletter_posts")
-      .select("id, slug, title, excerpt, published_at, email_sent_at, updated_at, created_at, post_type" as any)
+      .select("id, slug, title, excerpt, published_at, email_sent_at, updated_at, created_at, post_type")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
-    return { posts: data ?? [] };
+    return { posts: (data ?? []) as any[] };
   });
 
 export const getPostAdmin = createServerFn({ method: "GET" })
