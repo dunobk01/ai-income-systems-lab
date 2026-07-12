@@ -56,9 +56,9 @@ export const Route = createFileRoute("/guides/$slug")({
           { property: "og:description", content: g.description },
           { property: "og:type", content: "article" },
           { property: "og:url", content: url },
-          { name: "twitter:card", content: "summary" },
           { name: "twitter:title", content: g.title },
           { name: "twitter:description", content: g.description },
+          ...ogImageMeta(DEFAULT_OG_IMAGE, g.title),
         ],
         links: [{ rel: "canonical", href: url }],
         scripts: [
