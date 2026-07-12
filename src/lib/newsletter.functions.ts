@@ -52,9 +52,9 @@ export const getPostBySlug = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ slug: z.string().min(1).max(200) }).parse(d))
   .handler(async ({ data }) => {
     const sb = serverPublic();
-    const { data: post, error } = await sb
+    const { data: post, error } = await (sb as any)
       .from("newsletter_posts")
-      .select("id, slug, title, excerpt, content, cover_image_url, published_at")
+      .select("id, slug, title, excerpt, content, cover_image_url, published_at, post_type, seo_title, seo_description")
       .eq("slug", data.slug)
       .not("published_at", "is", null)
       .lte("published_at", new Date().toISOString())
