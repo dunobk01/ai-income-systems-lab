@@ -135,6 +135,7 @@ function BlogIndex() {
         </section>
       </main>
       <SiteFooter />
+      <ExitIntentModal source="blog" />
     </div>
   );
 }
