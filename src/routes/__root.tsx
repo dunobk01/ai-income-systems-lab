@@ -119,7 +119,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "AI Income Systems Lab",
+          alternateName: "AI Income Systems",
           url: "https://ai-income-systems.com",
+          logo: "https://ai-income-systems.com/__l5e/assets-v1/9053bc09-99f9-4de8-9ff8-ad1634bd23d2/og-brand.jpg",
+          sameAs: [
+            "https://www.pinterest.com/aiincomesystems/",
+            "https://www.tiktok.com/@aiincomesystems",
+          ],
+          contactPoint: [{
+            "@type": "ContactPoint",
+            contactType: "customer support",
+            email: "support@ai-income-systems.com",
+            areaServed: "Worldwide",
+            availableLanguage: ["English"],
+          }],
         }),
       },
       {
@@ -129,6 +142,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "WebSite",
           name: "AI Income Systems Lab",
           url: "https://ai-income-systems.com",
+          publisher: { "@type": "Organization", name: "AI Income Systems Lab" },
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://ai-income-systems.com/blog?q={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
         }),
       },
     ],
