@@ -140,11 +140,31 @@ function GuideRouteComponent() {
   const staticGuide = getStaticGuideBySlug(params.slug);
 
   if (staticGuide) {
+    const related = STATIC_GUIDES.filter((g) => g.slug !== staticGuide.slug).slice(0, 3);
     return (
       <div className="min-h-screen flex flex-col">
         <SiteHeader />
         <main className="flex-1">
           <GuideView guide={staticGuide} />
+          {related.length > 0 && (
+            <section className="mx-auto max-w-4xl px-4 sm:px-6 pb-20">
+              <h2 className="text-2xl font-bold mb-6">Keep going — related guides</h2>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {related.map((g) => (
+                  <Link
+                    key={g.slug}
+                    to="/guides/$slug"
+                    params={{ slug: g.slug }}
+                    className="glass rounded-2xl p-5 hover:border-[color:var(--brand)]/40 transition group"
+                  >
+                    <div className="text-xs uppercase tracking-widest text-[color:var(--brand)]">Guide</div>
+                    <h3 className="mt-1 text-base font-bold group-hover:text-[color:var(--brand)] transition">{g.title}</h3>
+                    <p className="mt-2 text-xs text-muted-foreground line-clamp-3">{g.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
         </main>
         <SiteFooter />
       </div>
