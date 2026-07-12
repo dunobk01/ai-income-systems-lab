@@ -61,6 +61,7 @@ function AdminNewsletter() {
     cover_image_url: string;
     tags: string[];
     pillar_slug: string;
+    post_type: "newsletter" | "blog";
   }>(null);
   const [tagInput, setTagInput] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
