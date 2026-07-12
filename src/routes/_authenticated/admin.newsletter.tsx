@@ -95,8 +95,8 @@ function AdminNewsletter() {
 
   if (!isAdmin) return null;
 
-  const startNew = () =>
-    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "" });
+  const startNew = (post_type: "newsletter" | "blog" = "newsletter") =>
+    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "", post_type });
 
   const startEdit = async (id: string) => {
     setErr(null);
@@ -113,6 +113,7 @@ function AdminNewsletter() {
         cover_image_url: post.cover_image_url ?? "",
         tags: (post as any).tags ?? [],
         pillar_slug: (post as any).pillar_slug ?? "",
+        post_type: ((post as any).post_type ?? "newsletter") as "newsletter" | "blog",
       });
     } catch (e: any) {
       setErr(e?.message ?? "Failed to load post");
