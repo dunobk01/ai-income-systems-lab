@@ -19,10 +19,11 @@ export const Route = createFileRoute("/newsletter/$slug")({
     return res;
   },
   head: ({ loaderData }) => {
-    const p = loaderData?.post;
+    const p = loaderData?.post as any;
     if (!p) return {};
     const url = `https://ai-income-systems.com/newsletter/${p.slug}`;
-    const desc = p.excerpt ?? p.content.slice(0, 160);
+    const desc = (p.seo_description as string | null) || p.excerpt || p.content.slice(0, 160);
+    const seoTitle = (p.seo_title as string | null) || p.title;
     const published = p.published_at ?? new Date().toISOString();
     const articleLd = {
       "@context": "https://schema.org",
@@ -51,9 +52,9 @@ export const Route = createFileRoute("/newsletter/$slug")({
     };
     return {
       meta: [
-        { title: `${p.title} — AI Income Weekly` },
+        { title: `${seoTitle} — AI Income Weekly` },
         { name: "description", content: desc },
-        { property: "og:title", content: p.title },
+        { property: "og:title", content: seoTitle },
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
