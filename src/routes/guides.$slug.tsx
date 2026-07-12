@@ -100,8 +100,7 @@ export const Route = createFileRoute("/guides/$slug")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
-        { name: "twitter:card", content: p.cover_image_url ? "summary_large_image" : "summary" },
-        ...(p.cover_image_url ? [{ property: "og:image", content: p.cover_image_url }, { name: "twitter:image", content: p.cover_image_url }] : []),
+        ...ogImageMeta(p.cover_image_url ?? DEFAULT_OG_IMAGE, p.title),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
