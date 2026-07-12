@@ -151,7 +151,15 @@ function RootShell({ children }: { children: ReactNode }) {
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            alt=""
+            src="https://ct.pinterest.com/v3/?event=init&tid=2613894747736&noscript=1"
+          />
         </noscript>
+
         {children}
         <Scripts />
       </body>
