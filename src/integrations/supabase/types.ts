@@ -623,6 +623,8 @@ export type Database = {
           pillar_slug: string | null
           post_type: string
           published_at: string | null
+          seo_description: string | null
+          seo_title: string | null
           slug: string
           tags: string[]
           title: string
@@ -639,6 +641,8 @@ export type Database = {
           pillar_slug?: string | null
           post_type?: string
           published_at?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
           slug: string
           tags?: string[]
           title: string
@@ -655,6 +659,8 @@ export type Database = {
           pillar_slug?: string | null
           post_type?: string
           published_at?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
           slug?: string
           tags?: string[]
           title?: string
