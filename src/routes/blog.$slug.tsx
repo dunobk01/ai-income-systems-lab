@@ -9,10 +9,10 @@ import { NewsletterEngagement } from "@/components/newsletter-engagement";
 import { Linkify } from "@/components/linkify";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
-export const Route = createFileRoute("/newsletter/$slug")({
+export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ context, params }) => {
     const res = await context.queryClient.ensureQueryData({
-      queryKey: ["newsletter", "post", params.slug],
+      queryKey: ["blog", "post", params.slug],
       queryFn: () => getPostBySlug({ data: { slug: params.slug } }),
     });
     if (!res.post) throw notFound();
@@ -21,8 +21,8 @@ export const Route = createFileRoute("/newsletter/$slug")({
   head: ({ loaderData }) => {
     const p = loaderData?.post as any;
     if (!p) return {};
-    const url = `https://ai-income-systems.com/newsletter/${p.slug}`;
-    const desc = (p.seo_description as string | null) || p.excerpt || p.content.slice(0, 160);
+    const url = `https://ai-income-systems.com/blog/${p.slug}`;
+    const desc = (p.seo_description as string | null) || p.excerpt || (p.content ?? "").slice(0, 160);
     const seoTitle = (p.seo_title as string | null) || p.title;
     const published = p.published_at ?? new Date().toISOString();
     const articleLd = {
@@ -46,13 +46,13 @@ export const Route = createFileRoute("/newsletter/$slug")({
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: "https://ai-income-systems.com/" },
-        { "@type": "ListItem", position: 2, name: "Newsletter", item: "https://ai-income-systems.com/newsletter" },
+        { "@type": "ListItem", position: 2, name: "Blog", item: "https://ai-income-systems.com/blog" },
         { "@type": "ListItem", position: 3, name: p.title, item: url },
       ],
     };
     return {
       meta: [
-        { title: `${seoTitle} — AI Income Weekly` },
+        { title: `${seoTitle} — AI Income Systems Blog` },
         { name: "description", content: desc },
         { property: "og:title", content: seoTitle },
         { property: "og:description", content: desc },
@@ -69,15 +69,14 @@ export const Route = createFileRoute("/newsletter/$slug")({
       ],
     };
   },
-
   notFoundComponent: () => (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
       <main className="flex-1 mx-auto max-w-3xl px-4 sm:px-6 py-20 text-center">
-        <h1 className="text-3xl font-bold">Issue not found</h1>
-        <p className="mt-3 text-muted-foreground">That newsletter issue doesn't exist or hasn't been published yet.</p>
-        <Link to="/newsletter" className="mt-6 inline-flex items-center gap-1 text-[color:var(--brand)]">
-          <ArrowLeft className="h-4 w-4" /> Back to all issues
+        <h1 className="text-3xl font-bold">Post not found</h1>
+        <p className="mt-3 text-muted-foreground">That blog post doesn't exist or hasn't been published yet.</p>
+        <Link to="/blog" className="mt-6 inline-flex items-center gap-1 text-[color:var(--brand)]">
+          <ArrowLeft className="h-4 w-4" /> Back to the blog
         </Link>
       </main>
       <SiteFooter />
@@ -94,16 +93,16 @@ export const Route = createFileRoute("/newsletter/$slug")({
       <SiteFooter />
     </div>
   ),
-  component: PostPage,
+  component: BlogPostPage,
 });
 
-function PostPage() {
+function BlogPostPage() {
   const params = Route.useParams();
   const { data } = useQuery({
-    queryKey: ["newsletter", "post", params.slug],
+    queryKey: ["blog", "post", params.slug],
     queryFn: () => getPostBySlug({ data: { slug: params.slug } }),
   });
-  const post = data?.post;
+  const post = data?.post as any;
   if (!post) return null;
 
   return (
@@ -111,19 +110,19 @@ function PostPage() {
       <SiteHeader />
       <main className="flex-1">
         <article className="mx-auto max-w-3xl px-4 sm:px-6 pt-12 pb-16">
-          <Link to="/newsletter" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4" /> All issues
+          <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> All posts
           </Link>
           <div className="mt-6 text-xs text-muted-foreground uppercase tracking-widest">
-            {post.published_at ? new Date(post.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : ""}
+            {post.published_at ? new Date(post.published_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : ""}
           </div>
           <h1 className="mt-2 text-4xl sm:text-5xl font-black tracking-tight">{post.title}</h1>
           {post.excerpt && <p className="mt-4 text-lg text-muted-foreground">{post.excerpt}</p>}
           {post.cover_image_url && (
-            <img src={post.cover_image_url} alt="" className="mt-8 w-full rounded-2xl border border-white/10" />
+            <img src={post.cover_image_url} alt={post.title} className="mt-8 w-full rounded-2xl border border-white/10" />
           )}
           <div className="mt-10 text-base leading-relaxed text-foreground/90 space-y-5">
-            {post.content.split(/\n{2,}/).map((para: string, i: number) => (
+            {(post.content ?? "").split(/\n{2,}/).map((para: string, i: number) => (
               <p key={i} className="whitespace-pre-wrap"><Linkify text={para} /></p>
             ))}
           </div>
@@ -132,14 +131,13 @@ function PostPage() {
 
           <div className="mt-16">
             <div className="glass rounded-2xl p-6">
-              <h3 className="text-lg font-bold">Get next week's issue in your inbox</h3>
+              <h3 className="text-lg font-bold">Get the weekly AI income tip</h3>
               <p className="text-sm text-muted-foreground mt-1">Free. One email a week. Unsubscribe anytime.</p>
               <div className="mt-4 max-w-xl">
-                <NewsletterSignup source="newsletter-post" />
+                <NewsletterSignup source="blog-post" />
               </div>
             </div>
           </div>
-
         </article>
       </main>
       <SiteFooter />

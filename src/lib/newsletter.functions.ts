@@ -52,9 +52,9 @@ export const getPostBySlug = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ slug: z.string().min(1).max(200) }).parse(d))
   .handler(async ({ data }) => {
     const sb = serverPublic();
-    const { data: post, error } = await sb
+    const { data: post, error } = await (sb as any)
       .from("newsletter_posts")
-      .select("id, slug, title, excerpt, content, cover_image_url, published_at")
+      .select("id, slug, title, excerpt, content, cover_image_url, published_at, post_type, seo_title, seo_description")
       .eq("slug", data.slug)
       .not("published_at", "is", null)
       .lte("published_at", new Date().toISOString())
@@ -101,6 +101,8 @@ const upsertSchema = z.object({
   tags: z.array(z.string().min(1).max(40)).max(20).optional().default([]),
   pillar_slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/).optional().nullable(),
   post_type: z.enum(["newsletter", "blog"]).optional().default("newsletter"),
+  seo_title: z.string().max(70).optional().nullable(),
+  seo_description: z.string().max(200).optional().nullable(),
 });
 
 export const upsertPost = createServerFn({ method: "POST" })
@@ -117,6 +119,8 @@ export const upsertPost = createServerFn({ method: "POST" })
       tags: (data.tags ?? []).map((t) => t.trim().toLowerCase()).filter(Boolean),
       pillar_slug: data.pillar_slug ?? null,
       post_type: data.post_type ?? "newsletter",
+      seo_title: data.seo_title?.trim() || null,
+      seo_description: data.seo_description?.trim() || null,
       author_id: context.userId,
     };
     if (data.id) {

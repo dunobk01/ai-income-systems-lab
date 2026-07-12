@@ -62,6 +62,8 @@ function AdminNewsletter() {
     tags: string[];
     pillar_slug: string;
     post_type: "newsletter" | "blog";
+    seo_title: string;
+    seo_description: string;
   }>(null);
   const [tagInput, setTagInput] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
@@ -96,7 +98,7 @@ function AdminNewsletter() {
   if (!isAdmin) return null;
 
   const startNew = (post_type: "newsletter" | "blog" = "newsletter") =>
-    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "", post_type });
+    setEditing({ slug: "", title: "", excerpt: "", content: "", cover_image_url: "", tags: [], pillar_slug: "", post_type, seo_title: "", seo_description: "" });
 
   const startEdit = async (id: string) => {
     setErr(null);
@@ -114,6 +116,8 @@ function AdminNewsletter() {
         tags: (post as any).tags ?? [],
         pillar_slug: (post as any).pillar_slug ?? "",
         post_type: ((post as any).post_type ?? "newsletter") as "newsletter" | "blog",
+        seo_title: (post as any).seo_title ?? "",
+        seo_description: (post as any).seo_description ?? "",
       });
     } catch (e: any) {
       setErr(e?.message ?? "Failed to load post");
@@ -146,6 +150,8 @@ function AdminNewsletter() {
           tags: editing.tags,
           pillar_slug: editing.pillar_slug.trim() || null,
           post_type: editing.post_type,
+          seo_title: editing.seo_title.trim() || null,
+          seo_description: editing.seo_description.trim() || null,
         },
       });
 
@@ -417,6 +423,36 @@ function AdminNewsletter() {
                   className="font-mono text-sm"
                 />
                 <p className="text-xs text-muted-foreground mt-1">{editing.content.length.toLocaleString()} / 50,000</p>
+              </div>
+
+              <div className="pt-4 border-t border-white/5 space-y-4">
+                <div>
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground">Search / social preview (optional)</div>
+                  <p className="text-xs text-muted-foreground mt-1">Overrides the default title and description used by Google and social share cards. Leave blank to use the post title and excerpt.</p>
+                </div>
+                <div>
+                  <Label htmlFor="seo_title">SEO title <span className="text-muted-foreground">(≤ 60 chars)</span></Label>
+                  <Input
+                    id="seo_title"
+                    value={editing.seo_title}
+                    onChange={(e) => setEditing((p) => p ? { ...p, seo_title: e.target.value.slice(0, 70) } : p)}
+                    placeholder={editing.title || "Custom title for Google & social"}
+                    maxLength={70}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">{editing.seo_title.length} / 70</p>
+                </div>
+                <div>
+                  <Label htmlFor="seo_description">Meta description <span className="text-muted-foreground">(≤ 160 chars)</span></Label>
+                  <Textarea
+                    id="seo_description"
+                    value={editing.seo_description}
+                    onChange={(e) => setEditing((p) => p ? { ...p, seo_description: e.target.value.slice(0, 200) } : p)}
+                    rows={2}
+                    placeholder={editing.excerpt || "1–2 sentences shown under the title in search results and link previews."}
+                    maxLength={200}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">{editing.seo_description.length} / 200</p>
+                </div>
               </div>
               <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/5">
                 <Button variant="brand" onClick={save} disabled={busy === "save"}>
