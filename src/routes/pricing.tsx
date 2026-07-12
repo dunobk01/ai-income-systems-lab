@@ -391,6 +391,7 @@ function PricingPage() {
       </section>
 
       <SiteFooter />
+      <ExitIntentModal source="pricing" />
     </div>
   );
 }
