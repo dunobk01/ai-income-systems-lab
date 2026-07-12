@@ -71,7 +71,7 @@ export const listAllPostsAdmin = createServerFn({ method: "GET" })
     await assertAdmin(context.supabase, context.userId);
     const { data, error } = await context.supabase
       .from("newsletter_posts")
-      .select("id, slug, title, excerpt, published_at, email_sent_at, updated_at, created_at")
+      .select("id, slug, title, excerpt, published_at, email_sent_at, updated_at, created_at, post_type" as any)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return { posts: data ?? [] };
