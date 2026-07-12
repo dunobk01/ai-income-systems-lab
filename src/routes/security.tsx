@@ -9,18 +9,33 @@ export const Route = createFileRoute("/security")({
       {
         name: "description",
         content:
-          "AI Income Systems Lab security policy. Learn how we protect your data, payments, and account.",
+          "How AI Income Systems Lab protects your data, payments, and account: TLS, Stripe PCI-DSS, RBAC, and incident response.",
       },
-      {
-        property: "og:title",
-        content: "Security Policy — AI Income Systems Lab",
-      },
+      { property: "og:title", content: "Security Policy — AI Income Systems Lab" },
       {
         property: "og:description",
         content:
-          "AI Income Systems Lab security policy. Learn how we protect your data, payments, and account.",
+          "How AI Income Systems Lab protects your data, payments, and account.",
       },
+      { property: "og:type", content: "article" },
       { property: "og:url", content: "https://ai-income-systems.com/security" },
+      {
+        property: "og:image",
+        content: "https://ai-income-systems.com/__l5e/assets-v1/4fc4935b-005a-45ad-950a-3d437f26a30a/og-brand.jpg",
+      },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Security Policy — AI Income Systems Lab" },
+      {
+        name: "twitter:description",
+        content:
+          "How AI Income Systems Lab protects your data, payments, and account.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://ai-income-systems.com/__l5e/assets-v1/4fc4935b-005a-45ad-950a-3d437f26a30a/og-brand.jpg",
+      },
     ],
     links: [
       { rel: "canonical", href: "https://ai-income-systems.com/security" },
