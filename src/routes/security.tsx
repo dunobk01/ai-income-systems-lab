@@ -21,7 +21,7 @@ export const Route = createFileRoute("/security")({
       { property: "og:url", content: "https://ai-income-systems.com/security" },
       {
         property: "og:image",
-        content: "https://ai-income-systems.com/__l5e/assets-v1/4fc4935b-005a-45ad-950a-3d437f26a30a/og-brand.jpg",
+        content: "https://ai-income-systems.com/__l5e/assets-v1/9053bc09-99f9-4de8-9ff8-ad1634bd23d2/og-brand.jpg",
       },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/security")({
       },
       {
         name: "twitter:image",
-        content: "https://ai-income-systems.com/__l5e/assets-v1/4fc4935b-005a-45ad-950a-3d437f26a30a/og-brand.jpg",
+        content: "https://ai-income-systems.com/__l5e/assets-v1/9053bc09-99f9-4de8-9ff8-ad1634bd23d2/og-brand.jpg",
       },
     ],
     links: [
