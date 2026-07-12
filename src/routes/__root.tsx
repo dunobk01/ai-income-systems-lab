@@ -107,6 +107,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "text/javascript",
         children: `!function (w, d, t) {w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};ttq.load('D8VTDLBC77UEAKLA0EM0');ttq.page();}(window, document, 'ttq');`,
       },
+      {
+        type: "text/javascript",
+        children: `!function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";var t=document.createElement("script");t.async=!0,t.src=e;var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");pintrk('load','2613894747736');pintrk('page');`,
+      },
+
 
       {
         type: "application/ld+json",
@@ -146,7 +151,15 @@ function RootShell({ children }: { children: ReactNode }) {
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            alt=""
+            src="https://ct.pinterest.com/v3/?event=init&tid=2613894747736&noscript=1"
+          />
         </noscript>
+
         {children}
         <Scripts />
       </body>
@@ -160,11 +173,16 @@ function RootComponent() {
   useEffect(() => {
     // Fire a TikTok pageview on every SPA route change.
     import("@/lib/tiktok").then((m) => m.tiktokPage()).catch(() => {});
+    // Pinterest pageview on SPA route change.
+    if (typeof window !== "undefined" && (window as any).pintrk) {
+      try { (window as any).pintrk("page"); } catch {}
+    }
     // Standardized GTM page_view.
     import("@/lib/datalayer").then((m) =>
       m.dlPageView({ path: pathname, title: typeof document !== "undefined" ? document.title : "" }),
     ).catch(() => {});
   }, [pathname]);
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
