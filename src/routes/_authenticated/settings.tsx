@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2 } from "lucide-react";
+import { Copy, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,34 @@ function SettingsPage() {
   const [cancelOpen, setCancelOpen] = useState(false);
   const [canceling, setCanceling] = useState(false);
   const cancelFn = useServerFn(cancelMonthlySubscription);
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [referralCount, setReferralCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const [{ data: me }, { count }] = await Promise.all([
+        (supabase.from("profiles") as any).select("referral_code").eq("user_id", user.id).maybeSingle(),
+        (supabase.from("profiles") as any).select("id", { count: "exact", head: true }).eq("referred_by", user.id),
+      ]);
+      if (cancelled) return;
+      setReferralCode((me as any)?.referral_code ?? null);
+      setReferralCount(count ?? 0);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  const referralUrl = referralCode ? `https://ai-income-systems.com/?ref=${referralCode}` : "";
+  const copyReferral = async () => {
+    if (!referralUrl) return;
+    try {
+      await navigator.clipboard.writeText(referralUrl);
+      toast.success("Referral link copied");
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
 
   useEffect(() => { setName(profile?.display_name ?? ""); }, [profile?.display_name]);
 
@@ -137,6 +165,23 @@ function SettingsPage() {
           )}
         </section>
       )}
+
+      <section className="mt-6 glass rounded-2xl p-6">
+        <h2 className="font-semibold">Referral link</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Share your link. When someone signs up, they're credited to you — {referralCount} member{referralCount === 1 ? "" : "s"} referred so far.
+        </p>
+        {referralCode ? (
+          <div className="mt-4 flex gap-2">
+            <Input readOnly value={referralUrl} className="font-mono text-xs" />
+            <Button variant="glass" onClick={copyReferral} className="shrink-0">
+              <Copy className="h-4 w-4" /> Copy
+            </Button>
+          </div>
+        ) : (
+          <p className="mt-3 text-xs text-muted-foreground">Generating your referral link…</p>
+        )}
+      </section>
 
       <section className="mt-6 glass rounded-2xl p-6">
         <h2 className="font-semibold">Purchase history</h2>

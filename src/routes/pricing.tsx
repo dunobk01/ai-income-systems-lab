@@ -9,6 +9,16 @@ import { CohortCountdown } from "@/components/cohort-countdown";
 import { LeadCapture } from "@/components/lead-capture";
 import { useAuth } from "@/lib/auth-context";
 import { ogImageMeta } from "@/lib/og";
+import { ExitIntentModal } from "@/components/exit-intent-modal";
+
+const pricingFaqs = [
+  { q: "Can I cancel anytime?", a: "Yes. Cancel from Settings in one click; access continues through the end of your billing period." },
+  { q: "What's the difference between Monthly and Annual?", a: "Annual plans are billed once per year at the equivalent of 10 months (2 months free). Same features either way." },
+  { q: "Do you offer refunds?", a: "Monthly is cancel-anytime — no refund needed. Annual plans get a 14-day money-back guarantee." },
+  { q: "Can I upgrade or downgrade?", a: "Yes, from Settings. Upgrades pro-rate immediately; downgrades apply at the next billing cycle." },
+  { q: "Is my payment secure?", a: "All payments are processed by Stripe. We never see or store your card details." },
+  { q: "Do I get lifetime access?", a: "Your access lasts as long as your subscription is active. If you cancel, you keep access through the current billing period." },
+];
 
 export const Route = createFileRoute("/pricing")({
   validateSearch: z.object({ expired: z.coerce.boolean().optional() }),
@@ -37,6 +47,18 @@ export const Route = createFileRoute("/pricing")({
             { "@type": "Offer", name: "Builder Monthly", price: "79", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
             { "@type": "Offer", name: "Accelerator Monthly", price: "149", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
           ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: pricingFaqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
         }),
       },
     ],
@@ -346,11 +368,30 @@ function PricingPage() {
         </p>
       </section>
 
+      <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-16">
+        <div className="text-center mb-6">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">FAQ</p>
+          <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight">Pricing questions</h2>
+        </div>
+        <div className="space-y-3">
+          {pricingFaqs.map((f) => (
+            <details key={f.q} className="glass rounded-xl px-5 py-4 group">
+              <summary className="font-medium cursor-pointer list-none flex justify-between items-center gap-3">
+                <span>{f.q}</span>
+                <span className="text-muted-foreground group-open:rotate-45 transition shrink-0">+</span>
+              </summary>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-20">
         <LeadCapture source="pricing" />
       </section>
 
       <SiteFooter />
+      <ExitIntentModal source="pricing" />
     </div>
   );
 }

@@ -13,6 +13,8 @@ import { dlSignUp } from "@/lib/datalayer";
 import { pinSignUp } from "@/lib/pinterest";
 import { toast } from "sonner";
 import { ogImageMeta } from "@/lib/og";
+import { useServerFn } from "@tanstack/react-start";
+import { attachReferral } from "@/lib/referrals.functions";
 
 const TIER_KEYS = [
   "starter_monthly", "builder_monthly", "accelerator_monthly",
@@ -52,6 +54,7 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const attachRef = useServerFn(attachReferral);
 
   const postAuthTo = tier ? "/checkout" : "/dashboard";
 
@@ -82,6 +85,15 @@ function SignupPage() {
     });
     dlSignUp({ method: "email" });
     pinSignUp({ lead_type: tier ? `plan-${tier}` : "Account" });
+    // Attach referral if one was captured in sessionStorage
+    try {
+      const ref = typeof window !== "undefined" ? sessionStorage.getItem("ails:ref") : null;
+      if (ref) {
+        // fire-and-forget; auth session is now set, so bearer middleware attaches
+        attachRef({ data: { code: ref } }).catch(() => {});
+        sessionStorage.removeItem("ails:ref");
+      }
+    } catch {}
     void navigate({ to: postAuthTo, search: tier ? { tier } : undefined, replace: true });
   };
 

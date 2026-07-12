@@ -13,10 +13,22 @@ export const Route = createFileRoute("/faq")({
       { property: "og:title", content: "FAQ — AI Income Systems Lab" },
       { property: "og:description", content: "Honest answers about how the program works, what's included, refunds, pacing, and who it's for." },
       { property: "og:url", content: "https://ai-income-systems.com/faq" },
-    
+
       ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/faq" }],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: groups.flatMap((g) => g.faqs).map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }),
+    }],
   }),
   component: FAQPage,
 });
