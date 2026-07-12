@@ -144,3 +144,57 @@ export const cancelMonthlySubscription = createServerFn({ method: "POST" })
       return { error: getStripeErrorMessage(error) };
     }
   });
+
+type PurchaseSummary =
+  | {
+      ok: true;
+      amountCents: number;
+      currency: string;
+      priceId: string | null;
+      productLabel: string;
+    }
+  | { error: string };
+
+const RETURN_TIER_LABEL: Record<string, string> = {
+  ailab_starter_monthly: "Starter — Monthly",
+  ailab_builder_monthly: "Builder — Monthly",
+  ailab_accelerator_monthly: "Accelerator — Monthly",
+  ailab_starter_annual: "Starter — Annual",
+  ailab_builder_annual: "Builder — Annual",
+  ailab_accelerator_annual: "Accelerator — Annual",
+  ailab_starter_onetime: "Starter Lab",
+  ailab_builder_onetime: "Builder Lab",
+  ailab_pro_onetime: "Pro Systems Lab",
+  ailab_monthly_subscription: "All-Access Monthly",
+};
+
+export const getCheckoutSessionSummary = createServerFn({ method: "POST" })
+  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+    if (!/^cs_(test|live)_[A-Za-z0-9]+$/.test(data.sessionId)) {
+      throw new Error("Invalid session id");
+    }
+    return data;
+  })
+  .handler(async ({ data }): Promise<PurchaseSummary> => {
+    try {
+      const stripe = createStripeClient(data.environment);
+      const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
+        expand: ["line_items.data.price"],
+      });
+      const line = session.line_items?.data?.[0];
+      const priceId =
+        line?.price?.lookup_key ||
+        (line?.price?.metadata as Record<string, string> | undefined)?.lovable_external_id ||
+        (session.metadata?.priceId as string | undefined) ||
+        null;
+      return {
+        ok: true,
+        amountCents: session.amount_total ?? 0,
+        currency: (session.currency ?? "usd").toLowerCase(),
+        priceId,
+        productLabel: (priceId && RETURN_TIER_LABEL[priceId]) || "AI Income Systems Lab",
+      };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
