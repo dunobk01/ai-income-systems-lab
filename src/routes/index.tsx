@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Sparkles, Rocket, Zap, Brain, Workflow, Bot, Search, Layers,
-  ArrowRight, Check, Shield, MessageSquare, Wand2, FileCode2,
-  Video, Image as ImageIcon, Mic,
+  ArrowRight, Check, Shield, ShieldCheck, MessageSquare, Wand2, FileCode2,
+  Video, Image as ImageIcon, Mic, Lock, CreditCard, RefreshCcw, Users, Headphones, BookOpen,
 } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -393,9 +393,78 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* TRUST STRIP — honest, no fabricated testimonials */}
-      <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-10">
-        <div className="grid gap-3 sm:grid-cols-3">
+      {/* TRUST & CREDIBILITY */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
+        <div className="text-center mb-12">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Trust & credibility</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Everything clear. Nothing hidden.</h2>
+          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
+            Secure checkout, straightforward policies, and a clear picture of what's included — so you can decide with confidence.
+          </p>
+        </div>
+        <div className="grid gap-4 lg:grid-cols-3">
+          {/* Security & privacy */}
+          <div className="glass-strong rounded-2xl p-6">
+            <div className="grid h-10 w-10 place-items-center rounded-lg" style={{ background: "var(--gradient-soft)" }}>
+              <Lock className="h-5 w-5 text-[color:var(--brand)]" />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold">Secure & private</h3>
+            <ul className="mt-4 space-y-3">
+              {[
+                { icon: ShieldCheck, text: "Bank-level SSL encryption sitewide" },
+                { icon: CreditCard, text: "Stripe processes payments — card details never touch our servers" },
+                { icon: Lock, text: "Your data isn't sold, rented, or shared with third parties" },
+                { icon: Users, text: "Member areas gated by secure login + role checks" },
+              ].map((item) => (
+                <li key={item.text} className="flex items-start gap-3 text-sm text-muted-foreground">
+                  <item.icon className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" />
+                  <span>{item.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* Risk-free */}
+          <div className="glass-strong rounded-2xl p-6">
+            <div className="grid h-10 w-10 place-items-center rounded-lg" style={{ background: "var(--gradient-soft)" }}>
+              <RefreshCcw className="h-5 w-5 text-[color:var(--brand)]" />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold">Risk-free cancellation</h3>
+            <ul className="mt-4 space-y-3">
+              {[
+                { icon: Check, text: "14-day money-back guarantee on your first payment" },
+                { icon: Check, text: "Cancel anytime — keep access through your billing period" },
+                { icon: Check, text: "Zero hidden fees, surprise charges, or forced upsells" },
+                { icon: Check, text: "Switch tiers or pause your subscription easily" },
+              ].map((item) => (
+                <li key={item.text} className="flex items-start gap-3 text-sm text-muted-foreground">
+                  <item.icon className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" />
+                  <span>{item.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* What you get */}
+          <div className="glass-strong rounded-2xl p-6">
+            <div className="grid h-10 w-10 place-items-center rounded-lg" style={{ background: "var(--gradient-soft)" }}>
+              <Check className="h-5 w-5 text-[color:var(--brand)]" />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold">What you get</h3>
+            <ul className="mt-4 space-y-3">
+              {[
+                { icon: BookOpen, text: "All course modules matching your tier" },
+                { icon: Layers, text: "Searchable prompt library + interactive builders" },
+                { icon: Users, text: "Members community, Wins channel, and member DMs (Accelerator)" },
+                { icon: Headphones, text: "New lessons and updates included while subscribed" },
+              ].map((item) => (
+                <li key={item.text} className="flex items-start gap-3 text-sm text-muted-foreground">
+                  <item.icon className="h-4 w-4 text-[color:var(--brand-2)] mt-0.5 shrink-0" />
+                  <span>{item.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="mt-8 grid gap-3 sm:grid-cols-3">
           {[
             { k: "Cancel", v: "Anytime — keep access through your billing period" },
             { k: "0", v: "Hidden fees, upsells, or surprise charges" },
@@ -407,9 +476,6 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
-        <p className="mt-4 text-center text-xs text-muted-foreground">
-          New program — we'd rather earn testimonials than fake them. Early cohort builders get featured here.
-        </p>
       </section>
 
       {/* PRICING TEASER */}
