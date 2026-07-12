@@ -1,8 +1,10 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { z } from "zod";
 import { StripeEmbeddedCheckoutView } from "@/components/stripe-embedded-checkout";
 import { PaymentTestModeBanner } from "@/components/payment-test-mode-banner";
+import { pinAddToCart } from "@/lib/pinterest";
 
 type PlanInfo = { name: string; price: number; priceId: string; recurring: "month" | "year" | null; subline: string };
 
