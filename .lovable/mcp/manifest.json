@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://efsyxisktlhpbfrzakyu.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "ai-income-systems-mcp",
+      "version": "0.1.0",
+      "title": "AI Income Systems Lab"
+    },
+    "tools": [
+      {
+        "name": "get_my_profile",
+        "title": "Get my profile",
+        "description": "Return the signed-in user's profile, tier, and admin status on AI Income Systems Lab.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_wins",
+        "title": "List my wins",
+        "description": "List the signed-in user's own wins posted to the Wall of Wins.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max wins to return (default 25).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_win",
+        "title": "Post a new win",
+        "description": "Post a new win to the AI Income Systems Lab Wall of Wins as the signed-in user.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Dollar amount of the win."
+            },
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Which system/product produced the win (e.g. 'Digital Product', 'Agency')."
+            },
+            "note": {
+              "description": "Optional short note about the win.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "amount",
+            "system"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_recent_wins",
+        "title": "List recent wins",
+        "description": "List the most recent community wins from the AI Income Systems Lab Wall of Wins.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max wins to return (default 25).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_content",
+        "title": "Search blog, newsletter & guides",
+        "description": "Search published blog posts, newsletter issues, and pillar guides on AI Income Systems Lab by title/excerpt.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Search text matched against title and excerpt."
+            },
+            "post_type": {
+              "description": "Filter by content type.",
+              "type": "string",
+              "enum": [
+                "blog",
+                "newsletter",
+                "guide"
+              ]
+            },
+            "limit": {
+              "description": "Max results (default 15).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          "required": [
+            "query"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
