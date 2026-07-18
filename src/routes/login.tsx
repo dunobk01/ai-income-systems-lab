@@ -63,12 +63,18 @@ function LoginPage() {
   };
 
   const onGoogle = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
+    const target = search.redirect ?? "/dashboard";
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + target,
+    });
     if (result.error) toast.error("Google sign-in failed");
   };
 
   const onApple = async () => {
-    const result = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/welcome" });
+    const target = search.redirect ?? "/welcome";
+    const result = await lovable.auth.signInWithOAuth("apple", {
+      redirect_uri: window.location.origin + target,
+    });
     if (result.error) toast.error("Apple sign-in failed");
   };
 
