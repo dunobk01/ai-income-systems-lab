@@ -84,7 +84,7 @@ function TagPage() {
           {posts.map((p) => (
             <Link
               key={p.id}
-              to="/newsletter/$slug"
+              to="/blog/$slug"
               params={{ slug: p.slug }}
               className="glass rounded-2xl p-6 hover:border-[color:var(--brand)]/40 transition group"
             >
