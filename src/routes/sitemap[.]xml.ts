@@ -53,18 +53,19 @@ export const Route = createFileRoute("/sitemap.xml")({
             { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
           );
 
-          // Published newsletter posts + tag pages
+          // Published newsletter posts + blog posts + tag pages
           const { data: posts } = await sb
             .from("newsletter_posts")
-            .select("slug, published_at, updated_at, tags")
+            .select("slug, published_at, updated_at, tags, post_type")
             .not("published_at", "is", null)
             .lte("published_at", new Date().toISOString())
             .order("published_at", { ascending: false })
             .limit(1000);
           const tagSet = new Set<string>();
-          for (const p of posts ?? []) {
+          for (const p of (posts ?? []) as any[]) {
+            const isBlog = p.post_type === "blog";
             entries.push({
-              path: `/newsletter/${p.slug}`,
+              path: `${isBlog ? "/blog" : "/newsletter"}/${p.slug}`,
               lastmod: (p.updated_at ?? p.published_at ?? undefined)?.slice(0, 10),
               changefreq: "monthly",
               priority: "0.7",
