@@ -152,6 +152,151 @@
           ]
         },
         "outputSchema": null
+      },
+      {
+        "name": "list_my_progress",
+        "title": "List my lesson progress",
+        "description": "List the signed-in user's completed lessons on AI Income Systems Lab, with lesson title and module.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max lessons to return (default 50).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            },
+            "only_completed": {
+              "description": "If true (default), return only completed lessons.",
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "mark_lesson_complete",
+        "title": "Mark a lesson complete",
+        "description": "Mark a lesson as complete (or incomplete) for the signed-in user. Provide either lesson_id or lesson_slug.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "lesson_id": {
+              "description": "Lesson UUID.",
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "lesson_slug": {
+              "description": "Lesson slug (used if lesson_id omitted).",
+              "type": "string",
+              "minLength": 1
+            },
+            "completed": {
+              "description": "Set to false to mark incomplete. Defaults to true.",
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "admin_stats",
+        "title": "Admin: platform stats",
+        "description": "Admin-only. Returns totals for AI Income Systems Lab: users, leads, active subscriptions, revenue, and a tier breakdown.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "admin_recent_signups",
+        "title": "Admin: recent signups",
+        "description": "Admin-only. List recently created member profiles with tier and referral code.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max rows (default 25).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "admin_recent_leads",
+        "title": "Admin: recent email leads",
+        "description": "Admin-only. List recently captured email leads with source and lead magnet.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max rows (default 25).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "admin_recent_purchases",
+        "title": "Admin: recent purchases & subscriptions",
+        "description": "Admin-only. List recent Stripe subscriptions/purchases with status, price, amount, and environment.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max rows (default 25).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          }
+        },
+        "outputSchema": null
       }
     ]
   }
