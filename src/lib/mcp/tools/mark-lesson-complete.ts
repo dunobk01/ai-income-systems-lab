@@ -48,7 +48,7 @@ export default defineTool({
           user_id: ctx.getUserId(),
           lesson_id: resolvedId,
           completed: isComplete,
-          completed_at: isComplete ? new Date().toISOString() : null,
+          completed_at: new Date().toISOString(),
         },
         { onConflict: "user_id,lesson_id" },
       )
