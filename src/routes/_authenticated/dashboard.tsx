@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 const quickStart = [
-  { to: "/course", title: "Continue the course", desc: "11 modules · 90+ lessons", icon: BookOpen, monthlyOk: true, builderOnly: false },
+  { to: "/course", title: "Continue the course", desc: "15 modules · 89 lessons", icon: BookOpen, monthlyOk: true, builderOnly: false },
   { to: "/prompts", title: "Open prompt library", desc: "Browse and save prompts", icon: Sparkles, monthlyOk: true, builderOnly: false },
   { to: "/starter-kit", title: "AI Tool Starter Kit", desc: "Tools, setup, recommended config", icon: Wrench, monthlyOk: true, builderOnly: false },
   { to: "/library", title: "Template Library", desc: "Flagship prompts, workflows, starters", icon: Library, monthlyOk: false, builderOnly: true },

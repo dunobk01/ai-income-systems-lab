@@ -222,7 +222,7 @@ function SettingsPage() {
             <DialogTitle>Cancel membership?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            You'll lose access to all 11 modules at the end of your billing period{periodEndLabel ? ` (${periodEndLabel})` : ""}.
+            You'll lose access to all 15 modules at the end of your billing period{periodEndLabel ? ` (${periodEndLabel})` : ""}.
           </p>
           <p className="mt-3 text-sm">
             Or grab lifetime Starter access for just <strong>$29</strong> — a one-time payment that's less than 2 months of membership.

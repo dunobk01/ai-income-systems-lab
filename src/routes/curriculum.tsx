@@ -9,9 +9,9 @@ export const Route = createFileRoute("/curriculum")({
   head: () => ({
     meta: [
       { title: "Curriculum — AI Income Systems Lab" },
-      { name: "description", content: "11 modules, 90+ lessons. The full sequence that takes you from zero to a live AI income system in 7 days." },
+      { name: "description", content: "15 modules, 89 lessons. The full sequence that takes you from zero to a live AI income system in 7 days." },
       { property: "og:title", content: "Curriculum — AI Income Systems Lab" },
-      { property: "og:description", content: "11 modules, 90+ lessons. The full sequence that takes you from zero to a live AI income system." },
+      { property: "og:description", content: "15 modules, 89 lessons. The full sequence that takes you from zero to a live AI income system." },
       { property: "og:url", content: "https://ai-income-systems.com/curriculum" },
     
       ...ogImageMeta(),
@@ -90,7 +90,7 @@ function CurriculumPage() {
             <BookOpen className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Curriculum
           </div>
           <h1 className="mt-5 text-4xl sm:text-6xl font-black tracking-tight">
-            11 modules. 90+ lessons.<br />
+            15 modules. 89 lessons.<br />
             <span className="text-gradient">One real income system.</span>
           </h1>
           <p className="mt-5 mx-auto max-w-2xl text-muted-foreground">
