@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/course/")({
   head: () => ({
     meta: [
       { title: "Course — AI Income Systems Lab" },
-      { name: "description", content: "11 modules teaching you to build digital products, funnels, automations, and AI agents you can actually sell." },
+      { name: "description", content: "15 modules teaching you to build digital products, funnels, automations, and AI agents you can actually sell." },
     ],
     scripts: [
       {

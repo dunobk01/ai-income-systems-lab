@@ -77,7 +77,7 @@ function ToolsPublicPage() {
         <div className="glass-strong rounded-3xl p-10 text-center relative overflow-hidden">
           <div className="absolute inset-0 -z-10" style={{ background: "var(--gradient-hero)" }} />
           <h2 className="text-2xl sm:text-3xl font-bold">Learn the whole stack inside the Lab.</h2>
-          <p className="mt-2 text-muted-foreground">11 modules teach you when to use which tool and how to wire them into one system.</p>
+          <p className="mt-2 text-muted-foreground">15 modules teach you when to use which tool and how to wire them into one system.</p>
           <Button asChild size="lg" variant="brand" className="mt-6 h-12 px-7">
             <Link to="/pricing">See pricing <ArrowRight className="h-4 w-4" /></Link>
           </Button>
