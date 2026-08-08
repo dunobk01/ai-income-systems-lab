@@ -2,7 +2,7 @@
 
 > A course and toolkit teaching you to combine ChatGPT, Claude, Perplexity, Lovable, and n8n to build digital products, sales funnels, automations, and AI agents you can actually sell.
 
-AI Income Systems Lab is a one-time-purchase learning platform with three tiers (Starter $29, Builder $79, Pro $149). It pairs an 11-module curriculum with interactive AI builders that turn ideas into ship-ready product plans, funnel plans, and agent specs.
+AI Income Systems Lab is a subscription learning platform with three tiers (Starter $29, Builder $79, Pro $149). It pairs an 15-module curriculum with interactive AI builders that turn ideas into ship-ready product plans, funnel plans, and agent specs.
 
 ## Pages
 
