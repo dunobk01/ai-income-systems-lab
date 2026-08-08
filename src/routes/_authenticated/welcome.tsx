@@ -59,7 +59,7 @@ function WelcomePage() {
 
         <ul className="mt-8 grid sm:grid-cols-2 gap-3 text-sm">
           {[
-            { icon: BookOpen, title: "The Course", body: "11 modules · 90+ lessons of real-world systems." },
+            { icon: BookOpen, title: "The Course", body: "15 modules · 89 lessons of real-world systems." },
             { icon: Sparkles, title: "Prompt Library", body: "Battle-tested prompts you can copy and remix." },
             { icon: Wrench, title: "Tool Stack", body: "Our curated AI stack with setup guides." },
             { icon: Workflow, title: "n8n Workflows", body: "Importable automations to ship faster." },

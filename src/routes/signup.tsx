@@ -120,9 +120,8 @@ function SignupPage() {
             Start building <span className="text-gradient">real income systems</span>.
           </h2>
           <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
-            <li>• 11 modules · 90+ lessons</li>
+            <li>• 15 modules · 89 lessons</li>
             <li>• Prompt library + interactive builders</li>
-            <li>• Lifetime access to your tier</li>
           </ul>
         </div>
       </div>

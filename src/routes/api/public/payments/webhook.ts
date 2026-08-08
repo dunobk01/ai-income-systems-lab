@@ -82,7 +82,7 @@ async function sendMonthlyWelcomeEmail(opts: { to: string; amountCents: number; 
     subject: "You're in — All-Access Monthly",
     html: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
       <h1 style="font-size:22px;margin:0 0 12px">Welcome to All-Access Monthly 🎉</h1>
-      <p style="color:#444;line-height:1.5">Your membership is active. You have full access to all 11 modules and 90+ lessons right now.</p>
+      <p style="color:#444;line-height:1.5">Your membership is active. You have full access to all 15 modules and 89 lessons right now.</p>
       <p style="color:#444;line-height:1.5">Charged today: <strong>${amount}</strong>. You can cancel anytime from Settings.</p>
       <p style="margin-top:24px"><a href="https://ai-income-systems.com/dashboard" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">Open your dashboard</a></p>
       <p style="color:#888;font-size:12px;margin-top:32px">Want lifetime access + the builder tools? <a href="https://ai-income-systems.com/pricing">See one-time plans</a>.</p>

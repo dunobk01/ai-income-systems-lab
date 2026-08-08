@@ -5,7 +5,6 @@ import { Check, Sparkles, ArrowRight, X as XIcon } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
-import { CohortCountdown } from "@/components/cohort-countdown";
 import { LeadCapture } from "@/components/lead-capture";
 import { useAuth } from "@/lib/auth-context";
 import { ogImageMeta } from "@/lib/og";
@@ -91,7 +90,7 @@ const tiers: Tier[] = [
     annualPriceId: "starter_annual",
     tag: "Core course",
     bestFor: "Beginners who want the full curriculum and a shippable first offer.",
-    whyUpgrade: "All 11 core modules + 90+ lessons. Learn the system end-to-end.",
+    whyUpgrade: "All 15 core modules + 89 lessons. Learn the system end-to-end.",
     features: [
       "Full 11-module course access",
       "Searchable prompt library (12 starter prompts)",
@@ -148,7 +147,7 @@ const compare: { section: string; rows: Row[] }[] = [
   {
     section: "Learning",
     rows: [
-      { label: "Core course (11 modules · 90+ lessons)", starter: true, builder: true, accelerator: true },
+      { label: "Core course (15 modules · 89 lessons)", starter: true, builder: true, accelerator: true },
       { label: "AI Agents & Skills module", starter: false, builder: false, accelerator: true },
       { label: "Faceless Video Income module", starter: false, builder: false, accelerator: true },
       { label: "AI Image Income module", starter: false, builder: false, accelerator: true },
@@ -243,10 +242,6 @@ function PricingPage() {
                 2 months free
               </span>
             </button>
-          </div>
-
-          <div className="mt-6 flex justify-center">
-            <CohortCountdown label="Current cohort pricing closes in" />
           </div>
         </div>
       </section>

@@ -76,7 +76,7 @@ function CoursePage() {
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Curriculum</p>
           <h1 className="mt-2 text-3xl sm:text-4xl font-bold">The <span className="text-gradient">AI Income Systems</span> course</h1>
-          <p className="mt-2 text-muted-foreground max-w-2xl">11 modules · {totalLessons} lessons · Practical, built around what you ship.</p>
+          <p className="mt-2 text-muted-foreground max-w-2xl">{modules.length} modules · {totalLessons} lessons · Practical, built around what you ship.</p>
         </div>
         <div className="glass rounded-2xl px-5 py-3 text-sm">
           <span className="font-semibold">{completedCount}</span>

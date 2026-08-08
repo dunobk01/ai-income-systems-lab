@@ -7,7 +7,6 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
-import { CohortCountdown } from "@/components/cohort-countdown";
 import { LeadCapture } from "@/components/lead-capture";
 import dustinPhoto from "@/assets/dustin.jpg.asset.json";
 import { ogImageMeta } from "@/lib/og";
@@ -73,7 +72,7 @@ const audience = [
 ];
 
 const included = [
-  "100+ structured lessons across 14 modules",
+  "89 structured lessons across 15 modules",
   "Faceless video, AI image, and chatbot agency modules (Accelerator)",
   "Searchable prompt library (ChatGPT, Claude, Perplexity, Lovable, n8n)",
   "Interactive Digital Product Builder + Sales Funnel Builder",
@@ -105,7 +104,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-24 sm:pt-28 sm:pb-32 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" />
-            New cohort open · No fake income promises
+            No fake income promises
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05]">
             Master AI Tools by Building<br />
@@ -122,9 +121,6 @@ export default function LandingPage() {
             <Button asChild size="lg" variant="glass" className="h-12 px-7 text-base">
               <Link to="/curriculum">See What You'll Build</Link>
             </Button>
-          </div>
-          <div className="mt-6 flex justify-center">
-            <CohortCountdown compact />
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
             {["ChatGPT", "Claude", "Perplexity", "Lovable", "n8n"].map((t) => (
@@ -256,7 +252,7 @@ export default function LandingPage() {
       <section id="curriculum" className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Curriculum</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">14 modules. 110+ lessons.</h2>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">15 modules. 89 lessons.</h2>
           <p className="mt-3 text-muted-foreground">Sequenced so each module builds on the last.</p>
         </div>
         <div className="glass-strong rounded-2xl overflow-hidden divide-y divide-white/5">
@@ -511,9 +507,6 @@ export default function LandingPage() {
                 <p className="mt-1 text-xs text-muted-foreground">{p.note}</p>
               </div>
             ))}
-          </div>
-          <div className="mt-6 flex justify-center">
-            <CohortCountdown />
           </div>
           <Button asChild variant="brand" size="lg" className="mt-6 h-12 px-7">
             <Link to="/pricing">See full pricing <ArrowRight className="h-4 w-4" /></Link>

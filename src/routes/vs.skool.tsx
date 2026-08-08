@@ -16,7 +16,7 @@ const rows = [
 ];
 
 const whyWeWin = [
-  { title: "Curriculum, not a chatroom", body: "Skool is a container — the education depends entirely on the group owner. We ship 11 modules, 90+ lessons, and builders you actually use." },
+  { title: "Curriculum, not a chatroom", body: "Skool is a container — the education depends entirely on the group owner. We ship 15 modules, 89 lessons, and builders you actually use." },
   { title: "Tools built for the outcome", body: "Digital Product Builder, Funnel Builder, Agent Generator, n8n workflow library — none of that exists on Skool." },
   { title: "One flat price, all AI", body: "Pay us once per month for the full stack. On Skool you're paying per community, often for content that never gets updated." },
 ];
