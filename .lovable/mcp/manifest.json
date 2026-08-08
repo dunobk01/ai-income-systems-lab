@@ -425,7 +425,7 @@
       {
         "name": "admin_delete_module",
         "title": "Admin: delete module",
-        "description": "Admin-only. Delete a module. Fails if lessons still reference it — delete those first.",
+        "description": "Admin-only. DESTRUCTIVE: deleting a module cascade-deletes all of its lessons and every member's progress on those lessons. If the module still has lessons, the tool refuses unless confirm_cascade_delete is true.",
         "annotations": {
           "readOnlyHint": false,
           "destructiveHint": true,
@@ -440,6 +440,10 @@
               "type": "string",
               "format": "uuid",
               "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "confirm_cascade_delete": {
+              "description": "Must be true to delete a module that still has lessons. This permanently deletes those lessons and all member progress on them.",
+              "type": "boolean"
             }
           },
           "required": [
