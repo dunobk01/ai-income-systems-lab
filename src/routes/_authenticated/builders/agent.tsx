@@ -15,7 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Header, Block, List, LockedView } from "@/routes/_authenticated/builders/product";
+import { Header, Block, List } from "@/routes/_authenticated/builders/product";
+import { ToolPreview } from "@/components/tool-preview";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/builders/agent")({
@@ -58,7 +59,30 @@ function AgentBuilder() {
 
   useEffect(() => { if (tierOk(profile?.tier, isAdmin)) void refresh(); }, [profile?.tier, isAdmin, refresh]);
 
-  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="Agent Generator (Pro)" />;
+  if (!tierOk(profile?.tier, isAdmin))
+    return (
+      <ToolPreview
+        icon={<Bot className="h-5 w-5" />}
+        eyebrow="Builder"
+        title="Agent Generator"
+        subtitle="Spec a working AI agent: role, tools, guardrails, and the exact system prompt to paste in."
+        requiredTier="pro"
+        inputs={["What the agent should handle", "Tools or data it can touch", "Tone and hard limits", "Where it will run"]}
+        produces={["Full system prompt", "Tool/function list with descriptions", "Guardrails and refusal rules", "Test cases to validate it"]}
+        lockedActions={["generating specs", "saving agents", "copying the system prompt"]}
+        example={
+          <>
+            <p className="font-medium text-foreground">Agent: "Inbox Triage Assistant"</p>
+            <p>Role: sorts incoming leads, drafts replies, escalates pricing questions to a human.</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Tools: search_crm, draft_reply, create_task</li>
+              <li>Guardrail: never quotes prices or commits to deadlines</li>
+            </ul>
+            <p className="text-xs text-muted-foreground">Sample spec — real output matches your brief.</p>
+          </>
+        }
+      />
+    );
 
   const submit = async () => {
     setLoading(true); setError(null); setSpec(null); setActiveId(null);

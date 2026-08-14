@@ -116,12 +116,17 @@ export default function LandingPage() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
             <Button asChild size="lg" variant="brand" className="h-12 px-7 text-base">
-              <Link to="/signup">Build My First Income System <ArrowRight className="h-4 w-4" /></Link>
+              <Link to="/signup">Start Learning Free <ArrowRight className="h-4 w-4" /></Link>
             </Button>
             <Button asChild size="lg" variant="glass" className="h-12 px-7 text-base">
-              <Link to="/curriculum">See What You'll Build</Link>
+              <Link to="/curriculum">View Curriculum</Link>
             </Button>
           </div>
+          <p className="mt-4 text-sm text-muted-foreground">
+            No credit card. Your free account is permanent — start with Module 1 and free sample lessons,
+            preview every tool, and upgrade only when you're ready.
+          </p>
+
           <div className="mt-10 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
             {["ChatGPT", "Claude", "Perplexity", "Lovable", "n8n"].map((t) => (
               <span key={t} className="glass rounded-full px-3 py-1">{t}</span>

@@ -3,6 +3,9 @@ import { generateText, Output } from "ai";
 import { z } from "zod";
 import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { assertBuilderAccess } from "@/lib/entitlements";
+
+
 
 const productInput = z.object({
   niche: z.string().min(2).max(200),
@@ -31,6 +34,7 @@ export const generateProductPlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => productInput.parse(d))
   .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("AI is not configured. Please contact support.");
     const gateway = createLovableAiGatewayProvider(key);
@@ -100,6 +104,7 @@ export const generateFunnelPlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => funnelInput.parse(d))
   .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("AI is not configured. Please contact support.");
     const gateway = createLovableAiGatewayProvider(key);
@@ -417,6 +422,7 @@ export const generateAgentSpec = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => agentInput.parse(d))
   .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("AI is not configured. Please contact support.");
     const gateway = createLovableAiGatewayProvider(key);

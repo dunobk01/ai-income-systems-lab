@@ -454,6 +454,7 @@ export type Database = {
           created_at: string
           duration_minutes: number | null
           id: string
+          is_preview: boolean
           module_id: string
           order_index: number
           resource_url: string | null
@@ -468,6 +469,7 @@ export type Database = {
           created_at?: string
           duration_minutes?: number | null
           id?: string
+          is_preview?: boolean
           module_id: string
           order_index?: number
           resource_url?: string | null
@@ -482,6 +484,7 @@ export type Database = {
           created_at?: string
           duration_minutes?: number | null
           id?: string
+          is_preview?: boolean
           module_id?: string
           order_index?: number
           resource_url?: string | null
@@ -961,6 +964,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      lesson_catalog: {
+        Args: never
+        Returns: {
+          duration_minutes: number
+          id: string
+          is_preview: boolean
+          module_id: string
+          order_index: number
+          slug: string
+          title: string
+        }[]
+      }
       move_to_dlq: {
         Args: {
           dlq_name: string
@@ -969,6 +984,18 @@ export type Database = {
           source_queue: string
         }
         Returns: number
+      }
+      prompt_catalog: {
+        Args: never
+        Returns: {
+          category: string
+          id: string
+          is_preview: boolean
+          required_tier: Database["public"]["Enums"]["subscription_tier"]
+          title: string
+          tool: string
+          use_case: string
+        }[]
       }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }

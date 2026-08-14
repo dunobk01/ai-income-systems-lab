@@ -4,20 +4,22 @@ import { BookOpen, Check, Lock, PlayCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { hasTier, isFreeTier } from "@/lib/access";
+import { CURRICULUM_LABEL } from "@/lib/curriculum";
 
 type Tier = "starter" | "builder" | "pro" | "accelerator";
 type Module = { id: string; slug: string; title: string; summary: string | null; required_tier: Tier; order_index: number; is_preview: boolean };
-type Lesson = { id: string; slug: string; title: string; module_id: string; order_index: number; duration_minutes: number | null };
+type Lesson = { id: string; slug: string; title: string; module_id: string; order_index: number; duration_minutes: number | null; is_preview: boolean };
 
-const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
 const canAccessModule = (userTier: string | undefined, requiredTier: string, isAdmin?: boolean) =>
-  isAdmin === true || (TIER_RANK[userTier ?? "none"] ?? 0) >= (TIER_RANK[requiredTier] ?? 0);
+  hasTier(userTier, requiredTier, isAdmin);
 
 export const Route = createFileRoute("/_authenticated/course/")({
   head: () => ({
     meta: [
       { title: "Course — AI Income Systems Lab" },
-      { name: "description", content: "15 modules teaching you to build digital products, funnels, automations, and AI agents you can actually sell." },
+      { name: "description", content: "The full AI Income Systems curriculum — modules teaching you to build digital products, funnels, automations, and AI agents you can actually sell." },
     ],
     scripts: [
       {
@@ -48,7 +50,7 @@ function CoursePage() {
       try {
         const [{ data: mods, error: mErr }, { data: lsns, error: lErr }] = await Promise.all([
           supabase.from("modules").select("id, slug, title, summary, required_tier, order_index, is_preview").order("order_index"),
-          supabase.from("lessons").select("id, slug, title, module_id, order_index, duration_minutes").order("order_index"),
+          supabase.rpc("lesson_catalog"),
         ]);
         if (mErr) throw mErr; if (lErr) throw lErr;
         setModules((mods ?? []) as Module[]);
@@ -76,13 +78,26 @@ function CoursePage() {
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Curriculum</p>
           <h1 className="mt-2 text-3xl sm:text-4xl font-bold">The <span className="text-gradient">AI Income Systems</span> course</h1>
-          <p className="mt-2 text-muted-foreground max-w-2xl">{modules.length} modules · {totalLessons} lessons · Practical, built around what you ship.</p>
+          <p className="mt-2 text-muted-foreground max-w-2xl">{CURRICULUM_LABEL} · Practical, built around what you ship.</p>
         </div>
         <div className="glass rounded-2xl px-5 py-3 text-sm">
           <span className="font-semibold">{completedCount}</span>
           <span className="text-muted-foreground"> / {totalLessons} lessons · {pct}%</span>
         </div>
       </div>
+
+      {isFreeTier(profile?.tier) && !isAdmin && (
+        <div className="mt-6 glass-strong rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="min-w-0">
+            <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--brand-2)]">Free membership</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Module 1 is fully open, plus free sample lessons from Module 2. Every other module stays visible so you
+              can see exactly what a paid plan adds.
+            </p>
+          </div>
+          <Button asChild variant="brand" size="sm" className="sm:ml-auto shrink-0"><Link to="/pricing">See plans</Link></Button>
+        </div>
+      )}
 
       {error && <div className="mt-6 glass rounded-2xl p-4 text-sm text-red-300">Couldn't load curriculum: {error}</div>}
       {loading && <div className="mt-10 text-sm text-muted-foreground">Loading curriculum…</div>}
@@ -91,7 +106,7 @@ function CoursePage() {
         {modules.map((m, i) => {
           const moduleLessons = lessons.filter((l) => l.module_id === m.id);
           const hasModuleAccess = canAccessModule(profile?.tier, m.required_tier, isAdmin);
-          const locked = !hasModuleAccess && !m.is_preview;
+          const moduleUnlocked = hasModuleAccess || m.is_preview;
           const doneInMod = moduleLessons.filter((l) => completed.has(l.id)).length;
           return (
             <section key={m.id} className="glass rounded-2xl overflow-hidden">
@@ -104,9 +119,9 @@ function CoursePage() {
                     <h2 className="font-semibold">{m.title}</h2>
                     <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-white/15">{m.required_tier}</Badge>
                     {m.is_preview && !hasModuleAccess && (
-                      <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free preview</Badge>
+                      <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free</Badge>
                     )}
-                    {locked && <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground"><Lock className="h-3 w-3" /> Locked</span>}
+                    {!moduleUnlocked && <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground"><Lock className="h-3 w-3" /> Locked</span>}
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">{m.summary}</p>
                   <p className="text-xs text-muted-foreground mt-2">{doneInMod} / {moduleLessons.length} done</p>
@@ -114,6 +129,7 @@ function CoursePage() {
               </div>
               <div className="border-t border-white/5 divide-y divide-white/5">
                 {moduleLessons.map((l) => {
+                  const locked = !moduleUnlocked && !l.is_preview;
                   const isDone = completed.has(l.id);
                   const Inner = (
                     <>
@@ -125,6 +141,9 @@ function CoursePage() {
                         <PlayCircle className="h-4 w-4 text-[color:var(--brand)]" />
                       )}
                       <span className="text-sm flex-1 min-w-0 truncate">{l.title}</span>
+                      {!moduleUnlocked && l.is_preview && (
+                        <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shrink-0">Free sample</Badge>
+                      )}
                       <span className="text-xs text-muted-foreground shrink-0">{l.duration_minutes ?? 10} min</span>
                     </>
                   );
@@ -145,10 +164,10 @@ function CoursePage() {
                   );
                 })}
               </div>
-              {locked && (
-                <div className="bg-white/5 px-6 py-3 text-xs text-muted-foreground flex items-center justify-between">
-                  <span>Unlock this module — start All-Access Monthly ($14.99/mo) or grab lifetime access.</span>
-                  <Link to="/pricing" className="text-[color:var(--brand)] hover:underline">See plans →</Link>
+              {!moduleUnlocked && (
+                <div className="bg-white/5 px-6 py-3 text-xs text-muted-foreground flex items-center justify-between gap-3">
+                  <span>Locked on your current plan — unlock this module with a paid membership.</span>
+                  <Link to="/pricing" className="text-[color:var(--brand)] hover:underline shrink-0">See plans →</Link>
                 </div>
               )}
             </section>
