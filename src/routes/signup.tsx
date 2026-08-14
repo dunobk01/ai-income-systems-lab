@@ -13,6 +13,7 @@ import { dlSignUp } from "@/lib/datalayer";
 import { pinSignUp } from "@/lib/pinterest";
 import { toast } from "sonner";
 import { ogImageMeta } from "@/lib/og";
+import { CURRICULUM_LABEL } from "@/lib/curriculum";
 import { useServerFn } from "@tanstack/react-start";
 import { attachReferral } from "@/lib/referrals.functions";
 
@@ -120,8 +121,10 @@ function SignupPage() {
             Start building <span className="text-gradient">real income systems</span>.
           </h2>
           <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
-            <li>• 15 modules · 89 lessons</li>
-            <li>• Prompt library + interactive builders</li>
+            <li>• {CURRICULUM_LABEL} — Module 1 free, forever</li>
+            <li>• Free sample lessons + starter prompts</li>
+            <li>• Preview every builder, workflow, and template</li>
+            <li>• No credit card required</li>
           </ul>
         </div>
       </div>
@@ -129,7 +132,7 @@ function SignupPage() {
       <div className="flex items-center justify-center p-6 sm:p-10">
         <div className="w-full max-w-sm">
           <div className="lg:hidden mb-8"><Logo /></div>
-          <h1 className="text-2xl font-bold">Create your account</h1>
+          <h1 className="text-2xl font-bold">Create your free account</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Have one? <Link to="/login" className="text-foreground hover:underline">Log in</Link>
           </p>
@@ -166,7 +169,7 @@ function SignupPage() {
             </Button>
           </form>
           <p className="mt-4 text-xs text-muted-foreground text-center">
-            By signing up, you agree to our terms. Free preview content — upgrade anytime.
+            By signing up, you agree to our terms. Your free membership is permanent — no credit card, upgrade anytime.
           </p>
         </div>
       </div>

@@ -17,7 +17,7 @@ type Lesson = {
   id: string; slug: string; title: string; module_id: string;
   content: string | null; action_steps: string | null;
   video_url: string | null; resource_url: string | null;
-  duration_minutes: number | null; order_index: number;
+  duration_minutes: number | null; order_index: number; is_preview?: boolean;
 };
 
 const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3, accelerator: 3 };
@@ -88,7 +88,7 @@ function LessonPage() {
   }, [lesson?.id, module?.id]);
 
   const canAccess = hasCurriculumAccess(profile?.tier, module?.required_tier, isAdmin);
-  const locked = module ? (!canAccess && !module.is_preview) : false;
+  const locked = module ? (!canAccess && !module.is_preview && !lesson?.is_preview) : false;
 
   const idx = useMemo(() => siblings.findIndex((l) => l.id === lesson?.id), [siblings, lesson]);
   const prev = idx > 0 ? siblings[idx - 1] : null;

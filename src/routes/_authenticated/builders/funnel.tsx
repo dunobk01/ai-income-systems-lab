@@ -5,7 +5,8 @@ import { Loader2, Sparkles, Megaphone, Copy } from "lucide-react";
 import { generateFunnelPlan } from "@/lib/builders.functions";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
-import { Header, Field, Block, List, LockedView } from "./product";
+import { Header, Field, Block, List } from "./product";
+import { ToolPreview } from "@/components/tool-preview";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/builders/funnel")({
@@ -29,7 +30,31 @@ function FunnelBuilder() {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="Sales Funnel Builder" />;
+  if (!tierOk(profile?.tier, isAdmin))
+    return (
+      <ToolPreview
+        icon={<Megaphone className="h-5 w-5" />}
+        eyebrow="Builder"
+        title="Sales Funnel Builder"
+        subtitle="End-to-end funnel blueprint: hooks, lead magnet, landing page, emails, sales page, upsell."
+        requiredTier="builder"
+        inputs={["Your offer and price", "Audience and their main problem", "Traffic source you'll use", "Tools you already pay for"]}
+        produces={["Lead magnet concept + title options", "Landing page copy outline", "5-email nurture sequence", "Sales page structure and upsell path"]}
+        lockedActions={["generating a funnel", "saving blueprints", "copying the output"]}
+        example={
+          <>
+            <p className="font-medium text-foreground">Lead magnet: "The 10-Prompt Client Audit"</p>
+            <p>Landing hook: "Find the 3 leaks costing you clients — in one afternoon."</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Email 1 — deliver + quick win</li>
+              <li>Email 3 — case teardown</li>
+              <li>Email 5 — offer + FAQ objections</li>
+            </ul>
+            <p className="text-xs text-muted-foreground">Sample output. Real runs are built from your inputs.</p>
+          </>
+        }
+      />
+    );
 
   const submit = async () => {
     setLoading(true); setError(null); setPlan(null);

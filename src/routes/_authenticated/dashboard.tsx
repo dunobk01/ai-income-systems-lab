@@ -5,6 +5,9 @@ import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { OnboardingChecklist } from "@/components/onboarding-checklist";
+import { Badge } from "@/components/ui/badge";
+import { tierLabel, isFreeTier } from "@/lib/access";
+import { CURRICULUM_LABEL } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -18,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 const quickStart = [
-  { to: "/course", title: "Continue the course", desc: "15 modules · 89 lessons", icon: BookOpen, monthlyOk: true, builderOnly: false },
+  { to: "/course", title: "Continue the course", desc: CURRICULUM_LABEL, icon: BookOpen, monthlyOk: true, builderOnly: false },
   { to: "/prompts", title: "Open prompt library", desc: "Browse and save prompts", icon: Sparkles, monthlyOk: true, builderOnly: false },
   { to: "/starter-kit", title: "AI Tool Starter Kit", desc: "Tools, setup, recommended config", icon: Wrench, monthlyOk: true, builderOnly: false },
   { to: "/library", title: "Template Library", desc: "Flagship prompts, workflows, starters", icon: Library, monthlyOk: false, builderOnly: true },
@@ -82,17 +85,22 @@ function DashboardPage() {
 
       <div className="relative overflow-hidden rounded-3xl glass-strong p-8 sm:p-10">
         <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Welcome back</p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Welcome back</p>
+          <Badge variant="outline" className="text-[10px] uppercase border-white/15">{tierLabel(tier)} plan</Badge>
+        </div>
         <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
           Hey {name}, ready to <span className="text-gradient">ship something</span>?
         </h1>
         <p className="mt-3 text-muted-foreground max-w-xl">
-          Your lab is set up. Course content, prompts, and builders unlock based on your tier.
+          {isFreeTier(tier)
+            ? "You're on the permanent Free plan — Module 1, free sample lessons, and starter prompts are open, and every premium tool is visible to preview."
+            : "Your lab is set up. Course content, prompts, and builders are unlocked for your plan."}
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button asChild variant="brand"><Link to="/course">Open course <ArrowRight className="h-4 w-4" /></Link></Button>
-          {isNone && (
-            <Button asChild variant="glass"><Link to="/pricing">Unlock full access</Link></Button>
+          {isFreeTier(tier) && (
+            <Button asChild variant="glass"><Link to="/pricing">See what upgrading unlocks</Link></Button>
           )}
         </div>
       </div>
@@ -126,6 +134,7 @@ function DashboardPage() {
                 key={q.to}
                 to={q.to}
                 className="glass rounded-2xl p-5 hover:bg-white/8 transition flex items-start gap-3 group"
+                title={locked ? "Preview available — full access with a paid plan" : undefined}
               >
                 <div className="grid h-10 w-10 place-items-center rounded-lg shrink-0" style={{ background: "var(--gradient-soft)" }}>
                   {locked ? <Lock className="h-5 w-5 text-muted-foreground" /> : <q.icon className="h-5 w-5 text-[color:var(--brand)]" />}
@@ -133,6 +142,7 @@ function DashboardPage() {
                 <div className="min-w-0">
                   <p className="font-medium group-hover:text-gradient">{q.title}</p>
                   <p className="text-xs text-muted-foreground">{q.desc}</p>
+                  {locked && <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">Preview · upgrade to use</p>}
                 </div>
               </Link>
             );

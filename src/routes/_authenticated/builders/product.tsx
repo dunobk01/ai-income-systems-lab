@@ -5,6 +5,7 @@ import { Loader2, Sparkles, Package, Copy, Lock } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { generateProductPlan } from "@/lib/builders.functions";
 import { useAuth } from "@/lib/auth-context";
+import { ToolPreview } from "@/components/tool-preview";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +36,30 @@ function ProductBuilder() {
   const [error, setError] = useState<string | null>(null);
 
   if (!tierOk(profile?.tier, isAdmin)) {
-    return <LockedView title="Digital Product Builder" />;
+    return (
+      <ToolPreview
+        icon={<Package className="h-5 w-5" />}
+        eyebrow="Builder"
+        title="Digital Product Builder"
+        subtitle="Turn a fuzzy idea into a shippable product brief in 30 seconds."
+        requiredTier="builder"
+        inputs={["Your topic or skill", "Who it's for", "Format you prefer (course, template, guide…)", "Rough price range"]}
+        produces={["Product name + positioning angle", "Outline of every module or section", "Pricing tiers with what's in each", "Launch checklist and first-week promo plan"]}
+        lockedActions={["generating a brief", "saving briefs", "copying the output"]}
+        example={
+          <>
+            <p className="font-medium text-foreground">"The 7-Day Client Machine" — $79 template kit</p>
+            <p>Positioning: for freelancers who hate cold outreach; turns one case study into a repeatable pipeline.</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Section 1 — Offer teardown worksheet</li>
+              <li>Section 2 — Outreach sequence (5 emails + 3 DMs)</li>
+              <li>Section 3 — Automation map (n8n + Sheets)</li>
+            </ul>
+            <p className="text-xs text-muted-foreground">Real runs are tailored to your inputs — this is a sample.</p>
+          </>
+        }
+      />
+    );
   }
 
   const submit = async () => {

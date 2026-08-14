@@ -3,22 +3,22 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, Search, Star, Lock, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { Link } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { hasTier, isFreeTier, tierLabel } from "@/lib/access";
+import { useUpgradePrompt } from "@/components/upgrade-gate";
 
-type Tier = "starter" | "builder" | "pro";
-type Prompt = {
-  id: string; title: string; category: string; tool: string;
-  use_case: string | null; prompt_text: string; required_tier: Tier;
+type CatalogPrompt = {
+  id: string;
+  title: string;
+  category: string;
+  tool: string;
+  use_case: string | null;
+  required_tier: string;
   is_preview: boolean;
 };
-
-// Monthly subscribers see Starter prompts (part of the curriculum) but not
-// Builder/Pro prompts, which stay exclusive to the lifetime tiers.
-const tierRank: Record<string, number> = { none: 0, monthly: 1, starter: 1, builder: 2, pro: 3 };
 
 export const Route = createFileRoute("/_authenticated/prompts")({
   head: () => ({ meta: [{ title: "Prompt Library — AI Income Systems Lab" }] }),
@@ -27,7 +27,9 @@ export const Route = createFileRoute("/_authenticated/prompts")({
 
 function PromptsPage() {
   const { user, profile, isAdmin } = useAuth();
-  const [prompts, setPrompts] = useState<Prompt[]>([]);
+  const { prompt: promptUpgrade, dialog } = useUpgradePrompt();
+  const [prompts, setPrompts] = useState<CatalogPrompt[]>([]);
+  const [texts, setTexts] = useState<Record<string, string>>({});
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [savedIds, setSavedIds] = useState<Record<string, string>>({});
   const [q, setQ] = useState("");
@@ -40,9 +42,17 @@ function PromptsPage() {
   useEffect(() => {
     void (async () => {
       try {
-        const { data, error: err } = await supabase.from("prompts").select("*").order("category");
-        if (err) throw err;
-        setPrompts((data ?? []) as Prompt[]);
+        // Catalogue = every prompt's metadata (visible to all members).
+        // Full text only comes back for prompts the member's tier allows (RLS).
+        const [{ data: catalog, error: cErr }, { data: unlocked }] = await Promise.all([
+          supabase.rpc("prompt_catalog"),
+          supabase.from("prompts").select("id, prompt_text"),
+        ]);
+        if (cErr) throw cErr;
+        setPrompts((catalog ?? []) as CatalogPrompt[]);
+        const map: Record<string, string> = {};
+        (unlocked ?? []).forEach((p) => { map[p.id] = p.prompt_text; });
+        setTexts(map);
         if (user) {
           const { data: favs } = await supabase.from("saved_prompts").select("id, prompt_id").eq("user_id", user.id);
           const ids: Record<string, string> = {};
@@ -58,17 +68,15 @@ function PromptsPage() {
   const tools = useMemo(() => ["All", ...Array.from(new Set(prompts.map((p) => p.tool)))], [prompts]);
   const cats = useMemo(() => ["All", ...Array.from(new Set(prompts.map((p) => p.category)))], [prompts]);
 
-  const userRank = isAdmin ? 3 : tierRank[profile?.tier ?? "none"];
-
   const filtered = prompts.filter((p) => {
     if (onlySaved && !saved.has(p.id)) return false;
     if (tool !== "All" && p.tool !== tool) return false;
     if (category !== "All" && p.category !== category) return false;
-    if (q && !`${p.title} ${p.use_case} ${p.prompt_text}`.toLowerCase().includes(q.toLowerCase())) return false;
+    if (q && !`${p.title} ${p.use_case ?? ""} ${texts[p.id] ?? ""}`.toLowerCase().includes(q.toLowerCase())) return false;
     return true;
   });
 
-  const toggleSave = async (p: Prompt) => {
+  const toggleSave = async (p: CatalogPrompt) => {
     if (!user) return;
     if (saved.has(p.id)) {
       const id = savedIds[p.id];
@@ -84,17 +92,25 @@ function PromptsPage() {
     }
   };
 
-  const copy = async (p: Prompt) => {
-    await navigator.clipboard.writeText(p.prompt_text);
+  const copy = async (p: CatalogPrompt) => {
+    const text = texts[p.id];
+    if (!text) return;
+    await navigator.clipboard.writeText(text);
     toast.success("Prompt copied");
   };
 
+  const free = isFreeTier(profile?.tier) && !isAdmin;
+
   return (
     <div className="p-6 lg:p-10 max-w-6xl mx-auto">
+      {dialog}
       <div>
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Prompt library</p>
         <h1 className="mt-2 text-3xl sm:text-4xl font-bold">Battle-tested <span className="text-gradient">prompts</span></h1>
-        <p className="mt-2 text-muted-foreground max-w-2xl">Plug-and-play prompts for ChatGPT, Claude, and Perplexity. Copy, customize, ship.</p>
+        <p className="mt-2 text-muted-foreground max-w-2xl">
+          Plug-and-play prompts for ChatGPT, Claude, and Perplexity. Browse every prompt in the library —
+          {free ? " starter prompts are open on your Free plan, the rest unlock with a paid plan." : " copy, customize, ship."}
+        </p>
       </div>
 
       <div className="mt-6 glass rounded-2xl p-4 flex flex-col md:flex-row gap-3 md:items-center">
@@ -118,7 +134,9 @@ function PromptsPage() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {filtered.map((p) => {
-          const locked = userRank < tierRank[p.required_tier] && !p.is_preview;
+          const entitled = hasTier(profile?.tier, p.required_tier, isAdmin) || p.is_preview;
+          const text = texts[p.id];
+          const locked = !entitled || !text;
           const isSaved = saved.has(p.id);
           return (
             <article key={p.id} className="glass rounded-2xl p-5 flex flex-col">
@@ -128,8 +146,8 @@ function PromptsPage() {
                     <Badge variant="outline" className="border-white/15 text-[10px] uppercase">{p.tool}</Badge>
                     <Badge variant="outline" className="border-white/15 text-[10px] uppercase">{p.category}</Badge>
                     <Badge variant="outline" className="border-white/15 text-[10px] uppercase">{p.required_tier}</Badge>
-                    {p.is_preview && userRank < tierRank[p.required_tier] && (
-                      <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free preview</Badge>
+                    {p.is_preview && !hasTier(profile?.tier, p.required_tier, isAdmin) && (
+                      <Badge className="text-[10px] uppercase bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Free starter prompt</Badge>
                     )}
                   </div>
                   <h3 className="mt-2 font-semibold">{p.title}</h3>
@@ -140,13 +158,37 @@ function PromptsPage() {
                 </button>
               </div>
               {locked ? (
-                <div className="mt-4 rounded-lg bg-white/5 p-4 text-sm text-muted-foreground flex items-center justify-between gap-3">
-                  <span className="flex items-center gap-2"><Lock className="h-4 w-4" /> Unlock with {p.required_tier} tier</span>
-                  <Link to="/pricing" className="text-[color:var(--brand)] hover:underline text-xs">Upgrade →</Link>
+                <div className="mt-4 space-y-3">
+                  <div className="relative rounded-lg bg-black/30 p-3 overflow-hidden" aria-hidden>
+                    <pre className="text-xs font-mono text-foreground/40 blur-[3px] select-none whitespace-pre-wrap">
+{`You are a senior ${p.category.toLowerCase()} strategist working in ${p.tool}.\nContext: …\nGoal: …\nConstraints: …\nOutput format: …`}
+                    </pre>
+                    <div className="absolute inset-0 grid place-items-center">
+                      <Lock className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="brand"
+                    className="w-full"
+                    onClick={() =>
+                      promptUpgrade({
+                        action: `The full "${p.title}" prompt`,
+                        requiredTier: p.required_tier,
+                        benefits: [
+                          "Full text for every prompt in the library",
+                          "One-click copy into ChatGPT, Claude, or Perplexity",
+                          "New prompts added as the curriculum grows",
+                        ],
+                      })
+                    }
+                  >
+                    <Lock className="h-3 w-3" /> Unlock with {tierLabel(p.required_tier)}
+                  </Button>
                 </div>
               ) : (
                 <>
-                  <pre className="mt-3 text-xs bg-black/30 rounded-lg p-3 max-h-40 overflow-auto whitespace-pre-wrap font-mono text-foreground/80">{p.prompt_text}</pre>
+                  <pre className="mt-3 text-xs bg-black/30 rounded-lg p-3 max-h-40 overflow-auto whitespace-pre-wrap font-mono text-foreground/80">{text}</pre>
                   <div className="mt-3 flex justify-end">
                     <Button size="sm" variant="glass" onClick={() => copy(p)}><Copy className="h-3 w-3" /> Copy</Button>
                   </div>

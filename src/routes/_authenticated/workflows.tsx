@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
-import { Header, LockedView } from "./builders/product";
+import { Header } from "./builders/product";
+import { ToolPreview } from "@/components/tool-preview";
 
 export const Route = createFileRoute("/_authenticated/workflows")({
   head: () => ({ meta: [{ title: "n8n Workflows — AI Income Systems Lab" }] }),
@@ -92,7 +93,30 @@ const workflows: WF[] = [
 
 function WorkflowsPage() {
   const { profile, isAdmin } = useAuth();
-  if (!tierOk(profile?.tier, isAdmin)) return <LockedView title="n8n Workflow Library" />;
+  if (!tierOk(profile?.tier, isAdmin))
+    return (
+      <ToolPreview
+        icon={<Workflow className="h-5 w-5" />}
+        eyebrow="Library"
+        title="n8n Workflow Library"
+        subtitle="Production-ready automation templates. Copy the spec, build in n8n, save hours a week."
+        requiredTier="builder"
+        inputs={["An n8n account (free self-host or cloud)", "The API keys for the apps you connect"]}
+        produces={["Node-by-node build spec for each workflow", "Trigger, transform, and error-handling setup", "Copy-paste prompts for the AI nodes"]}
+        lockedActions={["viewing full specs", "copying workflow JSON prompts"]}
+        example={
+          <>
+            <p className="font-medium text-foreground">"Lead → CRM → Welcome Email"</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Webhook trigger from your site form</li>
+              <li>AI node scores and tags the lead</li>
+              <li>Upsert to CRM, then send a personalised welcome</li>
+            </ul>
+            <p className="text-xs text-muted-foreground">Every template ships with this level of detail.</p>
+          </>
+        }
+      />
+    );
   const copyJSON = (wf: WF) => { navigator.clipboard.writeText(JSON.stringify(wf, null, 2)); toast.success("Workflow spec copied"); };
   return (
     <div className="p-6 lg:p-10 max-w-6xl mx-auto">
