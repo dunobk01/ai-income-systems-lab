@@ -92,7 +92,7 @@ const tiers: Tier[] = [
     bestFor: "Beginners who want the full curriculum and a shippable first offer.",
     whyUpgrade: "All 15 core modules + 89 lessons. Learn the system end-to-end.",
     features: [
-      "Full 11-module course access",
+      "Full 15-module course access",
       "Searchable prompt library (12 starter prompts)",
       "Action steps + downloads on every lesson",
       "Progress tracking + private notes",

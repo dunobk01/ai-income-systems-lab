@@ -10,7 +10,7 @@ const products: Row[] = [
   {
     id: "ailab_starter_monthly",
     title: "Starter — Monthly Membership",
-    description: "Full 11-module course access. Learn the AI Income System end-to-end. Cancel anytime.",
+    description: "Full 15-module course access (89 lessons). Learn the AI Income System end-to-end. Cancel anytime.",
     link: `${BASE_URL}/pricing`,
     image_link: `${BASE_URL}/pinterest/pin-starter-monthly-v2.jpg`,
     price: "29.00 USD",
