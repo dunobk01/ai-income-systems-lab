@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, ShoppingBag, BookOpen, DollarSign, Mail } from "lucide-react";
+import { Users, ShoppingBag, BookOpen, DollarSign, Mail, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({ meta: [{ title: "Admin — AI Income Systems Lab" }] }),
