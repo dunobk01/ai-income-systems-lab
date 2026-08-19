@@ -73,6 +73,9 @@ function AdminPage() {
         <Link to="/admin/pillars" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3 py-2 text-sm">
           <BookOpen className="h-4 w-4" /> Manage pillar guides
         </Link>
+        <Link to="/admin/permissions" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3 py-2 text-sm">
+          <Shield className="h-4 w-4" /> Permission diagnostics
+        </Link>
       </div>
 
       {err && <div className="mt-6 text-sm text-red-300">{err}</div>}
