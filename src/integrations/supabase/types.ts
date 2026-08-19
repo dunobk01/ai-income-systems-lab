@@ -957,6 +957,7 @@ export type Database = {
         Returns: number
       }
       generate_referral_code: { Args: never; Returns: string }
+      get_permission_diagnostics: { Args: never; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

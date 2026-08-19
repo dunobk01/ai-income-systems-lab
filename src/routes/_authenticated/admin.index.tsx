@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, ShoppingBag, BookOpen, DollarSign, Mail } from "lucide-react";
+import { Users, ShoppingBag, BookOpen, DollarSign, Mail, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({ meta: [{ title: "Admin — AI Income Systems Lab" }] }),
@@ -72,6 +72,9 @@ function AdminPage() {
         </Link>
         <Link to="/admin/pillars" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3 py-2 text-sm">
           <BookOpen className="h-4 w-4" /> Manage pillar guides
+        </Link>
+        <Link to="/admin/permissions" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3 py-2 text-sm">
+          <Shield className="h-4 w-4" /> Permission diagnostics
         </Link>
       </div>
 
