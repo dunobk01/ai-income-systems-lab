@@ -123,7 +123,7 @@ export default function LandingPage() {
             </Button>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            No credit card. Your free account is permanent — start with Module 1 and free sample lessons,
+            No credit card needed. Unsubscribe anytime — start with Module 1 and free sample lessons,
             preview every tool, and upgrade only when you're ready.
           </p>
 
