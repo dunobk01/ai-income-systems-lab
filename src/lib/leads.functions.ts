@@ -1,41 +1,82 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+/**
+ * MailerLite audiences.
+ *
+ * - `leads` — general newsletter / content opt-ins.
+ * - `free`  — people who claimed the free lead magnet and are being nurtured
+ *             toward creating a permanent Free account.
+ */
+export const AUDIENCE_GROUPS = {
+  leads: "AI-Income-Systems Leads 1",
+  free: "AI-Income-Systems Free Members",
+} as const;
+
+export type Audience = keyof typeof AUDIENCE_GROUPS;
+
 const schema = z.object({
   email: z.string().email().max(255),
   source: z.string().max(100).optional(),
   lead_magnet: z.string().max(100).optional(),
+  audience: z.enum(["leads", "free"]).optional(),
+  // Honeypot — real users never fill this in.
+  company: z.string().max(100).optional(),
 });
 
-async function syncToMailerLite(email: string, source?: string | null, leadMagnet?: string | null) {
-  const apiKey = process.env.MAILERLITE_API_KEY;
-  if (!apiKey) return;
+const ML_BASE = "https://connect.mailerlite.com/api";
 
-  const headers = {
+function mlHeaders(apiKey: string) {
+  return {
     "Content-Type": "application/json",
     Accept: "application/json",
     Authorization: `Bearer ${apiKey}`,
   };
+}
+
+/** Find a MailerLite group by name, creating it if it doesn't exist yet. */
+async function resolveGroupId(apiKey: string, name: string): Promise<string | undefined> {
+  const headers = mlHeaders(apiKey);
+
+  const res = await fetch(`${ML_BASE}/groups?limit=200`, { headers });
+  if (res.ok) {
+    const body = (await res.json()) as { data?: Array<{ id: string; name: string }> };
+    const found = body.data?.find((g) => g.name === name);
+    if (found) return found.id;
+  }
+
+  const created = await fetch(`${ML_BASE}/groups`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ name }),
+  });
+  if (created.ok) {
+    const body = (await created.json()) as { data?: { id: string } };
+    return body.data?.id;
+  }
+  console.error("[mailerlite] group create failed", created.status, await created.text());
+  return undefined;
+}
+
+async function syncToMailerLite(
+  email: string,
+  opts: { source?: string | null; leadMagnet?: string | null; audience: Audience },
+) {
+  const apiKey = process.env.MAILERLITE_API_KEY;
+  if (!apiKey) return;
 
   try {
-    // Find the group ID for "AI-Income-Systems Leads 1"
-    const groupsRes = await fetch("https://connect.mailerlite.com/api/groups", { headers });
-    let groupId: string | undefined;
-    if (groupsRes.ok) {
-      const groupsData = (await groupsRes.json()) as { data?: Array<{ id: string; name: string }> };
-      const group = groupsData.data?.find((g) => g.name === "AI-Income-Systems Leads 1");
-      if (group) groupId = group.id;
-    }
+    const groupId = await resolveGroupId(apiKey, AUDIENCE_GROUPS[opts.audience]);
 
-    // Create/update subscriber
-    const subscriberRes = await fetch("https://connect.mailerlite.com/api/subscribers", {
+    const subscriberRes = await fetch(`${ML_BASE}/subscribers`, {
       method: "POST",
-      headers,
+      headers: mlHeaders(apiKey),
       body: JSON.stringify({
         email,
         fields: {
-          lead_source: source ?? undefined,
-          lead_magnet: leadMagnet ?? undefined,
+          lead_source: opts.source ?? undefined,
+          lead_magnet: opts.leadMagnet ?? undefined,
+          plan_status: opts.audience === "free" ? "free-lead" : undefined,
         },
         status: "active",
         groups: groupId ? [groupId] : undefined,
@@ -53,7 +94,12 @@ async function syncToMailerLite(email: string, source?: string | null, leadMagne
 export const submitLead = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => schema.parse(d))
   .handler(async ({ data }) => {
+    // Silently accept-and-drop honeypot hits so bots don't learn anything.
+    if (data.company && data.company.trim().length > 0) return { ok: true };
+
     const email = data.email.trim().toLowerCase();
+    const audience: Audience = data.audience ?? "leads";
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("leads").insert({
       email,
@@ -65,6 +111,61 @@ export const submitLead = createServerFn({ method: "POST" })
       throw new Error(error.message);
     }
     // Fire MailerLite sync; don't block the user on failures.
-    await syncToMailerLite(email, data.source, data.lead_magnet);
+    await syncToMailerLite(email, {
+      source: data.source,
+      leadMagnet: data.lead_magnet,
+      audience,
+    });
+    return { ok: true };
+  });
+
+/* ------------------------------------------------------------------ *
+ * Self-serve unsubscribe by email address.
+ *
+ * Works without a signed token so it can be used as the custom unsubscribe
+ * page URL in MailerLite, and from account settings. Always returns a
+ * generic success so the endpoint can't be used to enumerate subscribers.
+ * ------------------------------------------------------------------ */
+
+async function unsubscribeFromMailerLite(email: string) {
+  const apiKey = process.env.MAILERLITE_API_KEY;
+  if (!apiKey) return;
+  const headers = mlHeaders(apiKey);
+  try {
+    const res = await fetch(`${ML_BASE}/subscribers/${encodeURIComponent(email)}`, { headers });
+    if (!res.ok) return; // not a subscriber — nothing to do
+    const body = (await res.json()) as { data?: { id?: string } };
+    const id = body.data?.id;
+    if (!id) return;
+    const upd = await fetch(`${ML_BASE}/subscribers/${id}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({ status: "unsubscribed" }),
+    });
+    if (!upd.ok) console.error("[mailerlite] unsubscribe failed", upd.status, await upd.text());
+  } catch (err) {
+    console.error("[mailerlite] unsubscribe error", err);
+  }
+}
+
+export const unsubscribeByEmail = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) =>
+    z.object({ email: z.string().email().max(255), company: z.string().max(100).optional() }).parse(d),
+  )
+  .handler(async ({ data }) => {
+    if (data.company && data.company.trim().length > 0) return { ok: true };
+    const email = data.email.trim().toLowerCase();
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("suppressed_emails").insert({
+      email,
+      reason: "user_unsubscribed",
+      metadata: { via: "unsubscribe-page" },
+    });
+    if (error && !/duplicate key/i.test(error.message)) {
+      console.error("[unsubscribe] suppression insert failed", error.message);
+    }
+
+    await unsubscribeFromMailerLite(email);
     return { ok: true };
   });

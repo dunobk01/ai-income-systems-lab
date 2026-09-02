@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { ogImageMeta } from "@/lib/og";
 import { ExitIntentModal } from "@/components/exit-intent-modal";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
       { title: "Blog — AI Income Systems | Tips, Guides & Real Systems" },

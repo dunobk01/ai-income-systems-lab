@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { NewsletterEngagement } from "@/components/newsletter-engagement";
-import { Linkify } from "@/components/linkify";
+import { ProseContent } from "@/components/prose-content";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -121,11 +121,8 @@ function BlogPostPage() {
           {post.cover_image_url && (
             <img src={post.cover_image_url} alt={post.title} className="mt-8 w-full rounded-2xl border border-white/10" />
           )}
-          <div className="mt-10 text-base leading-relaxed text-foreground/90 space-y-5">
-            {(post.content ?? "").split(/\n{2,}/).map((para: string, i: number) => (
-              <p key={i} className="whitespace-pre-wrap"><Linkify text={para} /></p>
-            ))}
-          </div>
+          <ProseContent content={post.content ?? ""} />
+
 
           <NewsletterEngagement postId={post.id} />
 

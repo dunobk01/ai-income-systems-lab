@@ -25,12 +25,13 @@ import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CurriculumRouteImport } from './routes/curriculum'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as FreeIndexRouteImport } from './routes/free.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as VsSkoolRouteImport } from './routes/vs.skool'
 import { Route as VsMightyNetworksRouteImport } from './routes/vs.mighty-networks'
 import { Route as VsCircleRouteImport } from './routes/vs.circle'
@@ -38,6 +39,7 @@ import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
+import { Route as FreePlanRouteImport } from './routes/free.plan'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -45,7 +47,6 @@ import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedWinsRouteImport } from './routes/_authenticated/wins'
 import { Route as AuthenticatedWelcomeRouteImport } from './routes/_authenticated/welcome'
 import { Route as AuthenticatedStarterKitRouteImport } from './routes/_authenticated/starter-kit'
-import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedPromptsRouteImport } from './routes/_authenticated/prompts'
 import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
@@ -54,12 +55,14 @@ import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings.index'
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedCommunityIndexRouteImport } from './routes/_authenticated/community.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
+import { Route as AuthenticatedSettingsBillingRouteImport } from './routes/_authenticated/settings.billing'
 import { Route as AuthenticatedLibrarySlugRouteImport } from './routes/_authenticated/library.$slug'
 import { Route as AuthenticatedCommunityThreadIdRouteImport } from './routes/_authenticated/community.$threadId'
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
@@ -159,11 +162,6 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -187,6 +185,16 @@ const GuidesIndexRoute = GuidesIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => GuidesRoute,
+} as any)
+const FreeIndexRoute = FreeIndexRouteImport.update({
+  id: '/free/',
+  path: '/free/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const VsSkoolRoute = VsSkoolRouteImport.update({
   id: '/vs/skool',
@@ -223,6 +231,11 @@ const GuidesSlugRoute = GuidesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => GuidesRoute,
 } as any)
+const FreePlanRoute = FreePlanRouteImport.update({
+  id: '/free/plan',
+  path: '/free/plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -234,9 +247,9 @@ const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedWorkflowsRoute = AuthenticatedWorkflowsRouteImport.update({
   id: '/workflows',
@@ -256,11 +269,6 @@ const AuthenticatedWelcomeRoute = AuthenticatedWelcomeRouteImport.update({
 const AuthenticatedStarterKitRoute = AuthenticatedStarterKitRouteImport.update({
   id: '/starter-kit',
   path: '/starter-kit',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedPromptsRoute = AuthenticatedPromptsRouteImport.update({
@@ -305,6 +313,12 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedSettingsIndexRoute =
+  AuthenticatedSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedLibraryIndexRoute =
   AuthenticatedLibraryIndexRouteImport.update({
     id: '/library/',
@@ -334,10 +348,16 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogTagTagRoute = BlogTagTagRouteImport.update({
-  id: '/tag/$tag',
-  path: '/tag/$tag',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/tag/$tag',
+  path: '/blog/tag/$tag',
+  getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSettingsBillingRoute =
+  AuthenticatedSettingsBillingRouteImport.update({
+    id: '/settings/billing',
+    path: '/settings/billing',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedLibrarySlugRoute =
   AuthenticatedLibrarySlugRouteImport.update({
     id: '/library/$slug',
@@ -446,7 +466,6 @@ const AuthenticatedCourseModuleSlugLessonSlugRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -471,7 +490,6 @@ export interface FileRoutesByFullPath {
   '/messages': typeof AuthenticatedMessagesRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/prompts': typeof AuthenticatedPromptsRoute
-  '/settings': typeof AuthenticatedSettingsRoute
   '/starter-kit': typeof AuthenticatedStarterKitRoute
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/wins': typeof AuthenticatedWinsRoute
@@ -479,6 +497,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
@@ -486,6 +505,8 @@ export interface FileRoutesByFullPath {
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
+  '/blog/': typeof BlogIndexRoute
+  '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
@@ -499,12 +520,14 @@ export interface FileRoutesByFullPath {
   '/builders/product': typeof AuthenticatedBuildersProductRoute
   '/community/$threadId': typeof AuthenticatedCommunityThreadIdRoute
   '/library/$slug': typeof AuthenticatedLibrarySlugRoute
+  '/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/community/': typeof AuthenticatedCommunityIndexRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
   '/library/': typeof AuthenticatedLibraryIndexRoute
+  '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
@@ -516,7 +539,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -537,7 +559,6 @@ export interface FileRoutesByTo {
   '/messages': typeof AuthenticatedMessagesRoute
   '/progress': typeof AuthenticatedProgressRoute
   '/prompts': typeof AuthenticatedPromptsRoute
-  '/settings': typeof AuthenticatedSettingsRoute
   '/starter-kit': typeof AuthenticatedStarterKitRoute
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/wins': typeof AuthenticatedWinsRoute
@@ -545,6 +566,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
@@ -552,6 +574,8 @@ export interface FileRoutesByTo {
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
+  '/blog': typeof BlogIndexRoute
+  '/free': typeof FreeIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
   '/tools': typeof ToolsIndexRoute
@@ -565,12 +589,14 @@ export interface FileRoutesByTo {
   '/builders/product': typeof AuthenticatedBuildersProductRoute
   '/community/$threadId': typeof AuthenticatedCommunityThreadIdRoute
   '/library/$slug': typeof AuthenticatedLibrarySlugRoute
+  '/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/community': typeof AuthenticatedCommunityIndexRoute
   '/course': typeof AuthenticatedCourseIndexRoute
   '/library': typeof AuthenticatedLibraryIndexRoute
+  '/settings': typeof AuthenticatedSettingsIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
@@ -584,7 +610,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -609,7 +634,6 @@ export interface FileRoutesById {
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/_authenticated/prompts': typeof AuthenticatedPromptsRoute
-  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/starter-kit': typeof AuthenticatedStarterKitRoute
   '/_authenticated/welcome': typeof AuthenticatedWelcomeRoute
   '/_authenticated/wins': typeof AuthenticatedWinsRoute
@@ -617,6 +641,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
@@ -624,6 +649,8 @@ export interface FileRoutesById {
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
+  '/blog/': typeof BlogIndexRoute
+  '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
   '/tools/': typeof ToolsIndexRoute
@@ -637,12 +664,14 @@ export interface FileRoutesById {
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
   '/_authenticated/community/$threadId': typeof AuthenticatedCommunityThreadIdRoute
   '/_authenticated/library/$slug': typeof AuthenticatedLibrarySlugRoute
+  '/_authenticated/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/community/': typeof AuthenticatedCommunityIndexRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
   '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
+  '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
@@ -656,7 +685,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/blog'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -681,7 +709,6 @@ export interface FileRouteTypes {
     | '/messages'
     | '/progress'
     | '/prompts'
-    | '/settings'
     | '/starter-kit'
     | '/welcome'
     | '/wins'
@@ -689,6 +716,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free/plan'
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
@@ -696,6 +724,8 @@ export interface FileRouteTypes {
     | '/vs/circle'
     | '/vs/mighty-networks'
     | '/vs/skool'
+    | '/blog/'
+    | '/free/'
     | '/guides/'
     | '/newsletter/'
     | '/tools/'
@@ -709,12 +739,14 @@ export interface FileRouteTypes {
     | '/builders/product'
     | '/community/$threadId'
     | '/library/$slug'
+    | '/settings/billing'
     | '/blog/tag/$tag'
     | '/lovable/email/suppression'
     | '/admin/'
     | '/community/'
     | '/course/'
     | '/library/'
+    | '/settings/'
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
@@ -726,7 +758,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/blog'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -747,7 +778,6 @@ export interface FileRouteTypes {
     | '/messages'
     | '/progress'
     | '/prompts'
-    | '/settings'
     | '/starter-kit'
     | '/welcome'
     | '/wins'
@@ -755,6 +785,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free/plan'
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
@@ -762,6 +793,8 @@ export interface FileRouteTypes {
     | '/vs/circle'
     | '/vs/mighty-networks'
     | '/vs/skool'
+    | '/blog'
+    | '/free'
     | '/guides'
     | '/newsletter'
     | '/tools'
@@ -775,12 +808,14 @@ export interface FileRouteTypes {
     | '/builders/product'
     | '/community/$threadId'
     | '/library/$slug'
+    | '/settings/billing'
     | '/blog/tag/$tag'
     | '/lovable/email/suppression'
     | '/admin'
     | '/community'
     | '/course'
     | '/library'
+    | '/settings'
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
@@ -793,7 +828,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/blog'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -818,7 +852,6 @@ export interface FileRouteTypes {
     | '/_authenticated/messages'
     | '/_authenticated/progress'
     | '/_authenticated/prompts'
-    | '/_authenticated/settings'
     | '/_authenticated/starter-kit'
     | '/_authenticated/welcome'
     | '/_authenticated/wins'
@@ -826,6 +859,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free/plan'
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
@@ -833,6 +867,8 @@ export interface FileRouteTypes {
     | '/vs/circle'
     | '/vs/mighty-networks'
     | '/vs/skool'
+    | '/blog/'
+    | '/free/'
     | '/guides/'
     | '/newsletter/'
     | '/tools/'
@@ -846,12 +882,14 @@ export interface FileRouteTypes {
     | '/_authenticated/builders/product'
     | '/_authenticated/community/$threadId'
     | '/_authenticated/library/$slug'
+    | '/_authenticated/settings/billing'
     | '/blog/tag/$tag'
     | '/lovable/email/suppression'
     | '/_authenticated/admin/'
     | '/_authenticated/community/'
     | '/_authenticated/course/'
     | '/_authenticated/library/'
+    | '/_authenticated/settings/'
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
@@ -865,7 +903,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
@@ -884,14 +921,19 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
   VsCircleRoute: typeof VsCircleRoute
   VsMightyNetworksRoute: typeof VsMightyNetworksRoute
   VsSkoolRoute: typeof VsSkoolRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  FreeIndexRoute: typeof FreeIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  BlogTagTagRoute: typeof BlogTagTagRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicPinterestCatalogDottsvRoute: typeof ApiPublicPinterestCatalogDottsvRoute
@@ -1016,13 +1058,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -1057,6 +1092,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/guides/'
       preLoaderRoute: typeof GuidesIndexRouteImport
       parentRoute: typeof GuidesRoute
+    }
+    '/free/': {
+      id: '/free/'
+      path: '/free'
+      fullPath: '/free/'
+      preLoaderRoute: typeof FreeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/vs/skool': {
       id: '/vs/skool'
@@ -1107,6 +1156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesSlugRouteImport
       parentRoute: typeof GuidesRoute
     }
+    '/free/plan': {
+      id: '/free/plan'
+      path: '/free/plan'
+      fullPath: '/free/plan'
+      preLoaderRoute: typeof FreePlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
       path: '/email/unsubscribe'
@@ -1123,10 +1179,10 @@ declare module '@tanstack/react-router' {
     }
     '/blog/$slug': {
       id: '/blog/$slug'
-      path: '/$slug'
+      path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/workflows': {
       id: '/_authenticated/workflows'
@@ -1154,13 +1210,6 @@ declare module '@tanstack/react-router' {
       path: '/starter-kit'
       fullPath: '/starter-kit'
       preLoaderRoute: typeof AuthenticatedStarterKitRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/settings': {
-      id: '/_authenticated/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/prompts': {
@@ -1219,6 +1268,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/settings/': {
+      id: '/_authenticated/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/library/': {
       id: '/_authenticated/library/'
       path: '/library'
@@ -1256,10 +1312,17 @@ declare module '@tanstack/react-router' {
     }
     '/blog/tag/$tag': {
       id: '/blog/tag/$tag'
-      path: '/tag/$tag'
+      path: '/blog/tag/$tag'
       fullPath: '/blog/tag/$tag'
       preLoaderRoute: typeof BlogTagTagRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/settings/billing': {
+      id: '/_authenticated/settings/billing'
+      path: '/settings/billing'
+      fullPath: '/settings/billing'
+      preLoaderRoute: typeof AuthenticatedSettingsBillingRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/library/$slug': {
       id: '/_authenticated/library/$slug'
@@ -1414,7 +1477,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedPromptsRoute: typeof AuthenticatedPromptsRoute
-  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedStarterKitRoute: typeof AuthenticatedStarterKitRoute
   AuthenticatedWelcomeRoute: typeof AuthenticatedWelcomeRoute
   AuthenticatedWinsRoute: typeof AuthenticatedWinsRoute
@@ -1424,9 +1486,11 @@ interface AuthenticatedRouteChildren {
   AuthenticatedBuildersProductRoute: typeof AuthenticatedBuildersProductRoute
   AuthenticatedCommunityThreadIdRoute: typeof AuthenticatedCommunityThreadIdRoute
   AuthenticatedLibrarySlugRoute: typeof AuthenticatedLibrarySlugRoute
+  AuthenticatedSettingsBillingRoute: typeof AuthenticatedSettingsBillingRoute
   AuthenticatedCommunityIndexRoute: typeof AuthenticatedCommunityIndexRoute
   AuthenticatedCourseIndexRoute: typeof AuthenticatedCourseIndexRoute
   AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
+  AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
   AuthenticatedCourseModuleSlugLessonSlugRoute: typeof AuthenticatedCourseModuleSlugLessonSlugRoute
 }
 
@@ -1437,7 +1501,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedPromptsRoute: AuthenticatedPromptsRoute,
-  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedStarterKitRoute: AuthenticatedStarterKitRoute,
   AuthenticatedWelcomeRoute: AuthenticatedWelcomeRoute,
   AuthenticatedWinsRoute: AuthenticatedWinsRoute,
@@ -1447,9 +1510,11 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBuildersProductRoute: AuthenticatedBuildersProductRoute,
   AuthenticatedCommunityThreadIdRoute: AuthenticatedCommunityThreadIdRoute,
   AuthenticatedLibrarySlugRoute: AuthenticatedLibrarySlugRoute,
+  AuthenticatedSettingsBillingRoute: AuthenticatedSettingsBillingRoute,
   AuthenticatedCommunityIndexRoute: AuthenticatedCommunityIndexRoute,
   AuthenticatedCourseIndexRoute: AuthenticatedCourseIndexRoute,
   AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
+  AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   AuthenticatedCourseModuleSlugLessonSlugRoute:
     AuthenticatedCourseModuleSlugLessonSlugRoute,
 }
@@ -1457,18 +1522,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
-
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-  BlogTagTagRoute: typeof BlogTagTagRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-  BlogTagTagRoute: BlogTagTagRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface GuidesRouteChildren {
   GuidesSlugRoute: typeof GuidesSlugRoute
@@ -1512,7 +1565,6 @@ const ToolsRouteWithChildren = ToolsRoute._addFileChildren(ToolsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,
@@ -1532,14 +1584,19 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
   VsCircleRoute: VsCircleRoute,
   VsMightyNetworksRoute: VsMightyNetworksRoute,
   VsSkoolRoute: VsSkoolRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  FreeIndexRoute: FreeIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  BlogTagTagRoute: BlogTagTagRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicPinterestCatalogDottsvRoute: ApiPublicPinterestCatalogDottsvRoute,
