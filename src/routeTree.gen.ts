@@ -25,13 +25,13 @@ import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CurriculumRouteImport } from './routes/curriculum'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as FreeIndexRouteImport } from './routes/free.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as VsSkoolRouteImport } from './routes/vs.skool'
 import { Route as VsMightyNetworksRouteImport } from './routes/vs.mighty-networks'
 import { Route as VsCircleRouteImport } from './routes/vs.circle'
@@ -162,11 +162,6 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -194,6 +189,11 @@ const GuidesIndexRoute = GuidesIndexRouteImport.update({
 const FreeIndexRoute = FreeIndexRouteImport.update({
   id: '/free/',
   path: '/free/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VsSkoolRoute = VsSkoolRouteImport.update({
@@ -247,9 +247,9 @@ const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedWorkflowsRoute = AuthenticatedWorkflowsRouteImport.update({
   id: '/workflows',
@@ -348,9 +348,9 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogTagTagRoute = BlogTagTagRouteImport.update({
-  id: '/tag/$tag',
-  path: '/tag/$tag',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/tag/$tag',
+  path: '/blog/tag/$tag',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSettingsBillingRoute =
   AuthenticatedSettingsBillingRouteImport.update({
@@ -466,7 +466,6 @@ const AuthenticatedCourseModuleSlugLessonSlugRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -506,6 +505,7 @@ export interface FileRoutesByFullPath {
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
+  '/blog/': typeof BlogIndexRoute
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -539,7 +539,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -575,6 +574,7 @@ export interface FileRoutesByTo {
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
+  '/blog': typeof BlogIndexRoute
   '/free': typeof FreeIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
@@ -610,7 +610,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -650,6 +649,7 @@ export interface FileRoutesById {
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
+  '/blog/': typeof BlogIndexRoute
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -685,7 +685,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/blog'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -725,6 +724,7 @@ export interface FileRouteTypes {
     | '/vs/circle'
     | '/vs/mighty-networks'
     | '/vs/skool'
+    | '/blog/'
     | '/free/'
     | '/guides/'
     | '/newsletter/'
@@ -758,7 +758,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/blog'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -794,6 +793,7 @@ export interface FileRouteTypes {
     | '/vs/circle'
     | '/vs/mighty-networks'
     | '/vs/skool'
+    | '/blog'
     | '/free'
     | '/guides'
     | '/newsletter'
@@ -828,7 +828,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/blog'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -868,6 +867,7 @@ export interface FileRouteTypes {
     | '/vs/circle'
     | '/vs/mighty-networks'
     | '/vs/skool'
+    | '/blog/'
     | '/free/'
     | '/guides/'
     | '/newsletter/'
@@ -903,7 +903,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
@@ -922,6 +921,7 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   FreePlanRoute: typeof FreePlanRoute
@@ -929,9 +929,11 @@ export interface RootRouteChildren {
   VsCircleRoute: typeof VsCircleRoute
   VsMightyNetworksRoute: typeof VsMightyNetworksRoute
   VsSkoolRoute: typeof VsSkoolRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   FreeIndexRoute: typeof FreeIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  BlogTagTagRoute: typeof BlogTagTagRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicPinterestCatalogDottsvRoute: typeof ApiPublicPinterestCatalogDottsvRoute
@@ -1056,13 +1058,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -1103,6 +1098,13 @@ declare module '@tanstack/react-router' {
       path: '/free'
       fullPath: '/free/'
       preLoaderRoute: typeof FreeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/vs/skool': {
@@ -1177,10 +1179,10 @@ declare module '@tanstack/react-router' {
     }
     '/blog/$slug': {
       id: '/blog/$slug'
-      path: '/$slug'
+      path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/workflows': {
       id: '/_authenticated/workflows'
@@ -1310,10 +1312,10 @@ declare module '@tanstack/react-router' {
     }
     '/blog/tag/$tag': {
       id: '/blog/tag/$tag'
-      path: '/tag/$tag'
+      path: '/blog/tag/$tag'
       fullPath: '/blog/tag/$tag'
       preLoaderRoute: typeof BlogTagTagRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/settings/billing': {
       id: '/_authenticated/settings/billing'
@@ -1521,18 +1523,6 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-  BlogTagTagRoute: typeof BlogTagTagRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-  BlogTagTagRoute: BlogTagTagRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
-
 interface GuidesRouteChildren {
   GuidesSlugRoute: typeof GuidesSlugRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
@@ -1575,7 +1565,6 @@ const ToolsRouteWithChildren = ToolsRoute._addFileChildren(ToolsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,
@@ -1595,6 +1584,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   FreePlanRoute: FreePlanRoute,
@@ -1602,9 +1592,11 @@ const rootRouteChildren: RootRouteChildren = {
   VsCircleRoute: VsCircleRoute,
   VsMightyNetworksRoute: VsMightyNetworksRoute,
   VsSkoolRoute: VsSkoolRoute,
+  BlogIndexRoute: BlogIndexRoute,
   FreeIndexRoute: FreeIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  BlogTagTagRoute: BlogTagTagRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicPinterestCatalogDottsvRoute: ApiPublicPinterestCatalogDottsvRoute,
