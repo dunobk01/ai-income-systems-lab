@@ -198,3 +198,94 @@ export const getCheckoutSessionSummary = createServerFn({ method: "POST" })
       return { error: getStripeErrorMessage(error) };
     }
   });
+
+/* ------------------------------------------------------------------ *
+ * Self-serve billing (/settings/billing)
+ * ------------------------------------------------------------------ */
+
+type PortalResult = { url: string } | { error: string };
+
+/**
+ * Opens the Stripe-hosted billing portal for the signed-in member so they can
+ * update payment methods, download invoices, switch plans, or cancel.
+ */
+export const createPortalSession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { returnUrl?: string; environment: StripeEnv }) => data)
+  .handler(async ({ data, context }): Promise<PortalResult> => {
+    const { supabase, userId } = context;
+
+    const { data: sub } = await supabase
+      .from("subscriptions")
+      .select("stripe_customer_id")
+      .eq("user_id", userId)
+      .eq("environment", data.environment)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (!sub?.stripe_customer_id) {
+      return { error: "No billing account yet — start a plan first." };
+    }
+
+    try {
+      const stripe = createStripeClient(data.environment);
+      const portal = await stripe.billingPortal.sessions.create({
+        customer: sub.stripe_customer_id as string,
+        ...(data.returnUrl && { return_url: data.returnUrl }),
+      });
+      return { url: portal.url };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+type RenewalResult = { ok: true; cancelAtPeriodEnd: boolean; periodEnd: string | null } | { error: string };
+
+/**
+ * Cancel-at-period-end or resume any of the member's own active subscriptions.
+ * Ownership is enforced by reading the row through the caller's RLS session.
+ */
+export const setSubscriptionRenewal = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { subscriptionId: string; cancelAtPeriodEnd: boolean; environment: StripeEnv }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(data.subscriptionId)) throw new Error("Invalid subscription id");
+    return data;
+  })
+  .handler(async ({ data, context }): Promise<RenewalResult> => {
+    const { supabase, userId } = context;
+
+    const { data: row } = await supabase
+      .from("subscriptions")
+      .select("stripe_subscription_id, status")
+      .eq("id", data.subscriptionId)
+      .eq("user_id", userId)
+      .eq("environment", data.environment)
+      .maybeSingle();
+
+    if (!row?.stripe_subscription_id) return { error: "Subscription not found." };
+    if (!["active", "trialing", "past_due"].includes(row.status as string)) {
+      return { error: "That subscription is no longer active." };
+    }
+
+    try {
+      const stripe = createStripeClient(data.environment);
+      const sub = await stripe.subscriptions.update(row.stripe_subscription_id as string, {
+        cancel_at_period_end: data.cancelAtPeriodEnd,
+      });
+      const periodEnd = (sub as any).current_period_end
+        ? new Date((sub as any).current_period_end * 1000).toISOString()
+        : null;
+
+      // Keep the local row in sync immediately; the webhook will confirm.
+      await supabase
+        .from("subscriptions")
+        .update({ cancel_at_period_end: data.cancelAtPeriodEnd })
+        .eq("id", data.subscriptionId)
+        .eq("user_id", userId);
+
+      return { ok: true, cancelAtPeriodEnd: sub.cancel_at_period_end ?? data.cancelAtPeriodEnd, periodEnd };
+    } catch (error) {
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
