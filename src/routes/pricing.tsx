@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { LeadCapture } from "@/components/lead-capture";
 import { useAuth } from "@/lib/auth-context";
-import { ogImageMeta } from "@/lib/og";
+import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 import { ExitIntentModal } from "@/components/exit-intent-modal";
 
 const pricingFaqs = [
@@ -38,8 +38,11 @@ export const Route = createFileRoute("/pricing")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Product",
-          name: "AI Income Systems Lab",
+          name: "AI Income Systems Lab Membership",
           description: "Course + interactive builders teaching AI-powered digital products, funnels, automations, faceless video, image gen, and chatbots.",
+          image: [DEFAULT_OG_IMAGE],
+          url: "https://ai-income-systems.com/pricing",
+          sku: "ailab-membership",
           brand: { "@type": "Brand", name: "AI Income Systems Lab" },
           offers: [
             { "@type": "Offer", name: "Starter Monthly", price: "19.99", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
