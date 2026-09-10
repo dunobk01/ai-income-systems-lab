@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, Check, Loader2, Map, Mail, Sparkles, ShieldCheck } from "lucide-react";
+import { ArrowRight, Check, Download, Loader2, Map, Mail, Sparkles, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
