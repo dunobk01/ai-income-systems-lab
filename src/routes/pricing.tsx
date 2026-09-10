@@ -269,11 +269,7 @@ function PricingPage() {
                   <span className="text-5xl font-black">${price}</span>
                   <span className="text-sm text-muted-foreground">{suffix}</span>
                 </div>
-                {billing === "annual" && (
-                  <p className="mt-1 text-xs text-[color:var(--brand-2)]">
-                    Just ${Math.round(t.annual / 12)}/mo · Save ${t.monthly * 12 - t.annual}/year
-                  </p>
-                )}
+                <p className="mt-1 text-xs text-[color:var(--brand-2)]">Billed monthly · Cancel anytime</p>
                 <p className="mt-3 text-xs leading-relaxed text-[color:var(--brand-2)]/90 bg-[color:var(--brand-2)]/5 border border-[color:var(--brand-2)]/15 rounded-lg px-3 py-2">
                   <span className="font-semibold">Why this tier:</span> {t.whyUpgrade}
                 </p>
