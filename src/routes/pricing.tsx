@@ -244,9 +244,9 @@ function PricingPage() {
             const tierR = TIER_RANK[t.key];
             const isCurrent = !!user && currentTier === t.key;
             const isIncluded = !!user && currentRank > tierR;
-            const price = billing === "monthly" ? t.monthly : t.annual;
-            const suffix = billing === "monthly" ? "/month" : "/year";
-            const priceId = billing === "monthly" ? t.monthlyPriceId : t.annualPriceId;
+            const price = t.monthly.toFixed(2);
+            const suffix = "/month";
+            const priceId = t.monthlyPriceId;
             return (
               <div
                 key={t.name}
