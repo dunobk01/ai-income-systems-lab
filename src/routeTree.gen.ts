@@ -18,6 +18,7 @@ import { Route as SecurityRouteImport } from './routes/security'
 import { Route as RefundRouteImport } from './routes/refund'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as OsRouteImport } from './routes/os'
 import { Route as NewsletterRouteImport } from './routes/newsletter'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
@@ -127,6 +128,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OsRoute = OsRouteImport.update({
+  id: '/os',
+  path: '/os',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsletterRoute = NewsletterRouteImport.update({
@@ -486,6 +492,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/newsletter': typeof NewsletterRouteWithChildren
+  '/os': typeof OsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -559,6 +566,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
+  '/os': typeof OsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -634,6 +642,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/newsletter': typeof NewsletterRouteWithChildren
+  '/os': typeof OsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -711,6 +720,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/mcp'
     | '/newsletter'
+    | '/os'
     | '/pricing'
     | '/privacy'
     | '/refund'
@@ -784,6 +794,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/login'
     | '/mcp'
+    | '/os'
     | '/pricing'
     | '/privacy'
     | '/refund'
@@ -858,6 +869,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/mcp'
     | '/newsletter'
+    | '/os'
     | '/pricing'
     | '/privacy'
     | '/refund'
@@ -935,6 +947,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   McpRoute: typeof McpRoute
   NewsletterRoute: typeof NewsletterRouteWithChildren
+  OsRoute: typeof OsRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   RefundRoute: typeof RefundRoute
@@ -1033,6 +1046,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/os': {
+      id: '/os'
+      path: '/os'
+      fullPath: '/os'
+      preLoaderRoute: typeof OsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/newsletter': {
@@ -1613,6 +1633,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   McpRoute: McpRoute,
   NewsletterRoute: NewsletterRouteWithChildren,
+  OsRoute: OsRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   RefundRoute: RefundRoute,

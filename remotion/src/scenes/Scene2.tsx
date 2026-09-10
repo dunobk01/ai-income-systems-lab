@@ -1,92 +1,61 @@
-import { AbsoluteFill, useCurrentFrame, spring, interpolate, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
+import { Kinetic } from "../components/Kinetic";
+import { C, FONT } from "../theme";
 
+/** TURN — the promise: systems, not tools. */
 export const Scene2 = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const mainOpacity = spring({ frame: frame - 5, fps, config: { damping: 20, stiffness: 100 } });
-  const mainScale = spring({ frame: frame - 5, fps, config: { damping: 12, stiffness: 60 } });
-  const subtitleOpacity = spring({ frame: frame - 30, fps, config: { damping: 20, stiffness: 100 } });
+  const wipe = spring({ frame, fps, config: { damping: 200 } });
+  const wipeX = interpolate(wipe, [0, 1], [-1920, 0]);
 
-  const gradientShift = interpolate(frame, [0, 90], [0, 1], { extrapolateRight: "clamp" });
+  const pulse = 1 + Math.sin(frame / 6) * 0.02;
+  const underline = spring({ frame: frame - 34, fps, config: { damping: 14, stiffness: 120 } });
 
   return (
-    <AbsoluteFill
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 32,
-      }}
-    >
-      {/* Background glow */}
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
       <div
         style={{
           position: "absolute",
-          width: 600,
-          height: 600,
-          borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(168,85,247,${0.15 + gradientShift * 0.1}) 0%, transparent 70%)`,
-          top: "5%",
-          left: "50%",
-          transform: "translateX(-50%)",
+          inset: 0,
+          transform: `translateX(${wipeX}px)`,
+          background: "linear-gradient(100deg, rgba(232,184,75,0.10), rgba(255,107,61,0.06))",
         }}
       />
-
-      <div
+      <p
         style={{
-          opacity: mainOpacity,
-          transform: `scale(${0.85 + mainScale * 0.15})`,
-          textAlign: "center",
-          zIndex: 1,
+          fontFamily: FONT,
+          fontSize: 30,
+          letterSpacing: "0.35em",
+          textTransform: "uppercase",
+          color: C.muted,
+          opacity: interpolate(frame, [4, 18], [0, 1], { extrapolateRight: "clamp" }),
+          marginBottom: 26,
         }}
       >
-        <p
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: 80,
-            fontWeight: 900,
-            lineHeight: 1.08,
-            letterSpacing: "-0.03em",
-            color: "#F8FAFC",
-            maxWidth: 1200,
-          }}
-        >
-          Start shipping{" "}
-          <span
-            style={{
-              background: "linear-gradient(135deg, #6366F1, #A855F7)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              color: "transparent",
-            }}
-          >
-            income systems.
-          </span>
-        </p>
+        You need one thing
+      </p>
+      <div style={{ transform: `scale(${pulse})` }}>
+        <Kinetic text="A SYSTEM" delay={8} size={190} color={C.gold} shadow="0 0 70px rgba(232,184,75,0.35)" />
       </div>
-
       <div
         style={{
-          opacity: subtitleOpacity,
-          transform: `translateY(${(1 - subtitleOpacity) * 20}px)`,
-          textAlign: "center",
-          zIndex: 1,
+          marginTop: 18,
+          height: 10,
+          width: 520 * underline,
+          background: C.accent,
+          borderRadius: 99,
         }}
-      >
-        <p
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: 36,
-            fontWeight: 600,
-            color: "#94A3B8",
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-          }}
-        >
-          AI Income Systems Lab
-        </p>
+      />
+      <div style={{ marginTop: 40 }}>
+        <Kinetic
+          text="that runs while you sleep."
+          delay={40}
+          size={54}
+          color={C.white}
+          italic
+        />
       </div>
     </AbsoluteFill>
   );

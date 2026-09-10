@@ -29,11 +29,11 @@ await renderMedia({
   composition,
   serveUrl: bundled,
   codec: "h264",
-  outputLocation: "/mnt/documents/ai-income-systems-promo.mp4",
+  outputLocation: "/mnt/documents/ai-income-systems-ad-20s.mp4",
   puppeteerInstance: browser,
   muted: true,
   concurrency: 1,
 });
 
 await browser.close({ silent: false });
-console.log("Render complete: /mnt/documents/ai-income-systems-promo.mp4");
+console.log("Render complete: /mnt/documents/ai-income-systems-ad-20s.mp4");
