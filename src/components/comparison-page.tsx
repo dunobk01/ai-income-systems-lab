@@ -120,7 +120,7 @@ export function ComparisonPageView(props: ComparisonPageProps) {
         <div className="glass-strong rounded-3xl p-10 text-center relative overflow-hidden">
           <div className="absolute inset-0 -z-10" style={{ background: "var(--gradient-hero)" }} />
           <h2 className="text-2xl sm:text-3xl font-bold">Ready to build something you can sell?</h2>
-          <p className="mt-2 text-muted-foreground">Start Starter at $29/mo — cancel anytime.</p>
+          <p className="mt-2 text-muted-foreground">Start Starter at $19.99/mo — cancel anytime.</p>
           <Button asChild size="lg" variant="brand" className="mt-6 h-12 px-7">
             <Link to="/pricing">See pricing <ArrowRight className="h-4 w-4" /></Link>
           </Button>

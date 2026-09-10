@@ -11,20 +11,20 @@ const rows = [
   { label: "Community & discussions", us: true, them: true },
   { label: "Cohort/event scheduling", us: false, them: true },
   { label: "White-label branding", us: false, them: true },
-  { label: "Starts at", us: "$29/mo", them: "$41/mo (host)" },
+  { label: "Starts at", us: "$19.99/mo", them: "$41/mo (host)" },
   { label: "Focus", us: "AI income systems", them: "Host-your-own community" },
 ];
 
 const whyWeWin = [
   { title: "You want to earn, not host", body: "Mighty Networks is for people who want to run a community. We're for people who want to build AI income streams." },
   { title: "Everything is done for you", body: "Curriculum, prompts, tools, and workflows are already loaded. On Mighty, you start with an empty canvas and have to build it all yourself." },
-  { title: "Lower price, higher output", body: "$29/mo gets you full access. Mighty's host plans start higher and don't include any content or tools — you build those." },
+  { title: "Lower price, higher output", body: "$19.99/mo gets you full access. Mighty's host plans start higher and don't include any content or tools — you build those." },
 ];
 
 const faqs = [
   { q: "Is AI Income Systems a Mighty Networks alternative?", a: "Only if you were joining a Mighty community about AI income. We're not a host-your-own platform — we're a fully-built learning platform members join." },
   { q: "Can I create my own space here?", a: "No. AI Income Systems is a curated platform, not a community-building tool. If you want to host your own space, Mighty is a fine choice — for everything else, we're likely a better fit." },
-  { q: "Which is cheaper?", a: "For a member, we start at $29/mo. Mighty's host plans start higher and require you to create the content — so total cost varies." },
+  { q: "Which is cheaper?", a: "For a member, we start at $19.99/mo. Mighty's host plans start higher and require you to create the content — so total cost varies." },
 ];
 
 export const Route = createFileRoute("/vs/mighty-networks")({
