@@ -42,9 +42,9 @@ export const Route = createFileRoute("/pricing")({
           description: "Course + interactive builders teaching AI-powered digital products, funnels, automations, faceless video, image gen, and chatbots.",
           brand: { "@type": "Brand", name: "AI Income Systems Lab" },
           offers: [
-            { "@type": "Offer", name: "Starter Monthly", price: "29", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
-            { "@type": "Offer", name: "Builder Monthly", price: "79", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
-            { "@type": "Offer", name: "Accelerator Monthly", price: "149", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Starter Monthly", price: "19.99", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Builder Monthly", price: "29.99", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Accelerator Monthly", price: "44.99", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
           ],
         }),
       },
