@@ -206,35 +206,14 @@ function PricingPage() {
             </div>
           )}
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Monthly or annual · Cancel anytime
+            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Simple monthly pricing · Cancel anytime
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl font-black tracking-tight">
             Pick your <span className="text-gradient">level</span>
           </h1>
           <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-            Three tiers built around what you actually ship. Switch or cancel from Settings anytime. Annual plans get <strong className="text-foreground">2 months free</strong>.
+            Three tiers built around what you actually ship. Start free, then upgrade from <strong className="text-foreground">$19.99/month</strong>. Switch or cancel from Settings anytime.
           </p>
-
-          {/* Billing toggle */}
-          <div className="mt-7 inline-flex rounded-full glass p-1 text-sm">
-            <button
-              type="button"
-              onClick={() => setBilling("monthly")}
-              className={`px-5 py-2 rounded-full transition ${billing === "monthly" ? "bg-white/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              Monthly
-            </button>
-            <button
-              type="button"
-              onClick={() => setBilling("annual")}
-              className={`px-5 py-2 rounded-full transition flex items-center gap-2 ${billing === "annual" ? "bg-white/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              Annual
-              <span className="text-[10px] font-semibold text-background px-2 py-0.5 rounded-full" style={{ background: "var(--gradient-brand)" }}>
-                2 months free
-              </span>
-            </button>
-          </div>
         </div>
       </section>
 
