@@ -157,13 +157,17 @@ export const unsubscribeByEmail = createServerFn({ method: "POST" })
     const email = data.email.trim().toLowerCase();
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("suppressed_emails").insert({
-      email,
-      reason: "user_unsubscribed",
-      metadata: { via: "unsubscribe-page" },
-    });
-    if (error && !/duplicate key/i.test(error.message)) {
+    const { error } = await supabaseAdmin.from("suppressed_emails").upsert(
+      {
+        email,
+        reason: "unsubscribe",
+        metadata: { via: "unsubscribe-page" },
+      },
+      { onConflict: "email" },
+    );
+    if (error) {
       console.error("[unsubscribe] suppression insert failed", error.message);
+      throw new Error("Could not process unsubscribe");
     }
 
     await unsubscribeFromMailerLite(email);
