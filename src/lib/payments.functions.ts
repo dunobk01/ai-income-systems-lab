@@ -100,6 +100,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         return_url: data.returnUrl,
         customer: customerId,
         allow_promotion_codes: true,
+        // Always bill and display in USD — without this Stripe's Adaptive
+        // Pricing converts the amount to the buyer's local currency.
+        adaptive_pricing: { enabled: false },
         ...(isRecurring
           ? { subscription_data: { metadata: { userId, priceId: data.priceId } } }
           : { payment_intent_data: { description: product.name } }),
