@@ -16,6 +16,7 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><Link to="/pricing" className="hover:text-foreground">Pricing</Link></li>
             <li><Link to="/free" className="hover:text-foreground">Free 7-Day Plan</Link></li>
+            <li><Link to="/ai-business-engine" className="hover:text-foreground">Free AI Prompts + n8n Guide</Link></li>
             <li><Link to="/blog" className="hover:text-foreground">Blog</Link></li>
             <li><Link to="/contact" className="hover:text-foreground">Contact</Link></li>
             <li><a href="/#curriculum" className="hover:text-foreground">Curriculum</a></li>
