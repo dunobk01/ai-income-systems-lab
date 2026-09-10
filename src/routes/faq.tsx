@@ -55,8 +55,8 @@ const groups = [
   {
     label: "Pricing & access",
     faqs: [
-      { q: "What's the difference between Monthly and the lifetime tiers?", a: "Monthly ($14.99/mo) gives you full access for as long as you stay subscribed — best if you want low commitment. Lifetime tiers (Starter $29, Builder $79, Pro $149) are one-time payments and yours forever, including future updates. Lifetime is cheaper if you plan to stick around more than 6–12 months." },
-      { q: "What do the lifetime tiers include?", a: "Starter = course + prompt library. Builder = adds interactive builders + n8n workflow templates. Pro = adds the local business service kit + advanced templates + priority support. Full comparison on the pricing page." },
+      { q: "What do the plans cost?", a: "Starter is $19.99/mo, Builder is $29.99/mo, and Accelerator is $44.99/mo. There is also a permanent free plan with Module 1, sample lessons and tool guides. Every paid plan is monthly and cancel-anytime." },
+      { q: "What does each tier include?", a: "Starter = full course + prompt library. Builder = adds the community, template library and interactive builders. Accelerator = adds faceless video, AI image, chatbot agency modules and member DMs. Full comparison on the pricing page." },
       { q: "Can I upgrade later?", a: "Yes — upgrade any time and pay only the difference. No 'gotcha' pricing." },
       { q: "Do you offer refunds?", a: "Yes. 14-day refund window on every one-time (lifetime) tier — no questions asked. Monthly is cancel-anytime. Email support and you'll get it processed within 48 hours." },
       { q: "Is there a payment plan?", a: "The monthly tier is effectively the payment plan — start there, upgrade to a lifetime tier whenever it makes sense." },

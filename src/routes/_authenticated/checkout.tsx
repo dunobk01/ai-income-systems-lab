@@ -13,10 +13,6 @@ const PRICE_MAP: Record<string, PlanInfo> = {
   starter_monthly: { name: "Starter — Monthly", price: 19.99, priceId: "ailab_starter_monthly", recurring: "month", subline: "$19.99/month · Cancel anytime · Full core curriculum." },
   builder_monthly: { name: "Builder — Monthly", price: 29.99, priceId: "ailab_builder_monthly", recurring: "month", subline: "$29.99/month · Cancel anytime · Course + community + templates + builders." },
   accelerator_monthly: { name: "Accelerator — Monthly", price: 44.99, priceId: "ailab_accelerator_monthly", recurring: "month", subline: "$44.99/month · Cancel anytime · Everything + faceless video, image gen, chatbot modules, Pro builders, DMs." },
-  // Annual tiers (retired — kept routable for old links)
-  starter_annual: { name: "Starter — Annual (retired)", price: 290, priceId: "ailab_starter_annual", recurring: "year", subline: "$290/year (2 months free) · Cancel anytime." },
-  builder_annual: { name: "Builder — Annual", price: 790, priceId: "ailab_builder_annual", recurring: "year", subline: "$790/year (2 months free) · Cancel anytime." },
-  accelerator_annual: { name: "Accelerator — Annual", price: 1490, priceId: "ailab_accelerator_annual", recurring: "year", subline: "$1,490/year (2 months free) · Cancel anytime." },
   // Legacy (grandfathered): still routable in case checkout link is shared
   starter: { name: "Starter Lab (Legacy)", price: 29, priceId: "ailab_starter_onetime", recurring: null, subline: "One-time payment · Lifetime access · 14-day refund window." },
   builder: { name: "Builder Lab (Legacy)", price: 79, priceId: "ailab_builder_onetime", recurring: null, subline: "One-time payment · Lifetime access · 14-day refund window." },
@@ -28,7 +24,6 @@ export const Route = createFileRoute("/_authenticated/checkout")({
   validateSearch: z.object({
     tier: z.enum([
       "starter_monthly", "builder_monthly", "accelerator_monthly",
-      "starter_annual", "builder_annual", "accelerator_annual",
       "starter", "builder", "pro", "monthly",
     ]).optional(),
   }),

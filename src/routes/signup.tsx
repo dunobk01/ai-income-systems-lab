@@ -19,7 +19,6 @@ import { attachReferral } from "@/lib/referrals.functions";
 
 const TIER_KEYS = [
   "starter_monthly", "builder_monthly", "accelerator_monthly",
-  "starter_annual", "builder_annual", "accelerator_annual",
   "starter", "builder", "pro", "monthly",
 ] as const;
 

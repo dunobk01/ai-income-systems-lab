@@ -97,7 +97,7 @@ async function sendMonthlyCanceledEmail(opts: { to: string; periodEndISO: string
     subject: "Your membership has ended",
     html: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
       <h1 style="font-size:22px;margin:0 0 12px">Your All-Access Monthly membership has ended</h1>
-      <p style="color:#444;line-height:1.5">Course access ended on <strong>${date}</strong>. You can resubscribe anytime, or pick up lifetime access starting at $29.</p>
+      <p style="color:#444;line-height:1.5">Course access ended on <strong>${date}</strong>. You can resubscribe anytime — plans start at $19.99/month.</p>
       <p style="margin-top:24px"><a href="https://ai-income-systems.com/pricing" style="background:#111;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none">See plans</a></p>
     </div>`,
   });

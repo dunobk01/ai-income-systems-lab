@@ -120,9 +120,9 @@ function RefundPage() {
         </div>
 
         <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
-          <h2 className="text-lg font-semibold">6. Annual Plans</h2>
+          <h2 className="text-lg font-semibold">6. Monthly Billing</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Annual plans include 2 months free compared to paying monthly. If you cancel an annual plan after the 14-day guarantee period, you keep access through the end of the annual billing period. Annual plans are not prorated for partial use.
+            All memberships are billed monthly at $19.99 (Starter), $29.99 (Builder), or $44.99 (Accelerator). There are no annual plans or long-term contracts. Cancel anytime and keep access through the end of the month you paid for.
           </p>
         </div>
 
