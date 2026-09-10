@@ -26,7 +26,9 @@ HB = "Helvetica-Bold"
 MONO = "Courier"
 
 def S(name, **kw):
-    return ParagraphStyle(name, fontName=H, fontSize=10.5, leading=15.5, textColor=INK, **kw)
+    base = dict(fontName=H, fontSize=10.5, leading=15.5, textColor=INK)
+    base.update(kw)
+    return ParagraphStyle(name, **base)
 
 st = {
     "eyebrow": S("eyebrow", fontName=HB, fontSize=8.5, leading=11, textColor=GOLD, spaceAfter=6),
