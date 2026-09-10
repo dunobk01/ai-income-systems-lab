@@ -82,10 +82,8 @@ const tiers: Tier[] = [
   {
     name: "Starter",
     key: "starter",
-    monthly: 29,
-    annual: 290,
+    monthly: 19.99,
     monthlyPriceId: "starter_monthly",
-    annualPriceId: "starter_annual",
     tag: "Core course",
     bestFor: "Beginners who want the full curriculum and a shippable first offer.",
     whyUpgrade: "All 15 core modules + 89 lessons. Learn the system end-to-end.",
