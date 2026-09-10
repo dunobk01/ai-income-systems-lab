@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, Check, Clock, Copy, Loader2, Lock, Wrench, AlertTriangle } from "lucide-react";
+import { ArrowRight, Check, Clock, Copy, Download, Loader2, Lock, Wrench, AlertTriangle } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
@@ -147,6 +147,11 @@ function PlanBody() {
           ))}
         </ul>
         <p className="mt-4 text-xs text-muted-foreground">{FREE_KIT.honesty}</p>
+        <Button asChild variant="glass" className="mt-4">
+          <a href="/free/checklist.md" download>
+            <Download className="h-4 w-4" /> Download the full checklist
+          </a>
+        </Button>
       </section>
 
       <div className="mt-8 space-y-6">

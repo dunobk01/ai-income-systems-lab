@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, Check, Loader2, Map, Mail, Sparkles, ShieldCheck } from "lucide-react";
+import { ArrowRight, Check, Download, Loader2, Map, Mail, Sparkles, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
@@ -146,6 +146,11 @@ function FreeLandingPage() {
                   </p>
                   <Button variant="brand" className="mt-4 w-full" onClick={() => navigate({ to: "/free/plan" })}>
                     Open the 7-day map <ArrowRight className="h-4 w-4" />
+                  </Button>
+                  <Button asChild variant="glass" className="mt-2 w-full">
+                    <a href="/free/checklist.md" download>
+                      <Download className="h-4 w-4" /> Download the checklist
+                    </a>
                   </Button>
                 </div>
                 <div className="rounded-2xl border border-white/10 p-5">

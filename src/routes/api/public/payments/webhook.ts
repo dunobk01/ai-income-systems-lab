@@ -182,6 +182,14 @@ async function recordOneTimePurchase(session: any, env: StripeEnv) {
       amountCents,
       currency,
     });
+    const { mailerliteTrackUpgrade } = await import("@/lib/mailerlite.server");
+    await mailerliteTrackUpgrade({
+      email,
+      planId: priceId,
+      planLabel: TIER_LABEL[priceId] ?? priceId,
+      amountCents,
+      currency,
+    });
   }
 }
 
@@ -241,6 +249,17 @@ async function handleSubscriptionUpsert(sub: any, env: StripeEnv, isNew: boolean
     const email = await getUserEmail(userId);
     if (email && priceId === "ailab_monthly_subscription") {
       await sendMonthlyWelcomeEmail({ to: email, amountCents, currency });
+    }
+    if (email) {
+      // Free -> paid conversion signal for MailerLite reporting.
+      const { mailerliteTrackUpgrade } = await import("@/lib/mailerlite.server");
+      await mailerliteTrackUpgrade({
+        email,
+        planId: String(priceId ?? "unknown"),
+        planLabel: TIER_LABEL[String(priceId)] ?? String(priceId ?? "subscription"),
+        amountCents,
+        currency,
+      });
     }
   }
 }
