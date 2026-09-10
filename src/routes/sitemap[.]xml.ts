@@ -65,7 +65,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             .lte("published_at", new Date().toISOString())
             .order("published_at", { ascending: false })
             .limit(1000);
-          const tagSet = new Set<string>();
+          const tagCounts = new Map<string, number>();
           for (const p of (posts ?? []) as any[]) {
             const isBlog = p.post_type === "blog";
             entries.push({
@@ -74,10 +74,17 @@ export const Route = createFileRoute("/sitemap.xml")({
               changefreq: "monthly",
               priority: "0.7",
             });
-            for (const t of (p.tags ?? [])) tagSet.add(t);
+            for (const t of (p.tags ?? [])) {
+              const tag = String(t).trim();
+              if (!tag) continue;
+              tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+            }
           }
-          for (const t of Array.from(tagSet).sort()) {
-            entries.push({ path: `/blog/tag/${t}`, changefreq: "weekly", priority: "0.6" });
+          // Only list topic pages with real depth (2+ posts) so Google doesn't
+          // spend crawl budget on thin, near-duplicate listings.
+          for (const [tag, count] of Array.from(tagCounts.entries()).sort(([a], [b]) => a.localeCompare(b))) {
+            if (count < 2) continue;
+            entries.push({ path: `/blog/tag/${encodeURIComponent(tag)}`, changefreq: "weekly", priority: "0.6" });
           }
 
           // Pillar guides
