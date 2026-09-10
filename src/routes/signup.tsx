@@ -168,7 +168,11 @@ function SignupPage() {
             </Button>
           </form>
           <p className="mt-4 text-xs text-muted-foreground text-center">
-            By signing up, you agree to our terms. Joining is free — cancel anytime.
+            By signing up, you agree to our{" "}
+            <Link to="/terms" className="underline hover:text-foreground">
+              Terms & Conditions
+            </Link>
+            . Joining is free — cancel anytime.
           </p>
         </div>
       </div>
