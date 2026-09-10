@@ -24,9 +24,9 @@ export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing — AI Income Systems Lab" },
-      { name: "description", content: "Monthly or annual memberships. Starter $29/mo, Builder $79/mo, Accelerator $149/mo. Annual plans get 2 months free. Cancel anytime." },
+      { name: "description", content: "Simple monthly memberships. Starter $19.99/mo, Builder $29.99/mo, Accelerator $44.99/mo. Free plan included. Cancel anytime." },
       { property: "og:title", content: "Pricing — AI Income Systems Lab" },
-      { property: "og:description", content: "Three subscription tiers — Starter, Builder, Accelerator. Monthly or annual. Cancel anytime." },
+      { property: "og:description", content: "Three monthly tiers — Starter $19.99, Builder $29.99, Accelerator $44.99. Cancel anytime." },
       { property: "og:url", content: "https://ai-income-systems.com/pricing" },
     
       ...ogImageMeta(),
