@@ -182,6 +182,14 @@ async function recordOneTimePurchase(session: any, env: StripeEnv) {
       amountCents,
       currency,
     });
+    const { mailerliteTrackUpgrade } = await import("@/lib/mailerlite.server");
+    await mailerliteTrackUpgrade({
+      email,
+      planId: priceId,
+      planLabel: TIER_LABEL[priceId] ?? priceId,
+      amountCents,
+      currency,
+    });
   }
 }
 
