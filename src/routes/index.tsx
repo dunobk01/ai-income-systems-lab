@@ -92,6 +92,46 @@ const faqs = [
   { q: "What if I get stuck?", a: "Every lesson has action steps, copy-pasteable prompts, and example outputs. The builders generate plans tailored to your niche." },
 ];
 
+function LatestPosts() {
+  const { data } = useQuery({
+    queryKey: ["blog", "all"],
+    queryFn: () => listAllBlogPosts(),
+  });
+  const posts = (data?.posts ?? []).slice(0, 6);
+  if (!posts.length) return null;
+  return (
+    <section className="mx-auto max-w-7xl px-4 sm:px-6 py-20">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Latest from the blog</h2>
+          <p className="mt-2 text-muted-foreground">Free playbooks on AI automation, n8n, and building income systems.</p>
+        </div>
+        <Link to="/blog" className="hidden sm:inline-flex items-center gap-1 text-sm text-[color:var(--brand)]">
+          All posts <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((p) => (
+          <Link
+            key={p.id}
+            to="/blog/$slug"
+            params={{ slug: p.slug }}
+            className="glass rounded-2xl p-6 hover:border-[color:var(--brand)]/40 transition group"
+          >
+            <h3 className="text-lg font-bold group-hover:text-[color:var(--brand)] transition">{p.title}</h3>
+            {p.excerpt && <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{p.excerpt}</p>}
+          </Link>
+        ))}
+      </div>
+      <div className="mt-6 sm:hidden">
+        <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-[color:var(--brand)]">
+          All posts <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen">
