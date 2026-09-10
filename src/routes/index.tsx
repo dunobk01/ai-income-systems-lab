@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { listAllBlogPosts } from "@/lib/blog.functions";
 import {
   Sparkles, Rocket, Zap, Brain, Workflow, Bot, Search, Layers,
@@ -26,11 +25,15 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/" }],
   }),
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData({
-      queryKey: ["blog", "all"],
-      queryFn: () => listAllBlogPosts(),
-    });
+  // Resolve the posts fully in the loader (no streamed promise) so the SSR
+  // HTML and the hydrated client render identical markup.
+  loader: async () => {
+    try {
+      const res = await listAllBlogPosts();
+      return { posts: (res?.posts ?? []).slice(0, 6) };
+    } catch {
+      return { posts: [] };
+    }
   },
   component: LandingPage,
 });
@@ -101,11 +104,7 @@ const faqs = [
 ];
 
 function LatestPosts() {
-  const { data } = useQuery({
-    queryKey: ["blog", "all"],
-    queryFn: () => listAllBlogPosts(),
-  });
-  const posts = (data?.posts ?? []).slice(0, 6);
+  const { posts } = Route.useLoaderData();
   if (!posts.length) return null;
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 py-20">
