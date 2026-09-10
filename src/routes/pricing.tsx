@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { z } from "zod";
 import { Check, Sparkles, ArrowRight, X as XIcon } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -192,7 +192,6 @@ function PricingPage() {
   const currentTier = profile?.tier ?? "none";
   const currentRank = TIER_RANK[currentTier] ?? 0;
   const ctaTo = user ? "/checkout" : "/signup";
-  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
 
   return (
     <div className="min-h-screen">
@@ -297,12 +296,12 @@ function PricingPage() {
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-muted-foreground">
                   <th className="text-left font-medium px-5 py-4 w-1/3">Feature</th>
-                  <th className="text-center font-medium px-3 py-4">Starter<br /><span className="text-foreground font-bold normal-case tracking-normal">$29/mo</span></th>
+                  <th className="text-center font-medium px-3 py-4">Starter<br /><span className="text-foreground font-bold normal-case tracking-normal">$19.99/mo</span></th>
                   <th className="text-center font-medium px-3 py-4 bg-white/5">
-                    Builder<br /><span className="text-foreground font-bold normal-case tracking-normal">$79/mo</span>
+                    Builder<br /><span className="text-foreground font-bold normal-case tracking-normal">$29.99/mo</span>
                     <div className="mt-1 inline-block text-[10px] px-2 py-0.5 rounded-full text-background font-semibold" style={{ background: "var(--gradient-brand)" }}>Most popular</div>
                   </th>
-                  <th className="text-center font-medium px-3 py-4">Accelerator<br /><span className="text-foreground font-bold normal-case tracking-normal">$149/mo</span></th>
+                  <th className="text-center font-medium px-3 py-4">Accelerator<br /><span className="text-foreground font-bold normal-case tracking-normal">$44.99/mo</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -326,7 +325,7 @@ function PricingPage() {
           </div>
         </div>
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          Annual plans pay the same per-month rate × 10 (2 months free). Cancel anytime — your access continues through the end of your billing period.
+          Every plan is billed monthly. Cancel anytime — your access continues through the end of your billing period.
         </p>
       </section>
 
