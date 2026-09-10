@@ -168,7 +168,7 @@ function SignupPage() {
             </Button>
           </form>
           <p className="mt-4 text-xs text-muted-foreground text-center">
-            By signing up, you agree to our terms. Your free membership is permanent — no credit card, upgrade anytime.
+            By signing up, you agree to our terms. Joining is free — cancel anytime.
           </p>
         </div>
       </div>
