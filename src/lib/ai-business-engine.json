@@ -1,0 +1,289 @@
+{
+  "title": "The AI Business Engine",
+  "subtitle": "20 Professional Prompts + Full n8n Automation Guide",
+  "promise": "Turn ChatGPT, Claude, and Perplexity into a complete online income system — and automate all of it with n8n.",
+  "stats": [
+    { "value": "20", "label": "Engineered prompts" },
+    { "value": "4", "label": "Income categories" },
+    { "value": "5", "label": "AI tools covered" },
+    { "value": "$0", "label": "To get started" }
+  ],
+  "includesNote": "Includes: how I built ai-income-systems.com on Lovable using these exact prompts.",
+  "howToUse": {
+    "heading": "How to use these prompts",
+    "intro": "These are not templates — they are engineered systems. Each one has a role, a context layer, an output spec, and a format instruction. Here is how to get the most out of them.",
+    "items": [
+      {
+        "title": "Replace every [BRACKET]",
+        "text": "Every bracket is a variable. The more specific you are, the better the output. \u201cOnline business course creator\u201d beats \u201ccontent creator\u201d every time."
+      },
+      {
+        "title": "Start with Step 1 when there is a Perplexity step",
+        "text": "Several prompts are two-stage: Perplexity for research, then Claude or ChatGPT for the deliverable. Do not skip the research step — it is what makes the output feel custom instead of generic."
+      },
+      {
+        "title": "Run it, then refine",
+        "text": "These prompts get strong results on the first run. But the second run — after you tell the AI what you liked and what to adjust — is where the magic happens."
+      },
+      {
+        "title": "Use n8n to automate the repeatable ones",
+        "text": "Prompts 16\u201320 are designed to be automated. Once you have run them manually a few times and you like the output, wire them into n8n so they run on a schedule."
+      },
+      {
+        "title": "Build the Lovable spec in Claude first",
+        "text": "Prompt 07 is the secret weapon. Always write your Lovable spec in Claude before touching Lovable. That is exactly how ai-income-systems.com was built."
+      }
+    ]
+  },
+  "categories": [
+    {
+      "name": "Content Systems",
+      "range": "Prompts 01\u201305",
+      "blurb": "Build an audience and publish with authority on autopilot.",
+      "prompts": [
+        {
+          "n": "01",
+          "title": "The Authority Content Architect",
+          "subtitle": "Turns one core idea into a full 90-day content calendar across every platform.",
+          "tools": "Claude \u00b7 ChatGPT",
+          "body": "# ROLE\nYou are a professional content strategist and publishing architect with 10 years building authority brands in online business and AI.\n\n# CONTEXT\nMy business: [YOUR BUSINESS NAME AND NICHE]\nCore audience: [DESCRIBE YOUR IDEAL CUSTOMER]\nMain offer: [YOUR PRODUCT OR SERVICE]\nCurrent platforms: [LIST PLATFORMS YOU PUBLISH ON]\n\n# TASK\nBuild me a 90-day content system using this one core idea: [YOUR BIG IDEA]\n\n# OUTPUT REQUIREMENTS\n1. One \u201cpillar\u201d piece (long-form post, video script, or newsletter) per month \u2014 3 total\n2. Five derivative pieces per pillar, repurposed for each platform\n3. Five short-form micro-hooks per pillar for social\n4. The connecting narrative thread that makes all content feel like one brand story\n5. A simple publishing sequence: what goes out when, and in what order\n\n# FORMAT\nOrganise by month. Include specific titles, not placeholders. Make the hooks punchy \u2014 I need real copy I can use today.",
+          "produces": "A complete 90-day content calendar with specific titles, hooks, and a cross-platform repurposing strategy: 3 pillar pieces, 15 derivatives, and 15 micro-hooks, all tied to a single narrative that builds authority and drives your offer."
+        },
+        {
+          "n": "02",
+          "title": "The Newsletter Engine Starter",
+          "subtitle": "Generates a full newsletter issue that reads like a human wrote it at 2am and nailed it.",
+          "tools": "Claude",
+          "body": "# ROLE\nYou are a newsletter writer known for making AI and online business feel approachable, real, and useful \u2014 not corporate or hype-driven. Your tone is a smart friend who happens to know everything about this stuff.\n\n# THIS WEEK'S ISSUE\nTopic: [THIS WEEK'S TOPIC OR NEWS HOOK]\nMy take: [YOUR RAW OPINION \u2014 2\u20133 SENTENCES IS FINE]\nOne thing I learned this week: [REAL THING FROM YOUR WEEK]\nCurrent offer or CTA: [WHAT YOU WANT TO PROMOTE]\n\n# OUTPUT STRUCTURE\n- Subject line: 3 options (curiosity / direct benefit / controversial take)\n- Opening hook: 2\u20133 sentences that make them read further\n- Main section: insight or lesson, 400\u2013600 words, conversational\n- \u201cThis week's system\u201d: one actionable thing they can do today\n- Soft CTA that feels like a recommendation, not a pitch\n- P.S. line that adds one more value nugget\n\n# TONE RULES\n- No \u201cin today's fast-paced digital landscape\u201d\n- First person, casual, honest. Contractions always.\n- Sound like someone who is actually doing this, not observing it.",
+          "produces": "A complete, ready-to-send newsletter issue with 3 subject line options, full body copy, and a CTA that doesn't feel like a pitch. Plug in your raw inputs, get a polished issue in under 60 seconds."
+        },
+        {
+          "n": "03",
+          "title": "The Research Synthesizer",
+          "subtitle": "Uses Perplexity to turn any topic into a competitive intelligence brief in minutes.",
+          "tools": "Perplexity",
+          "body": "# USE IN: Perplexity (Pro mode recommended for deeper sources)\nI need a competitive intelligence brief on: [YOUR TOPIC OR NICHE]\n\n## MARKET LANDSCAPE\n- Who are the 5\u20137 main players in this space?\n- What are they charging, and how are they positioned?\n- What do their audiences complain about most? (Check Reddit, reviews, forums.)\n\n## CONTENT GAPS\n- What questions are people asking that nobody answers well?\n- What topics get search traffic but have weak coverage?\n\n## POSITIONING OPPORTUNITY\n- What angle is currently wide open?\n- What would make someone the obvious choice in this niche right now?\n\n## SOURCES\nCite all sources. I want real links, not summaries of summaries. Format the answer as a structured brief I can use as a strategy document.",
+          "produces": "A cited, sourced competitive brief with real market data, pricing intel, content gaps, and a clear positioning opportunity. Run this before launching anything."
+        },
+        {
+          "n": "04",
+          "title": "The Faceless Video Script Machine",
+          "subtitle": "Generates a complete short-form video script optimised for retention and shares.",
+          "tools": "ChatGPT \u00b7 Claude",
+          "body": "# ROLE\nYou are a short-form video scriptwriter for faceless educational channels with 100K+ subscribers. You hook fast, deliver dense value, and end with a reason to follow.\n\n# VIDEO BRIEF\nPlatform: [YOUTUBE SHORTS / TIKTOK / INSTAGRAM REELS]\nTopic: [YOUR TOPIC]\nTarget viewer: [WHO IS WATCHING]\nGoal: [GROW FOLLOWERS / DRIVE TO LEAD MAGNET / SELL PRODUCT]\nTarget length: [30 / 45 / 60 SECONDS]\n\n# SCRIPT STRUCTURE\n- Hook (0\u20133 sec): pattern interrupt. No \u201chey guys, welcome back.\u201d\n- Problem agitation (3\u201310 sec): make them feel the pain or curiosity\n- Value delivery (10\u201350 sec): useful content in punchy steps\n- CTA (last 5 sec): one clear, friction-free action\n\n# FORMAT\n- Include on-screen text suggestions in [brackets]\n- Mark timing for each section\n- Write the voiceover as natural speech, not formal copy\n- Give me 2 hook variations",
+          "produces": "A production-ready video script with timing, on-screen text suggestions, 2 hook options, and a CTA. Designed for faceless content \u2014 no face required."
+        },
+        {
+          "n": "05",
+          "title": "The Pinterest SEO Architect",
+          "subtitle": "Generates an entire Pinterest keyword and pin strategy for organic traffic from zero.",
+          "tools": "Perplexity \u00b7 Claude",
+          "body": "# STEP 1 \u2014 Run in Perplexity first\nResearch Pinterest keyword trends for: [YOUR NICHE]\nFind: trending searches, seasonal patterns, long-tail opportunities, and which pin formats are performing right now.\n\n# STEP 2 \u2014 Run in Claude with the Perplexity output\nYou are a Pinterest SEO strategist. I am starting from zero followers and need to drive organic traffic to my lead magnet within 60 days.\n\nMy niche: [YOUR NICHE]\nMy lead magnet: [TITLE AND WHAT IT OFFERS]\nLanding page URL: [YOUR URL]\nResearch: [PASTE STEP 1 OUTPUT HERE]\n\nDeliver:\n1. 10 Pinterest board names, keyword-optimised rather than creative\n2. 30 pin title templates I can customise\n3. 5 pin description templates with a hashtag strategy\n4. A 30-day posting cadence: pins per day and what types\n5. The 3 pin formats driving the most link clicks right now\n6. One \u201chero pin\u201d concept for my first viral attempt",
+          "produces": "A complete Pinterest traffic system: board strategy, 30 pin titles, description templates, and a 30-day posting plan designed to drive lead magnet downloads from day one with zero existing audience."
+        }
+      ]
+    },
+    {
+      "name": "Digital Product Creation",
+      "range": "Prompts 06\u201310",
+      "blurb": "Turn ideas and knowledge into sellable digital products.",
+      "prompts": [
+        {
+          "n": "06",
+          "title": "The Digital Product Blueprint Generator",
+          "subtitle": "Turns a topic idea into a fully structured, sellable digital product in one prompt.",
+          "tools": "Claude",
+          "body": "# ROLE\nYou are a digital product strategist who has designed 50+ info products generating $1M+ combined. You know what sells, what people finish, and how to structure knowledge for results and minimal refunds.\n\n# MY PRODUCT IDEA\nTopic: [YOUR IDEA IN ONE SENTENCE]\nTarget buyer: [WHO BUYS THIS AND WHY]\nPrice point: [$X]\nFormat: [PDF / VIDEO COURSE / TEMPLATE PACK / ETC.]\n\n# DELIVER\n1. Product title \u2014 3 options, clear transformation over clever wordplay\n2. A one-sentence value proposition that hits the emotional outcome\n3. A complete module outline with a description for each section\n4. The \u201cquick win\u201d: what can they do within 30 minutes of starting?\n5. A bonus idea that adds perceived value without extra production time\n6. Sales page headline (3 options) and 10 bullet points\n7. An honest risk assessment: what makes this hard to sell, and how to fix it\n\nBe direct. If my idea is weak, say so and tell me how to fix it.",
+          "produces": "A complete digital product blueprint: title options, full outline, quick-win structure, sales copy, and an honest critique. The difference between an idea and a product you can actually sell."
+        },
+        {
+          "n": "07",
+          "title": "The Lovable App Spec Writer",
+          "subtitle": "Generates a precise Lovable build prompt that actually works \u2014 no vague requests.",
+          "tools": "Claude \u00b7 Lovable",
+          "body": "# ABOUT THIS PROMPT\nTwo-stage prompt. Stage 1 runs in Claude to produce a Lovable-ready spec. Stage 2 is that spec, pasted directly into Lovable.\n\n# STAGE 1 \u2014 Run in Claude\nI am building a [TYPE OF APP OR SITE] using Lovable.\nMy app does: [CORE FUNCTION IN 2\u20133 SENTENCES]\nTarget user: [WHO USES IT]\nKey pages needed: [LIST THEM]\nDesign vibe: [DARK/LIGHT, MINIMAL/BOLD, REFERENCE SITES]\nMust-have features: [LIST CORE FEATURES]\nNice-to-have: [LIST OPTIONAL FEATURES]\n\nWrite a Lovable build prompt that:\n- Specifies the exact page structure and navigation\n- Describes UI components in enough detail for correct rendering\n- Includes a colour palette (hex codes), typography, and spacing feel\n- Lists all sections of each page in order, with content descriptions\n- Calls out integrations needed (Stripe, email capture, and so on)\n- Requests a mobile-responsive layout explicitly\n\nFormat the answer as a single clean prompt to paste directly into Lovable.",
+          "produces": "A Lovable-ready build spec specific enough to get real results on the first try. This is exactly how ai-income-systems.com was built: Claude spec \u2192 Lovable \u2192 live site."
+        },
+        {
+          "n": "08",
+          "title": "The Lead Magnet Converter",
+          "subtitle": "Takes any knowledge you have and turns it into a lead magnet people actually want.",
+          "tools": "Claude \u00b7 ChatGPT",
+          "body": "# ROLE\nYou are a conversion copywriter who specialises in lead magnets. You know the only ones that work solve a specific, immediate problem so well that getting the answer feels like cheating.\n\n# MY KNOWLEDGE BASE\nWhat I know or do well: [YOUR SKILLS, EXPERIENCE, OR KNOWLEDGE]\nMy audience's #1 frustration: [WHAT THEY STRUGGLE WITH MOST]\nMy email list leads to: [YOUR MAIN PRODUCT OR SERVICE]\n\n# DELIVER\n1. 5 lead magnet concepts: title, format, and what makes each irresistible\n2. For your top pick: a full table of contents or outline\n3. The opt-in page headline and subheadline\n4. The confirmation email subject line and first 3 sentences\n5. The one thing this must deliver in the first 2 minutes to justify every email I will ever send\n\n# SELECTION CRITERIA\nRank the 5 concepts by speed to create, conversion potential, and relevance to my offer. Be brutally honest about which one I should actually build.",
+          "produces": "5 ranked lead magnet concepts with outlines, opt-in copy, and the first email \u2014 plus a clear recommendation on which one to build first."
+        },
+        {
+          "n": "09",
+          "title": "The Pricing Architect",
+          "subtitle": "Designs a tiered pricing strategy that maximises revenue without pricing people out.",
+          "tools": "Claude \u00b7 Perplexity",
+          "body": "# ROLE\nYou are a SaaS and digital product pricing strategist. You have helped bootstrapped creators design tiered offers that convert across budget levels and maximise lifetime value without devaluing the brand.\n\n# MY OFFER\nWhat I sell: [DESCRIBE YOUR PRODUCT OR SERVICE CATEGORY]\nCurrent price (if any): [CURRENT PRICE OR \u201cNEW\u201d]\nCompetitor pricing: [PASTE RELEVANT PRICING DATA FROM PERPLEXITY]\nMy audience: [WHO BUYS AND THEIR BUDGET RANGE]\nMy costs: [WHAT IT COSTS YOU TO DELIVER]\n\n# DELIVER\n1. A 3-tier pricing structure with names, prices, and inclusions\n2. The anchor strategy: what makes the middle tier the obvious choice?\n3. One-time versus recurring: which model fits my offer better, and why?\n4. The price I should NOT charge, and why (the dead zone)\n5. A launch pricing strategy: start low and raise, or start at full price?\n6. One upsell that adds real value without new product creation",
+          "produces": "A complete pricing architecture with tier structure, anchor strategy, launch recommendation, and one ready-to-implement upsell \u2014 built for your specific offer and market."
+        },
+        {
+          "n": "10",
+          "title": "The Sales Page Writer",
+          "subtitle": "Long-form sales page copy that converts without sounding like a 2009 ClickBank product.",
+          "tools": "Claude",
+          "body": "# ROLE\nYou are a direct response copywriter with 15 years writing sales pages. You write with honest persuasion: no fake scarcity, no hollow hype \u2014 just a clear articulation of who this is for, what they get, and why.\n\n# PRODUCT INFO\nProduct name: [NAME]\nPrice: [PRICE]\nWhat it is: [DESCRIPTION]\nWho it is for: [IDEAL BUYER]\nThe #1 outcome: [MAIN TRANSFORMATION]\nWhat they have tried before: [PAST FAILED SOLUTIONS]\nObjections they will have: [LIST THE REAL OBJECTIONS]\nSocial proof: [TESTIMONIALS / RESULTS / YOUR OWN STORY]\n\n# WRITE THE FULL PAGE\nInclude: headline, subheadline, hook story, problem section, solution intro, feature and benefit breakdown, who it is for and who it is not for, social proof, pricing reveal, FAQ (5 questions), guarantee, and final CTA.\n\n# TONE\nConfident, clear, honest. Reads like a real person, not a template.",
+          "produces": "A complete, production-ready sales page \u2014 every section, every word \u2014 that you can drop straight into Lovable, Webflow, or any builder."
+        }
+      ]
+    },
+    {
+      "name": "Client Acquisition",
+      "range": "Prompts 11\u201315",
+      "blurb": "Find, pitch, and close clients without the awkward hustle.",
+      "prompts": [
+        {
+          "n": "11",
+          "title": "The Cold Outreach Engine",
+          "subtitle": "Generates personalised cold email sequences that get responses \u2014 not templates.",
+          "tools": "ChatGPT \u00b7 Perplexity",
+          "body": "# STEP 1 \u2014 Research the prospect in Perplexity\nResearch this company or person: [PROSPECT NAME + COMPANY]\nFind: recent news, what they are known for, current industry challenges, their content and social presence, and any public pain points.\n\n# STEP 2 \u2014 Write the sequence in ChatGPT\nYou are an outbound sales specialist who writes emails with 30%+ reply rates by being genuinely useful, not pitchy.\n\nMy service: [WHAT YOU DO]\nMy outcome for them: [WHAT RESULT I DELIVER]\nProspect research: [PASTE STEP 1 OUTPUT]\n\nWrite a 3-email sequence:\n- Email 1: pure value or observation. No ask. Reference something specific.\n- Email 2 (day 3): one case study plus one soft ask\n- Email 3 (day 8): the honest breakup email that often gets the most replies\n\n# RULES\n- Subject lines under 6 words\n- Email 1 under 75 words total\n- No \u201cI hope this email finds you well\u201d\n- One CTA maximum per email, never two",
+          "produces": "A 3-email cold outreach sequence personalised to your actual prospect \u2014 not a generic template. Built to get replies, not just opens."
+        },
+        {
+          "n": "12",
+          "title": "The Discovery Call Prep System",
+          "subtitle": "Preps you so thoroughly you sound like you have worked with them for months.",
+          "tools": "Perplexity \u00b7 Claude",
+          "body": "# STEP 1 \u2014 Research in Perplexity\nGive me a full business intelligence brief on: [PROSPECT / COMPANY]\nInclude: business model, revenue signals, team size, tech stack, recent activity, competitors, and likely challenges.\n\n# STEP 2 \u2014 Build the call framework in Claude\nI have a discovery call with [PROSPECT] in [X] hours.\nMy service: [WHAT I DO]\nTheir business context: [PASTE PERPLEXITY OUTPUT]\nMy goal for this call: [BOOK PROJECT / CLOSE DEAL / QUALIFY]\n\nBuild me:\n1. 5 diagnostic questions that show deep, non-generic knowledge\n2. The most likely objections and exactly how to handle them\n3. How to transition from discovery to proposal naturally\n4. One pattern-interrupt observation that shows I did my homework\n5. The close: how to end with a clear next step without being pushy",
+          "produces": "A complete call prep brief: questions, objection handlers, a natural close, and an opening line that differentiates you from every other vendor they will talk to."
+        },
+        {
+          "n": "13",
+          "title": "The Proposal Generator",
+          "subtitle": "Writes a complete client proposal that positions you as the obvious choice.",
+          "tools": "Claude",
+          "body": "# ROLE\nYou are a business development consultant who writes proposals that win. You know a proposal is not a list of services \u2014 it is a document that makes the client feel understood and certain.\n\n# PROJECT DETAILS\nClient: [CLIENT NAME]\nTheir stated problem: [WHAT THEY TOLD ME IN THE CALL]\nTheir real problem: [WHAT I THINK IS ACTUALLY GOING ON]\nMy proposed solution: [WHAT I WILL DO]\nTimeline: [HOW LONG]\nInvestment: [PRICE + PAYMENT TERMS]\n\n# WRITE THE PROPOSAL\n1. Executive summary: what I heard, what I recommend, what the outcome is\n2. Situation overview that shows I understand their world\n3. Proposed approach: what I will do, in what order, and why\n4. Timeline and milestones\n5. Investment breakdown, framing value before price\n6. Why me \u2014 specific, not generic\n7. Next steps: one clear action to move forward\n\n# TONE\nProfessional but warm. A peer conversation, not a pitch deck.",
+          "produces": "A complete client proposal \u2014 every section \u2014 that you can drop into a document and send the same day. Designed to win, not just inform."
+        },
+        {
+          "n": "14",
+          "title": "The Referral Activation Prompt",
+          "subtitle": "Designs a referral system and writes the exact messages to activate it.",
+          "tools": "Claude",
+          "body": "# CONTEXT\nMy business: [WHAT YOU DO OR SELL]\nCurrent clients or subscribers: [ROUGHLY HOW MANY]\nReferral incentive I can offer: [WHAT IS REALISTIC FOR ME]\nWhat the referred person gets: [THEIR BENEFIT]\n\n# DELIVER\n1. A referral system design: how it works, how it is tracked, what triggers payout\n2. The email to existing clients and subscribers asking for referrals \u2014 conversational, grateful, not corporate\n3. A follow-up for people who said they would refer but have not yet\n4. A simple thank-you message for when a referral converts\n5. Three ways to make referrals feel natural, not like an MLM\n\n# CONSTRAINT\nThis has to work with fewer than 100 subscribers. No fancy software \u2014 just email and simple tracking.",
+          "produces": "A complete referral system with email templates, a follow-up sequence, and a tracking method \u2014 built for small lists, no software required."
+        },
+        {
+          "n": "15",
+          "title": "The AI Agency Positioning Brief",
+          "subtitle": "Defines your AI service niche and the positioning that makes you the obvious expert.",
+          "tools": "Claude \u00b7 Perplexity",
+          "body": "# CONTEXT\nI want to offer AI automation services.\nIndustries I am considering: [LIST 3\u20135]\nMy background: [YOUR SKILLS]\nTools I know or am learning: [n8n, CHATGPT API, CLAUDE API, ETC.]\n\n# PERPLEXITY RESEARCH (run first)\nResearch: what AI automation problems are small businesses in [YOUR INDUSTRIES] paying to solve right now?\n\n# CLAUDE POSITIONING BUILD\nBased on my background and this research: [PASTE PERPLEXITY OUTPUT]\n\nDeliver:\n1. My recommended niche: industry + problem + offer\n2. My positioning statement \u2014 one sentence that makes my ideal client say \u201cthat's me\u201d\n3. Three services at three different price points\n4. How to describe what I do without saying \u201cAI automation\u201d (too generic)\n5. The first 5 businesses I should reach out to, and why\n6. What I need to demonstrate before my first sales call",
+          "produces": "A complete AI agency positioning strategy: your niche, services, pricing, and first 5 prospects \u2014 a blueprint for launching an agency that doesn't sound like everyone else."
+        }
+      ]
+    },
+    {
+      "name": "Revenue Automation",
+      "range": "Prompts 16\u201320",
+      "blurb": "Wire everything together so the business runs while you sleep.",
+      "prompts": [
+        {
+          "n": "16",
+          "title": "The Email Sequence Architect",
+          "subtitle": "Writes a 7-email nurture sequence that converts subscribers to buyers on autopilot.",
+          "tools": "Claude \u00b7 n8n",
+          "body": "# ROLE\nYou are an email marketing strategist who builds sequences that feel like conversations, not campaigns. The best converting emails would still be worth reading even if you never sold anything.\n\n# SEQUENCE CONTEXT\nLead magnet they downloaded: [TITLE AND WHAT IT COVERS]\nMy main offer: [WHAT I AM ULTIMATELY SELLING]\nPrice: [$X]\nAudience pain: [WHAT KEEPS THEM UP AT NIGHT]\nAudience desire: [WHAT THEY REALLY WANT]\nMy credibility: [WHAT MAKES ME QUALIFIED]\n\n# WRITE 7 EMAILS\nEmail 1 (day 0): welcome, lead magnet delivery, expectations\nEmail 2 (day 1): one insight that changes how they see the problem\nEmail 3 (day 3): a story that makes the solution real\nEmail 4 (day 5): the common mistake keeping them stuck\nEmail 5 (day 7): introduce the offer naturally \u2014 teach first, sell second\nEmail 6 (day 9): handle the #1 objection head-on\nEmail 7 (day 11): the honest close\n\nEach email: subject line + preview text + full body (200\u2013400 words).",
+          "produces": "7 complete emails \u2014 subject lines, preview text, full body \u2014 that run on autopilot and convert subscribers to buyers without you touching anything after setup."
+        },
+        {
+          "n": "17",
+          "title": "The n8n Workflow Designer",
+          "subtitle": "Designs a complete n8n automation for any business process \u2014 node by node.",
+          "tools": "Claude \u00b7 n8n",
+          "body": "# ROLE\nYou are an n8n automation specialist who designs workflows that work on the first run. You explain each node's purpose, not just its name, and flag common configuration pitfalls.\n\n# WORKFLOW REQUEST\nI want to automate: [DESCRIBE THE PROCESS IN PLAIN ENGLISH]\nTrigger: [NEW EMAIL / FORM SUBMISSION / SCHEDULE / WEBHOOK / ETC.]\nData inputs: [WHAT INFORMATION COMES IN]\nDesired output: [WHAT SHOULD HAPPEN AS A RESULT]\nApps involved: [LIST THE SERVICES THAT NEED TO CONNECT]\nn8n version: [CLOUD / SELF-HOSTED]\n\n# DELIVER\n1. A full workflow description \u2014 a text diagram showing nodes and connections\n2. Step-by-step configuration for each node\n3. Sample data to test with\n4. Common failure points and how to handle them\n5. Error handling so the workflow does not silently fail\n6. One phase-2 enhancement to make this more powerful",
+          "produces": "A complete n8n workflow design with node-by-node setup instructions, test data, and error handling guidance. Build your automation in one session instead of 12 open browser tabs."
+        },
+        {
+          "n": "18",
+          "title": "The Passive Income System Mapper",
+          "subtitle": "Maps your existing skills and content into a complete passive income architecture.",
+          "tools": "Claude \u00b7 Perplexity",
+          "body": "# ROLE\nYou are a digital business architect who helps people turn knowledge and skills into automated income streams. You are known for finding the minimum viable path \u2014 the fastest route to revenue before building complexity.\n\n# MY SITUATION\nMy skills and knowledge: [LIST EVERYTHING YOU KNOW OR DO WELL]\nTime I can invest: [HOURS PER WEEK]\nExisting assets (list, social, content): [WHAT I ALREADY HAVE]\nIncome goal in 90 days: [$X PER MONTH]\nWhat I absolutely will not do: [YOUR CONSTRAINTS]\n\n# DELIVER\n1. My income system map: all streams ranked by speed to revenue, effort required, and scalability\n2. My recommended 90-day path: the 3 streams to build, in order\n3. The automation layer: what gets automated once stream 1 works\n4. The first thing I should do tomorrow morning \u2014 one specific action\n5. The trap to avoid: what most people in my situation waste time on",
+          "produces": "A ranked passive income architecture built from your actual skills and constraints, including a specific 90-day action plan and the automation layer to scale it."
+        },
+        {
+          "n": "19",
+          "title": "The Customer Journey Automator",
+          "subtitle": "Designs the full automated customer experience from first click to repeat purchase.",
+          "tools": "Claude \u00b7 n8n",
+          "body": "# ROLE\nYou are a customer experience architect who designs automated journeys that feel human. The best automations feel like a smart team is watching and responding \u2014 not a drip sequence running on a timer.\n\n# MY BUSINESS\nWhat I sell: [YOUR PRODUCT OR SERVICE]\nPrice points: [LOW / MID / HIGH TICKET OFFERS]\nCurrent tools: [EMAIL PLATFORM, PAYMENT, ETC.]\nBiggest drop-off: [WHERE DO PEOPLE GO COLD OR ABANDON?]\n\n# DELIVER \u2014 map the complete automated journey\n1. Discovery \u2192 lead capture (first 5 minutes)\n2. Lead \u2192 first purchase (nurture logic and triggers)\n3. First purchase \u2192 completion (onboarding, quick win, check-in)\n4. Completion \u2192 repeat purchase (re-engagement and upsell triggers)\n5. Happy customer \u2192 referral (automated ask and follow-up)\n\nFor each stage: what the automation does, what triggers it, what it sends or shows, and what success looks like.",
+          "produces": "A complete automated customer journey map \u2014 every stage, trigger, and touchpoint \u2014 designed to run without you while feeling like attentive human service."
+        },
+        {
+          "n": "20",
+          "title": "The Monthly Revenue Review System",
+          "subtitle": "Builds an AI-powered monthly business review that tells you exactly what to do next.",
+          "tools": "Claude \u00b7 n8n",
+          "body": "# ROLE\nYou are a business analyst and growth advisor. I am giving you my raw monthly numbers and you are going to tell me what they mean and what I should do differently next month. Be direct \u2014 I need signal, not support.\n\n# THIS MONTH'S DATA\nRevenue: [TOTAL + BREAKDOWN BY PRODUCT OR SOURCE]\nNew leads and subscribers: [NUMBER AND SOURCE]\nEmail metrics: [OPEN RATE, CLICK RATE, UNSUBSCRIBES]\nTraffic: [SESSIONS, TOP SOURCES, CONVERSION RATE]\nContent published: [WHAT I PUT OUT AND WHERE]\nBiggest win this month: [WHAT WORKED]\nBiggest frustration: [WHAT DIDN'T]\n\n# DELIVER\n1. What the numbers actually tell me \u2014 not what I want to hear\n2. The one metric I should obsess over next month, and why\n3. What to stop doing, and why it is a distraction\n4. What to do more of, with specific targets\n5. One experiment to run, with a clear success metric\n6. My 3 priorities for next month, in order",
+          "produces": "A complete monthly business review: honest assessment, one metric to obsess over, what to stop, what to start, one experiment, and 3 priorities. Automate it in n8n: Schedule \u2192 input form \u2192 Claude API \u2192 email report."
+        }
+      ]
+    }
+  ],
+  "automation": {
+    "heading": "How to wire these into n8n",
+    "intro": "n8n is free, open-source, and more powerful than Zapier. Here is how to connect it to these prompt systems so they run themselves.",
+    "steps": [
+      {
+        "title": "Install n8n \u2014 free, 5 minutes",
+        "text": "Go to n8n.io and start on the cloud free tier. You get 5 active workflows on the free plan, which is enough to start. For unlimited workflows, self-host on Railway or Render for roughly $5 per month.",
+        "flow": "n8n.io \u2192 Sign up free \u2192 New workflow"
+      },
+      {
+        "title": "Connect your AI tools via API credentials",
+        "text": "In n8n: Settings \u2192 Credentials \u2192 New \u2192 OpenAI (for ChatGPT) or Anthropic (for Claude). Paste your API key. Get your OpenAI key at platform.openai.com/api-keys and your Claude key at console.anthropic.com. Each run costs fractions of a cent.",
+        "flow": "Settings \u2192 Credentials \u2192 Add credential \u2192 OpenAI / Anthropic"
+      },
+      {
+        "title": "Build your first workflow: the weekly content generator",
+        "text": "Trigger: Schedule, every Monday at 7am. Node 1: a Set node with your business context. Node 2: an OpenAI node containing Prompt 01 with your variables pre-filled. Node 3: a Gmail node that sends the output to you. You get a full week of content ideas every Monday morning, automatically.",
+        "flow": "Schedule \u2192 Set variables \u2192 OpenAI \u2192 Email you"
+      },
+      {
+        "title": "Chain prompts for multi-step workflows",
+        "text": "A lead magnet download triggers a webhook, Claude generates a personalised welcome email, your email provider sends it, and the result is logged to a Google Sheet. The Claude API call costs roughly $0.01\u2013$0.03 per email.",
+        "flow": "Webhook \u2192 Claude API \u2192 Format \u2192 Send email \u2192 Log to sheet"
+      },
+      {
+        "title": "Automate your monthly revenue review (Prompt 20)",
+        "text": "Set a monthly trigger for the 1st. Build a simple n8n form for your numbers. Run it through the Claude API with Prompt 20 as the system message and email the formatted report to yourself. Your monthly business review runs itself \u2014 you just fill in the numbers.",
+        "flow": "Monthly trigger \u2192 Form \u2192 Claude API \u2192 Email report"
+      }
+    ]
+  },
+  "buildStory": {
+    "heading": "How I built ai-income-systems.com",
+    "sub": "No code. No developer. Here is exactly how Lovable and Claude became a live business.",
+    "quote": "I built ai-income-systems.com in Lovable using these prompts. The trick is using Claude to write the spec first \u2014 then feeding that spec to Lovable.",
+    "paragraphs": [
+      "Lovable is an AI app builder that turns prompts into real, deployable web apps. Most people's first attempt looks rough because they prompt it like ChatGPT. The trick is using Claude to write the spec first, then feeding that spec to Lovable.",
+      "I used Prompt 07, The Lovable App Spec Writer, to generate a precise, structured build prompt that described every page, every section, the colour palette, the navigation, and the integrations. Then I dropped that into Lovable and had a working site in one session.",
+      "The whole thing \u2014 design, layout, content sections, Stripe integration plan, email capture \u2014 was built by describing what I wanted in plain English, having Claude formalise it into a Lovable-ready spec, and letting Lovable build it. Total lines of code I wrote: zero.",
+      "Every time I wanted to change something, I described the change to Claude first, got a precise Lovable prompt back, and pasted it in. The entire site was built in a single afternoon. Then it was live, on a real domain, taking real email signups."
+    ],
+    "steps": [
+      { "title": "Step 1 \u2014 Write the spec in Claude", "text": "Use Prompt 07 to generate a detailed Lovable build prompt with exact specs." },
+      { "title": "Step 2 \u2014 Paste into Lovable", "text": "lovable.dev \u2192 New project \u2192 paste your Claude-generated spec. The first build ships fast." },
+      { "title": "Step 3 \u2014 Iterate with Claude prompts", "text": "Want changes? Describe them to Claude first and get a precise Lovable prompt back." },
+      { "title": "Step 4 \u2014 Deploy live", "text": "Lovable deploys to its own URL instantly. Connect your custom domain in about 5 minutes." }
+    ]
+  },
+  "next": {
+    "heading": "You have the prompts. Now build the system.",
+    "intro": "These 20 prompts are the foundation. The full AI Income Systems Lab course shows you how to combine them into complete income systems \u2014 each one built, automated, and running before you move to the next.",
+    "bullets": [
+      "25 AI income blueprints, ranked by revenue potential and ease of build",
+      "The Workflow Rescue Co. blueprint \u2014 a complete AI automation agency setup",
+      "AI Front Desk, AI Lead Forge, Faceless Content Factory, and Newsletter Engine \u2014 full builds",
+      "Monthly prompt packs \u2014 new engineered prompts every month as AI tools evolve",
+      "The all-access membership with live builds, office hours, and community"
+    ],
+    "cta": "Visit ai-income-systems.com to get started."
+  },
+  "footer": "AI Income Systems Lab \u00b7 ai-income-systems.com \u00b7 Built with ChatGPT, Claude, Perplexity, Lovable, and n8n. \u00a9 2026 AI Income Systems Lab. Share freely. Please don't resell."
+}
