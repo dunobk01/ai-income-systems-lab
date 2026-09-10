@@ -152,6 +152,12 @@ type PurchaseSummary =
       currency: string;
       priceId: string | null;
       productLabel: string;
+      /** "month" | "year" for subscriptions, null for one-time purchases. */
+      interval: "day" | "week" | "month" | "year" | null;
+      /** ISO date of the next automatic charge (subscriptions only). */
+      nextBillingDate: string | null;
+      customerEmail: string | null;
+      paid: boolean;
     }
   | { error: string };
 
@@ -187,12 +193,40 @@ export const getCheckoutSessionSummary = createServerFn({ method: "POST" })
         (line?.price?.metadata as Record<string, string> | undefined)?.lovable_external_id ||
         (session.metadata?.priceId as string | undefined) ||
         null;
+
+      // Subscriptions: pull the live subscription so we can show the exact
+      // date of the next automatic charge instead of guessing from "today".
+      let interval: "day" | "week" | "month" | "year" | null =
+        line?.price?.recurring?.interval ?? null;
+      let nextBillingDate: string | null = null;
+      const subId =
+        typeof session.subscription === "string"
+          ? session.subscription
+          : session.subscription?.id ?? null;
+      if (subId) {
+        try {
+          const sub = (await stripe.subscriptions.retrieve(subId)) as unknown as {
+            current_period_end?: number;
+            items?: { data?: Array<{ current_period_end?: number; price?: { recurring?: { interval?: "day" | "week" | "month" | "year" } } }> };
+          };
+          const periodEnd = sub.current_period_end ?? sub.items?.data?.[0]?.current_period_end ?? null;
+          if (periodEnd) nextBillingDate = new Date(periodEnd * 1000).toISOString();
+          interval = interval ?? sub.items?.data?.[0]?.price?.recurring?.interval ?? null;
+        } catch {
+          // Non-fatal: the confirmation still renders without a renewal date.
+        }
+      }
+
       return {
         ok: true,
         amountCents: session.amount_total ?? 0,
         currency: (session.currency ?? "usd").toLowerCase(),
         priceId,
         productLabel: (priceId && RETURN_TIER_LABEL[priceId]) || "AI Income Systems Lab",
+        interval,
+        nextBillingDate,
+        customerEmail: session.customer_details?.email ?? null,
+        paid: session.payment_status !== "unpaid",
       };
     } catch (error) {
       return { error: getStripeErrorMessage(error) };
