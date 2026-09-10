@@ -152,6 +152,12 @@ type PurchaseSummary =
       currency: string;
       priceId: string | null;
       productLabel: string;
+      /** "month" | "year" for subscriptions, null for one-time purchases. */
+      interval: "day" | "week" | "month" | "year" | null;
+      /** ISO date of the next automatic charge (subscriptions only). */
+      nextBillingDate: string | null;
+      customerEmail: string | null;
+      paid: boolean;
     }
   | { error: string };
 
