@@ -115,10 +115,8 @@ const tiers: Tier[] = [
   {
     name: "Accelerator",
     key: "accelerator",
-    monthly: 149,
-    annual: 1490,
+    monthly: 44.99,
     monthlyPriceId: "accelerator_monthly",
-    annualPriceId: "accelerator_annual",
     tag: "All-in",
     bestFor: "Operators selling AI services or running multiple income systems.",
     whyUpgrade: "Everything above + faceless video, image gen, and chatbot agency modules. All builders + member DMs unlocked.",
