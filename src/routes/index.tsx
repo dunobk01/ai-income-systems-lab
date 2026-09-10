@@ -105,11 +105,7 @@ const faqs = [
 ];
 
 function LatestPosts() {
-  const { data } = useQuery({
-    queryKey: ["blog", "all"],
-    queryFn: () => listAllBlogPosts(),
-  });
-  const posts = (data?.posts ?? []).slice(0, 6);
+  const { posts } = Route.useLoaderData();
   if (!posts.length) return null;
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 py-20">
