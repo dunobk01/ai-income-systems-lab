@@ -250,6 +250,17 @@ async function handleSubscriptionUpsert(sub: any, env: StripeEnv, isNew: boolean
     if (email && priceId === "ailab_monthly_subscription") {
       await sendMonthlyWelcomeEmail({ to: email, amountCents, currency });
     }
+    if (email) {
+      // Free -> paid conversion signal for MailerLite reporting.
+      const { mailerliteTrackUpgrade } = await import("@/lib/mailerlite.server");
+      await mailerliteTrackUpgrade({
+        email,
+        planId: String(priceId ?? "unknown"),
+        planLabel: TIER_LABEL[String(priceId)] ?? String(priceId ?? "subscription"),
+        amountCents,
+        currency,
+      });
+    }
   }
 }
 
