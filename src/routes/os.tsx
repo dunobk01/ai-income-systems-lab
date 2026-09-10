@@ -140,6 +140,26 @@ function OperatingSystemPage() {
           into one system that keeps running after you close the laptop.
         </p>
 
+        {/* Video */}
+        <section className="mt-10">
+          <div className="glass-strong rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            <video
+              src="/videos/ai-income-systems-ad-20s.mp4"
+              poster="/og-image.jpg"
+              controls
+              playsInline
+              muted
+              autoPlay
+              loop
+              className="w-full aspect-video bg-black"
+              aria-label="20-second AI Income Systems Lab intro video"
+            />
+          </div>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Watch the 20-second preview, then grab the free guide below.
+          </p>
+        </section>
+
         {/* Capture */}
         <section id="get" className="mt-10 glass-strong rounded-3xl p-6 sm:p-8 relative overflow-hidden">
           <div className="absolute inset-0 -z-10 opacity-50" style={{ background: "var(--gradient-hero)" }} />
