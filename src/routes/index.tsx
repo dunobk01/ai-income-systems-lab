@@ -26,6 +26,12 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/" }],
   }),
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData({
+      queryKey: ["blog", "all"],
+      queryFn: () => listAllBlogPosts(),
+    });
+  },
   component: LandingPage,
 });
 
