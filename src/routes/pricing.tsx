@@ -70,9 +70,7 @@ type Tier = {
   name: string;
   key: TierKey;
   monthly: number;
-  annual: number;
   monthlyPriceId: string;
-  annualPriceId: string;
   tag: string;
   featured?: boolean;
   bestFor: string;
