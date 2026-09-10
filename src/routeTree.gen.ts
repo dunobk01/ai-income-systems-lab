@@ -40,6 +40,7 @@ import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as FreePlanRouteImport } from './routes/free.plan'
+import { Route as FreeChecklistDotmdRouteImport } from './routes/free.checklist[.]md'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -234,6 +235,11 @@ const GuidesSlugRoute = GuidesSlugRouteImport.update({
 const FreePlanRoute = FreePlanRouteImport.update({
   id: '/free/plan',
   path: '/free/plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FreeChecklistDotmdRoute = FreeChecklistDotmdRouteImport.update({
+  id: '/free/checklist.md',
+  path: '/free/checklist.md',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
@@ -497,6 +503,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
@@ -566,6 +573,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
@@ -641,6 +649,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
@@ -716,6 +725,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
     | '/newsletter/$slug'
@@ -785,6 +795,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
     | '/newsletter/$slug'
@@ -859,6 +870,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
     | '/newsletter/$slug'
@@ -924,6 +936,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
   VsCircleRoute: typeof VsCircleRoute
@@ -1161,6 +1174,13 @@ declare module '@tanstack/react-router' {
       path: '/free/plan'
       fullPath: '/free/plan'
       preLoaderRoute: typeof FreePlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free/checklist.md': {
+      id: '/free/checklist.md'
+      path: '/free/checklist.md'
+      fullPath: '/free/checklist.md'
+      preLoaderRoute: typeof FreeChecklistDotmdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
@@ -1587,6 +1607,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
   VsCircleRoute: VsCircleRoute,
