@@ -586,6 +586,8 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <LatestPosts />
+
       {/* FINAL CTA */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="glass-strong rounded-3xl p-10 sm:p-14 text-center relative overflow-hidden">
