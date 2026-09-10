@@ -98,10 +98,8 @@ const tiers: Tier[] = [
   {
     name: "Builder",
     key: "builder",
-    monthly: 79,
-    annual: 790,
+    monthly: 29.99,
     monthlyPriceId: "builder_monthly",
-    annualPriceId: "builder_annual",
     tag: "Most popular",
     featured: true,
     bestFor: "Creators ready to launch products, funnels, and offers with AI shortcuts.",
