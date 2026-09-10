@@ -147,6 +147,11 @@ function FreeLandingPage() {
                   <Button variant="brand" className="mt-4 w-full" onClick={() => navigate({ to: "/free/plan" })}>
                     Open the 7-day map <ArrowRight className="h-4 w-4" />
                   </Button>
+                  <Button asChild variant="glass" className="mt-2 w-full">
+                    <a href="/free/checklist.md" download>
+                      <Download className="h-4 w-4" /> Download the checklist
+                    </a>
+                  </Button>
                 </div>
                 <div className="rounded-2xl border border-white/10 p-5">
                   <ShieldCheck className="h-5 w-5 text-[color:var(--brand-2)]" />
