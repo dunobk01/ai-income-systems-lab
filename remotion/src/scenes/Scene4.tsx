@@ -1,102 +1,68 @@
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
+import { C, FONT } from "../theme";
 
-const stats = [
-  { value: 2400, suffix: "+", label: "builders enrolled" },
-  { value: 11, suffix: "", label: "modules" },
-  { value: 90, suffix: "+", label: "lessons" },
-  { value: 7, suffix: "", label: "days to first system" },
+const STATS = [
+  { v: "15", l: "modules" },
+  { v: "89", l: "lessons" },
+  { v: "$0", l: "to start" },
 ];
 
-function formatNumber(n: number) {
-  return n.toLocaleString();
-}
-
+/** BRAND REVEAL. */
 export const Scene4 = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const headerOpacity = spring({ frame, fps, config: { damping: 20, stiffness: 100 } });
+  const reveal = spring({ frame, fps, config: { damping: 16, stiffness: 130 } });
+  const clip = interpolate(reveal, [0, 1], [100, 0]);
+  const glow = 0.35 + Math.sin(frame / 9) * 0.15;
 
   return (
-    <AbsoluteFill
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 64,
-      }}
-    >
-      <div style={{ opacity: headerOpacity, textAlign: "center" }}>
-        <p
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: 28,
-            fontWeight: 700,
-            color: "#94A3B8",
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-          }}
-        >
-          By the numbers
-        </p>
-      </div>
-
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "48px 80px",
-          zIndex: 1,
+          fontFamily: FONT,
+          fontWeight: 900,
+          fontSize: 130,
+          letterSpacing: "-0.05em",
+          color: C.white,
+          textAlign: "center",
+          lineHeight: 1.0,
+          clipPath: `inset(0 ${clip}% 0 0)`,
+          textShadow: `0 0 90px rgba(232,184,75,${glow})`,
         }}
       >
-        {stats.map((stat, i) => {
-          const delay = i * 5;
-          const statProgress = spring({
-            frame: frame - 15 - delay,
-            fps,
-            config: { damping: 15, stiffness: 60 },
-          });
-          const countUp = Math.round(stat.value * statProgress);
+        AI INCOME
+        <br />
+        <span style={{ color: C.gold }}>SYSTEMS LAB</span>
+      </div>
 
+      <div style={{ display: "flex", gap: 70, marginTop: 62 }}>
+        {STATS.map((s, i) => {
+          const sp = spring({ frame: frame - 26 - i * 7, fps, config: { damping: 9, stiffness: 220 } });
           return (
             <div
-              key={stat.label}
+              key={s.l}
               style={{
                 textAlign: "center",
-                opacity: spring({
-                  frame: frame - 10 - delay,
-                  fps,
-                  config: { damping: 20, stiffness: 100 },
-                }),
+                opacity: sp,
+                transform: `scale(${interpolate(sp, [0, 1], [0.4, 1])})`,
               }}
             >
-              <p
+              <div style={{ fontFamily: FONT, fontWeight: 900, fontSize: 96, color: C.gold, lineHeight: 1 }}>
+                {s.v}
+              </div>
+              <div
                 style={{
-                  fontFamily: "Arial, sans-serif",
-                  fontSize: 96,
-                  fontWeight: 900,
-                  lineHeight: 1,
-                  letterSpacing: "-0.03em",
-                  background: "linear-gradient(135deg, #6366F1, #A855F7)",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
+                  fontFamily: FONT,
+                  fontSize: 24,
+                  letterSpacing: "0.28em",
+                  textTransform: "uppercase",
+                  color: C.muted,
+                  marginTop: 10,
                 }}
               >
-                {formatNumber(countUp)}{stat.suffix}
-              </p>
-              <p
-                style={{
-                  fontFamily: "Arial, sans-serif",
-                  fontSize: 22,
-                  fontWeight: 500,
-                  color: "#94A3B8",
-                  marginTop: 12,
-                }}
-              >
-                {stat.label}
-              </p>
+                {s.l}
+              </div>
             </div>
           );
         })}
