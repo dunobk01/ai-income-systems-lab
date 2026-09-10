@@ -26,11 +26,15 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/" }],
   }),
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData({
-      queryKey: ["blog", "all"],
-      queryFn: () => listAllBlogPosts(),
-    });
+  // Resolve the posts fully in the loader (no streamed promise) so the SSR
+  // HTML and the hydrated client render identical markup.
+  loader: async () => {
+    try {
+      const res = await listAllBlogPosts();
+      return { posts: (res?.posts ?? []).slice(0, 6) };
+    } catch {
+      return { posts: [] };
+    }
   },
   component: LandingPage,
 });
