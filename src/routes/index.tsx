@@ -483,7 +483,7 @@ export default function LandingPage() {
           {[
             { k: "Cancel", v: "Anytime — keep access through your billing period" },
             { k: "0", v: "Hidden fees, upsells, or surprise charges" },
-            { k: "2 mo", v: "Free when you choose any annual plan" },
+            { k: "Free", v: "Permanent free plan — no card needed" },
           ].map((t) => (
             <div key={t.v} className="glass rounded-2xl p-5 text-center">
               <p className="text-2xl font-black text-gradient">{t.k}</p>
@@ -499,12 +499,12 @@ export default function LandingPage() {
           <div className="absolute inset-0 -z-10 opacity-60" style={{ background: "var(--gradient-hero)" }} />
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Pricing</p>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">Pick your plan. Cancel anytime.</h2>
-          <p className="mt-3 text-muted-foreground">Three subscription tiers — monthly or annual. Annual plans get <strong className="text-foreground">2 months free</strong>.</p>
+          <p className="mt-3 text-muted-foreground">Three simple monthly tiers, starting at <strong className="text-foreground">$19.99/month</strong>.</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-3 text-left">
             {[
-              { name: "Starter", price: "$29", note: "/mo · Core course + prompts" },
-              { name: "Builder", price: "$79", note: "/mo · + community, builders, templates", featured: true },
-              { name: "Accelerator", price: "$149", note: "/mo · + faceless video, AI image, chatbot agency, DMs" },
+              { name: "Starter", price: "$19.99", note: "/mo · Core course + prompts" },
+              { name: "Builder", price: "$29.99", note: "/mo · + community, builders, templates", featured: true },
+              { name: "Accelerator", price: "$44.99", note: "/mo · + faceless video, AI image, chatbot agency, DMs" },
             ].map((p) => (
               <div key={p.name} className={`rounded-2xl p-5 ${p.featured ? "ring-brand bg-white/5" : "glass"}`}>
                 <p className="text-sm text-muted-foreground">{p.name}</p>

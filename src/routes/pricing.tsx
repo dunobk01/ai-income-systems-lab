@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { z } from "zod";
 import { Check, Sparkles, ArrowRight, X as XIcon } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -12,8 +12,8 @@ import { ExitIntentModal } from "@/components/exit-intent-modal";
 
 const pricingFaqs = [
   { q: "Can I cancel anytime?", a: "Yes. Cancel from Settings in one click; access continues through the end of your billing period." },
-  { q: "What's the difference between Monthly and Annual?", a: "Annual plans are billed once per year at the equivalent of 10 months (2 months free). Same features either way." },
-  { q: "Do you offer refunds?", a: "Monthly is cancel-anytime — no refund needed. Annual plans get a 14-day money-back guarantee." },
+  { q: "Is there a free plan?", a: "Yes. The free account is permanent: Module 1, sample lessons, tool guides and progress tracking, with no card required." },
+  { q: "Do you offer refunds?", a: "Every plan is monthly and cancel-anytime, so there's nothing to refund — you keep access through the period you paid for." },
   { q: "Can I upgrade or downgrade?", a: "Yes, from Settings. Upgrades pro-rate immediately; downgrades apply at the next billing cycle." },
   { q: "Is my payment secure?", a: "All payments are processed by Stripe. We never see or store your card details." },
   { q: "Do I get lifetime access?", a: "Your access lasts as long as your subscription is active. If you cancel, you keep access through the current billing period." },
@@ -24,9 +24,9 @@ export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing — AI Income Systems Lab" },
-      { name: "description", content: "Monthly or annual memberships. Starter $29/mo, Builder $79/mo, Accelerator $149/mo. Annual plans get 2 months free. Cancel anytime." },
+      { name: "description", content: "Simple monthly memberships. Starter $19.99/mo, Builder $29.99/mo, Accelerator $44.99/mo. Free plan included. Cancel anytime." },
       { property: "og:title", content: "Pricing — AI Income Systems Lab" },
-      { property: "og:description", content: "Three subscription tiers — Starter, Builder, Accelerator. Monthly or annual. Cancel anytime." },
+      { property: "og:description", content: "Three monthly tiers — Starter $19.99, Builder $29.99, Accelerator $44.99. Cancel anytime." },
       { property: "og:url", content: "https://ai-income-systems.com/pricing" },
     
       ...ogImageMeta(),
@@ -42,9 +42,9 @@ export const Route = createFileRoute("/pricing")({
           description: "Course + interactive builders teaching AI-powered digital products, funnels, automations, faceless video, image gen, and chatbots.",
           brand: { "@type": "Brand", name: "AI Income Systems Lab" },
           offers: [
-            { "@type": "Offer", name: "Starter Monthly", price: "29", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
-            { "@type": "Offer", name: "Builder Monthly", price: "79", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
-            { "@type": "Offer", name: "Accelerator Monthly", price: "149", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Starter Monthly", price: "19.99", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Builder Monthly", price: "29.99", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
+            { "@type": "Offer", name: "Accelerator Monthly", price: "44.99", priceCurrency: "USD", url: "https://ai-income-systems.com/pricing", availability: "https://schema.org/InStock" },
           ],
         }),
       },
@@ -70,9 +70,7 @@ type Tier = {
   name: string;
   key: TierKey;
   monthly: number;
-  annual: number;
   monthlyPriceId: string;
-  annualPriceId: string;
   tag: string;
   featured?: boolean;
   bestFor: string;
@@ -84,10 +82,8 @@ const tiers: Tier[] = [
   {
     name: "Starter",
     key: "starter",
-    monthly: 29,
-    annual: 290,
+    monthly: 19.99,
     monthlyPriceId: "starter_monthly",
-    annualPriceId: "starter_annual",
     tag: "Core course",
     bestFor: "Beginners who want the full curriculum and a shippable first offer.",
     whyUpgrade: "All 15 core modules + 89 lessons. Learn the system end-to-end.",
@@ -102,10 +98,8 @@ const tiers: Tier[] = [
   {
     name: "Builder",
     key: "builder",
-    monthly: 79,
-    annual: 790,
+    monthly: 29.99,
     monthlyPriceId: "builder_monthly",
-    annualPriceId: "builder_annual",
     tag: "Most popular",
     featured: true,
     bestFor: "Creators ready to launch products, funnels, and offers with AI shortcuts.",
@@ -121,10 +115,8 @@ const tiers: Tier[] = [
   {
     name: "Accelerator",
     key: "accelerator",
-    monthly: 149,
-    annual: 1490,
+    monthly: 44.99,
     monthlyPriceId: "accelerator_monthly",
-    annualPriceId: "accelerator_annual",
     tag: "All-in",
     bestFor: "Operators selling AI services or running multiple income systems.",
     whyUpgrade: "Everything above + faceless video, image gen, and chatbot agency modules. All builders + member DMs unlocked.",
@@ -200,7 +192,6 @@ function PricingPage() {
   const currentTier = profile?.tier ?? "none";
   const currentRank = TIER_RANK[currentTier] ?? 0;
   const ctaTo = user ? "/checkout" : "/signup";
-  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
 
   return (
     <div className="min-h-screen">
@@ -214,35 +205,14 @@ function PricingPage() {
             </div>
           )}
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Monthly or annual · Cancel anytime
+            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Simple monthly pricing · Cancel anytime
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl font-black tracking-tight">
             Pick your <span className="text-gradient">level</span>
           </h1>
           <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-            Three tiers built around what you actually ship. Switch or cancel from Settings anytime. Annual plans get <strong className="text-foreground">2 months free</strong>.
+            Three tiers built around what you actually ship. Start free, then upgrade from <strong className="text-foreground">$19.99/month</strong>. Switch or cancel from Settings anytime.
           </p>
-
-          {/* Billing toggle */}
-          <div className="mt-7 inline-flex rounded-full glass p-1 text-sm">
-            <button
-              type="button"
-              onClick={() => setBilling("monthly")}
-              className={`px-5 py-2 rounded-full transition ${billing === "monthly" ? "bg-white/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              Monthly
-            </button>
-            <button
-              type="button"
-              onClick={() => setBilling("annual")}
-              className={`px-5 py-2 rounded-full transition flex items-center gap-2 ${billing === "annual" ? "bg-white/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              Annual
-              <span className="text-[10px] font-semibold text-background px-2 py-0.5 rounded-full" style={{ background: "var(--gradient-brand)" }}>
-                2 months free
-              </span>
-            </button>
-          </div>
         </div>
       </section>
 
@@ -252,9 +222,9 @@ function PricingPage() {
             const tierR = TIER_RANK[t.key];
             const isCurrent = !!user && currentTier === t.key;
             const isIncluded = !!user && currentRank > tierR;
-            const price = billing === "monthly" ? t.monthly : t.annual;
-            const suffix = billing === "monthly" ? "/month" : "/year";
-            const priceId = billing === "monthly" ? t.monthlyPriceId : t.annualPriceId;
+            const price = t.monthly.toFixed(2);
+            const suffix = "/month";
+            const priceId = t.monthlyPriceId;
             return (
               <div
                 key={t.name}
@@ -277,11 +247,7 @@ function PricingPage() {
                   <span className="text-5xl font-black">${price}</span>
                   <span className="text-sm text-muted-foreground">{suffix}</span>
                 </div>
-                {billing === "annual" && (
-                  <p className="mt-1 text-xs text-[color:var(--brand-2)]">
-                    Just ${Math.round(t.annual / 12)}/mo · Save ${t.monthly * 12 - t.annual}/year
-                  </p>
-                )}
+                <p className="mt-1 text-xs text-[color:var(--brand-2)]">Billed monthly · Cancel anytime</p>
                 <p className="mt-3 text-xs leading-relaxed text-[color:var(--brand-2)]/90 bg-[color:var(--brand-2)]/5 border border-[color:var(--brand-2)]/15 rounded-lg px-3 py-2">
                   <span className="font-semibold">Why this tier:</span> {t.whyUpgrade}
                 </p>
@@ -330,12 +296,12 @@ function PricingPage() {
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wider text-muted-foreground">
                   <th className="text-left font-medium px-5 py-4 w-1/3">Feature</th>
-                  <th className="text-center font-medium px-3 py-4">Starter<br /><span className="text-foreground font-bold normal-case tracking-normal">$29/mo</span></th>
+                  <th className="text-center font-medium px-3 py-4">Starter<br /><span className="text-foreground font-bold normal-case tracking-normal">$19.99/mo</span></th>
                   <th className="text-center font-medium px-3 py-4 bg-white/5">
-                    Builder<br /><span className="text-foreground font-bold normal-case tracking-normal">$79/mo</span>
+                    Builder<br /><span className="text-foreground font-bold normal-case tracking-normal">$29.99/mo</span>
                     <div className="mt-1 inline-block text-[10px] px-2 py-0.5 rounded-full text-background font-semibold" style={{ background: "var(--gradient-brand)" }}>Most popular</div>
                   </th>
-                  <th className="text-center font-medium px-3 py-4">Accelerator<br /><span className="text-foreground font-bold normal-case tracking-normal">$149/mo</span></th>
+                  <th className="text-center font-medium px-3 py-4">Accelerator<br /><span className="text-foreground font-bold normal-case tracking-normal">$44.99/mo</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -359,7 +325,7 @@ function PricingPage() {
           </div>
         </div>
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          Annual plans pay the same per-month rate × 10 (2 months free). Cancel anytime — your access continues through the end of your billing period.
+          Every plan is billed monthly. Cancel anytime — your access continues through the end of your billing period.
         </p>
       </section>
 

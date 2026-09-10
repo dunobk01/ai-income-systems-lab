@@ -10,7 +10,7 @@ const rows = [
   { label: "Community + Wall of Wins", us: true, them: true },
   { label: "Prompt library + n8n workflow templates", us: true, them: false },
   { label: "Faceless video / AI image / chatbot modules", us: true, them: false },
-  { label: "Cancel-anytime monthly", us: "$29/mo", them: "Varies by group" },
+  { label: "Cancel-anytime monthly", us: "$19.99/mo", them: "Varies by group" },
   { label: "Fixed pricing across the platform", us: true, them: false },
   { label: "Focus", us: "AI income systems", them: "General communities" },
 ];
@@ -24,7 +24,7 @@ const whyWeWin = [
 const faqs = [
   { q: "Is AI Income Systems a Skool community?", a: "No. We're a full learning platform with a curriculum, interactive builders, prompt library, workflows, and a dedicated members-only community — all in one login." },
   { q: "Can I get similar AI training inside Skool?", a: "You can find AI-themed groups on Skool, but quality varies wildly. Our platform is purpose-built for AI-powered income systems with a fixed curriculum, live-updated tools, and hands-on builders." },
-  { q: "How much does it cost vs. a Skool group?", a: "We start at $29/mo for the full curriculum. Skool groups typically charge $39–$99/mo each, and you'd need several to match what we ship in one plan." },
+  { q: "How much does it cost vs. a Skool group?", a: "We start at $19.99/mo for the full curriculum. Skool groups typically charge $39–$99/mo each, and you'd need several to match what we ship in one plan." },
 ];
 
 export const Route = createFileRoute("/vs/skool")({

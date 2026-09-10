@@ -10,14 +10,14 @@ const rows = [
   { label: "Prompt library + n8n workflow templates", us: true, them: false },
   { label: "Community + Wall of Wins", us: true, them: true },
   { label: "Courses / lessons", us: true, them: "Add-on" },
-  { label: "Starts at", us: "$29/mo", them: "$89/mo (host)" },
+  { label: "Starts at", us: "$19.99/mo", them: "$89/mo (host)" },
   { label: "Focus", us: "AI income systems", them: "Host-your-own community" },
 ];
 
 const whyWeWin = [
   { title: "Content, tools, and community — bundled", body: "Circle is a great host platform if you're building your own community. We are the community, plus the curriculum and builders you'd otherwise have to create yourself." },
   { title: "AI-specific by design", body: "Every module, prompt, and workflow is tuned to AI-powered income. Circle is category-agnostic — you'd need to source all of that." },
-  { title: "One membership, one price", body: "$29/mo for the whole platform. Circle's plans are for hosts, and stacking a curriculum + tools on top adds up fast." },
+  { title: "One membership, one price", body: "$19.99/mo for the whole platform. Circle's plans are for hosts, and stacking a curriculum + tools on top adds up fast." },
 ];
 
 const faqs = [

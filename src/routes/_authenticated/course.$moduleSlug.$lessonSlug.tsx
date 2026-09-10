@@ -153,7 +153,7 @@ function LessonPage() {
         <div className="glass-strong rounded-2xl p-8 text-center">
           <Lock className="h-8 w-8 mx-auto text-muted-foreground" />
           <h1 className="mt-3 text-xl font-bold">Unlock the full curriculum</h1>
-          <p className="mt-2 text-sm text-muted-foreground">Start All-Access Monthly at $14.99/mo, or grab lifetime access from $29.</p>
+          <p className="mt-2 text-sm text-muted-foreground">Plans start at $19.99/month — cancel anytime.</p>
           <div className="mt-5 flex gap-2 justify-center">
             <Button asChild variant="brand"><Link to="/pricing">See plans</Link></Button>
             <Button asChild variant="glass"><Link to="/course">Back to course</Link></Button>
