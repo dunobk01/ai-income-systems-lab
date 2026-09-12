@@ -45,7 +45,7 @@ const INSIDE = [
 const FAQS = [
   {
     q: "What do I get when I sign up?",
-    a: "The AI Income Operating System PDF unlocks instantly on the next screen, and a copy goes to your inbox. You also get a permanent free account with Module 1 and the sample lessons.",
+    a: "The AI Income Operating System PDF unlocks instantly on the next screen, and a copy goes to your inbox. You can also create a free account for Module 1 and the sample lessons.",
   },
   {
     q: "Is it really free?",
@@ -170,7 +170,7 @@ function OperatingSystemPage() {
               </div>
               <h2 className="mt-3 text-2xl font-bold tracking-tight">Grab the PDF</h2>
               <p className="mt-1 text-sm text-muted-foreground max-w-xl">
-                A copy is on its way to your inbox too. Create your free account to unlock Module 1 and the sample
+                 A copy is on its way to your inbox too. Create your free account to unlock Module 1 and the sample
                 lessons.
               </p>
               <div className="mt-5 flex flex-col sm:flex-row gap-3">
@@ -188,11 +188,11 @@ function OperatingSystemPage() {
             <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-                  <Mail className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Instant download + free account
+                   <Mail className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Instant download + free account
                 </div>
                 <h2 className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight">Send me the guide</h2>
                 <p className="mt-2 text-sm text-muted-foreground max-w-xl">
-                  Enter your email and the PDF unlocks immediately. One-click unsubscribe, always.
+                   Enter your email and the PDF unlocks immediately. One-click unsubscribe, always.
                 </p>
               </div>
               <form onSubmit={submit} className="relative flex flex-col sm:flex-row gap-2 md:w-[420px]">
