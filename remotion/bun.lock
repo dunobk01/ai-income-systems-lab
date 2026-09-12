@@ -9,6 +9,7 @@
         "@remotion/cli": "^4.0.481",
         "@remotion/compositor-linux-x64-musl": "^4.0.481",
         "@remotion/google-fonts": "^4.0.481",
+        "@remotion/media": "4.0.481",
         "@remotion/renderer": "^4.0.481",
         "@remotion/transitions": "^4.0.481",
         "@types/react": "^19.2.17",
@@ -144,6 +145,8 @@
     "@remotion/google-fonts": ["@remotion/google-fonts@4.0.481", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/google-fonts/-/google-fonts-4.0.481.tgz", { "dependencies": { "remotion": "4.0.481" } }, "sha512-vMEYKmhODZvdjdG4CsbZCO6o607Abx7oLXYVPYqHc9cdClz9Bt3kIco2wTJOxzumIhboXS3UzSE51z0TZZeusg=="],
 
     "@remotion/licensing": ["@remotion/licensing@4.0.481", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/licensing/-/licensing-4.0.481.tgz", {}, "sha512-vUWA26GZKhp/Tl0Sj2E/M5SRZIQttMMT3kqXB7Se9wvGMAfSqm/86HLkY3dRNaagF2jSXJ7w+LY7EkXOTXVMBw=="],
+
+    "@remotion/media": ["@remotion/media@4.0.481", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/media/-/media-4.0.481.tgz", { "dependencies": { "mediabunny": "1.47.0", "remotion": "4.0.481", "zod": "4.3.6" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-wJyFEL4vAC8Z811o9AGTtUlhSnkBJUmI6OpJK/UDGQ56LpSwXtf/jSZx2H8zfulQouxBrMuS3iekkeXTrkfbdw=="],
 
     "@remotion/media-parser": ["@remotion/media-parser@4.0.481", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@remotion/media-parser/-/media-parser-4.0.481.tgz", {}, "sha512-VM0slWAYdSKGanBWn92B7eV7zheLN2mYaoccXDJemC0Ev4EIx40lcvFJAiMJ1yR0WoRn6Z6zLCbgPQrWmzVezg=="],
 

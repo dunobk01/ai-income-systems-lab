@@ -31,7 +31,7 @@ await renderMedia({
   codec: "h264",
   outputLocation: "/mnt/documents/ai-income-systems-ad-20s.mp4",
   puppeteerInstance: browser,
-  muted: true,
+  muted: false,
   concurrency: 1,
 });
 
