@@ -4,18 +4,20 @@ const PDF_URL = "https://ai-income-systems.com/downloads/ai-income-operating-sys
 const DOWNLOAD_URL = "https://ai-income-systems.com/downloads/ai-income-operating-system.pdf";
 
 export async function sendOsPdfEmail(email: string): Promise<void> {
-  const apiKey = process.env["RESEND_API_KEY"];
-  if (!apiKey) throw new Error("Email delivery is not configured");
+  const lovableApiKey = process.env["LOVABLE_API_KEY"];
+  const resendConnectionKey = process.env["RESEND_API_KEY"];
+  if (!lovableApiKey || !resendConnectionKey) throw new Error("Email delivery is not configured");
 
   const pdfResponse = await fetch(PDF_URL);
   if (!pdfResponse.ok) throw new Error("The OS guide could not be prepared for delivery");
 
   const pdf = Buffer.from(await pdfResponse.arrayBuffer());
   const idempotencyKey = `os-pdf-${createHash("sha256").update(email).digest("hex")}`;
-  const response = await fetch("https://api.resend.com/emails", {
+  const response = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${lovableApiKey}`,
+      "X-Connection-Api-Key": resendConnectionKey,
       "Content-Type": "application/json",
       "Idempotency-Key": idempotencyKey,
     },
