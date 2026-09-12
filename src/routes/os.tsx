@@ -106,7 +106,7 @@ function OperatingSystemPage() {
     setError(null);
     try {
       await fn({
-        data: { email, source: "ai-income-operating-system-landing", lead_magnet: SLUG, audience: "free", company },
+        data: { email, source: "ai-income-operating-system-landing", lead_magnet: SLUG, audience: "os", company },
       });
       setState("done");
       void tiktokIdentify({ email });

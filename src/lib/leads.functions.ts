@@ -7,10 +7,12 @@ import { z } from "zod";
  * - `leads` — general newsletter / content opt-ins.
  * - `free`  — people who claimed the free lead magnet and are being nurtured
  *             toward creating a permanent Free account.
+ * - `os`    — people who requested the AI Income Operating System guide.
  */
 export const AUDIENCE_GROUPS = {
   leads: "AI-Income-Systems Leads 1",
   free: "AI-Income-Systems Free Members",
+  os: "AI Income Operating System — 7-Day Nurture",
 } as const;
 
 export type Audience = keyof typeof AUDIENCE_GROUPS;
@@ -19,7 +21,7 @@ const schema = z.object({
   email: z.string().email().max(255),
   source: z.string().max(100).optional(),
   lead_magnet: z.string().max(100).optional(),
-  audience: z.enum(["leads", "free"]).optional(),
+  audience: z.enum(["leads", "free", "os"]).optional(),
   // Honeypot — real users never fill this in.
   company: z.string().max(100).optional(),
 });
@@ -76,7 +78,7 @@ async function syncToMailerLite(
         fields: {
           lead_source: opts.source ?? undefined,
           lead_magnet: opts.leadMagnet ?? undefined,
-          plan_status: opts.audience === "free" ? "free-lead" : undefined,
+          plan_status: opts.audience === "free" || opts.audience === "os" ? "free-lead" : undefined,
         },
         status: "active",
         groups: groupId ? [groupId] : undefined,
