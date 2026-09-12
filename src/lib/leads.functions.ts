@@ -118,6 +118,10 @@ export const submitLead = createServerFn({ method: "POST" })
       leadMagnet: data.lead_magnet,
       audience,
     });
+    if (audience === "os") {
+      const { sendOsPdfEmail } = await import("@/lib/os-delivery.server");
+      await sendOsPdfEmail(email);
+    }
     return { ok: true };
   });
 
