@@ -87,6 +87,24 @@ async function syncToMailerLite(
     if (!subscriberRes.ok) {
       const body = await subscriberRes.text();
       console.error("[mailerlite] subscribe failed", subscriberRes.status, body);
+      return;
+    }
+
+    // MailerLite's upsert keeps a previously unsubscribed person unsubscribed,
+    // so they never appear in the list again. Someone submitting the form is
+    // opting back in — flip them to active explicitly.
+    const created = (await subscriberRes.json()) as {
+      data?: { id?: string; status?: string };
+    };
+    if (created.data?.id && created.data.status !== "active") {
+      const reactivate = await fetch(`${ML_BASE}/subscribers/${created.data.id}`, {
+        method: "PUT",
+        headers: mlHeaders(apiKey),
+        body: JSON.stringify({ status: "active", groups: groupId ? [groupId] : undefined }),
+      });
+      if (!reactivate.ok) {
+        console.error("[mailerlite] reactivate failed", reactivate.status, await reactivate.text());
+      }
     }
   } catch (err) {
     console.error("[mailerlite] subscribe error", err);
