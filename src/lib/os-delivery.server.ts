@@ -5,14 +5,15 @@
  * Never import this from client code.
  */
 
+import { createHash } from "crypto";
+
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
 const PDF_URL = "https://ai-income-systems.com/downloads/ai-income-operating-system.pdf";
 const FROM = "AI Income Systems <support@ai-income-systems.com>";
 const REPLY_TO = "support@ai-income-systems.com";
 
 function sha256(input: string) {
-  const crypto = require("crypto");
-  return crypto.createHash("sha256").update(input).digest("hex");
+  return createHash("sha256").update(input).digest("hex");
 }
 
 async function fetchPdf(): Promise<Buffer> {
