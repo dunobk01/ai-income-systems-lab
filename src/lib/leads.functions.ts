@@ -102,8 +102,17 @@ async function syncToMailerLite(
         headers: mlHeaders(apiKey),
         body: JSON.stringify({ status: "active", groups: groupId ? [groupId] : undefined }),
       });
-      if (!reactivate.ok) {
-        console.error("[mailerlite] reactivate failed", reactivate.status, await reactivate.text());
+      const after = reactivate.ok
+        ? (((await reactivate.json()) as { data?: { status?: string } }).data?.status ?? "unknown")
+        : "error";
+      if (after !== "active") {
+        // MailerLite refuses to resubscribe someone who previously unsubscribed;
+        // they have to opt back in through a MailerLite-hosted form themselves.
+        console.warn(
+          "[mailerlite] subscriber remains unsubscribed and cannot be reactivated via API",
+          email,
+          after,
+        );
       }
     }
   } catch (err) {
