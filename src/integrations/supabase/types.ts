@@ -671,6 +671,27 @@ export type Database = {
         }
         Relationships: []
       }
+      os_sequence_sends: {
+        Row: {
+          email: string
+          id: string
+          sent_at: string
+          step: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          sent_at?: string
+          step: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          sent_at?: string
+          step?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
