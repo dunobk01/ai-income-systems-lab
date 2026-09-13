@@ -87,6 +87,33 @@ async function syncToMailerLite(
     if (!subscriberRes.ok) {
       const body = await subscriberRes.text();
       console.error("[mailerlite] subscribe failed", subscriberRes.status, body);
+      return;
+    }
+
+    // MailerLite's upsert keeps a previously unsubscribed person unsubscribed,
+    // so they never appear in the list again. Someone submitting the form is
+    // opting back in — flip them to active explicitly.
+    const created = (await subscriberRes.json()) as {
+      data?: { id?: string; status?: string };
+    };
+    if (created.data?.id && created.data.status !== "active") {
+      const reactivate = await fetch(`${ML_BASE}/subscribers/${created.data.id}`, {
+        method: "PUT",
+        headers: mlHeaders(apiKey),
+        body: JSON.stringify({ status: "active", groups: groupId ? [groupId] : undefined }),
+      });
+      const after = reactivate.ok
+        ? (((await reactivate.json()) as { data?: { status?: string } }).data?.status ?? "unknown")
+        : "error";
+      if (after !== "active") {
+        // MailerLite refuses to resubscribe someone who previously unsubscribed;
+        // they have to opt back in through a MailerLite-hosted form themselves.
+        console.warn(
+          "[mailerlite] subscriber remains unsubscribed and cannot be reactivated via API",
+          email,
+          after,
+        );
+      }
     }
   } catch (err) {
     console.error("[mailerlite] subscribe error", err);
@@ -112,6 +139,16 @@ export const submitLead = createServerFn({ method: "POST" })
     if (error && !/duplicate key/i.test(error.message)) {
       throw new Error(error.message);
     }
+    // Submitting the form is a fresh opt-in: clear any earlier suppression so
+    // site emails (like the guide delivery) can reach them again.
+    const { error: unsuppressError } = await supabaseAdmin
+      .from("suppressed_emails")
+      .delete()
+      .eq("email", email);
+    if (unsuppressError) {
+      console.error("[submitLead] clearing suppression failed", unsuppressError.message);
+    }
+
     // Fire MailerLite sync; don't block the user on failures.
     await syncToMailerLite(email, {
       source: data.source,
