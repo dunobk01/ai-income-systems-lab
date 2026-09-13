@@ -130,6 +130,16 @@ export const submitLead = createServerFn({ method: "POST" })
     if (error && !/duplicate key/i.test(error.message)) {
       throw new Error(error.message);
     }
+    // Submitting the form is a fresh opt-in: clear any earlier suppression so
+    // site emails (like the guide delivery) can reach them again.
+    const { error: unsuppressError } = await supabaseAdmin
+      .from("suppressed_emails")
+      .delete()
+      .eq("email", email);
+    if (unsuppressError) {
+      console.error("[submitLead] clearing suppression failed", unsuppressError.message);
+    }
+
     // Fire MailerLite sync; don't block the user on failures.
     await syncToMailerLite(email, {
       source: data.source,
