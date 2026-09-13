@@ -118,6 +118,21 @@ export const submitLead = createServerFn({ method: "POST" })
       leadMagnet: data.lead_magnet,
       audience,
     });
+
+    // For OS leads, also send the PDF as a Resend attachment. Keep this
+    // non-blocking so a mail hiccup doesn't stop the signup.
+    if (audience === "os") {
+      try {
+        const { sendOsPdfEmail } = await import("@/lib/os-delivery.server");
+        const result = await sendOsPdfEmail(email);
+        if (!result.ok) {
+          console.error("[submitLead] OS PDF delivery failed", result.reason);
+        }
+      } catch (err) {
+        console.error("[submitLead] OS PDF delivery error", err);
+      }
+    }
+
     return { ok: true };
   });
 
