@@ -139,12 +139,15 @@ export const submitLead = createServerFn({ method: "POST" })
     if (error && !/duplicate key/i.test(error.message)) {
       throw new Error(error.message);
     }
-    // Submitting the form is a fresh opt-in: clear any earlier suppression so
-    // site emails (like the guide delivery) can reach them again.
+    // Submitting the form is a fresh opt-in, so clear an earlier *voluntary*
+    // unsubscribe only. Bounce and spam-complaint suppressions stay in place:
+    // the form is unauthenticated, so anyone could otherwise type in someone
+    // else's address and un-block a hard-bouncing or complaining recipient.
     const { error: unsuppressError } = await supabaseAdmin
       .from("suppressed_emails")
       .delete()
-      .eq("email", email);
+      .eq("email", email)
+      .eq("reason", "unsubscribe");
     if (unsuppressError) {
       console.error("[submitLead] clearing suppression failed", unsuppressError.message);
     }
