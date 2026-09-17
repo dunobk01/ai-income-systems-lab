@@ -126,11 +126,35 @@ async function sendRefundEmail(opts: {
   });
 }
 
+/**
+ * Idempotency gate. Returns true when this Stripe event id has already been
+ * processed, so webhook retries can never duplicate entitlements, purchase
+ * rows, receipt emails or MailerLite automation triggers.
+ */
+async function alreadyProcessed(eventId: string, eventType: string, env: StripeEnv): Promise<boolean> {
+  const { error } = await (getSupabase().from("stripe_events") as any).insert({
+    id: eventId,
+    event_type: eventType,
+    environment: env,
+  });
+  if (!error) return false;
+  if (/duplicate key/i.test(error.message)) return true;
+  console.error("stripe_events ledger write failed", error.message);
+  return false;
+}
+
 async function recordOneTimePurchase(session: any, env: StripeEnv) {
   const userId = session.metadata?.userId;
   const priceId = session.metadata?.priceId;
   if (!userId || !priceId) {
     console.error("checkout.session.completed missing metadata", session.id);
+    return;
+  }
+
+  // Creating a session is not a payment. Only `paid` and
+  // `no_payment_required` are final; `unpaid` settles later (or never).
+  if (session.payment_status === "unpaid") {
+    console.log("checkout session not yet paid; no entitlement granted");
     return;
   }
 
