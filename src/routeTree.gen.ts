@@ -84,6 +84,7 @@ import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/em
 import { Route as ApiPublicPinterestCatalogDottsvRouteImport } from './routes/api/public/pinterest/catalog[.]tsv'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicEmailOsDay5RouteImport } from './routes/api/public/email/os-day5'
+import { Route as ApiPublicEmailMailerliteSyncRouteImport } from './routes/api/public/email/mailerlite-sync'
 import { Route as AuthenticatedCourseModuleSlugLessonSlugRouteImport } from './routes/_authenticated/course.$moduleSlug.$lessonSlug'
 
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
@@ -481,6 +482,12 @@ const ApiPublicEmailOsDay5Route = ApiPublicEmailOsDay5RouteImport.update({
   path: '/api/public/email/os-day5',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEmailMailerliteSyncRoute =
+  ApiPublicEmailMailerliteSyncRouteImport.update({
+    id: '/api/public/email/mailerlite-sync',
+    path: '/api/public/email/mailerlite-sync',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedCourseModuleSlugLessonSlugRoute =
   AuthenticatedCourseModuleSlugLessonSlugRouteImport.update({
     id: '/course/$moduleSlug/$lessonSlug',
@@ -556,6 +563,7 @@ export interface FileRoutesByFullPath {
   '/library/': typeof AuthenticatedLibraryIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
+  '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
@@ -629,6 +637,7 @@ export interface FileRoutesByTo {
   '/library': typeof AuthenticatedLibraryIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
+  '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
@@ -708,6 +717,7 @@ export interface FileRoutesById {
   '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
+  '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
@@ -787,6 +797,7 @@ export interface FileRouteTypes {
     | '/library/'
     | '/settings/'
     | '/course/$moduleSlug/$lessonSlug'
+    | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
@@ -860,6 +871,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/settings'
     | '/course/$moduleSlug/$lessonSlug'
+    | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
@@ -938,6 +950,7 @@ export interface FileRouteTypes {
     | '/_authenticated/library/'
     | '/_authenticated/settings/'
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
+    | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
@@ -986,6 +999,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
+  ApiPublicEmailMailerliteSyncRoute: typeof ApiPublicEmailMailerliteSyncRoute
   ApiPublicEmailOsDay5Route: typeof ApiPublicEmailOsDay5Route
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicPinterestCatalogDottsvRoute: typeof ApiPublicPinterestCatalogDottsvRoute
@@ -1523,6 +1537,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicEmailOsDay5RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/email/mailerlite-sync': {
+      id: '/api/public/email/mailerlite-sync'
+      path: '/api/public/email/mailerlite-sync'
+      fullPath: '/api/public/email/mailerlite-sync'
+      preLoaderRoute: typeof ApiPublicEmailMailerliteSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/course/$moduleSlug/$lessonSlug': {
       id: '/_authenticated/course/$moduleSlug/$lessonSlug'
       path: '/course/$moduleSlug/$lessonSlug'
@@ -1681,6 +1702,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   BlogTagTagRoute: BlogTagTagRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
+  ApiPublicEmailMailerliteSyncRoute: ApiPublicEmailMailerliteSyncRoute,
   ApiPublicEmailOsDay5Route: ApiPublicEmailOsDay5Route,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicPinterestCatalogDottsvRoute: ApiPublicPinterestCatalogDottsvRoute,

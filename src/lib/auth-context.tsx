@@ -1,20 +1,13 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { FREE_TIER_VALUE, TIER_RANK, type Tier } from "@/lib/member-rules";
+import { ensureMemberProvisioned } from "@/lib/members.functions";
 
-type Tier = "none" | "monthly" | "starter" | "builder" | "pro" | "accelerator";
-
-export const TIER_RANK: Record<string, number> = {
-  none: 0,
-  monthly: 1,
-  starter: 1,
-  builder: 2,
-  pro: 3,
-  accelerator: 3,
-};
+export { TIER_RANK };
 
 export const hasTier = (userTier: string | undefined | null, requiredTier: string): boolean =>
-  (TIER_RANK[userTier ?? "none"] ?? 0) >= (TIER_RANK[requiredTier] ?? 0);
+  (TIER_RANK[userTier ?? FREE_TIER_VALUE] ?? 0) >= (TIER_RANK[requiredTier] ?? 0);
 
 type Profile = {
   user_id: string;
