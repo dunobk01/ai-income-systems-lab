@@ -1,64 +1,52 @@
-# Improvement Batch: Items 1, 5, 6, 7, 8, 9, 11, 12, 13
+# Audit: xbhiblackbox@gmail.com, 13 Sep 2026 ~19:00 UTC
 
-## 1. Exit-intent lead capture
-- New component `src/components/exit-intent-modal.tsx` — listens for `mouseleave` toward top of viewport (desktop) and 30s inactivity + scroll-up (mobile fallback).
-- Offers the Starter Kit PDF; reuses existing `leads.functions.ts` `captureLead`.
-- Session-storage flag `exitIntentShown` so it fires once per session.
-- Mount on `/pricing`, `/blog`, `/guides`, `/blog/$slug`, `/guides/$slug`. Skip when user is authenticated.
+No code was changed. Findings below come from reading the live code and querying the production database.
 
-## 5. Programmatic comparison pages
-- New routes: `src/routes/vs.skool.tsx`, `src/routes/vs.mighty-networks.tsx`, `src/routes/vs.circle.tsx`.
-- Shared component `src/components/comparison-page.tsx` with hero, feature comparison table, "why we win" section, testimonial slot, pricing CTA.
-- Each page gets unique title/description/OG + `Product` + `FAQPage` JSON-LD.
-- Add all three to `sitemap.xml.ts`.
+## What the records show
 
-## 6. Internal linking — related guides
-- New helper `getRelatedPosts(slug, pillarSlug, tags)` in `blog.functions.ts` — returns up to 3 posts matching pillar OR overlapping tags, excluding current.
-- Render "Related guides" block at bottom of `blog.$slug.tsx` (if it exists — will check) and `guides.$slug.tsx`.
-- Also add pillar-cross-link block to `newsletter.$slug.tsx`.
+- Account created 13 Sep 2026 19:00:25 UTC via Google sign-in. Profile exists, plan level `none`, onboarding never completed.
+- No subscription record, and no entry in the lead/marketing table for that address.
+- The only lead captured in that whole evening window (18:00-21:00 UTC) was a different address at 20:01 UTC.
+- Server logs only retain roughly the last hour, so nothing from 13 September is still available to inspect.
 
-## 7. FAQ schema
-- Extract existing FAQ Q&A on `/faq` and `/pricing` into a shared array.
-- Emit `FAQPage` JSON-LD via `head()` scripts on both routes.
+## Question 1: does opening checkout create a Stripe customer before payment?
 
-## 8. Image alt audit
-- Grep for `<img`, `alt=""`, missing `alt`, and generic strings ("image", "photo").
-- Fix hero, OG, avatar, and content images with descriptive alt.
+Yes. Confirmed.
 
-## 9. Onboarding checklist on /dashboard
-- New component `src/components/onboarding-checklist.tsx`.
-- Steps: (a) Complete profile (display_name + avatar), (b) Post first Win, (c) Complete first lesson, (d) Join The Lab (first community post).
-- Query existing tables: `profiles`, `wins`, `lesson_progress`, `community_posts`.
-- Dismissible; stores dismissal in `profiles.onboarding_dismissed_at` (new column via migration).
-- Auto-hides when all 4 complete.
+The checkout page is behind sign-in and immediately asks the server for a payment form. Before the payment form can be shown, the server code (`src/lib/payments.functions.ts`, `createCheckoutSession`) does this in order:
 
-## 11. Course progress persistence check
-- Read `_authenticated/course.$moduleSlug.$lessonSlug.tsx` and verify `lesson_progress` is upserted on completion (not just view).
-- If missing/wrong, add explicit "Mark complete" button that writes `completed_at`.
+1. Looks for an existing Stripe customer matching the signed-in account.
+2. If none exists, **creates a new Stripe customer** with the person's email attached.
+3. Only then creates the checkout session and returns the form.
 
-## 12. Referral system
-- Migration: add `referral_code` (unique) and `referred_by` (uuid) to `profiles`; generate code in `handle_new_user()` trigger.
-- Track `?ref=CODE` on landing routes → sessionStorage → attach to signup → write `referred_by` on profile.
-- New `/settings` section: "Your referral link" with copy button + count of referrals.
-- Reward mechanic (free month) will require Stripe coupon logic — I'll ship the tracking + display first, and note the coupon step for follow-up so it doesn't block the batch.
+So simply landing on the checkout page after signing up is enough to produce a brand-new Stripe customer with no payment attached. A customer appearing at 19:01 UTC — about 35 seconds after the 19:00:25 account creation — matches exactly this behaviour: sign up, get sent to checkout, abandon before entering card details. Nothing is wrong or missing here; this is how the code is written.
 
-## 13. CSP headers
-- Add CSP `<meta http-equiv="Content-Security-Policy">` in `__root.tsx` head — starts as report-only style but enforcing (script-src 'self' + Stripe + Pinterest + TikTok + GA + Lovable domains; img-src 'self' data: https:; connect-src 'self' + Supabase + Stripe + analytics).
-- Include `frame-src` for Stripe embedded checkout.
-- Verify checkout, analytics tags, and auth still work after applying.
+## Question 2: is normal signup synced to the mailing list?
 
-## Also (quiet fix)
-- Runtime hydration error on `/blog` — file changed between SSR and hydration. Will reload/verify.
+No. Confirmed.
 
-## Tech notes
-- All new routes ship with `head()` metadata + canonical + OG per `head-meta` rules.
-- Referral tracking uses existing `handle_new_user` trigger extension, avoiding a separate write path.
-- CSP list will be tuned against actual network requests observed on the site (Stripe, Supabase, Pinterest tag, TikTok pixel, GA4, Lovable analytics).
+The mailing-list sync only runs from two places:
 
-## Order of execution (parallel where possible)
-1. Migration (referral + onboarding_dismissed_at column)
-2. New files (comparison pages, exit-intent, onboarding, referral display) in parallel
-3. Edits to existing routes (FAQ schema, related guides, alt audit, CSP, sitemap)
-4. Verify build + smoke-test checkout under CSP
+- **Lead forms** — the free guide pages, the AI Business Engine page, the operating-system page, the newsletter box, and the exit-intent popup. All of these call one shared submission function that both stores the lead and pushes the address to the mailing list.
+- **Paid upgrades** — the payment webhook pushes buyers into the customers group after a successful charge.
 
-Estimated ~15-20 file writes/edits. Ready to execute on approval.
+Creating an account (email/password or Google) touches neither path. The signup screens call the authentication service directly and never record a lead or contact the mailing-list provider. So an account-only signup, with no plan purchased and no lead form filled in, will never appear in the mailing list. That fully explains this address being absent.
+
+## Conclusion
+
+Both observed behaviours are expected outcomes of the current code, not faults:
+
+- The Stripe customer with no transaction = abandoned checkout, customer created up front by design.
+- Missing from the mailing list = account signups were never wired into it.
+
+## Optional follow-ups (not implemented)
+
+1. Sync new account signups into a dedicated "members" group on the mailing list, so every registered person is reachable.
+2. Delay Stripe customer creation until payment is actually submitted, to stop empty customer records accumulating — or accept them and filter the Stripe view by customers with transactions.
+3. Add an abandoned-checkout follow-up email, since these records identify exactly who reached the payment step and stopped.
+
+### Technical notes
+
+- Customer creation: `resolveOrCreateCustomer` in `src/lib/payments.functions.ts`, called before `stripe.checkout.sessions.create`.
+- Mailing-list sync: `syncToMailerLite` in `src/lib/leads.functions.ts`, reachable only via `submitLead`; upgrade path via `mailerliteTrackUpgrade` in the payments webhook.
+- Signup flows: `src/routes/signup.tsx` (`supabase.auth.signUp`, `lovable.auth.signInWithOAuth`) contain no lead or mailing-list call.
