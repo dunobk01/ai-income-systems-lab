@@ -503,6 +503,51 @@ export type Database = {
           },
         ]
       }
+      mailerlite_sync_jobs: {
+        Row: {
+          attempt_count: number
+          completed_at: string | null
+          created_at: string
+          email: string
+          event_type: string
+          id: string
+          last_error: string | null
+          next_attempt_at: string
+          payload: Json
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          attempt_count?: number
+          completed_at?: string | null
+          created_at?: string
+          email: string
+          event_type: string
+          id?: string
+          last_error?: string | null
+          next_attempt_at?: string
+          payload?: Json
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          attempt_count?: number
+          completed_at?: string | null
+          created_at?: string
+          email?: string
+          event_type?: string
+          id?: string
+          last_error?: string | null
+          next_attempt_at?: string
+          payload?: Json
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       modules: {
         Row: {
           course_id: string
@@ -798,6 +843,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      stripe_events: {
+        Row: {
+          environment: string
+          event_type: string
+          id: string
+          processed_at: string
+        }
+        Insert: {
+          environment: string
+          event_type: string
+          id: string
+          processed_at?: string
+        }
+        Update: {
+          environment?: string
+          event_type?: string
+          id?: string
+          processed_at?: string
+        }
+        Relationships: []
       }
       subscriptions: {
         Row: {
