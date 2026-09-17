@@ -58,7 +58,7 @@ const groups = [
     label: "Pricing & access",
     faqs: [
       { q: "What do the plans cost?", a: "The Free plan costs $0. Starter is $19.99/month, Builder is $29.99/month, and Accelerator is $44.99/month. Every paid plan is billed monthly and can be canceled anytime." },
-      { q: "What does each tier include?", a: "Starter = full course + prompt library. Builder = adds the community, template library and interactive builders. Accelerator = adds faceless video, AI image, chatbot agency modules and member DMs. Full comparison on the pricing page." },
+      { q: "What does each tier include?", a: "Starter opens Modules 1–11 and the Starter prompt library. Builder adds Module 12, the community, template library and interactive builders. Accelerator opens all 15 modules, including faceless video, AI image and chatbot agency, plus member DMs. Full comparison is on the pricing page." },
       { q: "Can I upgrade later?", a: "Yes — upgrade any time and pay only the difference. No 'gotcha' pricing." },
       { q: "Do you offer refunds?", a: "Yes. Your first payment for any subscription tier has a 14-day money-back guarantee. Email support within 14 days of that initial purchase for a full refund. Renewals are not refundable, but you can cancel anytime and keep access through the paid billing period." },
       { q: "Is there a payment plan?", a: "There are no long-term payment plans. Starter, Builder, and Accelerator are billed monthly, and you can cancel anytime." },

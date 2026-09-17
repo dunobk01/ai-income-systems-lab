@@ -88,10 +88,10 @@ const tiers: Tier[] = [
     monthly: 19.99,
     monthlyPriceId: "starter_monthly",
     tag: "Core course",
-    bestFor: "Beginners who want the full curriculum and a shippable first offer.",
-    whyUpgrade: "All 15 core modules + 89 lessons. Learn the system end-to-end.",
+    bestFor: "Beginners who want the complete core path and a shippable first offer.",
+    whyUpgrade: "The first 11 modules and 69 lessons, from foundations through launch and scale.",
     features: [
-      "Full 15-module course access",
+      "Core course access: Modules 1–11 (69 lessons)",
       "Searchable prompt library (12 starter prompts)",
       "Action steps + downloads on every lesson",
       "Progress tracking + private notes",
@@ -109,6 +109,7 @@ const tiers: Tier[] = [
     whyUpgrade: "Courses + community + templates + the interactive builders that turn ideas into ship-ready plans in minutes.",
     features: [
       "Everything in Starter",
+      "AI Agents & Skills: Module 12 (8 lessons)",
       "Members-only Community + Wins channel",
       "Template Library (prompts, n8n workflows, Lovable scaffolds)",
       "Digital Product Builder + Sales Funnel Builder",
@@ -142,8 +143,8 @@ const compare: { section: string; rows: Row[] }[] = [
   {
     section: "Learning",
     rows: [
-      { label: "Core course (15 modules · 89 lessons)", starter: true, builder: true, accelerator: true },
-      { label: "AI Agents & Skills module", starter: false, builder: false, accelerator: true },
+      { label: "Core course (Modules 1–11 · 69 lessons)", starter: true, builder: true, accelerator: true },
+      { label: "AI Agents & Skills (Module 12 · 8 lessons)", starter: false, builder: true, accelerator: true },
       { label: "Faceless Video Income module", starter: false, builder: false, accelerator: true },
       { label: "AI Image Income module", starter: false, builder: false, accelerator: true },
       { label: "Chatbot Agency (Botpress) module", starter: false, builder: false, accelerator: true },

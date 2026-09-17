@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { canUseBuilders, hasTier, isFreeTier, tierLabel, tierRank } from "@/lib/access";
+import { COURSE_ACCESS, hasCourseAccess } from "@/lib/course-access";
 
 describe("access model — free members", () => {
   it("treats a brand new (tier `none`/null) account as Free", () => {
@@ -36,5 +37,29 @@ describe("access model — free members", () => {
     expect(tierRank("PRO")).toBe(0);
     expect(canUseBuilders("super-pro")).toBe(false);
     expect(hasTier("free-but-actually-pro", "builder")).toBe(false);
+  });
+});
+
+describe("course module ladder", () => {
+  it("gives Starter Modules 1–11 but not Builder or Accelerator modules", () => {
+    expect(hasCourseAccess("starter", "starter")).toBe(true);
+    expect(hasCourseAccess("starter", "builder")).toBe(false);
+    expect(hasCourseAccess("starter", "accelerator")).toBe(false);
+    expect(COURSE_ACCESS.starter).toEqual({ modules: 11, lessons: 69 });
+  });
+
+  it("gives Builder Modules 1–12 but not Accelerator modules", () => {
+    expect(hasCourseAccess("builder", "starter")).toBe(true);
+    expect(hasCourseAccess("builder", "builder")).toBe(true);
+    expect(hasCourseAccess("builder", "accelerator")).toBe(false);
+    expect(COURSE_ACCESS.builder).toEqual({ modules: 12, lessons: 77 });
+  });
+
+  it("gives Accelerator all 15 modules and preserves legacy Pro access", () => {
+    for (const requirement of ["starter", "builder", "accelerator"]) {
+      expect(hasCourseAccess("accelerator", requirement)).toBe(true);
+      expect(hasCourseAccess("pro", requirement)).toBe(true);
+    }
+    expect(COURSE_ACCESS.accelerator).toEqual({ modules: 15, lessons: 89 });
   });
 });

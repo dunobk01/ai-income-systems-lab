@@ -5,15 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { hasTier, isFreeTier } from "@/lib/access";
+import { isFreeTier } from "@/lib/access";
+import { hasCourseAccess } from "@/lib/course-access";
 import { CURRICULUM_LABEL } from "@/lib/curriculum";
 
 type Tier = "starter" | "builder" | "pro" | "accelerator";
 type Module = { id: string; slug: string; title: string; summary: string | null; required_tier: Tier; order_index: number; is_preview: boolean };
 type Lesson = { id: string; slug: string; title: string; module_id: string; order_index: number; duration_minutes: number | null; is_preview: boolean };
-
-const canAccessModule = (userTier: string | undefined, requiredTier: string, isAdmin?: boolean) =>
-  hasTier(userTier, requiredTier, isAdmin);
 
 export const Route = createFileRoute("/_authenticated/course/")({
   head: () => ({
@@ -105,7 +103,7 @@ function CoursePage() {
       <div className="mt-8 space-y-4">
         {modules.map((m, i) => {
           const moduleLessons = lessons.filter((l) => l.module_id === m.id);
-          const hasModuleAccess = canAccessModule(profile?.tier, m.required_tier, isAdmin);
+          const hasModuleAccess = hasCourseAccess(profile?.tier, m.required_tier, isAdmin);
           const moduleUnlocked = hasModuleAccess || m.is_preview;
           const doneInMod = moduleLessons.filter((l) => completed.has(l.id)).length;
           return (
