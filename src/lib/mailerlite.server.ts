@@ -70,7 +70,19 @@ export async function mailerliteTrackUpgrade(opts: {
       }),
     });
     if (!res.ok) {
-      console.error("[mailerlite] upgrade sync failed", res.status, await res.text());
+      console.error("[mailerlite] upgrade sync failed", res.status);
+      return;
+    }
+
+    // Add to the Customers group additively so the member keeps their Free
+    // Members group and any nurture history.
+    const body = (await res.json()) as { data?: { id?: string } };
+    if (body.data?.id && groupId) {
+      const assign = await fetch(`${ML_BASE}/subscribers/${body.data.id}/groups/${groupId}`, {
+        method: "POST",
+        headers: headers(apiKey),
+      });
+      if (!assign.ok) console.error("[mailerlite] customer group assign failed", assign.status);
     }
   } catch (err) {
     console.error("[mailerlite] upgrade sync error", err);
