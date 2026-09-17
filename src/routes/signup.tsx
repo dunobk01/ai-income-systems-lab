@@ -173,7 +173,7 @@ function SignupPage() {
               Terms & Conditions
             </Link>{" "}
             and to receive account, educational and promotional emails from us. You can{" "}
-            <Link to="/unsubscribe" className="underline hover:text-foreground">
+            <Link to="/unsubscribe" search={{}} className="underline hover:text-foreground">
               unsubscribe
             </Link>{" "}
             at any time. Joining is free — cancel anytime.
