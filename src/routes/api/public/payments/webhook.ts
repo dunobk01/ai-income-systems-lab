@@ -364,14 +364,18 @@ async function handleRefund(charge: any, env: StripeEnv) {
   });
 }
 
-async function handle(req: Request, env: StripeEnv) {
-  const event = (await verifyWebhook(req, env)) as { id?: string; type: string; data: { object: any } };
+/**
+ * Releases the idempotency claim so a failed event can be retried by Stripe.
+ */
+async function releaseClaim(eventId: string, env: StripeEnv) {
+  const { error } = await (getSupabase().from("stripe_events") as any)
+    .delete()
+    .eq("id", eventId)
+    .eq("environment", env);
+  if (error) console.error("failed to release stripe_events claim", error.message);
+}
 
-  if (event.id && (await alreadyProcessed(event.id, event.type, env))) {
-    console.log("duplicate Stripe event ignored:", event.type);
-    return;
-  }
-
+async function dispatch(event: { type: string; data: { object: any } }, env: StripeEnv) {
   switch (event.type) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
@@ -397,6 +401,24 @@ async function handle(req: Request, env: StripeEnv) {
       break;
     default:
       console.log("Unhandled event:", event.type);
+  }
+}
+
+async function handle(req: Request, env: StripeEnv) {
+  const event = (await verifyWebhook(req, env)) as { id?: string; type: string; data: { object: any } };
+
+  if (event.id && (await alreadyProcessed(event.id, event.type, env))) {
+    console.log("duplicate Stripe event ignored:", event.type);
+    return;
+  }
+
+  try {
+    await dispatch(event, env);
+  } catch (e) {
+    // Processing failed after claiming the event. Drop the claim so Stripe's
+    // automatic retry is actually processed instead of silently ignored.
+    if (event.id) await releaseClaim(event.id, env);
+    throw e;
   }
 }
 
