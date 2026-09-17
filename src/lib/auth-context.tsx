@@ -71,10 +71,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(s?.user ?? null);
       if (s?.user) {
         // Defer to avoid recursive auth events
-        setTimeout(() => { void loadProfile(s.user.id); }, 0);
+        setTimeout(() => {
+          void loadProfile(s.user.id);
+          void ensureProvisioned(s.user.id);
+        }, 0);
       } else {
         setProfile(null);
         setIsAdmin(false);
+        provisionedFor.current = null;
       }
     });
 
@@ -82,7 +86,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data: { session: s } } = await supabase.auth.getSession();
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) await loadProfile(s.user.id);
+      if (s?.user) {
+        await loadProfile(s.user.id);
+        void ensureProvisioned(s.user.id);
+      }
       setLoading(false);
     })();
 
