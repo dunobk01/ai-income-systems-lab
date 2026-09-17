@@ -59,7 +59,6 @@ export async function mailerliteTrackUpgrade(opts: {
       body: JSON.stringify({
         email: opts.email.trim().toLowerCase(),
         status: "active",
-        groups: groupId ? [groupId] : undefined,
         fields: {
           plan_status: "paid",
           plan_id: opts.planId,
