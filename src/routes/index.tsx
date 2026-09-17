@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { LeadCapture } from "@/components/lead-capture";
 import dustinPhoto from "@/assets/dustin.jpg.asset.json";
 import { ogImageMeta } from "@/lib/og";
+import { CURRICULUM_MODULES, CURRICULUM } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -56,22 +57,7 @@ const builds = [
 ];
 
 
-const modules = [
-  { n: "01", title: "AI Money Foundations", lessons: 6, outcome: "Pick a niche, an offer type, and a 90-day income target you can actually hit." },
-  { n: "02", title: "Prompt Mastery", lessons: 9, outcome: "Write reusable prompts that produce expert-level output on the first try." },
-  { n: "03", title: "ChatGPT for Execution", lessons: 8, outcome: "Use ChatGPT as your daily operator for content, copy, and customer work." },
-  { n: "04", title: "Claude for Strategy", lessons: 8, outcome: "Plan offers, products, and launches with long-context reasoning that doesn't drift." },
-  { n: "05", title: "Perplexity for Research", lessons: 7, outcome: "Validate niches, audiences, and competitors in minutes — with sources." },
-  { n: "06", title: "Lovable App & Funnel Builder", lessons: 9, outcome: "Ship a real landing page, micro-SaaS, or funnel without writing code." },
-  { n: "07", title: "Digital Product Factory", lessons: 9, outcome: "Produce and package a digital product (ebook, template pack, mini-course) you can sell this week." },
-  { n: "08", title: "Sales Funnel Builder", lessons: 8, outcome: "Map lead magnet → landing → tripwire → upsell and write every page that converts." },
-  { n: "09", title: "n8n Automation Lab", lessons: 11, outcome: "Build workflows that deliver products, follow up with buyers, and repurpose content on autopilot." },
-  { n: "10", title: "Local Business AI Service Kit", lessons: 7, outcome: "Sell a productized AI service (audits, content, automations) to local clients for $500–$2k." },
-  { n: "11", title: "Launch Your First Income System", lessons: 8, outcome: "Combine product + funnel + automation into a live offer in 7 days." },
-  { n: "12", title: "Faceless Video Income", lessons: 8, outcome: "Faceless YouTube/TikTok/Shorts with ElevenLabs voiceovers + HeyGen/Synthesia AI avatars." },
-  { n: "13", title: "AI Image Income", lessons: 7, outcome: "Midjourney / Flux 2 for print-on-demand, ads, and thumbnails that actually sell." },
-  { n: "14", title: "Chatbot Agency (Botpress)", lessons: 8, outcome: "Build and resell AI chatbots to local businesses for $1k–$5k setup deals." },
-];
+const modules = CURRICULUM_MODULES;
 
 const audience = [
   "Beginners who've never made $1 with AI",
@@ -83,7 +69,7 @@ const audience = [
 ];
 
 const included = [
-  "89 structured lessons across 15 modules",
+  `${CURRICULUM.lessons} structured lessons across ${CURRICULUM.modules} modules`,
   "Faceless video, AI image, and chatbot agency modules (Accelerator)",
   "Searchable prompt library (ChatGPT, Claude, Perplexity, Lovable, n8n)",
   "Interactive Digital Product Builder + Sales Funnel Builder",
@@ -99,7 +85,7 @@ const faqs = [
   { q: "Will you teach me to make $X per month?", a: "No fake income promises. We teach the systems people actually use to build offers and sell them. Your results depend on the work you put in." },
   { q: "Do I need paid AI tools?", a: "Free tiers of ChatGPT, Claude, Perplexity, Lovable, and n8n are enough to complete every module. Paid tiers help, but aren't required." },
   { q: "Is this another 'AI guru' course?", a: "It's the opposite. No screenshots of fake Stripe dashboards. No upsells to a $5,000 mastermind. Just one course, three tiers, real systems." },
-  { q: "How long does it take?", a: "You can ship your first income system in 7 days following Module 11. The full curriculum is paced for 4–8 weeks of part-time work." },
+  { q: "How long does it take?", a: "You can ship your first income system in 7 days following Module 10. The full curriculum is paced for 4–8 weeks of part-time work." },
   { q: "What if I get stuck?", a: "Every lesson has action steps, copy-pasteable prompts, and example outputs. The builders generate plans tailored to your niche." },
 ];
 
@@ -304,7 +290,7 @@ export default function LandingPage() {
       <section id="curriculum" className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Curriculum</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">15 modules. 89 lessons.</h2>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">{CURRICULUM.modules} modules. {CURRICULUM.lessons} lessons.</h2>
           <p className="mt-3 text-muted-foreground">Sequenced so each module builds on the last.</p>
         </div>
         <div className="glass-strong rounded-2xl overflow-hidden divide-y divide-white/5">
