@@ -101,7 +101,7 @@ function WorkflowsPage() {
         title="n8n Workflow Library"
         subtitle="Production-ready automation templates. Copy the spec, build in n8n, save hours a week."
         requiredTier="builder"
-        inputs={["An n8n account (free self-host or cloud)", "The API keys for the apps you connect"]}
+        inputs={["An n8n Cloud account or maintained self-hosted Community Edition", "The API keys for the apps you connect"]}
         produces={["Node-by-node build spec for each workflow", "Trigger, transform, and error-handling setup", "Copy-paste prompts for the AI nodes"]}
         lockedActions={["viewing full specs", "copying workflow JSON prompts"]}
         example={

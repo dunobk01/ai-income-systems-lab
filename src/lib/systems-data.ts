@@ -235,7 +235,7 @@ export const systems: System[] = [
       "Referral commissions from local-business networks (BNI, chambers, etc.)",
     ],
     realisticOutcome:
-      "First paid client in 14–30 days from cold outreach. $3k–$10k MRR within 90 days for a focused operator working part-time. Local services scale via hiring more cleanly than any other path.",
+      "A focused, reusable service makes client work easier to scope, faster to deliver, and simpler to repeat. Start with one clear offer, document each delivery, and use automation to reduce routine admin; results still depend on your market, outreach, pricing, and execution.",
     startingPrice: "$999–$1,999 setup + $199–$499/mo",
     timeToShip: "3–5 days per client delivery",
   },

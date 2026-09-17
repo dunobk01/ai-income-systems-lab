@@ -83,7 +83,7 @@ const included = [
 const faqs = [
   { q: "Do I need any AI experience?", a: "No. Module 1 starts from zero. If you can write a paragraph and follow steps, you can do this." },
   { q: "Will you teach me to make $X per month?", a: "No fake income promises. We teach the systems people actually use to build offers and sell them. Your results depend on the work you put in." },
-  { q: "Do I need paid AI tools?", a: "Free tiers of ChatGPT, Claude, Perplexity, Lovable, and n8n are enough to complete every module. Paid tiers help, but aren't required." },
+  { q: "Do I need paid AI tools?", a: "You can use free access to ChatGPT, Claude, Perplexity, and Lovable for the core lessons. n8n Cloud is managed and becomes paid after its trial; its Community Edition is free to self-host, but you manage the server, updates, security, backups, and uptime. AI API usage may cost extra." },
   { q: "Is this another 'AI guru' course?", a: "It's the opposite. No screenshots of fake Stripe dashboards. No upsells to a $5,000 mastermind. Just one course, three tiers, real systems." },
   { q: "How long does it take?", a: "You can ship your first income system in 7 days following Module 10. The full curriculum is paced for 4–8 weeks of part-time work." },
   { q: "What if I get stuck?", a: "Every lesson has action steps, copy-pasteable prompts, and example outputs. The builders generate plans tailored to your niche." },
@@ -351,7 +351,7 @@ export default function LandingPage() {
 
       {/* FOUNDER */}
       <section id="founder" className="mx-auto max-w-5xl px-4 sm:px-6 py-20">
-        <div className="grid gap-10 md:grid-cols-[220px_1fr] items-start">
+        <div className="grid min-w-0 gap-10 md:grid-cols-[220px_minmax(0,1fr)] items-start">
           <div className="mx-auto md:mx-0">
             <div className="h-52 w-52 rounded-2xl glass-strong overflow-hidden">
               <img src={dustinPhoto.url} alt="Dustin, creator of AI Income Systems Lab" className="h-full w-full object-cover" />
@@ -359,7 +359,7 @@ export default function LandingPage() {
             <p className="mt-4 text-center md:text-left text-sm font-semibold">Dustin</p>
             <p className="text-center md:text-left text-xs text-muted-foreground">Creator of AI Income Systems Lab</p>
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Who's behind this</p>
             <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">I Stopped Chasing Tools. I Started Building Systems.</h2>
 
@@ -419,8 +419,8 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
-              <Button asChild size="lg" variant="brand" className="h-12 px-7 text-base">
+            <div className="mt-8 flex min-w-0 flex-col sm:flex-row items-center gap-4">
+              <Button asChild size="lg" variant="brand" className="h-auto min-h-12 w-full max-w-full whitespace-normal px-5 py-3 text-center text-base sm:w-auto sm:px-7">
                 <Link to="/signup">Don't Get Left Behind — Start Building Systems</Link>
               </Button>
             </div>

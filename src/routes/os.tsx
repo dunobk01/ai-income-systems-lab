@@ -53,7 +53,7 @@ const FAQS = [
   },
   {
     q: "Do I need paid AI tools?",
-    a: "No. Everything in the guide works on the free tiers of ChatGPT, Claude, Perplexity and n8n.",
+    a: "The guide can use free access to ChatGPT, Claude and Perplexity. n8n Cloud offers a limited free trial before a paid plan; the Community Edition is free to self-host, but you manage the server, setup, updates, security, backups and uptime. AI API calls may cost extra.",
   },
   {
     q: "Will you spam me?",
@@ -140,28 +140,8 @@ function OperatingSystemPage() {
           into one system that keeps running after you close the laptop.
         </p>
 
-        {/* Video */}
-        <section className="mt-10">
-          <div className="glass-strong rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-            <video
-              src="/videos/ai-income-systems-ad-20s.mp4"
-              poster="/og-image.jpg"
-              controls
-              playsInline
-              muted
-              autoPlay
-              loop
-              className="w-full aspect-video bg-black"
-              aria-label="20-second AI Income Systems Lab intro video"
-            />
-          </div>
-          <p className="mt-3 text-center text-xs text-muted-foreground">
-            Watch the 20-second preview, then grab the free guide below.
-          </p>
-        </section>
-
         {/* Capture */}
-        <section id="get" className="mt-10 glass-strong rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+        <section id="get" className="mt-8 glass-strong rounded-3xl p-5 sm:p-8 relative overflow-hidden">
           <div className="absolute inset-0 -z-10 opacity-50" style={{ background: "var(--gradient-hero)" }} />
           {state === "done" ? (
             <div>
@@ -237,6 +217,27 @@ function OperatingSystemPage() {
           )}
           {error && <p className="mt-3 text-xs text-red-300">{error}</p>}
         </section>
+
+        {/* Video */}
+        <section className="mt-10">
+          <div className="glass-strong rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            <video
+              src="/videos/ai-income-systems-ad-20s.mp4"
+              poster="/og-image.jpg"
+              controls
+              playsInline
+              muted
+              autoPlay
+              loop
+              className="w-full aspect-video bg-black"
+              aria-label="20-second AI Income Systems Lab intro video"
+            />
+          </div>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Watch the 20-second preview to see how the system fits together.
+          </p>
+        </section>
+
 
         {/* Inside */}
         <section className="mt-14">

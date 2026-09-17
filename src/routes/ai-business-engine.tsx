@@ -31,7 +31,7 @@ const FAQS = [
   },
   {
     q: "Do I need to pay for AI tools to use it?",
-    a: "No. Every prompt works on the free tiers of ChatGPT, Claude and Perplexity. n8n has a free plan with 5 active workflows.",
+    a: "The prompts work with free access to ChatGPT, Claude and Perplexity. n8n Cloud is managed and offers a limited free trial before a paid plan. The Community Edition is free to self-host, but you must provide and maintain the server, updates, security, backups and uptime. AI API calls may also have separate usage costs.",
   },
   {
     q: "Will you spam me?",

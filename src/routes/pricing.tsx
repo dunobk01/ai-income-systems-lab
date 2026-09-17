@@ -13,7 +13,7 @@ import { ExitIntentModal } from "@/components/exit-intent-modal";
 const pricingFaqs = [
   { q: "Can I cancel anytime?", a: "Yes. Cancel from Settings in one click; access continues through the end of your billing period." },
   { q: "Is there a free plan?", a: "Yes. The free account is permanent: Module 1, sample lessons, tool guides and progress tracking, with no card required." },
-  { q: "Do you offer refunds?", a: "Every plan is monthly and cancel-anytime, so there's nothing to refund — you keep access through the period you paid for." },
+  { q: "Do you offer refunds?", a: "Yes. Your first payment for any subscription tier has a 14-day money-back guarantee. Email support within 14 days of that initial purchase for a full refund. Renewals are not refundable, but you can cancel anytime and keep access through the paid billing period." },
   { q: "Can I upgrade or downgrade?", a: "Yes, from Settings. Upgrades pro-rate immediately; downgrades apply at the next billing cycle." },
   { q: "Is my payment secure?", a: "All payments are processed by Stripe. We never see or store your card details." },
   { q: "Do I get lifetime access?", a: "Your access lasts as long as your subscription is active. If you cancel, you keep access through the current billing period." },
