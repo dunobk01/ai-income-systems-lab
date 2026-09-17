@@ -40,7 +40,7 @@ const groups = [
     label: "Getting started",
     faqs: [
       { q: "Do I need any AI experience?", a: "No. Module 1 starts from zero. If you can write a paragraph and follow steps, you can do this. Most students arrive having tried ChatGPT a few times and nothing else." },
-      { q: "Do I need paid AI tools?", a: "Free tiers of ChatGPT, Claude, Perplexity, Lovable, and n8n are enough to complete every module. Paid tiers help (longer context, faster models, more workflow runs), but they aren't required to ship your first income system." },
+      { q: "Do I need paid AI tools?", a: "You can use free access to ChatGPT, Claude, Perplexity, and Lovable for the core lessons. For n8n, the managed Cloud service offers a limited free trial before a paid plan; the Community Edition is free to self-host, but you are responsible for the server, setup, updates, security, backups, and uptime. Connected AI services may also charge separately for API usage." },
       { q: "How long does it take?", a: "You can ship your first income system in 7 days following Module 11. The full curriculum is paced for 4–8 weeks of part-time work (about 4–6 hours/week), and you can learn at your own pace while your plan is active." },
       { q: "What if I'm not technical?", a: "The whole program is built for non-technical operators. Lovable handles the code, n8n handles the integrations, and the AI tools handle most of the writing. If you can drag, drop, and copy-paste, you're qualified." },
     ],
@@ -60,7 +60,7 @@ const groups = [
       { q: "What do the plans cost?", a: "The Free plan costs $0. Starter is $19.99/month, Builder is $29.99/month, and Accelerator is $44.99/month. Every paid plan is billed monthly and can be canceled anytime." },
       { q: "What does each tier include?", a: "Starter = full course + prompt library. Builder = adds the community, template library and interactive builders. Accelerator = adds faceless video, AI image, chatbot agency modules and member DMs. Full comparison on the pricing page." },
       { q: "Can I upgrade later?", a: "Yes — upgrade any time and pay only the difference. No 'gotcha' pricing." },
-      { q: "Do you offer refunds?", a: "Every paid plan is monthly and cancel-anytime. When you cancel, you keep access through the billing period you've already paid for." },
+      { q: "Do you offer refunds?", a: "Yes. Your first payment for any subscription tier has a 14-day money-back guarantee. Email support within 14 days of that initial purchase for a full refund. Renewals are not refundable, but you can cancel anytime and keep access through the paid billing period." },
       { q: "Is there a payment plan?", a: "There are no long-term payment plans. Starter, Builder, and Accelerator are billed monthly, and you can cancel anytime." },
     ],
   },

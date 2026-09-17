@@ -90,11 +90,11 @@ export const starterKit: StarterSection[] = [
         name: "n8n (Cloud or self-hosted)",
         category: "Automation",
         role: "Connect every tool you use — AI, CRM, email, Sheets — into background workflows that run 24/7.",
-        pricing: "Free if self-hosted on Render/Railway. Cloud from $20/mo.",
+        pricing: "Community Edition is free to self-host, excluding server and operating costs. Cloud pricing follows its limited trial.",
         whyIts1stPick:
           "Open-source, AI-native (built-in OpenAI/Anthropic/HTTP nodes), self-hostable, and 10× more flexible than Zapier or Make at lower cost.",
         setupSteps: [
-          "Sign up for n8n Cloud OR deploy free on Render in 10 min.",
+          "Start an n8n Cloud trial for managed setup, or deploy Community Edition only if you can maintain the server, updates, security, backups, and uptime.",
           "Connect 3 credentials to start: OpenAI/Anthropic, Google (Sheets + Gmail), and Slack.",
           "Build your first workflow: webhook → AI processing → write to Sheets → Slack alert. That's the pattern under 80% of useful automations.",
           "Always add an Error Trigger sub-workflow that posts failures to Slack. Silent failures kill trust in automation faster than any bug.",

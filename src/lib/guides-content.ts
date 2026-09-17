@@ -643,7 +643,7 @@ const g3: StaticGuide = {
         {
           type: "ol",
           items: [
-            "Sign up for n8n Cloud free tier (or self-host on Railway for $5/mo).",
+            "Choose n8n Cloud for managed hosting after its limited trial, or self-host the free Community Edition on infrastructure you operate and maintain.",
             "Add credentials for OpenAI, Anthropic, Gmail (OAuth), and Stripe (secret key).",
             "Create a workspace-level environment variable for your ESP API key so you can reuse it across workflows.",
             "Turn on the built-in error workflow to email you when any workflow fails.",
