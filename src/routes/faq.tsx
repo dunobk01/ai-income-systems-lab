@@ -41,7 +41,7 @@ const groups = [
     faqs: [
       { q: "Do I need any AI experience?", a: "No. Module 1 starts from zero. If you can write a paragraph and follow steps, you can do this. Most students arrive having tried ChatGPT a few times and nothing else." },
       { q: "Do I need paid AI tools?", a: "Free tiers of ChatGPT, Claude, Perplexity, Lovable, and n8n are enough to complete every module. Paid tiers help (longer context, faster models, more workflow runs), but they aren't required to ship your first income system." },
-      { q: "How long does it take?", a: "You can ship your first income system in 7 days following Module 11. The full curriculum is paced for 4–8 weeks of part-time work (about 4–6 hours/week). Lifetime access means you go at your pace." },
+      { q: "How long does it take?", a: "You can ship your first income system in 7 days following Module 11. The full curriculum is paced for 4–8 weeks of part-time work (about 4–6 hours/week), and you can learn at your own pace while your plan is active." },
       { q: "What if I'm not technical?", a: "The whole program is built for non-technical operators. Lovable handles the code, n8n handles the integrations, and the AI tools handle most of the writing. If you can drag, drop, and copy-paste, you're qualified." },
     ],
   },
@@ -51,13 +51,13 @@ const groups = [
       { q: "Will you teach me to make $X per month?", a: "No fake income promises. We teach the systems people actually use to build offers and sell them. Your results depend on the work you put in, the market you pick, and how willing you are to iterate. Anyone promising a guaranteed dollar amount is selling fiction." },
       { q: "Is this another 'AI guru' course?", a: "It's the opposite. No screenshots of fake Stripe dashboards. No upsells to a $5,000 mastermind. No 'limited spots' theater. Just practical lessons, real systems, and clear monthly plans." },
       { q: "What if I get stuck?", a: "Every lesson has action steps, copy-pasteable prompts, and example outputs. The interactive builders (on Builder and Accelerator plans) generate plans tailored to your niche. If a lesson confuses you, email support — we read every message." },
-      { q: "How often is the content updated?", a: "AI tools change monthly. We update the relevant modules whenever a major change ships (new GPT version, new n8n features, new Lovable capabilities). Lifetime access includes all updates." },
+      { q: "How often is the content updated?", a: "AI tools change monthly. We update the relevant modules whenever a major change ships, and active members receive those updates as part of their plan." },
     ],
   },
   {
     label: "Pricing & access",
     faqs: [
-      { q: "What do the plans cost?", a: "Starter is $19.99/mo, Builder is $29.99/mo, and Accelerator is $44.99/mo. There is also a permanent free plan with Module 1, sample lessons and tool guides. Every paid plan is monthly and cancel-anytime." },
+      { q: "What do the plans cost?", a: "The Free plan costs $0. Starter is $19.99/month, Builder is $29.99/month, and Accelerator is $44.99/month. Every paid plan is billed monthly and can be canceled anytime." },
       { q: "What does each tier include?", a: "Starter = full course + prompt library. Builder = adds the community, template library and interactive builders. Accelerator = adds faceless video, AI image, chatbot agency modules and member DMs. Full comparison on the pricing page." },
       { q: "Can I upgrade later?", a: "Yes — upgrade any time and pay only the difference. No 'gotcha' pricing." },
       { q: "Do you offer refunds?", a: "Every paid plan is monthly and cancel-anytime. When you cancel, you keep access through the billing period you've already paid for." },
