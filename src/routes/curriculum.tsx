@@ -4,14 +4,15 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ogImageMeta } from "@/lib/og";
+import { CURRICULUM_MODULES, CURRICULUM_SENTENCE, CURRICULUM } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/curriculum")({
   head: () => ({
     meta: [
       { title: "Curriculum — AI Income Systems Lab" },
-      { name: "description", content: "15 modules, 89 lessons. The full sequence that takes you from zero to a live AI income system in 7 days." },
+      { name: "description", content: `${CURRICULUM_SENTENCE}. The full sequence that takes you from zero to a live AI income system in 7 days.` },
       { property: "og:title", content: "Curriculum — AI Income Systems Lab" },
-      { property: "og:description", content: "15 modules, 89 lessons. The full sequence that takes you from zero to a live AI income system." },
+      { property: "og:description", content: `${CURRICULUM_SENTENCE}. The full sequence that takes you from zero to a live AI income system.` },
       { property: "og:url", content: "https://ai-income-systems.com/curriculum" },
     
       ...ogImageMeta(),
@@ -21,63 +22,7 @@ export const Route = createFileRoute("/curriculum")({
   component: CurriculumPage,
 });
 
-const modules = [
-  {
-    n: "01", title: "AI Money Foundations", lessons: 6,
-    outcome: "Pick a niche, an offer type, and a 90-day income target you can actually hit.",
-    topics: ["How AI changes the income game (and what hasn't changed)", "The Niche × Offer × Tool matrix", "Setting a realistic 90-day target", "Tracker setup: what to measure weekly"],
-  },
-  {
-    n: "02", title: "Prompt Mastery", lessons: 9,
-    outcome: "Write reusable prompts that produce expert-level output on the first try.",
-    topics: ["Anatomy of a great prompt", "Role / context / format pattern", "Prompt chaining and refinement", "Building your personal prompt library"],
-  },
-  {
-    n: "03", title: "ChatGPT for Execution", lessons: 8,
-    outcome: "Use ChatGPT as your daily operator for content, copy, and customer work.",
-    topics: ["Custom GPTs for repeated workflows", "Voice mode + transcripts", "Projects for client work", "Inbox triage and reply drafting"],
-  },
-  {
-    n: "04", title: "Claude for Strategy", lessons: 8,
-    outcome: "Plan offers, products, and launches with long-context reasoning that doesn't drift.",
-    topics: ["200k context workflows", "Artifacts for plans and copy", "Voice matching and editing", "Self-critique loops"],
-  },
-  {
-    n: "05", title: "Perplexity for Research", lessons: 7,
-    outcome: "Validate niches, audiences, and competitors in minutes — with sources.",
-    topics: ["Market research playbooks", "Competitor teardown", "Audience pain mining", "Sourced fact packs for content"],
-  },
-  {
-    n: "06", title: "Lovable App & Funnel Builder", lessons: 9,
-    outcome: "Ship a real landing page, micro-SaaS, or funnel without writing code.",
-    topics: ["Project setup + design system", "Auth and payments", "Building the dashboard", "Shipping to a real domain"],
-  },
-  {
-    n: "07", title: "Digital Product Factory", lessons: 9,
-    outcome: "Produce and package a digital product (ebook, template pack, mini-course) you can sell this week.",
-    topics: ["Niche → product fit", "Drafting in Claude, designing in Canva", "Pricing and packaging", "Launching on Gumroad / Lovable"],
-  },
-  {
-    n: "08", title: "Sales Funnel Builder", lessons: 8,
-    outcome: "Map lead magnet → landing → tripwire → upsell and write every page that converts.",
-    topics: ["The value ladder", "Writing tripwires that liquidate ad spend", "5-day welcome sequences", "Order bumps and upsells"],
-  },
-  {
-    n: "09", title: "n8n Automation Lab", lessons: 11,
-    outcome: "Build workflows that deliver products, follow up with buyers, and repurpose content on autopilot.",
-    topics: ["n8n fundamentals", "Delivery + onboarding automations", "Content repurposing pipelines", "Reporting and alerting flows"],
-  },
-  {
-    n: "10", title: "Local Business AI Service Kit", lessons: 7,
-    outcome: "Sell a productized AI service (audits, content, automations) to local clients for $500–$2k.",
-    topics: ["Picking a vertical", "Productizing the offer", "Cold outreach scripts", "Delivery + retainer playbook"],
-  },
-  {
-    n: "11", title: "Launch Your First Income System", lessons: 8,
-    outcome: "Combine product + funnel + automation into a live offer in 7 days.",
-    topics: ["7-day launch sprint", "Pre-launch list building", "Launch week mechanics", "Post-launch iteration"],
-  },
-];
+const modules = CURRICULUM_MODULES;
 
 function CurriculumPage() {
   return (
@@ -90,11 +35,11 @@ function CurriculumPage() {
             <BookOpen className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Curriculum
           </div>
           <h1 className="mt-5 text-4xl sm:text-6xl font-black tracking-tight">
-            15 modules. 89 lessons.<br />
+            {CURRICULUM.modules} modules. {CURRICULUM.lessons} lessons.<br />
             <span className="text-gradient">One real income system.</span>
           </h1>
           <p className="mt-5 mx-auto max-w-2xl text-muted-foreground">
-            Sequenced so each module builds on the last. By Module 11, your product, funnel, and automations are live — not a theory deck.
+            Sequenced so each module builds on the last. By Module 10, your product, funnel, and automations are live — not a theory deck.
           </p>
         </div>
       </section>
