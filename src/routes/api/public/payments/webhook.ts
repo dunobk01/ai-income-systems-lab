@@ -267,9 +267,12 @@ async function handleSubscriptionUpsert(sub: any, env: StripeEnv, isNew: boolean
     { onConflict: "stripe_subscription_id" },
   );
 
-  // Send welcome email on first activation.
-  const becameActive = !wasActiveBefore && ["active", "trialing"].includes(sub.status);
-  if (isNew || becameActive) {
+  // Welcome / upgrade signals only once the first payment has actually
+  // succeeded. `incomplete`, `incomplete_expired` and `unpaid` grant nothing:
+  // the row is stored for reporting, but the profile stays on Free.
+  const isPaidNow = ["active", "trialing"].includes(sub.status);
+  const becameActive = !wasActiveBefore && isPaidNow;
+  if (isPaidNow && (becameActive || (isNew && !wasActiveBefore))) {
     const email = await getUserEmail(userId);
     if (email && priceId === "ailab_monthly_subscription") {
       await sendMonthlyWelcomeEmail({ to: email, amountCents, currency });
@@ -362,10 +365,23 @@ async function handleRefund(charge: any, env: StripeEnv) {
 }
 
 async function handle(req: Request, env: StripeEnv) {
-  const event = await verifyWebhook(req, env);
+  const event = (await verifyWebhook(req, env)) as { id?: string; type: string; data: { object: any } };
+
+  if (event.id && (await alreadyProcessed(event.id, event.type, env))) {
+    console.log("duplicate Stripe event ignored:", event.type);
+    return;
+  }
+
   switch (event.type) {
     case "checkout.session.completed":
+    case "checkout.session.async_payment_succeeded":
       await recordOneTimePurchase(event.data.object, env);
+      break;
+    case "checkout.session.expired":
+    case "checkout.session.async_payment_failed":
+      // Abandoned / failed checkout. No entitlement, no purchase record, no
+      // confirmation email — the member simply stays on Free.
+      console.log("checkout not completed; membership unchanged:", event.type);
       break;
     case "customer.subscription.created":
       await handleSubscriptionUpsert(event.data.object, env, true);
