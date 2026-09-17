@@ -171,8 +171,12 @@ function SignupPage() {
             By signing up, you agree to our{" "}
             <Link to="/terms" className="underline hover:text-foreground">
               Terms & Conditions
-            </Link>
-            . Joining is free — cancel anytime.
+            </Link>{" "}
+            and to receive account, educational and promotional emails from us. You can{" "}
+            <Link to="/unsubscribe" search={{ token: "", email: "" }} className="underline hover:text-foreground">
+              unsubscribe
+            </Link>{" "}
+            at any time. Joining is free — cancel anytime.
           </p>
         </div>
       </div>

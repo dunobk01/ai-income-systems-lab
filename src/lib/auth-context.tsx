@@ -1,20 +1,13 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { FREE_TIER_VALUE, TIER_RANK, type Tier } from "@/lib/member-rules";
+import { ensureMemberProvisioned } from "@/lib/members.functions";
 
-type Tier = "none" | "monthly" | "starter" | "builder" | "pro" | "accelerator";
-
-export const TIER_RANK: Record<string, number> = {
-  none: 0,
-  monthly: 1,
-  starter: 1,
-  builder: 2,
-  pro: 3,
-  accelerator: 3,
-};
+export { TIER_RANK };
 
 export const hasTier = (userTier: string | undefined | null, requiredTier: string): boolean =>
-  (TIER_RANK[userTier ?? "none"] ?? 0) >= (TIER_RANK[requiredTier] ?? 0);
+  (TIER_RANK[userTier ?? FREE_TIER_VALUE] ?? 0) >= (TIER_RANK[requiredTier] ?? 0);
 
 type Profile = {
   user_id: string;
@@ -42,6 +35,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const provisionedFor = useRef<string | null>(null);
+
+  /**
+   * Repair fallback: the OAuth redirect can interrupt any code that runs right
+   * after the sign-in click, so membership is confirmed server-side once per
+   * session instead. Never downgrades a paid member.
+   */
+  const ensureProvisioned = async (uid: string) => {
+    if (provisionedFor.current === uid) return;
+    provisionedFor.current = uid;
+    try {
+      const result = await ensureMemberProvisioned({ data: undefined } as never);
+      if (result?.repaired?.profile || result?.repaired?.sync) {
+        await loadProfile(uid);
+      }
+    } catch {
+      // Non-fatal: the scheduled worker repairs anything missed here.
+      provisionedFor.current = null;
+    }
+  };
 
   const loadProfile = async (uid: string) => {
     const [{ data: p }, { data: roles }] = await Promise.all([
@@ -58,10 +71,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(s?.user ?? null);
       if (s?.user) {
         // Defer to avoid recursive auth events
-        setTimeout(() => { void loadProfile(s.user.id); }, 0);
+        setTimeout(() => {
+          void loadProfile(s.user.id);
+          void ensureProvisioned(s.user.id);
+        }, 0);
       } else {
         setProfile(null);
         setIsAdmin(false);
+        provisionedFor.current = null;
       }
     });
 
@@ -69,7 +86,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data: { session: s } } = await supabase.auth.getSession();
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) await loadProfile(s.user.id);
+      if (s?.user) {
+        await loadProfile(s.user.id);
+        void ensureProvisioned(s.user.id);
+      }
       setLoading(false);
     })();
 

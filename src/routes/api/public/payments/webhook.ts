@@ -126,11 +126,35 @@ async function sendRefundEmail(opts: {
   });
 }
 
+/**
+ * Idempotency gate. Returns true when this Stripe event id has already been
+ * processed, so webhook retries can never duplicate entitlements, purchase
+ * rows, receipt emails or MailerLite automation triggers.
+ */
+async function alreadyProcessed(eventId: string, eventType: string, env: StripeEnv): Promise<boolean> {
+  const { error } = await (getSupabase().from("stripe_events") as any).insert({
+    id: eventId,
+    event_type: eventType,
+    environment: env,
+  });
+  if (!error) return false;
+  if (/duplicate key/i.test(error.message)) return true;
+  console.error("stripe_events ledger write failed", error.message);
+  return false;
+}
+
 async function recordOneTimePurchase(session: any, env: StripeEnv) {
   const userId = session.metadata?.userId;
   const priceId = session.metadata?.priceId;
   if (!userId || !priceId) {
     console.error("checkout.session.completed missing metadata", session.id);
+    return;
+  }
+
+  // Creating a session is not a payment. Only `paid` and
+  // `no_payment_required` are final; `unpaid` settles later (or never).
+  if (session.payment_status === "unpaid") {
+    console.log("checkout session not yet paid; no entitlement granted");
     return;
   }
 
@@ -243,9 +267,12 @@ async function handleSubscriptionUpsert(sub: any, env: StripeEnv, isNew: boolean
     { onConflict: "stripe_subscription_id" },
   );
 
-  // Send welcome email on first activation.
-  const becameActive = !wasActiveBefore && ["active", "trialing"].includes(sub.status);
-  if (isNew || becameActive) {
+  // Welcome / upgrade signals only once the first payment has actually
+  // succeeded. `incomplete`, `incomplete_expired` and `unpaid` grant nothing:
+  // the row is stored for reporting, but the profile stays on Free.
+  const isPaidNow = ["active", "trialing"].includes(sub.status);
+  const becameActive = !wasActiveBefore && isPaidNow;
+  if (isPaidNow && (becameActive || (isNew && !wasActiveBefore))) {
     const email = await getUserEmail(userId);
     if (email && priceId === "ailab_monthly_subscription") {
       await sendMonthlyWelcomeEmail({ to: email, amountCents, currency });
@@ -338,10 +365,23 @@ async function handleRefund(charge: any, env: StripeEnv) {
 }
 
 async function handle(req: Request, env: StripeEnv) {
-  const event = await verifyWebhook(req, env);
+  const event = (await verifyWebhook(req, env)) as { id?: string; type: string; data: { object: any } };
+
+  if (event.id && (await alreadyProcessed(event.id, event.type, env))) {
+    console.log("duplicate Stripe event ignored:", event.type);
+    return;
+  }
+
   switch (event.type) {
     case "checkout.session.completed":
+    case "checkout.session.async_payment_succeeded":
       await recordOneTimePurchase(event.data.object, env);
+      break;
+    case "checkout.session.expired":
+    case "checkout.session.async_payment_failed":
+      // Abandoned / failed checkout. No entitlement, no purchase record, no
+      // confirmation email — the member simply stays on Free.
+      console.log("checkout not completed; membership unchanged:", event.type);
       break;
     case "customer.subscription.created":
       await handleSubscriptionUpsert(event.data.object, env, true);
