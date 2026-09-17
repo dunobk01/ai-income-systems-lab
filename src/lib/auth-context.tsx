@@ -35,6 +35,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const provisionedFor = useRef<string | null>(null);
+
+  /**
+   * Repair fallback: the OAuth redirect can interrupt any code that runs right
+   * after the sign-in click, so membership is confirmed server-side once per
+   * session instead. Never downgrades a paid member.
+   */
+  const ensureProvisioned = async (uid: string) => {
+    if (provisionedFor.current === uid) return;
+    provisionedFor.current = uid;
+    try {
+      const result = await ensureMemberProvisioned({ data: undefined } as never);
+      if (result?.repaired?.profile || result?.repaired?.sync) {
+        await loadProfile(uid);
+      }
+    } catch {
+      // Non-fatal: the scheduled worker repairs anything missed here.
+      provisionedFor.current = null;
+    }
+  };
 
   const loadProfile = async (uid: string) => {
     const [{ data: p }, { data: roles }] = await Promise.all([
