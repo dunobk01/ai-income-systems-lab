@@ -90,10 +90,13 @@ export async function sendOsDay5Email(email: string) {
   if (!res.ok) {
     const body = await res.text();
     console.error("[os-day5] gateway error", res.status, body);
-    // 4xx (other than rate limiting) means the address itself is rejected —
-    // retrying it on every cron run will never succeed.
-    const permanent = res.status >= 400 && res.status < 500 && res.status !== 429;
-    return { ok: false, permanent, reason: `gateway ${res.status}: ${body}` };
+    // Only a recipient-level validation rejection is permanent. Auth, payload
+    // and routing failures (400/401/403/404/429/5xx) are global config issues:
+    // they must stay retryable so nobody is silently dropped from the sequence.
+    const permanent = res.status === 422 && /\b(to|recipient|email)\b/i.test(body);
+    // Anything that isn't about this address means the whole run is broken.
+    const fatal = res.status === 401 || res.status === 403 || res.status === 404;
+    return { ok: false, permanent, fatal, reason: `gateway ${res.status}: ${body}` };
   }
   const body = (await res.json()) as { id?: string };
   return { ok: true, id: body.id };
