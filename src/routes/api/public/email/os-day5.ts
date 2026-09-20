@@ -50,6 +50,11 @@ async function run(request: Request) {
     const result = await sendOsDay5Email(email);
     if (!result.ok) {
       failed++;
+      // Permanently rejected addresses get recorded so the cron stops
+      // hammering them; transient failures stay eligible for the next run.
+      if ("permanent" in result && result.permanent) {
+        await supabaseAdmin.from("os_sequence_sends").insert({ email, step: STEP });
+      }
       continue;
     }
     sent++;
