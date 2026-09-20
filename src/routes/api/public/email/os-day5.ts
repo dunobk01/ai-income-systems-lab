@@ -45,13 +45,20 @@ async function run(request: Request) {
 
   let sent = 0;
   let failed = 0;
+  let aborted: string | null = null;
   for (const email of emails) {
     if (skip.has(email)) continue;
     const result = await sendOsDay5Email(email);
     if (!result.ok) {
       failed++;
-      // Permanently rejected addresses get recorded so the cron stops
-      // hammering them; transient failures stay eligible for the next run.
+      // A credential/routing failure is not about this address — stop the run
+      // so the remaining leads stay eligible once the config is fixed.
+      if ("fatal" in result && result.fatal) {
+        aborted = result.reason ?? "fatal gateway error";
+        break;
+      }
+      // Only addresses the provider rejected outright get a sent-record, so the
+      // cron stops hammering them; everything else retries next run.
       if ("permanent" in result && result.permanent) {
         await supabaseAdmin.from("os_sequence_sends").insert({ email, step: STEP });
       }
@@ -61,7 +68,7 @@ async function run(request: Request) {
     await supabaseAdmin.from("os_sequence_sends").insert({ email, step: STEP });
   }
 
-  return Response.json({ sent, failed, skipped: skip.size });
+  return Response.json({ sent, failed, skipped: skip.size, aborted });
 }
 
 export const Route = createFileRoute("/api/public/email/os-day5")({
