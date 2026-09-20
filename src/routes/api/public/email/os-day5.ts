@@ -26,7 +26,12 @@ async function run(request: Request) {
     .limit(200);
   if (error) return new Response(error.message, { status: 500 });
 
-  const emails = Array.from(new Set((leads ?? []).map((l) => l.email.toLowerCase())));
+  // Reserved/test domains (RFC 2606) are never deliverable — seed and QA rows
+  // would otherwise be retried on every run.
+  const UNDELIVERABLE = /@(example|test|invalid|localhost)\.(com|net|org)$|@(example|test|invalid|localhost)$/i;
+  const emails = Array.from(new Set((leads ?? []).map((l) => l.email.toLowerCase()))).filter(
+    (e) => !UNDELIVERABLE.test(e),
+  );
   if (emails.length === 0) return Response.json({ sent: 0, skipped: 0 });
 
   const [{ data: sentRows }, { data: suppressed }] = await Promise.all([
@@ -45,6 +50,11 @@ async function run(request: Request) {
     const result = await sendOsDay5Email(email);
     if (!result.ok) {
       failed++;
+      // Permanently rejected addresses get recorded so the cron stops
+      // hammering them; transient failures stay eligible for the next run.
+      if ("permanent" in result && result.permanent) {
+        await supabaseAdmin.from("os_sequence_sends").insert({ email, step: STEP });
+      }
       continue;
     }
     sent++;

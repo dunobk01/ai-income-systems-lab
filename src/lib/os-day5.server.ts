@@ -90,7 +90,10 @@ export async function sendOsDay5Email(email: string) {
   if (!res.ok) {
     const body = await res.text();
     console.error("[os-day5] gateway error", res.status, body);
-    return { ok: false, reason: `gateway ${res.status}: ${body}` };
+    // 4xx (other than rate limiting) means the address itself is rejected —
+    // retrying it on every cron run will never succeed.
+    const permanent = res.status >= 400 && res.status < 500 && res.status !== 429;
+    return { ok: false, permanent, reason: `gateway ${res.status}: ${body}` };
   }
   const body = (await res.json()) as { id?: string };
   return { ok: true, id: body.id };
