@@ -37,6 +37,8 @@ import {
 import {
   generateSavingsBlueprint,
   submitToolLead,
+  attachToolReport,
+  reportUrlFor,
   type SavingsBlueprint,
 } from "@/lib/tool-leads.functions";
 import { downloadBlueprintPdf } from "@/lib/savings-pdf";
@@ -174,7 +176,10 @@ function SavingsCalculatorPage() {
   const [error, setError] = useState<string | null>(null);
   const [blueprint, setBlueprint] = useState<SavingsBlueprint | null>(null);
 
+  const [reportUrl, setReportUrl] = useState<string | undefined>(undefined);
+
   const saveLead = useServerFn(submitToolLead);
+  const persistReport = useServerFn(attachToolReport);
   const makeBlueprint = useServerFn(generateSavingsBlueprint);
 
   const taskInputs: TaskInput[] = useMemo(
@@ -221,7 +226,7 @@ function SavingsCalculatorPage() {
       savings.moneyYear,
     )}/year at ${money(rate)}/hour.`;
     try {
-      await saveLead({
+      const saved = await saveLead({
         data: {
           email,
           first_name: firstName || undefined,
@@ -248,6 +253,12 @@ function SavingsCalculatorPage() {
         },
       });
       setBlueprint(bp);
+      if (saved.report_token) {
+        setReportUrl(reportUrlFor(saved.report_token));
+        void persistReport({
+          data: { report_token: saved.report_token, report: bp as unknown as Record<string, unknown> },
+        });
+      }
       setState("done");
       dlToolComplete(SLUG, { hours_week_saved: Number(savings.hoursWeek.toFixed(1)) });
     } catch (err) {
@@ -415,6 +426,7 @@ function SavingsCalculatorPage() {
                   toolSlug={SLUG}
                   title="My AI savings estimate"
                   text={`The AI Savings Calculator says I could get back about ${savings.hoursWeek.toFixed(1)} hours a week.`}
+                  url={reportUrl}
                 />
               </div>
             </div>
@@ -483,7 +495,7 @@ function SavingsCalculatorPage() {
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="min-w-0">
                 <p className="inline-flex items-center gap-2 text-xs text-[color:var(--success)]">
-                  <Check className="h-3.5 w-3.5" /> Blueprint ready — it is right below, and downloadable as a PDF.
+                  <Check className="h-3.5 w-3.5" /> Blueprint ready — it is right below, downloadable as a PDF, and on its way to your inbox.
                 </p>
                 <h3 className="mt-3 text-2xl font-bold">{blueprint.headline}</h3>
               </div>
