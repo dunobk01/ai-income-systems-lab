@@ -181,13 +181,41 @@ export const attachToolReport = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin
+    const { data: lead, error } = await supabaseAdmin
       .from("tool_leads")
       .update({ report_json: data.report as never })
-      .eq("report_token", data.report_token);
+      .eq("report_token", data.report_token)
+      .select("email, first_name, tool_slug")
+      .maybeSingle();
     if (error) console.error("[tool-leads] report persist failed", error.message);
+
+    // Email the permanent report link ourselves — MailerLite won't deliver to
+    // anyone who previously unsubscribed, and this report was explicitly asked for.
+    if (lead?.email) {
+      try {
+        const { data: suppressed } = await supabaseAdmin
+          .from("suppressed_emails")
+          .select("email")
+          .eq("email", lead.email)
+          .maybeSingle();
+        if (!suppressed) {
+          const { sendToolReportEmail } = await import("@/lib/tool-report-email.server");
+          const sent = await sendToolReportEmail({
+            email: lead.email,
+            firstName: lead.first_name,
+            toolName: TOOL_NAMES[lead.tool_slug] ?? "AI tool",
+            reportUrl: reportUrlFor(data.report_token),
+          });
+          if (!sent.ok) console.error("[tool-leads] report email failed", sent.reason);
+        }
+      } catch (err) {
+        console.error("[tool-leads] report email error", err);
+      }
+    }
+
     return { ok: !error };
   });
+
 
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [k: string]: JsonValue };
 
