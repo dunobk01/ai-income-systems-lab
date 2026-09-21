@@ -75,6 +75,7 @@ import { Route as AuthenticatedCommunityThreadIdRouteImport } from './routes/_au
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
 import { Route as AuthenticatedBuildersAgentRouteImport } from './routes/_authenticated/builders/agent'
+import { Route as AuthenticatedAdminToolLeadsRouteImport } from './routes/_authenticated/admin.tool-leads'
 import { Route as AuthenticatedAdminPillarsRouteImport } from './routes/_authenticated/admin.pillars'
 import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_authenticated/admin.permissions'
 import { Route as AuthenticatedAdminNewsletterRouteImport } from './routes/_authenticated/admin.newsletter'
@@ -435,6 +436,12 @@ const AuthenticatedBuildersAgentRoute =
     path: '/builders/agent',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminToolLeadsRoute =
+  AuthenticatedAdminToolLeadsRouteImport.update({
+    id: '/tool-leads',
+    path: '/tool-leads',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminPillarsRoute =
   AuthenticatedAdminPillarsRouteImport.update({
     id: '/pillars',
@@ -580,6 +587,7 @@ export interface FileRoutesByFullPath {
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
+  '/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -658,6 +666,7 @@ export interface FileRoutesByTo {
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
+  '/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -742,6 +751,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
   '/_authenticated/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/_authenticated/admin/pillars': typeof AuthenticatedAdminPillarsRoute
+  '/_authenticated/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
   '/_authenticated/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -826,6 +836,7 @@ export interface FileRouteTypes {
     | '/admin/newsletter'
     | '/admin/permissions'
     | '/admin/pillars'
+    | '/admin/tool-leads'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
@@ -904,6 +915,7 @@ export interface FileRouteTypes {
     | '/admin/newsletter'
     | '/admin/permissions'
     | '/admin/pillars'
+    | '/admin/tool-leads'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
@@ -987,6 +999,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/newsletter'
     | '/_authenticated/admin/permissions'
     | '/_authenticated/admin/pillars'
+    | '/_authenticated/admin/tool-leads'
     | '/_authenticated/builders/agent'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
@@ -1529,6 +1542,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBuildersAgentRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/tool-leads': {
+      id: '/_authenticated/admin/tool-leads'
+      path: '/tool-leads'
+      fullPath: '/admin/tool-leads'
+      preLoaderRoute: typeof AuthenticatedAdminToolLeadsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/pillars': {
       id: '/_authenticated/admin/pillars'
       path: '/pillars'
@@ -1641,6 +1661,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminNewsletterRoute: typeof AuthenticatedAdminNewsletterRoute
   AuthenticatedAdminPermissionsRoute: typeof AuthenticatedAdminPermissionsRoute
   AuthenticatedAdminPillarsRoute: typeof AuthenticatedAdminPillarsRoute
+  AuthenticatedAdminToolLeadsRoute: typeof AuthenticatedAdminToolLeadsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
@@ -1648,6 +1669,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminNewsletterRoute: AuthenticatedAdminNewsletterRoute,
   AuthenticatedAdminPermissionsRoute: AuthenticatedAdminPermissionsRoute,
   AuthenticatedAdminPillarsRoute: AuthenticatedAdminPillarsRoute,
+  AuthenticatedAdminToolLeadsRoute: AuthenticatedAdminToolLeadsRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
