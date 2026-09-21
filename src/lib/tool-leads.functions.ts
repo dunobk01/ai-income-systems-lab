@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
  * Shared backend for the public Free Tools.
@@ -194,7 +195,7 @@ export type StoredReport = {
   business_type: string | null;
   score: number | null;
   result_summary: string | null;
-  report_json: unknown;
+  report_json: Record<string, unknown> | null;
   created_at: string;
 };
 
