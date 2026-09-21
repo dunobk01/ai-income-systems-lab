@@ -198,3 +198,109 @@ export const generateScorecardReport = createServerFn({ method: "POST" })
 
     return (await result.output) as ScorecardReport;
   });
+
+/* ------------------------ Savings blueprint ------------------------ */
+
+const blueprintSchema = z.object({
+  headline: z.string(),
+  summary: z.string(),
+  workflows: z
+    .array(
+      z.object({
+        rank: z.number(),
+        task: z.string(),
+        title: z.string(),
+        why: z.string(),
+        trigger: z.string(),
+        steps: z.array(z.string()),
+        output: z.string(),
+        tools: z.array(z.string()),
+      }),
+    )
+    .min(3)
+    .max(3),
+  caveats: z.array(z.string()).min(2).max(4),
+});
+
+export type SavingsBlueprint = z.infer<typeof blueprintSchema>;
+
+const blueprintInput = z.object({
+  hourly_rate: z.number().min(1).max(10000),
+  hours_week_saved: z.number().min(0).max(400),
+  money_month_saved: z.number().min(0),
+  top_tasks: z
+    .array(z.object({ label: z.string().max(120), hours: z.number(), saved_hours: z.number() }))
+    .max(12),
+});
+
+/** Shared IP rate-limit guard for the free tools' AI generations. */
+async function assertRateLimit(toolSlug: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const ipHash = await clientIpHash();
+  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const { count } = await supabaseAdmin
+    .from("tool_ai_usage")
+    .select("id", { count: "exact", head: true })
+    .eq("ip_hash", ipHash)
+    .gte("created_at", since);
+  if ((count ?? 0) >= RATE_LIMIT) {
+    throw new Error(
+      "You've generated 5 reports in the last hour — that's our cap so the free tools stay free. Try again in an hour; your emailed copy is already saved.",
+    );
+  }
+  await supabaseAdmin.from("tool_ai_usage").insert({ ip_hash: ipHash, tool_slug: toolSlug });
+}
+
+export const generateSavingsBlueprint = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => blueprintInput.parse(d))
+  .handler(async ({ data }) => {
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    if (!apiKey) throw new Error("AI is not configured right now. Try again shortly.");
+
+    await assertRateLimit("ai-savings-calculator");
+
+    const { streamText, Output } = await import("ai");
+    const { createOpenAI } = await import("@ai-sdk/openai");
+
+    const lovable = createOpenAI({
+      baseURL: "https://ai.gateway.lovable.dev/v1",
+      apiKey,
+      headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
+    });
+
+    const prompt = [
+      `The owner values their time at $${data.hourly_rate}/hour.`,
+      `Estimated savings if automated: ${data.hours_week_saved.toFixed(1)} hours/week (about $${Math.round(data.money_month_saved)}/month).`,
+      "Hours per week they currently spend, and the estimated hours automation could remove:",
+      ...data.top_tasks.map(
+        (t) => `- ${t.label}: ${t.hours}h/week now, ~${t.saved_hours.toFixed(1)}h/week potentially saved`,
+      ),
+    ].join("\n");
+
+    const result = streamText({
+      model: lovable.responses("openai/gpt-6-astra"),
+      system: [
+        "You design practical n8n automations for small business owners.",
+        "Pick the three tasks with the best saved-hours-to-effort ratio and design one concrete n8n workflow for each.",
+        "Each workflow: a real n8n trigger (Webhook, Gmail Trigger, Schedule Trigger, Form Trigger, etc.),",
+        "4-7 ordered node-level steps naming real nodes or services, and a single clear output.",
+        "Recommend only from: n8n, ChatGPT, Claude, Perplexity, Lovable, Botpress (chatbots only), plus common apps they already use (Gmail, Sheets, Stripe, Calendly).",
+        "Tone: plain English, specific, honest, lightly witty. Builder, not guru.",
+        "Never promise income or revenue. Speak in hours saved and fewer dropped balls.",
+        "Caveats must be honest about setup time, review steps, and what stays manual.",
+      ].join(" "),
+      prompt,
+      output: Output.object({ schema: blueprintSchema }),
+      providerOptions: {
+        openai: {
+          forceReasoning: true,
+          reasoningEffort: "low",
+          reasoningSummary: "auto",
+          store: false,
+          include: ["reasoning.encrypted_content"],
+        },
+      },
+    });
+
+    return (await result.output) as SavingsBlueprint;
+  });
