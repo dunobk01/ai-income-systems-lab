@@ -33,10 +33,10 @@ export const FREE_TOOLS: FreeTool[] = [
     slug: "ai-visibility-check",
     path: "/free-tools/ai-visibility-check",
     name: "AI Search Visibility Check",
-    promise: "See whether AI assistants can actually find and recommend your business.",
+    promise: "When customers ask ChatGPT for a business like yours, do you show up?",
     time: "About 60 seconds",
     icon: Radar,
-    status: "soon",
+    status: "live",
   },
 ];
 

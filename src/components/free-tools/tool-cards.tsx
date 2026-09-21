@@ -38,7 +38,9 @@ export function FreeToolCards({ exclude, location }: { exclude?: string; locatio
                   to={
                     t.slug === "ai-savings-calculator"
                       ? "/free-tools/ai-savings-calculator"
-                      : "/free-tools/ai-readiness-scorecard"
+                      : t.slug === "ai-visibility-check"
+                        ? "/free-tools/ai-visibility-check"
+                        : "/free-tools/ai-readiness-scorecard"
                   }
                 >
                   Start free <ArrowRight className="h-4 w-4" />

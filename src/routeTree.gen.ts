@@ -44,6 +44,7 @@ import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as FreePlanRouteImport } from './routes/free.plan'
 import { Route as FreeChecklistDotmdRouteImport } from './routes/free.checklist[.]md'
+import { Route as FreeToolsAiVisibilityCheckRouteImport } from './routes/free-tools.ai-visibility-check'
 import { Route as FreeToolsAiSavingsCalculatorRouteImport } from './routes/free-tools.ai-savings-calculator'
 import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
@@ -264,6 +265,12 @@ const FreeChecklistDotmdRoute = FreeChecklistDotmdRouteImport.update({
   path: '/free/checklist.md',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FreeToolsAiVisibilityCheckRoute =
+  FreeToolsAiVisibilityCheckRouteImport.update({
+    id: '/free-tools/ai-visibility-check',
+    path: '/free-tools/ai-visibility-check',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const FreeToolsAiSavingsCalculatorRoute =
   FreeToolsAiSavingsCalculatorRouteImport.update({
     id: '/free-tools/ai-savings-calculator',
@@ -552,6 +559,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
+  '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -629,6 +637,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
+  '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -712,6 +721,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
+  '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -795,6 +805,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
+    | '/free-tools/ai-visibility-check'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -872,6 +883,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
+    | '/free-tools/ai-visibility-check'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -954,6 +966,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
+    | '/free-tools/ai-visibility-check'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -1027,6 +1040,7 @@ export interface RootRouteChildren {
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
   FreeToolsAiSavingsCalculatorRoute: typeof FreeToolsAiSavingsCalculatorRoute
+  FreeToolsAiVisibilityCheckRoute: typeof FreeToolsAiVisibilityCheckRoute
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
@@ -1296,6 +1310,13 @@ declare module '@tanstack/react-router' {
       path: '/free/checklist.md'
       fullPath: '/free/checklist.md'
       preLoaderRoute: typeof FreeChecklistDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/ai-visibility-check': {
+      id: '/free-tools/ai-visibility-check'
+      path: '/free-tools/ai-visibility-check'
+      fullPath: '/free-tools/ai-visibility-check'
+      preLoaderRoute: typeof FreeToolsAiVisibilityCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/free-tools/ai-savings-calculator': {
@@ -1754,6 +1775,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,
   FreeToolsAiSavingsCalculatorRoute: FreeToolsAiSavingsCalculatorRoute,
+  FreeToolsAiVisibilityCheckRoute: FreeToolsAiVisibilityCheckRoute,
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
