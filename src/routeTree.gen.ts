@@ -33,6 +33,7 @@ import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as FreeIndexRouteImport } from './routes/free.index'
+import { Route as FreeToolsIndexRouteImport } from './routes/free-tools.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as VsSkoolRouteImport } from './routes/vs.skool'
 import { Route as VsMightyNetworksRouteImport } from './routes/vs.mighty-networks'
@@ -204,6 +205,11 @@ const GuidesIndexRoute = GuidesIndexRouteImport.update({
 const FreeIndexRoute = FreeIndexRouteImport.update({
   id: '/free/',
   path: '/free/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FreeToolsIndexRoute = FreeToolsIndexRouteImport.update({
+  id: '/free-tools/',
+  path: '/free-tools/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -540,6 +546,7 @@ export interface FileRoutesByFullPath {
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/blog/': typeof BlogIndexRoute
+  '/free-tools/': typeof FreeToolsIndexRoute
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -614,6 +621,7 @@ export interface FileRoutesByTo {
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/blog': typeof BlogIndexRoute
+  '/free-tools': typeof FreeToolsIndexRoute
   '/free': typeof FreeIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
@@ -694,6 +702,7 @@ export interface FileRoutesById {
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/blog/': typeof BlogIndexRoute
+  '/free-tools/': typeof FreeToolsIndexRoute
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -774,6 +783,7 @@ export interface FileRouteTypes {
     | '/vs/mighty-networks'
     | '/vs/skool'
     | '/blog/'
+    | '/free-tools/'
     | '/free/'
     | '/guides/'
     | '/newsletter/'
@@ -848,6 +858,7 @@ export interface FileRouteTypes {
     | '/vs/mighty-networks'
     | '/vs/skool'
     | '/blog'
+    | '/free-tools'
     | '/free'
     | '/guides'
     | '/newsletter'
@@ -927,6 +938,7 @@ export interface FileRouteTypes {
     | '/vs/mighty-networks'
     | '/vs/skool'
     | '/blog/'
+    | '/free-tools/'
     | '/free/'
     | '/guides/'
     | '/newsletter/'
@@ -994,6 +1006,7 @@ export interface RootRouteChildren {
   VsMightyNetworksRoute: typeof VsMightyNetworksRoute
   VsSkoolRoute: typeof VsSkoolRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  FreeToolsIndexRoute: typeof FreeToolsIndexRoute
   FreeIndexRoute: typeof FreeIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1178,6 +1191,13 @@ declare module '@tanstack/react-router' {
       path: '/free'
       fullPath: '/free/'
       preLoaderRoute: typeof FreeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/': {
+      id: '/free-tools/'
+      path: '/free-tools'
+      fullPath: '/free-tools/'
+      preLoaderRoute: typeof FreeToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -1697,6 +1717,7 @@ const rootRouteChildren: RootRouteChildren = {
   VsMightyNetworksRoute: VsMightyNetworksRoute,
   VsSkoolRoute: VsSkoolRoute,
   BlogIndexRoute: BlogIndexRoute,
+  FreeToolsIndexRoute: FreeToolsIndexRoute,
   FreeIndexRoute: FreeIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
