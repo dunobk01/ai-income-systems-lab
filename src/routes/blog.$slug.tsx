@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { NewsletterEngagement } from "@/components/newsletter-engagement";
 import { ProseContent } from "@/components/prose-content";
+import { InlineToolCard } from "@/components/free-tools/inline-tool-card";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/blog/$slug")({
