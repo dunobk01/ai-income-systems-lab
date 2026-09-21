@@ -189,13 +189,15 @@ export const attachToolReport = createServerFn({ method: "POST" })
     return { ok: !error };
   });
 
+export type JsonValue = string | number | boolean | null | JsonValue[] | { [k: string]: JsonValue };
+
 export type StoredReport = {
   tool_slug: string;
   first_name: string | null;
   business_type: string | null;
   score: number | null;
   result_summary: string | null;
-  report_json: Record<string, unknown> | null;
+  report_json: JsonValue;
   created_at: string;
 };
 
