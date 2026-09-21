@@ -12,13 +12,29 @@ import { Linkify } from "./linkify";
  * - "> quote" -> <blockquote>
  * - anything else -> <p>
  */
-export function ProseContent({ content }: { content: string }) {
+export function ProseContent({
+  content,
+  midSlot,
+}: {
+  content: string;
+  /** Optional element dropped in mid-article, before the closest heading to the middle. */
+  midSlot?: ReactNode;
+}) {
   const blocks = (content ?? "").split(/\n{2,}/).filter((b) => b.trim().length > 0);
+  const midpoint = Math.floor(blocks.length / 2);
+  let insertAt = -1;
+  if (midSlot && blocks.length >= 4) {
+    insertAt = blocks.findIndex((b, i) => i >= midpoint && b.trim().startsWith("## "));
+    if (insertAt === -1) insertAt = midpoint;
+  }
 
   return (
     <div className="mt-10 text-base leading-relaxed text-foreground/90 space-y-5">
       {blocks.map((raw, i) => {
         const block = raw.trim();
+        const slot = i === insertAt ? <Fragment key={`slot-${i}`}>{midSlot}</Fragment> : null;
+        const wrap = (el: ReactNode) => (slot ? <Fragment key={i}>{slot}{el}</Fragment> : el);
+        void wrap;
 
         if (block.startsWith("### ")) {
           return (
