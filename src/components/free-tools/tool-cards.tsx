@@ -73,10 +73,13 @@ export function ShareResultButton({
   toolSlug,
   title,
   text,
+  url,
 }: {
   toolSlug: string;
   title: string;
   text: string;
+  /** Permanent report URL; falls back to the current page. */
+  url?: string;
 }) {
   const [state, setState] = useState<"idle" | "done">("idle");
   return (
@@ -85,7 +88,7 @@ export function ShareResultButton({
       className="h-11 px-5"
       onClick={async () => {
         dlToolCtaClick(toolSlug, { location: "share-result" });
-        const res = await shareResult({ title, text });
+        const res = await shareResult({ title, text, url });
         if (res !== "failed") {
           setState("done");
           setTimeout(() => setState("idle"), 2500);
