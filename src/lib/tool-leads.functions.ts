@@ -387,7 +387,7 @@ const REASONING = {
     store: false,
     include: ["reasoning.encrypted_content"],
   },
-} as const;
+};
 
 export const runVisibilityCheck = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => visibilityInput.parse(d))
