@@ -517,7 +517,7 @@ function VisibilityCheckPage() {
         {fixList && (
           <div className="glass-strong rounded-3xl p-5 sm:p-8 mt-6">
             <p className="inline-flex items-center gap-2 text-xs text-[color:var(--success)]">
-              <Check className="h-3.5 w-3.5" /> Fix list ready — a copy is on its way to your inbox.
+              <Check className="h-3.5 w-3.5" /> Fix list ready — it is right below.
             </p>
             <h3 className="mt-3 text-2xl font-bold">{fixList.headline}</h3>
             <p className="mt-2 text-sm text-muted-foreground">{fixList.summary}</p>

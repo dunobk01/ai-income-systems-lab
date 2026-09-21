@@ -483,7 +483,7 @@ function SavingsCalculatorPage() {
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="min-w-0">
                 <p className="inline-flex items-center gap-2 text-xs text-[color:var(--success)]">
-                  <Check className="h-3.5 w-3.5" /> Blueprint ready — a copy is on its way to your inbox.
+                  <Check className="h-3.5 w-3.5" /> Blueprint ready — it is right below, and downloadable as a PDF.
                 </p>
                 <h3 className="mt-3 text-2xl font-bold">{blueprint.headline}</h3>
               </div>
