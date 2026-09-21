@@ -44,6 +44,7 @@ import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as FreePlanRouteImport } from './routes/free.plan'
 import { Route as FreeChecklistDotmdRouteImport } from './routes/free.checklist[.]md'
+import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -262,6 +263,12 @@ const FreeChecklistDotmdRoute = FreeChecklistDotmdRouteImport.update({
   path: '/free/checklist.md',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FreeToolsAiReadinessScorecardRoute =
+  FreeToolsAiReadinessScorecardRouteImport.update({
+    id: '/free-tools/ai-readiness-scorecard',
+    path: '/free-tools/ai-readiness-scorecard',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -536,6 +543,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -611,6 +619,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -692,6 +701,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -773,6 +783,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free-tools/ai-readiness-scorecard'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -848,6 +859,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free-tools/ai-readiness-scorecard'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -928,6 +940,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free-tools/ai-readiness-scorecard'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -999,6 +1012,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
@@ -1268,6 +1282,13 @@ declare module '@tanstack/react-router' {
       path: '/free/checklist.md'
       fullPath: '/free/checklist.md'
       preLoaderRoute: typeof FreeChecklistDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/ai-readiness-scorecard': {
+      id: '/free-tools/ai-readiness-scorecard'
+      path: '/free-tools/ai-readiness-scorecard'
+      fullPath: '/free-tools/ai-readiness-scorecard'
+      preLoaderRoute: typeof FreeToolsAiReadinessScorecardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
@@ -1710,6 +1731,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
