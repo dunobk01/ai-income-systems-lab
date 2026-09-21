@@ -233,19 +233,31 @@ const blueprintInput = z.object({
     .max(12),
 });
 
-/** Shared IP rate-limit guard for the free tools' AI generations. */
-async function assertRateLimit(toolSlug: string) {
+/**
+ * Shared IP rate-limit guard for the free tools' AI generations.
+ *
+ * `scopeToTool` counts only this tool's runs (used by the visibility check,
+ * which is more expensive per run and therefore capped tighter).
+ */
+async function assertRateLimit(
+  toolSlug: string,
+  opts: { limit?: number; scopeToTool?: boolean; message?: string } = {},
+) {
+  const limit = opts.limit ?? RATE_LIMIT;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const ipHash = await clientIpHash();
   const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-  const { count } = await supabaseAdmin
+  let query = supabaseAdmin
     .from("tool_ai_usage")
     .select("id", { count: "exact", head: true })
     .eq("ip_hash", ipHash)
     .gte("created_at", since);
-  if ((count ?? 0) >= RATE_LIMIT) {
+  if (opts.scopeToTool) query = query.eq("tool_slug", toolSlug);
+  const { count } = await query;
+  if ((count ?? 0) >= limit) {
     throw new Error(
-      "You've generated 5 reports in the last hour — that's our cap so the free tools stay free. Try again in an hour; your emailed copy is already saved.",
+      opts.message ??
+        "You've generated 5 reports in the last hour — that's our cap so the free tools stay free. Try again in an hour; your emailed copy is already saved.",
     );
   }
   await supabaseAdmin.from("tool_ai_usage").insert({ ip_hash: ipHash, tool_slug: toolSlug });
