@@ -121,7 +121,21 @@ function BlogPostPage() {
           {post.cover_image_url && (
             <img src={post.cover_image_url} alt={post.title} className="mt-8 w-full rounded-2xl border border-white/10" />
           )}
-          <ProseContent content={post.content ?? ""} />
+          <ProseContent
+            content={post.content ?? ""}
+            midSlot={
+              params.slug === "ai-automation-for-small-business" ? (
+                <InlineToolCard
+                  variant="prose"
+                  toolSlug="ai-readiness-scorecard"
+                  campaign="ai-automation-for-small-business"
+                  heading="Where should you actually start? Let the scorecard tell you."
+                  blurb="Ten questions about how leads, replies, follow-up and admin work in your business today. You get a readiness score and the one automation worth building first — no signup to see it."
+                  cta="Score my business"
+                />
+              ) : null
+            }
+          />
 
 
           <NewsletterEngagement postId={post.id} />

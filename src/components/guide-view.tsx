@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, Clock, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GUIDE_INLINE_TOOLS, InlineToolCard } from "@/components/free-tools/inline-tool-card";
 import type { Block, StaticGuide } from "@/lib/guides-content";
 
 function PromptBlock({ label, text }: { label: string; text: string }) {
@@ -125,6 +126,7 @@ function useActiveSection(ids: string[]) {
 
 export function GuideView({ guide }: { guide: StaticGuide }) {
   const progress = useReadingProgress();
+  const inlineTool = GUIDE_INLINE_TOOLS[guide.slug];
   const ids = useMemo(() => guide.sections.map((s) => s.id), [guide.sections]);
   const active = useActiveSection(ids);
 
@@ -173,7 +175,7 @@ export function GuideView({ guide }: { guide: StaticGuide }) {
               </div>
             )}
 
-            {guide.sections.map((section) => (
+            {guide.sections.map((section, sectionIndex) => (
               <section
                 key={section.id}
                 id={section.id}
@@ -187,6 +189,9 @@ export function GuideView({ guide }: { guide: StaticGuide }) {
                     <RenderBlock key={i} block={b} />
                   ))}
                 </div>
+                {inlineTool && inlineTool.afterSectionIndex === sectionIndex && (
+                  <InlineToolCard {...inlineTool} variant="guide" />
+                )}
               </section>
             ))}
 
