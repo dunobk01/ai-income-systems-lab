@@ -55,7 +55,7 @@ export const submitToolLead = createServerFn({ method: "POST" })
       first_name: data.first_name?.trim() || null,
       tool_slug: data.tool_slug,
       business_type: data.business_type ?? null,
-      answers: data.answers ?? {},
+      answers: (data.answers ?? {}) as Record<string, string>,
       score: data.score ?? null,
       result_summary: data.result_summary ?? null,
       utm_source: data.utm_source ?? null,
