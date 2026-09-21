@@ -7,7 +7,8 @@ import { useAuth } from "@/lib/auth-context";
 
 const nav = [
   { label: "Curriculum", to: "/curriculum" as const },
-  { label: "Tools", to: "/tools" as const },
+  { label: "Tool Stack", to: "/tools" as const },
+  { label: "Free Tools", to: "/free-tools" as const, badge: "New" },
   { label: "Blog", to: "/blog" as const },
   { label: "Guides", to: "/guides" as const },
   { label: "Newsletter", to: "/newsletter" as const },
@@ -26,8 +27,13 @@ export function SiteHeader() {
         <Logo />
         <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
           {nav.map((item) => (
-            <Link key={item.label} to={item.to} className="hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>
+            <Link key={item.label} to={item.to} className="hover:text-foreground transition inline-flex items-center gap-1.5" activeProps={{ className: "text-foreground" }}>
               {item.label}
+              {"badge" in item && item.badge && (
+                <span className="rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-background" style={{ background: "var(--gradient-brand)" }}>
+                  {item.badge}
+                </span>
+              )}
             </Link>
           ))}
         </nav>
@@ -63,9 +69,14 @@ export function SiteHeader() {
                 key={item.label}
                 to={item.to}
                 onClick={() => setOpen(false)}
-                className="py-2 text-sm text-muted-foreground hover:text-foreground"
+                className="py-2 text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5"
               >
                 {item.label}
+                {"badge" in item && item.badge && (
+                  <span className="rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-background" style={{ background: "var(--gradient-brand)" }}>
+                    {item.badge}
+                  </span>
+                )}
               </Link>
             ))}
             <div className="flex gap-2 pt-2">

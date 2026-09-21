@@ -943,6 +943,72 @@ export type Database = {
         }
         Relationships: []
       }
+      tool_ai_usage: {
+        Row: {
+          created_at: string
+          id: string
+          ip_hash: string
+          tool_slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_hash: string
+          tool_slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_hash?: string
+          tool_slug?: string
+        }
+        Relationships: []
+      }
+      tool_leads: {
+        Row: {
+          answers: Json
+          business_type: string | null
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          result_summary: string | null
+          score: number | null
+          tool_slug: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          answers?: Json
+          business_type?: string | null
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          result_summary?: string | null
+          score?: number | null
+          tool_slug: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          answers?: Json
+          business_type?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          result_summary?: string | null
+          score?: number | null
+          tool_slug?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       user_notes: {
         Row: {
           content: string

@@ -33,6 +33,7 @@ import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as FreeIndexRouteImport } from './routes/free.index'
+import { Route as FreeToolsIndexRouteImport } from './routes/free-tools.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as VsSkoolRouteImport } from './routes/vs.skool'
 import { Route as VsMightyNetworksRouteImport } from './routes/vs.mighty-networks'
@@ -43,6 +44,7 @@ import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as FreePlanRouteImport } from './routes/free.plan'
 import { Route as FreeChecklistDotmdRouteImport } from './routes/free.checklist[.]md'
+import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -206,6 +208,11 @@ const FreeIndexRoute = FreeIndexRouteImport.update({
   path: '/free/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FreeToolsIndexRoute = FreeToolsIndexRouteImport.update({
+  id: '/free-tools/',
+  path: '/free-tools/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -256,6 +263,12 @@ const FreeChecklistDotmdRoute = FreeChecklistDotmdRouteImport.update({
   path: '/free/checklist.md',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FreeToolsAiReadinessScorecardRoute =
+  FreeToolsAiReadinessScorecardRouteImport.update({
+    id: '/free-tools/ai-readiness-scorecard',
+    path: '/free-tools/ai-readiness-scorecard',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -530,6 +543,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -540,6 +554,7 @@ export interface FileRoutesByFullPath {
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/blog/': typeof BlogIndexRoute
+  '/free-tools/': typeof FreeToolsIndexRoute
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -604,6 +619,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -614,6 +630,7 @@ export interface FileRoutesByTo {
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/blog': typeof BlogIndexRoute
+  '/free-tools': typeof FreeToolsIndexRoute
   '/free': typeof FreeIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
@@ -684,6 +701,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -694,6 +712,7 @@ export interface FileRoutesById {
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
   '/vs/skool': typeof VsSkoolRoute
   '/blog/': typeof BlogIndexRoute
+  '/free-tools/': typeof FreeToolsIndexRoute
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -764,6 +783,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free-tools/ai-readiness-scorecard'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -774,6 +794,7 @@ export interface FileRouteTypes {
     | '/vs/mighty-networks'
     | '/vs/skool'
     | '/blog/'
+    | '/free-tools/'
     | '/free/'
     | '/guides/'
     | '/newsletter/'
@@ -838,6 +859,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free-tools/ai-readiness-scorecard'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -848,6 +870,7 @@ export interface FileRouteTypes {
     | '/vs/mighty-networks'
     | '/vs/skool'
     | '/blog'
+    | '/free-tools'
     | '/free'
     | '/guides'
     | '/newsletter'
@@ -917,6 +940,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/checkout/return'
     | '/email/unsubscribe'
+    | '/free-tools/ai-readiness-scorecard'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -927,6 +951,7 @@ export interface FileRouteTypes {
     | '/vs/mighty-networks'
     | '/vs/skool'
     | '/blog/'
+    | '/free-tools/'
     | '/free/'
     | '/guides/'
     | '/newsletter/'
@@ -987,6 +1012,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
@@ -994,6 +1020,7 @@ export interface RootRouteChildren {
   VsMightyNetworksRoute: typeof VsMightyNetworksRoute
   VsSkoolRoute: typeof VsSkoolRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  FreeToolsIndexRoute: typeof FreeToolsIndexRoute
   FreeIndexRoute: typeof FreeIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1180,6 +1207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FreeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/free-tools/': {
+      id: '/free-tools/'
+      path: '/free-tools'
+      fullPath: '/free-tools/'
+      preLoaderRoute: typeof FreeToolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -1248,6 +1282,13 @@ declare module '@tanstack/react-router' {
       path: '/free/checklist.md'
       fullPath: '/free/checklist.md'
       preLoaderRoute: typeof FreeChecklistDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/ai-readiness-scorecard': {
+      id: '/free-tools/ai-readiness-scorecard'
+      path: '/free-tools/ai-readiness-scorecard'
+      fullPath: '/free-tools/ai-readiness-scorecard'
+      preLoaderRoute: typeof FreeToolsAiReadinessScorecardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
@@ -1690,6 +1731,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
@@ -1697,6 +1739,7 @@ const rootRouteChildren: RootRouteChildren = {
   VsMightyNetworksRoute: VsMightyNetworksRoute,
   VsSkoolRoute: VsSkoolRoute,
   BlogIndexRoute: BlogIndexRoute,
+  FreeToolsIndexRoute: FreeToolsIndexRoute,
   FreeIndexRoute: FreeIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
