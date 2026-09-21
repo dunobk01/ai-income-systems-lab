@@ -44,12 +44,82 @@ async function postWebhook(payload: Record<string, unknown>) {
   }
 }
 
+/* --------------------------- MailerLite --------------------------- */
+
+const SITE_URL = "https://ai-income-systems.com";
+const MAILERLITE_GROUP_ID = "199195355015808121"; // "Free Tools Leads"
+
+const TOOL_NAMES: Record<string, string> = {
+  "ai-readiness-scorecard": "AI Readiness Scorecard",
+  "ai-savings-calculator": "AI Time & Money Savings Calculator",
+  "ai-visibility-check": "AI Search Visibility Check",
+};
+
+export const reportUrlFor = (token: string) => `${SITE_URL}/free-tools/r/${token}`;
+
+/** 24-char unguessable, URL-safe token. */
+function makeReportToken() {
+  const alphabet = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = new Uint8Array(24);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => alphabet[b % alphabet.length]).join("");
+}
+
+type MlLead = {
+  email: string;
+  first_name: string | null;
+  tool_slug: string;
+  business_type: string | null;
+  score: number | null;
+  report_token: string | null;
+  utm_source: string | null;
+};
+
+/**
+ * Upsert the lead into MailerLite. Never throws — a mail failure must not stop
+ * someone seeing their report. Returns the error text when it didn't land.
+ */
+async function syncLeadToMailerLite(lead: MlLead): Promise<{ ok: boolean; error?: string }> {
+  const apiKey = process.env["MAILERLITE_API_KEY"];
+  if (!apiKey) return { ok: false, error: "MAILERLITE_API_KEY is not set" };
+
+  const fields: Record<string, string | number> = {
+    name: lead.first_name ?? "",
+    tool_used: TOOL_NAMES[lead.tool_slug] ?? lead.tool_slug,
+    business_type: lead.business_type ?? "",
+    report_url: lead.report_token ? reportUrlFor(lead.report_token) : "",
+    lead_source: lead.utm_source || "direct",
+    lead_magnet: lead.tool_slug,
+  };
+  if (typeof lead.score === "number") fields["ai_score"] = lead.score;
+
+  try {
+    const res = await fetch("https://connect.mailerlite.com/api/subscribers", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ email: lead.email, fields, groups: [MAILERLITE_GROUP_ID] }),
+    });
+    if (res.status === 200 || res.status === 201) return { ok: true };
+    const body = (await res.text()).slice(0, 500);
+    console.error("[tool-leads] mailerlite sync failed", res.status, body);
+    return { ok: false, error: `${res.status}: ${body}` };
+  } catch (err) {
+    console.error("[tool-leads] mailerlite sync error", err);
+    return { ok: false, error: (err as Error).message.slice(0, 500) };
+  }
+}
+
 export const submitToolLead = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => leadSchema.parse(d))
   .handler(async ({ data }) => {
-    if (data.company && data.company.trim().length > 0) return { ok: true };
+    if (data.company && data.company.trim().length > 0) return { ok: true, report_token: null };
 
     const email = data.email.trim().toLowerCase();
+    const reportToken = makeReportToken();
     const row = {
       email,
       first_name: data.first_name?.trim() || null,
@@ -61,17 +131,121 @@ export const submitToolLead = createServerFn({ method: "POST" })
       utm_source: data.utm_source ?? null,
       utm_medium: data.utm_medium ?? null,
       utm_campaign: data.utm_campaign ?? null,
+      report_token: reportToken,
     };
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("tool_leads").insert(row);
+    const { data: inserted, error } = await supabaseAdmin
+      .from("tool_leads")
+      .insert(row)
+      .select("id")
+      .single();
     if (error) {
       console.error("[tool-leads] insert failed", error.message);
       throw new Error("Couldn't save your details. Try again.");
     }
 
-    await postWebhook(row);
-    return { ok: true };
+    await postWebhook({ ...row, report_url: reportUrlFor(reportToken) });
+
+    const sync = await syncLeadToMailerLite({
+      email,
+      first_name: row.first_name,
+      tool_slug: row.tool_slug,
+      business_type: row.business_type,
+      score: row.score,
+      report_token: reportToken,
+      utm_source: row.utm_source,
+    });
+    await supabaseAdmin
+      .from("tool_leads")
+      .update({
+        mailerlite_synced_at: sync.ok ? new Date().toISOString() : null,
+        mailerlite_error: sync.ok ? null : (sync.error ?? "unknown error"),
+      })
+      .eq("id", inserted.id);
+
+    return { ok: true, report_token: reportToken };
+  });
+
+/* ------------------- Persisted report + public page ------------------- */
+
+export const attachToolReport = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        report_token: z.string().min(16).max(64),
+        report: z.record(z.string(), z.unknown()),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("tool_leads")
+      .update({ report_json: data.report as never })
+      .eq("report_token", data.report_token);
+    if (error) console.error("[tool-leads] report persist failed", error.message);
+    return { ok: !error };
+  });
+
+export type StoredReport = {
+  tool_slug: string;
+  first_name: string | null;
+  business_type: string | null;
+  score: number | null;
+  result_summary: string | null;
+  report_json: unknown;
+  created_at: string;
+};
+
+export const getToolReport = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => z.object({ token: z.string().max(64) }).parse(d))
+  .handler(async ({ data }): Promise<StoredReport | null> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error } = await supabaseAdmin.rpc("get_tool_report", { _token: data.token });
+    if (error) {
+      console.error("[tool-leads] report lookup failed", error.message);
+      return null;
+    }
+    const row = (rows as StoredReport[] | null)?.[0];
+    return row ?? null;
+  });
+
+/* ---------------------- Admin: MailerLite retries ---------------------- */
+
+export const retryMailerliteSync = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error } = await supabaseAdmin
+      .from("tool_leads")
+      .select("id, email, first_name, tool_slug, business_type, score, report_token, utm_source")
+      .is("mailerlite_synced_at", null)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error(error.message);
+
+    let synced = 0;
+    let failed = 0;
+    for (const lead of rows ?? []) {
+      const res = await syncLeadToMailerLite(lead as MlLead);
+      if (res.ok) synced++;
+      else failed++;
+      await supabaseAdmin
+        .from("tool_leads")
+        .update({
+          mailerlite_synced_at: res.ok ? new Date().toISOString() : null,
+          mailerlite_error: res.ok ? null : (res.error ?? "unknown error"),
+        })
+        .eq("id", lead.id);
+    }
+    return { attempted: (rows ?? []).length, synced, failed };
   });
 
 /* ----------------------------- AI report ----------------------------- */
