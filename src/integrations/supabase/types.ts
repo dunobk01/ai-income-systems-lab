@@ -1009,6 +1009,30 @@ export type Database = {
         }
         Relationships: []
       }
+      tool_visibility_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          expires_at: string
+          id: string
+          payload: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          payload: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          payload?: Json
+        }
+        Relationships: []
+      }
       user_notes: {
         Row: {
           content: string
