@@ -972,6 +972,10 @@ export type Database = {
           email: string
           first_name: string | null
           id: string
+          mailerlite_error: string | null
+          mailerlite_synced_at: string | null
+          report_json: Json | null
+          report_token: string | null
           result_summary: string | null
           score: number | null
           tool_slug: string
@@ -986,6 +990,10 @@ export type Database = {
           email: string
           first_name?: string | null
           id?: string
+          mailerlite_error?: string | null
+          mailerlite_synced_at?: string | null
+          report_json?: Json | null
+          report_token?: string | null
           result_summary?: string | null
           score?: number | null
           tool_slug: string
@@ -1000,6 +1008,10 @@ export type Database = {
           email?: string
           first_name?: string | null
           id?: string
+          mailerlite_error?: string | null
+          mailerlite_synced_at?: string | null
+          report_json?: Json | null
+          report_token?: string | null
           result_summary?: string | null
           score?: number | null
           tool_slug?: string
@@ -1135,6 +1147,18 @@ export type Database = {
       }
       generate_referral_code: { Args: never; Returns: string }
       get_permission_diagnostics: { Args: never; Returns: Json }
+      get_tool_report: {
+        Args: { _token: string }
+        Returns: {
+          business_type: string
+          created_at: string
+          first_name: string
+          report_json: Json
+          result_summary: string
+          score: number
+          tool_slug: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
