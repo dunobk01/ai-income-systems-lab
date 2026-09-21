@@ -25,6 +25,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/free-tools", changefreq: "weekly", priority: "0.9" },
           { path: "/free-tools/ai-readiness-scorecard", changefreq: "monthly", priority: "0.85" },
           { path: "/free-tools/ai-savings-calculator", changefreq: "monthly", priority: "0.85" },
+          { path: "/free-tools/ai-visibility-check", changefreq: "monthly", priority: "0.85" },
           { path: "/blog", changefreq: "daily", priority: "0.9" },
           { path: "/free", changefreq: "monthly", priority: "0.85" },
           { path: "/ai-business-engine", changefreq: "monthly", priority: "0.85" },

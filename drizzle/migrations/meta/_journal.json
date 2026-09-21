@@ -15,6 +15,13 @@
       "when": 1789964620141,
       "tag": "0001_create_tool_leads",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789965801583,
+      "tag": "0002_create_tool_visibility_cache",
+      "breakpoints": true
     }
   ]
 }

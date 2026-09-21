@@ -233,19 +233,31 @@ const blueprintInput = z.object({
     .max(12),
 });
 
-/** Shared IP rate-limit guard for the free tools' AI generations. */
-async function assertRateLimit(toolSlug: string) {
+/**
+ * Shared IP rate-limit guard for the free tools' AI generations.
+ *
+ * `scopeToTool` counts only this tool's runs (used by the visibility check,
+ * which is more expensive per run and therefore capped tighter).
+ */
+async function assertRateLimit(
+  toolSlug: string,
+  opts: { limit?: number; scopeToTool?: boolean; message?: string } = {},
+) {
+  const limit = opts.limit ?? RATE_LIMIT;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const ipHash = await clientIpHash();
   const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-  const { count } = await supabaseAdmin
+  let query = supabaseAdmin
     .from("tool_ai_usage")
     .select("id", { count: "exact", head: true })
     .eq("ip_hash", ipHash)
     .gte("created_at", since);
-  if ((count ?? 0) >= RATE_LIMIT) {
+  if (opts.scopeToTool) query = query.eq("tool_slug", toolSlug);
+  const { count } = await query;
+  if ((count ?? 0) >= limit) {
     throw new Error(
-      "You've generated 5 reports in the last hour — that's our cap so the free tools stay free. Try again in an hour; your emailed copy is already saved.",
+      opts.message ??
+        "You've generated 5 reports in the last hour — that's our cap so the free tools stay free. Try again in an hour; your emailed copy is already saved.",
     );
   }
   await supabaseAdmin.from("tool_ai_usage").insert({ ip_hash: ipHash, tool_slug: toolSlug });
@@ -303,4 +315,258 @@ export const generateSavingsBlueprint = createServerFn({ method: "POST" })
     });
 
     return (await result.output) as SavingsBlueprint;
+  });
+
+/* --------------------- AI Search Visibility Check --------------------- */
+
+const VISIBILITY_SLUG = "ai-visibility-check";
+const VISIBILITY_RATE_LIMIT = 2;
+const VISIBILITY_CACHE_DAYS = 7;
+
+const visibilityInput = z.object({
+  business_name: z.string().min(2).max(120),
+  website: z.string().max(200).optional(),
+  city: z.string().max(120).optional(),
+  category: z.string().min(2).max(120),
+  competitors: z.array(z.string().max(120)).max(2).default([]),
+});
+
+export type VisibilityQuestionResult = {
+  question: string;
+  mentioned: boolean;
+  competitors_named: string[];
+  businesses_named: string[];
+  excerpt: string;
+};
+
+export type VisibilityResult = {
+  score: number;
+  questions: VisibilityQuestionResult[];
+  cached: boolean;
+  checked_at: string;
+};
+
+/** Normalises a URL to a bare domain for matching and cache keys. */
+export function toDomain(website?: string) {
+  if (!website) return "";
+  return website
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .split("/")[0]!
+    .trim();
+}
+
+const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
+function mentions(answer: string, needles: string[]) {
+  const hay = norm(answer);
+  return needles.some((n) => {
+    const needle = norm(n);
+    return needle.length >= 3 && hay.includes(needle);
+  });
+}
+
+function makeGateway(apiKey: string) {
+  return async () => {
+    const { createOpenAI } = await import("@ai-sdk/openai");
+    return createOpenAI({
+      baseURL: "https://ai.gateway.lovable.dev/v1",
+      apiKey,
+      headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
+    });
+  };
+}
+
+const REASONING = {
+  openai: {
+    forceReasoning: true,
+    reasoningEffort: "low",
+    reasoningSummary: "auto",
+    store: false,
+    include: ["reasoning.encrypted_content"],
+  },
+};
+
+export const runVisibilityCheck = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => visibilityInput.parse(d))
+  .handler(async ({ data }): Promise<VisibilityResult> => {
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    if (!apiKey) throw new Error("AI is not configured right now. Try again shortly.");
+
+    const domain = toDomain(data.website);
+    const cacheKey = [domain || norm(data.business_name), norm(data.category), norm(data.city ?? "")].join("|");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: cached } = await supabaseAdmin
+      .from("tool_visibility_cache")
+      .select("payload, created_at, expires_at")
+      .eq("cache_key", cacheKey)
+      .gt("expires_at", new Date().toISOString())
+      .maybeSingle();
+
+    if (cached) {
+      const payload = cached.payload as { score: number; questions: VisibilityQuestionResult[] };
+      return { ...payload, cached: true, checked_at: cached.created_at };
+    }
+
+    await assertRateLimit(VISIBILITY_SLUG, {
+      limit: VISIBILITY_RATE_LIMIT,
+      scopeToTool: true,
+      message:
+        "This check runs several AI queries per business, so it's capped at 2 per hour. Try again in an hour — or check a different business next time.",
+    });
+
+    const { streamText, Output } = await import("ai");
+    const lovable = await makeGateway(apiKey)();
+    const model = lovable.responses("openai/gpt-6-astra");
+    const place = data.city?.trim() ? ` in ${data.city.trim()}` : "";
+
+    // 1. Generate five realistic customer questions.
+    const qGen = streamText({
+      model,
+      system:
+        "You write the exact questions real customers type into AI assistants when they are ready to hire or buy. Short, specific, natural. Never mention any business by name.",
+      prompt: `Business category: ${data.category}${place}. Write 5 different questions a customer would ask an AI assistant to find and choose a business like this. Vary the intent: best-of, urgent need, price/quote, a specific problem, and a comparison.`,
+      output: Output.object({ schema: z.object({ questions: z.array(z.string()).min(5).max(5) }) }),
+      providerOptions: REASONING,
+    });
+    const { questions } = (await qGen.output) as { questions: string[] };
+
+    const answerSchema = z.object({
+      answer: z.string(),
+      businesses_named: z.array(z.string()),
+    });
+
+    // 2. Ask each question and record who the model actually names.
+    const results = await Promise.all(
+      questions.slice(0, 5).map(async (question): Promise<VisibilityQuestionResult> => {
+        try {
+          const run = streamText({
+            model,
+            system:
+              "You are a helpful assistant answering a consumer's question. Recommend specific, real businesses by name where you reasonably can. Also return the list of business names you named in `businesses_named` (empty if you named none).",
+            prompt: question,
+            output: Output.object({ schema: answerSchema }),
+            providerOptions: REASONING,
+          });
+          const out = (await run.output) as z.infer<typeof answerSchema>;
+          const named = out.businesses_named ?? [];
+          const haystack = `${out.answer}\n${named.join("\n")}`;
+          const needles = [data.business_name, ...(domain ? [domain, domain.split(".")[0]!] : [])];
+          const mentioned = mentions(haystack, needles);
+          const competitorsNamed = data.competitors.filter((c) => c.trim() && mentions(haystack, [c]));
+          return {
+            question,
+            mentioned,
+            competitors_named: competitorsNamed,
+            businesses_named: named.slice(0, 6),
+            excerpt: out.answer.slice(0, 400),
+          };
+        } catch (err) {
+          console.error("[visibility] question failed", err);
+          return {
+            question,
+            mentioned: false,
+            competitors_named: [],
+            businesses_named: [],
+            excerpt: "This question couldn't be checked this time.",
+          };
+        }
+      }),
+    );
+
+    const score = results.filter((r) => r.mentioned).length;
+    const payload = { score, questions: results };
+
+    await supabaseAdmin.from("tool_visibility_cache").upsert(
+      {
+        cache_key: cacheKey,
+        payload,
+        created_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + VISIBILITY_CACHE_DAYS * 86400_000).toISOString(),
+      },
+      { onConflict: "cache_key" },
+    );
+
+    return { ...payload, cached: false, checked_at: new Date().toISOString() };
+  });
+
+const fixListSchema = z.object({
+  headline: z.string(),
+  summary: z.string(),
+  actions: z
+    .array(
+      z.object({
+        rank: z.number(),
+        area: z.string(),
+        title: z.string(),
+        why: z.string(),
+        steps: z.array(z.string()),
+        prompt: z.string(),
+      }),
+    )
+    .min(7)
+    .max(7),
+});
+
+export type VisibilityFixList = z.infer<typeof fixListSchema>;
+
+const fixListInput = z.object({
+  business_name: z.string().max(120),
+  website: z.string().max(200).optional(),
+  city: z.string().max(120).optional(),
+  category: z.string().max(120),
+  score: z.number().int().min(0).max(5),
+  questions: z.array(z.object({ question: z.string().max(300), mentioned: z.boolean() })).max(5),
+  competitors_seen: z.array(z.string().max(120)).max(12),
+});
+
+export const generateVisibilityFixList = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => fixListInput.parse(d))
+  .handler(async ({ data }) => {
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    if (!apiKey) throw new Error("AI is not configured right now. Try again shortly.");
+
+    await assertRateLimit(VISIBILITY_SLUG, {
+      limit: VISIBILITY_RATE_LIMIT + 1,
+      scopeToTool: true,
+      message:
+        "This tool is capped at a couple of runs per hour so it stays free. Try again in an hour — your details are saved.",
+    });
+
+    const { streamText, Output } = await import("ai");
+    const lovable = await makeGateway(apiKey)();
+
+    const prompt = [
+      `Business: ${data.business_name}`,
+      data.website ? `Website: ${data.website}` : "Website: not given",
+      data.city ? `Area: ${data.city}` : "Area: not given",
+      `Category: ${data.category}`,
+      `AI visibility score: ${data.score} of 5 test questions mentioned them.`,
+      "Questions tested:",
+      ...data.questions.map((q) => `- ${q.question} — ${q.mentioned ? "mentioned them" : "did not mention them"}`),
+      data.competitors_seen.length
+        ? `Businesses the model named instead: ${data.competitors_seen.join(", ")}`
+        : "The model named no specific businesses.",
+    ].join("\n");
+
+    const result = streamText({
+      model: lovable.responses("openai/gpt-6-astra"),
+      system: [
+        "You write an AI Visibility Fix List for a small business owner.",
+        "Return exactly 7 actions, ranked by impact, covering these areas in this order:",
+        "Google Business Profile completeness; reviews strategy; FAQ content on their site; schema markup;",
+        "consistent NAP citations; answering common customer questions in blog posts; getting mentioned on local or industry sites.",
+        "Each action: 3-5 concrete steps and one copy-paste prompt the owner can paste into ChatGPT or Claude, written in second person and tailored to their business, category and area.",
+        "Tone: plain English, specific, honest, lightly witty. Builder, not guru.",
+        "Never promise rankings, traffic, revenue or income. Be clear that AI answers vary by model, location and time.",
+      ].join(" "),
+      prompt,
+      output: Output.object({ schema: fixListSchema }),
+      providerOptions: REASONING,
+    });
+
+    return (await result.output) as VisibilityFixList;
   });
