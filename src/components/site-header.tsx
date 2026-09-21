@@ -27,8 +27,13 @@ export function SiteHeader() {
         <Logo />
         <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
           {nav.map((item) => (
-            <Link key={item.label} to={item.to} className="hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>
+            <Link key={item.label} to={item.to} className="hover:text-foreground transition inline-flex items-center gap-1.5" activeProps={{ className: "text-foreground" }}>
               {item.label}
+              {"badge" in item && item.badge && (
+                <span className="rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-background" style={{ background: "var(--gradient-brand)" }}>
+                  {item.badge}
+                </span>
+              )}
             </Link>
           ))}
         </nav>
