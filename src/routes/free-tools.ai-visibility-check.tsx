@@ -19,6 +19,8 @@ import {
   generateVisibilityFixList,
   runVisibilityCheck,
   submitToolLead,
+  attachToolReport,
+  reportUrlFor,
   type VisibilityFixList,
   type VisibilityResult,
 } from "@/lib/tool-leads.functions";
@@ -155,9 +157,11 @@ function VisibilityCheckPage() {
   const [leadState, setLeadState] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [leadError, setLeadError] = useState<string | null>(null);
   const [fixList, setFixList] = useState<VisibilityFixList | null>(null);
+  const [reportUrl, setReportUrl] = useState<string | undefined>(undefined);
 
   const doCheck = useServerFn(runVisibilityCheck);
   const saveLead = useServerFn(submitToolLead);
+  const persistReport = useServerFn(attachToolReport);
   const makeFixList = useServerFn(generateVisibilityFixList);
 
   const competitors = useMemo(
@@ -213,7 +217,7 @@ function VisibilityCheckPage() {
       othersNamed.length ? `Named instead: ${othersNamed.slice(0, 5).join(", ")}.` : "No businesses named."
     }`;
     try {
-      await saveLead({
+      const saved = await saveLead({
         data: {
           email,
           first_name: firstName || undefined,
@@ -246,6 +250,12 @@ function VisibilityCheckPage() {
         },
       });
       setFixList(list);
+      if (saved.report_token) {
+        setReportUrl(reportUrlFor(saved.report_token));
+        void persistReport({
+          data: { report_token: saved.report_token, report: list as unknown as Record<string, unknown> },
+        });
+      }
       setLeadState("done");
     } catch (err) {
       setLeadState("error");
@@ -450,6 +460,7 @@ function VisibilityCheckPage() {
                 toolSlug={SLUG}
                 title="My AI visibility score"
                 text={`An AI model named my business in ${result.score} of 5 real customer questions.`}
+                url={reportUrl}
               />
             </div>
           </div>
@@ -517,7 +528,7 @@ function VisibilityCheckPage() {
         {fixList && (
           <div className="glass-strong rounded-3xl p-5 sm:p-8 mt-6">
             <p className="inline-flex items-center gap-2 text-xs text-[color:var(--success)]">
-              <Check className="h-3.5 w-3.5" /> Fix list ready — it is right below.
+              <Check className="h-3.5 w-3.5" /> Fix list ready — it is right below, and on its way to your inbox.
             </p>
             <h3 className="mt-3 text-2xl font-bold">{fixList.headline}</h3>
             <p className="mt-2 text-sm text-muted-foreground">{fixList.summary}</p>

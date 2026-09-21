@@ -25,7 +25,13 @@ import {
   dlToolStart,
   readUtm,
 } from "@/lib/free-tools";
-import { generateScorecardReport, submitToolLead, type ScorecardReport } from "@/lib/tool-leads.functions";
+import {
+  attachToolReport,
+  generateScorecardReport,
+  reportUrlFor,
+  submitToolLead,
+  type ScorecardReport,
+} from "@/lib/tool-leads.functions";
 
 const SLUG = "ai-readiness-scorecard";
 const TITLE = "AI Readiness Scorecard for Small Businesses";
@@ -126,7 +132,10 @@ function ScorecardPage() {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [report, setReport] = useState<ScorecardReport | null>(null);
 
+  const [reportUrl, setReportUrl] = useState<string | undefined>(undefined);
+
   const saveLead = useServerFn(submitToolLead);
+  const persistReport = useServerFn(attachToolReport);
   const makeReport = useServerFn(generateScorecardReport);
 
   const total = QUESTIONS.length;
@@ -167,7 +176,7 @@ function ScorecardPage() {
     const utm = readUtm();
     const summary = `${score}/100 — ${tier.label}. Top opportunity: ${opportunity?.title ?? "n/a"}.`;
     try {
-      await saveLead({
+      const saved = await saveLead({
         data: {
           email,
           first_name: firstName || undefined,
@@ -192,6 +201,12 @@ function ScorecardPage() {
         },
       });
       setReport(generated);
+      if (saved.report_token) {
+        setReportUrl(reportUrlFor(saved.report_token));
+        void persistReport({
+          data: { report_token: saved.report_token, report: generated as unknown as Record<string, unknown> },
+        });
+      }
       setEmailState("done");
     } catch (err) {
       setEmailState("error");
@@ -359,6 +374,7 @@ function ScorecardPage() {
                   toolSlug={SLUG}
                   title="My AI Readiness Score"
                   text={`I scored ${score}/100 on the AI Readiness Scorecard: ${tier.label}.`}
+                  url={reportUrl}
                 />
                 <Button variant="ghost" className="h-11" onClick={() => { setStep(0); setAnswers({}); setReport(null); setEmailState("idle"); }}>
                   Retake it
@@ -417,7 +433,7 @@ function ScorecardPage() {
             {report && (
               <div className="glass-strong rounded-3xl p-5 sm:p-8">
                 <p className="inline-flex items-center gap-2 text-xs text-[color:var(--success)]">
-                  <Check className="h-3.5 w-3.5" /> Report ready — it is right below.
+                  <Check className="h-3.5 w-3.5" /> Report ready — it is right below, and a copy is on its way to your inbox.
                 </p>
                 <h3 className="mt-3 text-2xl font-bold">{report.headline}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{report.summary}</p>

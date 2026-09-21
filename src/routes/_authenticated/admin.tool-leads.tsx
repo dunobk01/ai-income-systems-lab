@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Download, Users, Sparkles, CalendarDays } from "lucide-react";
+import { ArrowLeft, Download, Users, Sparkles, CalendarDays, RefreshCw, Link2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { retryMailerliteSync, reportUrlFor } from "@/lib/tool-leads.functions";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,9 @@ type Lead = {
   utm_source: string | null;
   utm_medium: string | null;
   utm_campaign: string | null;
+  report_token: string | null;
+  mailerlite_synced_at: string | null;
+  mailerlite_error: string | null;
 };
 
 const fmtDate = (iso: string) =>
@@ -48,6 +53,9 @@ function ToolLeadsPage() {
   const [err, setErr] = useState<string | null>(null);
 
   const [tool, setTool] = useState("all");
+  const [retry, setRetry] = useState<"idle" | "running" | "done">("idle");
+  const [retryMsg, setRetryMsg] = useState<string | null>(null);
+  const runRetry = useServerFn(retryMailerliteSync);
   const [biz, setBiz] = useState("all");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -62,7 +70,7 @@ function ToolLeadsPage() {
       const { data, error } = await supabase
         .from("tool_leads")
         .select(
-          "id, created_at, email, first_name, tool_slug, business_type, score, result_summary, utm_source, utm_medium, utm_campaign",
+          "id, created_at, email, first_name, tool_slug, business_type, score, result_summary, utm_source, utm_medium, utm_campaign, report_token, mailerlite_synced_at, mailerlite_error",
         )
         .order("created_at", { ascending: false })
         .limit(5000);
@@ -104,6 +112,32 @@ function ToolLeadsPage() {
     };
   }, [rows]);
 
+  const reload = async () => {
+    const { data } = await supabase
+      .from("tool_leads")
+      .select(
+        "id, created_at, email, first_name, tool_slug, business_type, score, result_summary, utm_source, utm_medium, utm_campaign, report_token, mailerlite_synced_at, mailerlite_error",
+      )
+      .order("created_at", { ascending: false })
+      .limit(5000);
+    setRows((data ?? []) as Lead[]);
+  };
+
+  const handleRetry = async () => {
+    setRetry("running");
+    setRetryMsg(null);
+    try {
+      const res = await runRetry({});
+      setRetryMsg(`Tried ${res.attempted} — ${res.synced} synced, ${res.failed} still failing.`);
+      await reload();
+    } catch (e) {
+      setRetryMsg((e as Error).message);
+    }
+    setRetry("done");
+  };
+
+  const failedCount = (rows ?? []).filter((r) => !r.mailerlite_synced_at).length;
+
   const exportCsv = () => {
     const header = [
       "date",
@@ -115,6 +149,8 @@ function ToolLeadsPage() {
       "utm_source",
       "utm_medium",
       "utm_campaign",
+      "mailerlite",
+      "report_url",
       "result_summary",
     ];
     const lines = [header.join(",")].concat(
@@ -129,6 +165,8 @@ function ToolLeadsPage() {
           r.utm_source,
           r.utm_medium,
           r.utm_campaign,
+          r.mailerlite_synced_at ? "synced" : (r.mailerlite_error ?? "pending"),
+          r.report_token ? reportUrlFor(r.report_token) : "",
           r.result_summary,
         ]
           .map(csvCell)
@@ -225,10 +263,20 @@ function ToolLeadsPage() {
         <Button variant="glass" className="h-10" onClick={exportCsv} disabled={!filtered.length}>
           <Download className="h-4 w-4" /> Export CSV
         </Button>
+        <Button
+          variant="glass"
+          className="h-10"
+          onClick={handleRetry}
+          disabled={retry === "running" || failedCount === 0}
+        >
+          <RefreshCw className={`h-4 w-4 ${retry === "running" ? "animate-spin" : ""}`} /> Retry email sync
+          {failedCount > 0 ? ` (${failedCount})` : ""}
+        </Button>
       </div>
 
       <div className="mt-3 text-xs text-muted-foreground">
         Showing {filtered.length} of {stats.total}
+        {retryMsg && <span className="ml-2 text-[color:var(--brand-2)]">{retryMsg}</span>}
       </div>
 
       {/* Table */}
@@ -242,19 +290,21 @@ function ToolLeadsPage() {
               <th className="px-3 py-2">Business type</th>
               <th className="px-3 py-2">Score</th>
               <th className="px-3 py-2">UTM source</th>
+              <th className="px-3 py-2">Email sync</th>
+              <th className="px-3 py-2">Report</th>
             </tr>
           </thead>
           <tbody>
             {rows === null && (
               <tr>
-                <td className="px-3 py-6 text-muted-foreground" colSpan={6}>
+                <td className="px-3 py-6 text-muted-foreground" colSpan={8}>
                   Loading…
                 </td>
               </tr>
             )}
             {rows !== null && filtered.length === 0 && (
               <tr>
-                <td className="px-3 py-6 text-muted-foreground" colSpan={6}>
+                <td className="px-3 py-6 text-muted-foreground" colSpan={8}>
                   No leads match these filters yet.
                 </td>
               </tr>
@@ -267,6 +317,29 @@ function ToolLeadsPage() {
                 <td className="px-3 py-2">{r.business_type ?? "—"}</td>
                 <td className="px-3 py-2">{r.score ?? "—"}</td>
                 <td className="px-3 py-2">{r.utm_source ?? "direct"}</td>
+                <td className="px-3 py-2">
+                  {r.mailerlite_synced_at ? (
+                    <span className="text-[color:var(--brand-2)]">Synced</span>
+                  ) : (
+                    <span className="text-red-400" title={r.mailerlite_error ?? undefined}>
+                      {r.mailerlite_error ? "Failed" : "Pending"}
+                    </span>
+                  )}
+                </td>
+                <td className="px-3 py-2">
+                  {r.report_token ? (
+                    <a
+                      className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                      href={reportUrlFor(r.report_token)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Link2 className="h-3.5 w-3.5" /> Open
+                    </a>
+                  ) : (
+                    "—"
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
