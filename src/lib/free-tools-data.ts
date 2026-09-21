@@ -24,10 +24,10 @@ export const FREE_TOOLS: FreeTool[] = [
     slug: "ai-savings-calculator",
     path: "/free-tools/ai-savings-calculator",
     name: "AI Time & Money Savings Calculator",
-    promise: "Estimate the hours and admin cost a few automations could take off your week.",
+    promise: "See how many hours and dollars AI could give back to you every month.",
     time: "About 90 seconds",
     icon: Calculator,
-    status: "soon",
+    status: "live",
   },
   {
     slug: "ai-visibility-check",

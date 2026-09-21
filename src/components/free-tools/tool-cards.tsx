@@ -34,7 +34,13 @@ export function FreeToolCards({ exclude, location }: { exclude?: string; locatio
                 className="w-full h-10"
                 onClick={() => dlToolCtaClick(t.slug, { location: location ?? "free-tools-grid" })}
               >
-                <Link to="/free-tools/ai-readiness-scorecard">
+                <Link
+                  to={
+                    t.slug === "ai-savings-calculator"
+                      ? "/free-tools/ai-savings-calculator"
+                      : "/free-tools/ai-readiness-scorecard"
+                  }
+                >
                   Start free <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>

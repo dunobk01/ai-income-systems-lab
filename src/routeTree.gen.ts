@@ -44,6 +44,7 @@ import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as FreePlanRouteImport } from './routes/free.plan'
 import { Route as FreeChecklistDotmdRouteImport } from './routes/free.checklist[.]md'
+import { Route as FreeToolsAiSavingsCalculatorRouteImport } from './routes/free-tools.ai-savings-calculator'
 import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
@@ -263,6 +264,12 @@ const FreeChecklistDotmdRoute = FreeChecklistDotmdRouteImport.update({
   path: '/free/checklist.md',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FreeToolsAiSavingsCalculatorRoute =
+  FreeToolsAiSavingsCalculatorRouteImport.update({
+    id: '/free-tools/ai-savings-calculator',
+    path: '/free-tools/ai-savings-calculator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const FreeToolsAiReadinessScorecardRoute =
   FreeToolsAiReadinessScorecardRouteImport.update({
     id: '/free-tools/ai-readiness-scorecard',
@@ -544,6 +551,7 @@ export interface FileRoutesByFullPath {
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
+  '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -620,6 +628,7 @@ export interface FileRoutesByTo {
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
+  '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -702,6 +711,7 @@ export interface FileRoutesById {
   '/checkout/return': typeof CheckoutReturnRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
+  '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -784,6 +794,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
+    | '/free-tools/ai-savings-calculator'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -860,6 +871,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
+    | '/free-tools/ai-savings-calculator'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -941,6 +953,7 @@ export interface FileRouteTypes {
     | '/checkout/return'
     | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
+    | '/free-tools/ai-savings-calculator'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -1013,6 +1026,7 @@ export interface RootRouteChildren {
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
+  FreeToolsAiSavingsCalculatorRoute: typeof FreeToolsAiSavingsCalculatorRoute
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
@@ -1282,6 +1296,13 @@ declare module '@tanstack/react-router' {
       path: '/free/checklist.md'
       fullPath: '/free/checklist.md'
       preLoaderRoute: typeof FreeChecklistDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/ai-savings-calculator': {
+      id: '/free-tools/ai-savings-calculator'
+      path: '/free-tools/ai-savings-calculator'
+      fullPath: '/free-tools/ai-savings-calculator'
+      preLoaderRoute: typeof FreeToolsAiSavingsCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/free-tools/ai-readiness-scorecard': {
@@ -1732,6 +1753,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutReturnRoute: CheckoutReturnRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,
+  FreeToolsAiSavingsCalculatorRoute: FreeToolsAiSavingsCalculatorRoute,
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
