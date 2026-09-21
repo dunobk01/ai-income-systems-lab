@@ -12,6 +12,7 @@ import { LeadCapture } from "@/components/lead-capture";
 import dustinPhoto from "@/assets/dustin.jpg.asset.json";
 import { ogImageMeta } from "@/lib/og";
 import { CURRICULUM_MODULES, CURRICULUM } from "@/lib/curriculum";
+import { FreeToolCards } from "@/components/free-tools/tool-cards";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -165,6 +166,24 @@ export default function LandingPage() {
               <span key={t} className="glass rounded-full px-3 py-1">{t}</span>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* FREE TOOLS */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 pt-4 pb-8">
+        <div className="text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Try a free tool first</h2>
+          <p className="mt-2 text-sm text-muted-foreground max-w-2xl mx-auto">
+            No account, no card. Get a straight answer about your business in about a minute.
+          </p>
+        </div>
+        <div className="mt-6">
+          <FreeToolCards location="homepage" />
+        </div>
+        <div className="mt-5 text-center">
+          <Button asChild variant="ghost" className="h-10">
+            <Link to="/free-tools">See all free tools <ArrowRight className="h-4 w-4" /></Link>
+          </Button>
         </div>
       </section>
 
