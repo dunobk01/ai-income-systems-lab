@@ -70,7 +70,7 @@ function PromptsPage() {
       } catch (e) { setError((e as Error).message); }
       finally { setLoading(false); }
     })();
-  }, [user]);
+  }, [user, session]);
 
   const tools = useMemo(() => ["All", ...Array.from(new Set(prompts.map((p) => p.tool)))], [prompts]);
   const cats = useMemo(() => ["All", ...Array.from(new Set(prompts.map((p) => p.category)))], [prompts]);
