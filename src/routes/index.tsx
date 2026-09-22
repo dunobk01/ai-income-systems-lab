@@ -621,6 +621,8 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <LabStrip />
+
       <LatestPosts />
 
       {/* FINAL CTA */}
