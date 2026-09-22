@@ -70,7 +70,7 @@ function CoursePage() {
         setLoading(false);
       }
     })();
-  }, [user]);
+  }, [user, session]);
 
   // (canAccessAll removed — gating is now per-module via canAccessModule)
   const totalLessons = lessons.length;
