@@ -45,13 +45,37 @@ function CurriculumPage() {
       </section>
 
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-20 space-y-4">
-        {modules.map((m) => (
-          <article key={m.n} className="glass-strong rounded-2xl p-6">
+        {modules.map((m) => {
+          const link = CURRICULUM_LINKS[m.n];
+          return (
+          <article key={m.n} className="glass-strong rounded-2xl p-6 transition hover:border-[color:var(--brand-2)]/40">
             <div className="flex flex-col sm:flex-row sm:items-start gap-4">
               <div className="sm:w-48 shrink-0">
                 <p className="text-xs font-mono text-muted-foreground">Module {m.n}</p>
-                <h2 className="mt-1 text-xl font-semibold">{m.title}</h2>
+                <h2 className="mt-1 text-xl font-semibold">
+                  {link ? (
+                    <Link
+                      to="/course/$moduleSlug/$lessonSlug"
+                      params={{ moduleSlug: link.moduleSlug, lessonSlug: link.lessonSlug }}
+                      className="hover:text-[color:var(--brand-2)] transition-colors"
+                    >
+                      {m.title}
+                    </Link>
+                  ) : (
+                    m.title
+                  )}
+                </h2>
                 <p className="mt-1 text-xs text-muted-foreground">{m.lessons} lessons</p>
+                {link && (
+                  <Button asChild size="sm" variant="outline" className="mt-3">
+                    <Link
+                      to="/course/$moduleSlug/$lessonSlug"
+                      params={{ moduleSlug: link.moduleSlug, lessonSlug: link.lessonSlug }}
+                    >
+                      Open module <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </Button>
+                )}
               </div>
               <div className="flex-1">
                 <p className="text-sm text-foreground/90 leading-relaxed">
