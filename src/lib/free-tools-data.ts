@@ -1,4 +1,4 @@
-import { Gauge, Calculator, Radar, type LucideIcon } from "lucide-react";
+import { Gauge, Calculator, Radar, Wand2, type LucideIcon } from "lucide-react";
 
 export type FreeTool = {
   slug: string;
@@ -11,6 +11,15 @@ export type FreeTool = {
 };
 
 export const FREE_TOOLS: FreeTool[] = [
+  {
+    slug: "ai-prompt-generator",
+    path: "/free-tools/prompt-generator",
+    name: "AI Prompt Generator",
+    promise: "Get three detailed, copy-ready prompts built for your business and your goal.",
+    time: "About 30 seconds",
+    icon: Wand2,
+    status: "live",
+  },
   {
     slug: "ai-readiness-scorecard",
     path: "/free-tools/ai-readiness-scorecard",

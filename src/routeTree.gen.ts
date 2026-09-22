@@ -44,6 +44,7 @@ import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as FreePlanRouteImport } from './routes/free.plan'
 import { Route as FreeChecklistDotmdRouteImport } from './routes/free.checklist[.]md'
+import { Route as FreeToolsPromptGeneratorRouteImport } from './routes/free-tools.prompt-generator'
 import { Route as FreeToolsAiVisibilityCheckRouteImport } from './routes/free-tools.ai-visibility-check'
 import { Route as FreeToolsAiSavingsCalculatorRouteImport } from './routes/free-tools.ai-savings-calculator'
 import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
@@ -267,6 +268,12 @@ const FreeChecklistDotmdRoute = FreeChecklistDotmdRouteImport.update({
   path: '/free/checklist.md',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FreeToolsPromptGeneratorRoute =
+  FreeToolsPromptGeneratorRouteImport.update({
+    id: '/free-tools/prompt-generator',
+    path: '/free-tools/prompt-generator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const FreeToolsAiVisibilityCheckRoute =
   FreeToolsAiVisibilityCheckRouteImport.update({
     id: '/free-tools/ai-visibility-check',
@@ -573,6 +580,7 @@ export interface FileRoutesByFullPath {
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
+  '/free-tools/prompt-generator': typeof FreeToolsPromptGeneratorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -653,6 +661,7 @@ export interface FileRoutesByTo {
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
+  '/free-tools/prompt-generator': typeof FreeToolsPromptGeneratorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -739,6 +748,7 @@ export interface FileRoutesById {
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
+  '/free-tools/prompt-generator': typeof FreeToolsPromptGeneratorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -825,6 +835,7 @@ export interface FileRouteTypes {
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
+    | '/free-tools/prompt-generator'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -905,6 +916,7 @@ export interface FileRouteTypes {
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
+    | '/free-tools/prompt-generator'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -990,6 +1002,7 @@ export interface FileRouteTypes {
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
+    | '/free-tools/prompt-generator'
     | '/free/checklist.md'
     | '/free/plan'
     | '/guides/$slug'
@@ -1066,6 +1079,7 @@ export interface RootRouteChildren {
   FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
   FreeToolsAiSavingsCalculatorRoute: typeof FreeToolsAiSavingsCalculatorRoute
   FreeToolsAiVisibilityCheckRoute: typeof FreeToolsAiVisibilityCheckRoute
+  FreeToolsPromptGeneratorRoute: typeof FreeToolsPromptGeneratorRoute
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
@@ -1336,6 +1350,13 @@ declare module '@tanstack/react-router' {
       path: '/free/checklist.md'
       fullPath: '/free/checklist.md'
       preLoaderRoute: typeof FreeChecklistDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/prompt-generator': {
+      id: '/free-tools/prompt-generator'
+      path: '/free-tools/prompt-generator'
+      fullPath: '/free-tools/prompt-generator'
+      preLoaderRoute: typeof FreeToolsPromptGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/free-tools/ai-visibility-check': {
@@ -1818,6 +1839,7 @@ const rootRouteChildren: RootRouteChildren = {
   FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,
   FreeToolsAiSavingsCalculatorRoute: FreeToolsAiSavingsCalculatorRoute,
   FreeToolsAiVisibilityCheckRoute: FreeToolsAiVisibilityCheckRoute,
+  FreeToolsPromptGeneratorRoute: FreeToolsPromptGeneratorRoute,
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
