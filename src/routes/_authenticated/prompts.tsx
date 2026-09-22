@@ -40,14 +40,21 @@ function PromptsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!session) return; // wait until the access token is attached to the client
     void (async () => {
       try {
         // Catalogue = every prompt's metadata (visible to all members).
         // Full text only comes back for prompts the member's tier allows (RLS).
-        const [{ data: catalog, error: cErr }, { data: unlocked }] = await Promise.all([
-          supabase.rpc("prompt_catalog"),
-          supabase.from("prompts").select("id, prompt_text"),
-        ]);
+        const [{ data: catalog, error: cErr }, { data: unlocked }] = await withFreshSession(() =>
+          Promise.all([
+            supabase.rpc("prompt_catalog"),
+            supabase.from("prompts").select("id, prompt_text"),
+          ]).then((res) => {
+            if (res[0].error) throw res[0].error;
+            if (res[1].error) throw res[1].error;
+            return res;
+          }),
+        );
         if (cErr) throw cErr;
         setPrompts((catalog ?? []) as CatalogPrompt[]);
         const map: Record<string, string> = {};
