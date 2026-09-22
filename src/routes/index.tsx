@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { listAllBlogPosts } from "@/lib/blog.functions";
+import { listLabPosts } from "@/lib/lab.functions";
+import { LabCard } from "@/components/lab/lab-card";
 import {
   Sparkles, Rocket, Zap, Brain, Workflow, Bot, Search, Layers,
   ArrowRight, Check, Shield, ShieldCheck, MessageSquare, Wand2, FileCode2,
@@ -30,12 +32,11 @@ export const Route = createFileRoute("/")({
   // Resolve the posts fully in the loader (no streamed promise) so the SSR
   // HTML and the hydrated client render identical markup.
   loader: async () => {
-    try {
-      const res = await listAllBlogPosts();
-      return { posts: (res?.posts ?? []).slice(0, 6) };
-    } catch {
-      return { posts: [] };
-    }
+    const [blog, lab] = await Promise.all([
+      listAllBlogPosts().catch(() => ({ posts: [] as any[] })),
+      listLabPosts({ data: { limit: 3 } }).catch(() => ({ posts: [] as any[] })),
+    ]);
+    return { posts: (blog?.posts ?? []).slice(0, 6), labPosts: (lab?.posts ?? []).slice(0, 3) };
   },
   component: LandingPage,
 });
