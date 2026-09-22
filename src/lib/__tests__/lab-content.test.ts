@@ -10,7 +10,7 @@ describe("trusted Lab HTML", () => {
   });
 
   it("removes script elements and inline event attributes", () => {
-    const html = '<div class="lab-post" onclick="bad()"><img src="x" onerror=bad()><script src="x"></script><script>bad()</script><p>Safe</p></div>';
+    const html = '<div class="lab-post" onclick="bad()"><img src="x" onerror=bad()><script src="x"></script><script>bad()</script></script><p>Safe</p></div>';
     const sanitized = sanitizeTrustedLabHtml(html);
 
     expect(sanitized).toContain('<div class="lab-post">');

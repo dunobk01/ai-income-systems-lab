@@ -7,6 +7,6 @@ export function isTrustedLabHtml(content: string) {
 export function sanitizeTrustedLabHtml(content: string) {
   return content
     .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "")
-    .replace(/<script\b[^>]*\/?\s*>/gi, "")
+    .replace(/<\/?script\b[^>]*>/gi, "")
     .replace(/\s+on[a-z][\w:.-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?/gi, "");
 }
