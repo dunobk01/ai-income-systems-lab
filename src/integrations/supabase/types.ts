@@ -659,59 +659,112 @@ export type Database = {
           },
         ]
       }
+      newsletter_post_saves: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_post_saves_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_posts: {
         Row: {
+          audience: string[]
           author_id: string | null
           content: string
           cover_image_url: string | null
           created_at: string
+          difficulty: string | null
           email_sent_at: string | null
           excerpt: string | null
           id: string
+          pain_point: string | null
           pillar_slug: string | null
           post_type: string
+          problem_solved: string | null
           published_at: string | null
+          reading_minutes: number | null
           seo_description: string | null
           seo_title: string | null
+          share_count: number
           slug: string
           tags: string[]
+          time_to_implement: string | null
           title: string
+          tools_used: string[]
           updated_at: string
         }
         Insert: {
+          audience?: string[]
           author_id?: string | null
           content?: string
           cover_image_url?: string | null
           created_at?: string
+          difficulty?: string | null
           email_sent_at?: string | null
           excerpt?: string | null
           id?: string
+          pain_point?: string | null
           pillar_slug?: string | null
           post_type?: string
+          problem_solved?: string | null
           published_at?: string | null
+          reading_minutes?: number | null
           seo_description?: string | null
           seo_title?: string | null
+          share_count?: number
           slug: string
           tags?: string[]
+          time_to_implement?: string | null
           title: string
+          tools_used?: string[]
           updated_at?: string
         }
         Update: {
+          audience?: string[]
           author_id?: string | null
           content?: string
           cover_image_url?: string | null
           created_at?: string
+          difficulty?: string | null
           email_sent_at?: string | null
           excerpt?: string | null
           id?: string
+          pain_point?: string | null
           pillar_slug?: string | null
           post_type?: string
+          problem_solved?: string | null
           published_at?: string | null
+          reading_minutes?: number | null
           seo_description?: string | null
           seo_title?: string | null
+          share_count?: number
           slug?: string
           tags?: string[]
+          time_to_implement?: string | null
           title?: string
+          tools_used?: string[]
           updated_at?: string
         }
         Relationships: []
@@ -1166,6 +1219,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_lab_share: { Args: { _post_id: string }; Returns: number }
       lesson_catalog: {
         Args: never
         Returns: {
