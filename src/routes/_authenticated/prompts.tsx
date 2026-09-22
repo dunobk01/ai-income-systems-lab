@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, Search, Star, Lock, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { withFreshSession } from "@/lib/supabase-retry";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/_authenticated/prompts")({
 });
 
 function PromptsPage() {
-  const { user, profile, isAdmin } = useAuth();
+  const { user, session, profile, isAdmin } = useAuth();
   const { prompt: promptUpgrade, dialog } = useUpgradePrompt();
   const [prompts, setPrompts] = useState<CatalogPrompt[]>([]);
   const [texts, setTexts] = useState<Record<string, string>>({});
