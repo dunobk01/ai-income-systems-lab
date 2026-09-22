@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { dlCourseProgress } from "@/lib/datalayer";
 import { hasCourseAccess } from "@/lib/course-access";
+import { withFreshSession } from "@/lib/supabase-retry";
 
 type Tier = "starter" | "builder" | "pro" | "accelerator";
 type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number; is_preview: boolean };
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/course/$moduleSlug/$lesson
 
 function LessonPage() {
   const { moduleSlug, lessonSlug } = Route.useParams();
-  const { user, profile, isAdmin } = useAuth();
+  const { user, session, profile, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [module, setModule] = useState<Module | null>(null);
   const [lesson, setLesson] = useState<Lesson | null>(null);
@@ -76,7 +77,7 @@ function LessonPage() {
         setError((e as Error).message);
       } finally { setLoading(false); }
     })();
-  }, [moduleSlug, lessonSlug, user]);
+  }, [moduleSlug, lessonSlug, user, session]);
 
   // Fire lesson_start once per lesson view (only if accessible & not already complete).
   useEffect(() => {
