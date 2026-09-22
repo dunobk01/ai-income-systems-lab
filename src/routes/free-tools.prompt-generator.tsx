@@ -16,9 +16,9 @@ import {
 } from "@/lib/prompt-generator-data";
 
 const SLUG = "ai-prompt-generator";
-const TITLE = "AI Prompt Generator";
+const TITLE = "AI Prompt Generator — AI Prompts by Business Type";
 const DESC =
-  "Free AI prompt generator for small businesses. Pick your business type and goal, get three detailed, copy-ready prompts built for ChatGPT or Claude — no signup, no editing required.";
+  "Get AI prompts by business type and goal. Pick freelancer, agency, e-commerce, local service and more, then copy three detailed, ready-to-run prompts for ChatGPT or Claude. Free, no signup.";
 const URL = "https://ai-income-systems.com/free-tools/prompt-generator";
 
 const FAQS = [
@@ -70,10 +70,18 @@ export const Route = createFileRoute("/free-tools/prompt-generator")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          name: TITLE,
+          name: "AI Prompt Generator",
+          alternateName: "AI Prompts by Business Type",
+          description: DESC,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
           url: URL,
+          isAccessibleForFree: true,
+          featureList: [
+            "AI prompts by business type",
+            "Prompts by marketing goal",
+            "Copy-ready ChatGPT and Claude prompts",
+          ],
           offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
         }),
       },
