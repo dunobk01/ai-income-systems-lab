@@ -30,6 +30,7 @@ import { Route as AiBusinessEngineRouteImport } from './routes/ai-business-engin
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
+import { Route as ThelabIndexRouteImport } from './routes/thelab.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as FreeIndexRouteImport } from './routes/free.index'
@@ -39,6 +40,7 @@ import { Route as VsSkoolRouteImport } from './routes/vs.skool'
 import { Route as VsMightyNetworksRouteImport } from './routes/vs.mighty-networks'
 import { Route as VsCircleRouteImport } from './routes/vs.circle'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as ThelabSavedRouteImport } from './routes/thelab.saved'
 import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
@@ -198,6 +200,11 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ToolsRoute,
 } as any)
+const ThelabIndexRoute = ThelabIndexRouteImport.update({
+  id: '/thelab/',
+  path: '/thelab/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsletterIndexRoute = NewsletterIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -242,6 +249,11 @@ const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ToolsRoute,
+} as any)
+const ThelabSavedRoute = ThelabSavedRouteImport.update({
+  id: '/thelab/saved',
+  path: '/thelab/saved',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const SystemsSlugRoute = SystemsSlugRouteImport.update({
   id: '/systems/$slug',
@@ -586,6 +598,7 @@ export interface FileRoutesByFullPath {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
@@ -595,6 +608,7 @@ export interface FileRoutesByFullPath {
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
+  '/thelab/': typeof ThelabIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -667,6 +681,7 @@ export interface FileRoutesByTo {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
@@ -676,6 +691,7 @@ export interface FileRoutesByTo {
   '/free': typeof FreeIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
+  '/thelab': typeof ThelabIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -754,6 +770,7 @@ export interface FileRoutesById {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
@@ -763,6 +780,7 @@ export interface FileRoutesById {
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
+  '/thelab/': typeof ThelabIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -841,6 +859,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
     | '/vs/mighty-networks'
@@ -850,6 +869,7 @@ export interface FileRouteTypes {
     | '/free/'
     | '/guides/'
     | '/newsletter/'
+    | '/thelab/'
     | '/tools/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -922,6 +942,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
     | '/vs/mighty-networks'
@@ -931,6 +952,7 @@ export interface FileRouteTypes {
     | '/free'
     | '/guides'
     | '/newsletter'
+    | '/thelab'
     | '/tools'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1008,6 +1030,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
     | '/vs/mighty-networks'
@@ -1017,6 +1040,7 @@ export interface FileRouteTypes {
     | '/free/'
     | '/guides/'
     | '/newsletter/'
+    | '/thelab/'
     | '/tools/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1083,12 +1107,14 @@ export interface RootRouteChildren {
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
+  ThelabSavedRoute: typeof ThelabSavedRoute
   VsCircleRoute: typeof VsCircleRoute
   VsMightyNetworksRoute: typeof VsMightyNetworksRoute
   VsSkoolRoute: typeof VsSkoolRoute
   BlogIndexRoute: typeof BlogIndexRoute
   FreeToolsIndexRoute: typeof FreeToolsIndexRoute
   FreeIndexRoute: typeof FreeIndexRoute
+  ThelabIndexRoute: typeof ThelabIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
@@ -1254,6 +1280,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsIndexRouteImport
       parentRoute: typeof ToolsRoute
     }
+    '/thelab/': {
+      id: '/thelab/'
+      path: '/thelab'
+      fullPath: '/thelab/'
+      preLoaderRoute: typeof ThelabIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/newsletter/': {
       id: '/newsletter/'
       path: '/'
@@ -1316,6 +1349,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/tools/$slug'
       preLoaderRoute: typeof ToolsSlugRouteImport
       parentRoute: typeof ToolsRoute
+    }
+    '/thelab/saved': {
+      id: '/thelab/saved'
+      path: '/thelab/saved'
+      fullPath: '/thelab/saved'
+      preLoaderRoute: typeof ThelabSavedRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/systems/$slug': {
       id: '/systems/$slug'
@@ -1843,12 +1883,14 @@ const rootRouteChildren: RootRouteChildren = {
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
+  ThelabSavedRoute: ThelabSavedRoute,
   VsCircleRoute: VsCircleRoute,
   VsMightyNetworksRoute: VsMightyNetworksRoute,
   VsSkoolRoute: VsSkoolRoute,
   BlogIndexRoute: BlogIndexRoute,
   FreeToolsIndexRoute: FreeToolsIndexRoute,
   FreeIndexRoute: FreeIndexRoute,
+  ThelabIndexRoute: ThelabIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   BlogTagTagRoute: BlogTagTagRoute,
