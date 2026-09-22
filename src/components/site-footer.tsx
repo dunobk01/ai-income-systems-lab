@@ -19,6 +19,8 @@ export function SiteFooter() {
             <li><Link to="/ai-business-engine" className="hover:text-foreground">Free AI Prompts + n8n Guide</Link></li>
             <li><Link to="/os" className="hover:text-foreground">Free AI Income Operating System</Link></li>
             <li><Link to="/blog" className="hover:text-foreground">Blog</Link></li>
+            <li><Link to="/thelab" className="hover:text-foreground">The Lab — daily AI builds</Link></li>
+            <li><Link to="/thelab/saved" className="hover:text-foreground">Saved builds</Link></li>
             <li><Link to="/contact" className="hover:text-foreground">Contact</Link></li>
             <li><a href="/#curriculum" className="hover:text-foreground">Curriculum</a></li>
             <li><a href="/#faq" className="hover:text-foreground">FAQ</a></li>

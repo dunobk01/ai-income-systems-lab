@@ -30,6 +30,7 @@ import { Route as AiBusinessEngineRouteImport } from './routes/ai-business-engin
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
+import { Route as ThelabIndexRouteImport } from './routes/thelab.index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as FreeIndexRouteImport } from './routes/free.index'
@@ -39,6 +40,8 @@ import { Route as VsSkoolRouteImport } from './routes/vs.skool'
 import { Route as VsMightyNetworksRouteImport } from './routes/vs.mighty-networks'
 import { Route as VsCircleRouteImport } from './routes/vs.circle'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as ThelabSavedRouteImport } from './routes/thelab.saved'
+import { Route as ThelabSlugRouteImport } from './routes/thelab.$slug'
 import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
@@ -90,6 +93,8 @@ import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/em
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicPinterestCatalogDottsvRouteImport } from './routes/api/public/pinterest/catalog[.]tsv'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicLabRecentRouteImport } from './routes/api/public/lab/recent'
+import { Route as ApiPublicLabPublishRouteImport } from './routes/api/public/lab/publish'
 import { Route as ApiPublicEmailOsDay5RouteImport } from './routes/api/public/email/os-day5'
 import { Route as ApiPublicEmailMailerliteSyncRouteImport } from './routes/api/public/email/mailerlite-sync'
 import { Route as AuthenticatedCourseModuleSlugLessonSlugRouteImport } from './routes/_authenticated/course.$moduleSlug.$lessonSlug'
@@ -198,6 +203,11 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ToolsRoute,
 } as any)
+const ThelabIndexRoute = ThelabIndexRouteImport.update({
+  id: '/thelab/',
+  path: '/thelab/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsletterIndexRoute = NewsletterIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -242,6 +252,16 @@ const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ToolsRoute,
+} as any)
+const ThelabSavedRoute = ThelabSavedRouteImport.update({
+  id: '/thelab/saved',
+  path: '/thelab/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThelabSlugRoute = ThelabSlugRouteImport.update({
+  id: '/thelab/$slug',
+  path: '/thelab/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const SystemsSlugRoute = SystemsSlugRouteImport.update({
   id: '/systems/$slug',
@@ -524,6 +544,16 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicLabRecentRoute = ApiPublicLabRecentRouteImport.update({
+  id: '/api/public/lab/recent',
+  path: '/api/public/lab/recent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicLabPublishRoute = ApiPublicLabPublishRouteImport.update({
+  id: '/api/public/lab/publish',
+  path: '/api/public/lab/publish',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicEmailOsDay5Route = ApiPublicEmailOsDay5RouteImport.update({
   id: '/api/public/email/os-day5',
   path: '/api/public/email/os-day5',
@@ -586,6 +616,8 @@ export interface FileRoutesByFullPath {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/$slug': typeof ThelabSlugRoute
+  '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
@@ -595,6 +627,7 @@ export interface FileRoutesByFullPath {
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
+  '/thelab/': typeof ThelabIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -619,6 +652,8 @@ export interface FileRoutesByFullPath {
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
+  '/api/public/lab/publish': typeof ApiPublicLabPublishRoute
+  '/api/public/lab/recent': typeof ApiPublicLabRecentRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -667,6 +702,8 @@ export interface FileRoutesByTo {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/$slug': typeof ThelabSlugRoute
+  '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
@@ -676,6 +713,7 @@ export interface FileRoutesByTo {
   '/free': typeof FreeIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
+  '/thelab': typeof ThelabIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -700,6 +738,8 @@ export interface FileRoutesByTo {
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
+  '/api/public/lab/publish': typeof ApiPublicLabPublishRoute
+  '/api/public/lab/recent': typeof ApiPublicLabRecentRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -754,6 +794,8 @@ export interface FileRoutesById {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/$slug': typeof ThelabSlugRoute
+  '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
   '/vs/mighty-networks': typeof VsMightyNetworksRoute
@@ -763,6 +805,7 @@ export interface FileRoutesById {
   '/free/': typeof FreeIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
+  '/thelab/': typeof ThelabIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -787,6 +830,8 @@ export interface FileRoutesById {
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
+  '/api/public/lab/publish': typeof ApiPublicLabPublishRoute
+  '/api/public/lab/recent': typeof ApiPublicLabRecentRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -841,6 +886,8 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/$slug'
+    | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
     | '/vs/mighty-networks'
@@ -850,6 +897,7 @@ export interface FileRouteTypes {
     | '/free/'
     | '/guides/'
     | '/newsletter/'
+    | '/thelab/'
     | '/tools/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -874,6 +922,8 @@ export interface FileRouteTypes {
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
+    | '/api/public/lab/publish'
+    | '/api/public/lab/recent'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
@@ -922,6 +972,8 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/$slug'
+    | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
     | '/vs/mighty-networks'
@@ -931,6 +983,7 @@ export interface FileRouteTypes {
     | '/free'
     | '/guides'
     | '/newsletter'
+    | '/thelab'
     | '/tools'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -955,6 +1008,8 @@ export interface FileRouteTypes {
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
+    | '/api/public/lab/publish'
+    | '/api/public/lab/recent'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
@@ -1008,6 +1063,8 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/$slug'
+    | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
     | '/vs/mighty-networks'
@@ -1017,6 +1074,7 @@ export interface FileRouteTypes {
     | '/free/'
     | '/guides/'
     | '/newsletter/'
+    | '/thelab/'
     | '/tools/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1041,6 +1099,8 @@ export interface FileRouteTypes {
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
     | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
+    | '/api/public/lab/publish'
+    | '/api/public/lab/recent'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
@@ -1083,12 +1143,15 @@ export interface RootRouteChildren {
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
+  ThelabSlugRoute: typeof ThelabSlugRoute
+  ThelabSavedRoute: typeof ThelabSavedRoute
   VsCircleRoute: typeof VsCircleRoute
   VsMightyNetworksRoute: typeof VsMightyNetworksRoute
   VsSkoolRoute: typeof VsSkoolRoute
   BlogIndexRoute: typeof BlogIndexRoute
   FreeToolsIndexRoute: typeof FreeToolsIndexRoute
   FreeIndexRoute: typeof FreeIndexRoute
+  ThelabIndexRoute: typeof ThelabIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
@@ -1096,6 +1159,8 @@ export interface RootRouteChildren {
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicEmailMailerliteSyncRoute: typeof ApiPublicEmailMailerliteSyncRoute
   ApiPublicEmailOsDay5Route: typeof ApiPublicEmailOsDay5Route
+  ApiPublicLabPublishRoute: typeof ApiPublicLabPublishRoute
+  ApiPublicLabRecentRoute: typeof ApiPublicLabRecentRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicPinterestCatalogDottsvRoute: typeof ApiPublicPinterestCatalogDottsvRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -1254,6 +1319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsIndexRouteImport
       parentRoute: typeof ToolsRoute
     }
+    '/thelab/': {
+      id: '/thelab/'
+      path: '/thelab'
+      fullPath: '/thelab/'
+      preLoaderRoute: typeof ThelabIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/newsletter/': {
       id: '/newsletter/'
       path: '/'
@@ -1316,6 +1388,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/tools/$slug'
       preLoaderRoute: typeof ToolsSlugRouteImport
       parentRoute: typeof ToolsRoute
+    }
+    '/thelab/saved': {
+      id: '/thelab/saved'
+      path: '/thelab/saved'
+      fullPath: '/thelab/saved'
+      preLoaderRoute: typeof ThelabSavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thelab/$slug': {
+      id: '/thelab/$slug'
+      path: '/thelab/$slug'
+      fullPath: '/thelab/$slug'
+      preLoaderRoute: typeof ThelabSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/systems/$slug': {
       id: '/systems/$slug'
@@ -1674,6 +1760,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/lab/recent': {
+      id: '/api/public/lab/recent'
+      path: '/api/public/lab/recent'
+      fullPath: '/api/public/lab/recent'
+      preLoaderRoute: typeof ApiPublicLabRecentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/lab/publish': {
+      id: '/api/public/lab/publish'
+      path: '/api/public/lab/publish'
+      fullPath: '/api/public/lab/publish'
+      preLoaderRoute: typeof ApiPublicLabPublishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/email/os-day5': {
       id: '/api/public/email/os-day5'
       path: '/api/public/email/os-day5'
@@ -1843,12 +1943,15 @@ const rootRouteChildren: RootRouteChildren = {
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
+  ThelabSlugRoute: ThelabSlugRoute,
+  ThelabSavedRoute: ThelabSavedRoute,
   VsCircleRoute: VsCircleRoute,
   VsMightyNetworksRoute: VsMightyNetworksRoute,
   VsSkoolRoute: VsSkoolRoute,
   BlogIndexRoute: BlogIndexRoute,
   FreeToolsIndexRoute: FreeToolsIndexRoute,
   FreeIndexRoute: FreeIndexRoute,
+  ThelabIndexRoute: ThelabIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   BlogTagTagRoute: BlogTagTagRoute,
@@ -1856,6 +1959,8 @@ const rootRouteChildren: RootRouteChildren = {
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicEmailMailerliteSyncRoute: ApiPublicEmailMailerliteSyncRoute,
   ApiPublicEmailOsDay5Route: ApiPublicEmailOsDay5Route,
+  ApiPublicLabPublishRoute: ApiPublicLabPublishRoute,
+  ApiPublicLabRecentRoute: ApiPublicLabRecentRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicPinterestCatalogDottsvRoute: ApiPublicPinterestCatalogDottsvRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,

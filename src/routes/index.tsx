@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { listAllBlogPosts } from "@/lib/blog.functions";
+import { listLabPosts } from "@/lib/lab.functions";
+import { LabCard } from "@/components/lab/lab-card";
 import {
   Sparkles, Rocket, Zap, Brain, Workflow, Bot, Search, Layers,
   ArrowRight, Check, Shield, ShieldCheck, MessageSquare, Wand2, FileCode2,
@@ -30,12 +32,11 @@ export const Route = createFileRoute("/")({
   // Resolve the posts fully in the loader (no streamed promise) so the SSR
   // HTML and the hydrated client render identical markup.
   loader: async () => {
-    try {
-      const res = await listAllBlogPosts();
-      return { posts: (res?.posts ?? []).slice(0, 6) };
-    } catch {
-      return { posts: [] };
-    }
+    const [blog, lab] = await Promise.all([
+      listAllBlogPosts().catch(() => ({ posts: [] as any[] })),
+      listLabPosts({ data: { limit: 3 } }).catch(() => ({ posts: [] as any[] })),
+    ]);
+    return { posts: (blog?.posts ?? []).slice(0, 6), labPosts: (lab?.posts ?? []).slice(0, 3) };
   },
   component: LandingPage,
 });
@@ -89,6 +90,36 @@ const faqs = [
   { q: "How long does it take?", a: "You can ship your first income system in 7 days following Module 10. The full curriculum is paced for 4–8 weeks of part-time work." },
   { q: "What if I get stuck?", a: "Every lesson has action steps, copy-pasteable prompts, and example outputs. The builders generate plans tailored to your niche." },
 ];
+
+function LabStrip() {
+  const { labPosts } = Route.useLoaderData();
+  if (!labPosts?.length) return null;
+  return (
+    <section className="mx-auto max-w-7xl px-4 sm:px-6 py-20">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            Fresh from <span className="text-gradient">The Lab</span>
+          </h2>
+          <p className="mt-2 text-muted-foreground">Working AI systems you can install today. One new build every day.</p>
+        </div>
+        <Link to="/thelab" className="hidden sm:inline-flex items-center gap-1 text-sm text-[color:var(--brand)]">
+          All builds <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {labPosts.map((p: any) => (
+          <LabCard key={p.id} post={p} />
+        ))}
+      </div>
+      <div className="mt-6 sm:hidden">
+        <Link to="/thelab" className="inline-flex items-center gap-1 text-sm text-[color:var(--brand)]">
+          All builds <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}
 
 function LatestPosts() {
   const { posts } = Route.useLoaderData();
@@ -589,6 +620,8 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
+
+      <LabStrip />
 
       <LatestPosts />
 
