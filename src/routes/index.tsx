@@ -91,6 +91,36 @@ const faqs = [
   { q: "What if I get stuck?", a: "Every lesson has action steps, copy-pasteable prompts, and example outputs. The builders generate plans tailored to your niche." },
 ];
 
+function LabStrip() {
+  const { labPosts } = Route.useLoaderData();
+  if (!labPosts?.length) return null;
+  return (
+    <section className="mx-auto max-w-7xl px-4 sm:px-6 py-20">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            Fresh from <span className="text-gradient">The Lab</span>
+          </h2>
+          <p className="mt-2 text-muted-foreground">Working AI systems you can install today. One new build every day.</p>
+        </div>
+        <Link to="/thelab" className="hidden sm:inline-flex items-center gap-1 text-sm text-[color:var(--brand)]">
+          All builds <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {labPosts.map((p: any) => (
+          <LabCard key={p.id} post={p} />
+        ))}
+      </div>
+      <div className="mt-6 sm:hidden">
+        <Link to="/thelab" className="inline-flex items-center gap-1 text-sm text-[color:var(--brand)]">
+          All builds <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 function LatestPosts() {
   const { posts } = Route.useLoaderData();
   if (!posts.length) return null;
