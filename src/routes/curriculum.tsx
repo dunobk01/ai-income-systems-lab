@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ogImageMeta } from "@/lib/og";
-import { CURRICULUM_MODULES, CURRICULUM_SENTENCE, CURRICULUM } from "@/lib/curriculum";
+import { CURRICULUM_MODULES, CURRICULUM_SENTENCE, CURRICULUM, CURRICULUM_LINKS } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/curriculum")({
   head: () => ({
