@@ -13,6 +13,7 @@ import { LabActions } from "@/components/lab/lab-actions";
 import { LabCard } from "@/components/lab/lab-card";
 import { getLabPostBySlug, listMySavedIds, listMyLikedIds } from "@/lib/lab.functions";
 import { useAuth } from "@/lib/auth-context";
+import { isTrustedLabHtml, sanitizeTrustedLabHtml } from "@/lib/lab-content";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/thelab/$slug")({
@@ -152,7 +153,9 @@ function LabPostPage() {
   if (!post) return null;
 
   const related = data?.related ?? [];
-  const headings = extractHeadings(post.content ?? "");
+  const content = post.content ?? "";
+  const renderAsHtml = isTrustedLabHtml(content);
+  const headings = renderAsHtml ? [] : extractHeadings(content);
   const isSaved = (saved.data?.ids ?? []).includes(post.id);
   const isLiked = (liked.data?.ids ?? []).includes(post.id);
   const scrollToComments = () =>
@@ -236,19 +239,28 @@ function LabPostPage() {
               )}
             </dl>
 
-            <LabProse
-              content={post.content ?? ""}
-              postSlug={post.slug}
-              midSlot={
-                <div className="glass my-10 rounded-2xl p-6">
-                  <h3 className="font-display text-lg font-bold">Get tomorrow's build in your inbox</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">Free. One system a day. Unsubscribe anytime.</p>
-                  <div className="mt-4 max-w-xl">
-                    <NewsletterSignup source="thelab-mid" />
-                  </div>
-                </div>
-              }
-            />
+            <div className="overflow-x-hidden">
+              {renderAsHtml ? (
+                <div
+                  className="mt-10"
+                  dangerouslySetInnerHTML={{ __html: sanitizeTrustedLabHtml(content) }}
+                />
+              ) : (
+                <LabProse
+                  content={content}
+                  postSlug={post.slug}
+                  midSlot={
+                    <div className="glass my-10 rounded-2xl p-6">
+                      <h3 className="font-display text-lg font-bold">Get tomorrow's build in your inbox</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">Free. One system a day. Unsubscribe anytime.</p>
+                      <div className="mt-4 max-w-xl">
+                        <NewsletterSignup source="thelab-mid" />
+                      </div>
+                    </div>
+                  }
+                />
+              )}
+            </div>
 
             <div id="lab-comments">
               <NewsletterEngagement postId={post.id} />
