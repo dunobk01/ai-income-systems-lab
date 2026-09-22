@@ -14,7 +14,7 @@ export function MermaidDiagram({ chart }: { chart: string }) {
     let cancelled = false;
     void (async () => {
       try {
-        const mermaid = (await import("mermaid")).default;
+        const mermaid = (await import(/* @vite-ignore */ MERMAID_URL)).default;
         mermaid.initialize({
           startOnLoad: false,
           theme: "dark",
