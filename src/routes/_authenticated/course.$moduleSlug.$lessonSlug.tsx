@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { dlCourseProgress } from "@/lib/datalayer";
 import { hasCourseAccess } from "@/lib/course-access";
+import { withFreshSession } from "@/lib/supabase-retry";
 
 type Tier = "starter" | "builder" | "pro" | "accelerator";
 type Module = { id: string; slug: string; title: string; required_tier: Tier; order_index: number; is_preview: boolean };
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/course/$moduleSlug/$lesson
 
 function LessonPage() {
   const { moduleSlug, lessonSlug } = Route.useParams();
-  const { user, profile, isAdmin } = useAuth();
+  const { user, session, profile, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [module, setModule] = useState<Module | null>(null);
   const [lesson, setLesson] = useState<Lesson | null>(null);
@@ -42,15 +43,22 @@ function LessonPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!session) return; // wait until the access token is attached to the client
     void (async () => {
       setLoading(true); setError(null);
       try {
-        const { data: mod, error: mErr } = await supabase.from("modules").select("id, slug, title, required_tier, order_index, is_preview").eq("slug", moduleSlug).maybeSingle();
-        if (mErr) throw mErr;
+        const mod = await withFreshSession(async () => {
+          const { data, error } = await supabase.from("modules").select("id, slug, title, required_tier, order_index, is_preview").eq("slug", moduleSlug).maybeSingle();
+          if (error) throw error;
+          return data;
+        });
         if (!mod) { setError("Module not found"); return; }
         setModule(mod as Module);
-        const { data: ls, error: lErr } = await supabase.from("lessons").select("*").eq("module_id", mod.id).order("order_index");
-        if (lErr) throw lErr;
+        const ls = await withFreshSession(async () => {
+          const { data, error } = await supabase.from("lessons").select("*").eq("module_id", mod.id).order("order_index");
+          if (error) throw error;
+          return data;
+        });
         const all = (ls ?? []) as Lesson[];
         setSiblings(all);
         const cur = all.find((l) => l.slug === lessonSlug) ?? null;
@@ -69,7 +77,7 @@ function LessonPage() {
         setError((e as Error).message);
       } finally { setLoading(false); }
     })();
-  }, [moduleSlug, lessonSlug, user]);
+  }, [moduleSlug, lessonSlug, user, session]);
 
   // Fire lesson_start once per lesson view (only if accessible & not already complete).
   useEffect(() => {

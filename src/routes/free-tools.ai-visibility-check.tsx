@@ -238,6 +238,7 @@ function VisibilityCheckPage() {
         },
       });
       dlToolEmailCapture(SLUG, { score: result.score });
+      if (saved.report_token) setReportUrl(reportUrlFor(saved.report_token));
       const list = await makeFixList({
         data: {
           business_name: businessName.trim(),
@@ -251,7 +252,6 @@ function VisibilityCheckPage() {
       });
       setFixList(list);
       if (saved.report_token) {
-        setReportUrl(reportUrlFor(saved.report_token));
         void persistReport({
           data: { report_token: saved.report_token, report: list as unknown as Record<string, unknown> },
         });

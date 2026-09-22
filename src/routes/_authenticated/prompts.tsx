@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, Search, Star, Lock, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { withFreshSession } from "@/lib/supabase-retry";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/_authenticated/prompts")({
 });
 
 function PromptsPage() {
-  const { user, profile, isAdmin } = useAuth();
+  const { user, session, profile, isAdmin } = useAuth();
   const { prompt: promptUpgrade, dialog } = useUpgradePrompt();
   const [prompts, setPrompts] = useState<CatalogPrompt[]>([]);
   const [texts, setTexts] = useState<Record<string, string>>({});
@@ -40,15 +41,21 @@ function PromptsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!session) return; // wait until the access token is attached to the client
     void (async () => {
       try {
         // Catalogue = every prompt's metadata (visible to all members).
         // Full text only comes back for prompts the member's tier allows (RLS).
-        const [{ data: catalog, error: cErr }, { data: unlocked }] = await Promise.all([
-          supabase.rpc("prompt_catalog"),
-          supabase.from("prompts").select("id, prompt_text"),
-        ]);
-        if (cErr) throw cErr;
+        const catalog = await withFreshSession(async () => {
+          const { data, error } = await supabase.rpc("prompt_catalog");
+          if (error) throw error;
+          return data;
+        });
+        const unlocked = await withFreshSession(async () => {
+          const { data, error } = await supabase.from("prompts").select("id, prompt_text");
+          if (error) throw error;
+          return data;
+        });
         setPrompts((catalog ?? []) as CatalogPrompt[]);
         const map: Record<string, string> = {};
         (unlocked ?? []).forEach((p) => { map[p.id] = p.prompt_text; });
@@ -63,7 +70,7 @@ function PromptsPage() {
       } catch (e) { setError((e as Error).message); }
       finally { setLoading(false); }
     })();
-  }, [user]);
+  }, [user, session]);
 
   const tools = useMemo(() => ["All", ...Array.from(new Set(prompts.map((p) => p.tool)))], [prompts]);
   const cats = useMemo(() => ["All", ...Array.from(new Set(prompts.map((p) => p.category)))], [prompts]);
