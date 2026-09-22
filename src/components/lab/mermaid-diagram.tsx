@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 
 let idCounter = 0;
 
+/** Mermaid is loaded from a CDN at runtime so it never enters the app bundle. */
+const MERMAID_URL = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
 /** Renders a mermaid code fence as a real diagram. Client-only, loaded on demand. */
 export function MermaidDiagram({ chart }: { chart: string }) {
   const ref = useRef<HTMLDivElement>(null);
