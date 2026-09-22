@@ -28,6 +28,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/free-tools/ai-savings-calculator", changefreq: "monthly", priority: "0.85" },
           { path: "/free-tools/ai-visibility-check", changefreq: "monthly", priority: "0.85" },
           { path: "/blog", changefreq: "daily", priority: "0.9" },
+          { path: "/thelab", changefreq: "daily", priority: "0.95" },
           { path: "/free", changefreq: "monthly", priority: "0.85" },
           { path: "/ai-business-engine", changefreq: "monthly", priority: "0.85" },
           { path: "/os", changefreq: "monthly", priority: "0.9" },
@@ -75,13 +76,15 @@ export const Route = createFileRoute("/sitemap.xml")({
             .limit(1000);
           const tagCounts = new Map<string, number>();
           for (const p of (posts ?? []) as any[]) {
-            const isBlog = p.post_type === "blog";
+            const prefix =
+              p.post_type === "blog" ? "/blog" : p.post_type === "lab" ? "/thelab" : "/newsletter";
             entries.push({
-              path: `${isBlog ? "/blog" : "/newsletter"}/${p.slug}`,
+              path: `${prefix}/${p.slug}`,
               lastmod: (p.updated_at ?? p.published_at ?? undefined)?.slice(0, 10),
-              changefreq: "monthly",
-              priority: "0.7",
+              changefreq: p.post_type === "lab" ? "weekly" : "monthly",
+              priority: p.post_type === "lab" ? "0.8" : "0.7",
             });
+            if (p.post_type === "lab") continue;
             for (const t of (p.tags ?? [])) {
               const tag = String(t).trim();
               if (!tag) continue;
