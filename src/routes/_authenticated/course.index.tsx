@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BookOpen, Check, Lock, PlayCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { withFreshSession } from "@/lib/supabase-retry";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { isFreeTier } from "@/lib/access";
@@ -36,7 +37,7 @@ export const Route = createFileRoute("/_authenticated/course/")({
 });
 
 function CoursePage() {
-  const { profile, user, isAdmin } = useAuth();
+  const { profile, user, session, isAdmin } = useAuth();
   const [modules, setModules] = useState<Module[]>([]);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
@@ -44,13 +45,19 @@ function CoursePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!session) return; // wait until the access token is attached to the client
     void (async () => {
       try {
-        const [{ data: mods, error: mErr }, { data: lsns, error: lErr }] = await Promise.all([
-          supabase.from("modules").select("id, slug, title, summary, required_tier, order_index, is_preview").order("order_index"),
-          supabase.rpc("lesson_catalog"),
-        ]);
-        if (mErr) throw mErr; if (lErr) throw lErr;
+        const mods = await withFreshSession(async () => {
+          const { data, error } = await supabase.from("modules").select("id, slug, title, summary, required_tier, order_index, is_preview").order("order_index");
+          if (error) throw error;
+          return data;
+        });
+        const lsns = await withFreshSession(async () => {
+          const { data, error } = await supabase.rpc("lesson_catalog");
+          if (error) throw error;
+          return data;
+        });
         setModules((mods ?? []) as Module[]);
         setLessons((lsns ?? []) as Lesson[]);
         if (user) {
