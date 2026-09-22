@@ -13,16 +13,8 @@ import { LabActions } from "@/components/lab/lab-actions";
 import { LabCard } from "@/components/lab/lab-card";
 import { getLabPostBySlug, listMySavedIds, listMyLikedIds } from "@/lib/lab.functions";
 import { useAuth } from "@/lib/auth-context";
+import { isTrustedLabHtml, sanitizeTrustedLabHtml } from "@/lib/lab-content";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
-
-const TRUSTED_HTML_PREFIX = '<div class="lab-post"';
-
-export function sanitizeTrustedLabHtml(content: string) {
-  return content
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "")
-    .replace(/<script\b[^>]*\/?\s*>/gi, "")
-    .replace(/\s+on[a-z][\w:.-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?/gi, "");
-}
 
 export const Route = createFileRoute("/thelab/$slug")({
   loader: async ({ context, params }) => {
@@ -162,8 +154,8 @@ function LabPostPage() {
 
   const related = data?.related ?? [];
   const content = post.content ?? "";
-  const isTrustedHtml = content.startsWith(TRUSTED_HTML_PREFIX);
-  const headings = isTrustedHtml ? [] : extractHeadings(content);
+  const renderAsHtml = isTrustedLabHtml(content);
+  const headings = renderAsHtml ? [] : extractHeadings(content);
   const isSaved = (saved.data?.ids ?? []).includes(post.id);
   const isLiked = (liked.data?.ids ?? []).includes(post.id);
   const scrollToComments = () =>
@@ -248,7 +240,7 @@ function LabPostPage() {
             </dl>
 
             <div className="overflow-x-hidden">
-              {isTrustedHtml ? (
+              {renderAsHtml ? (
                 <div
                   className="mt-10"
                   dangerouslySetInnerHTML={{ __html: sanitizeTrustedLabHtml(content) }}
