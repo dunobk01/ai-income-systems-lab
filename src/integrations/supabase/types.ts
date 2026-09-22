@@ -1220,6 +1220,13 @@ export type Database = {
         Returns: boolean
       }
       increment_lab_share: { Args: { _post_id: string }; Returns: number }
+      lab_save_counts: {
+        Args: never
+        Returns: {
+          post_id: string
+          save_count: number
+        }[]
+      }
       lesson_catalog: {
         Args: never
         Returns: {
