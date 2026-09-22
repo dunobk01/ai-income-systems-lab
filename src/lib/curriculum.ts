@@ -102,3 +102,25 @@ export const CURRICULUM_LABEL = `${CURRICULUM.modules} modules · ${CURRICULUM.l
 
 /** "15 modules, 89 lessons" — for prose/SEO copy. */
 export const CURRICULUM_SENTENCE = `${CURRICULUM.modules} modules, ${CURRICULUM.lessons} lessons`;
+
+/**
+ * Module number -> the live course module slug and its first lesson, so the
+ * public curriculum page can deep-link straight into the lesson player.
+ */
+export const CURRICULUM_LINKS: Record<string, { moduleSlug: string; lessonSlug: string }> = {
+  "01": { moduleSlug: "ai-money-foundations", lessonSlug: "welcome" },
+  "02": { moduleSlug: "master-chatgpt", lessonSlug: "mental-model" },
+  "03": { moduleSlug: "master-claude", lessonSlug: "claude-vs-chatgpt" },
+  "04": { moduleSlug: "master-perplexity", lessonSlug: "why-perplexity" },
+  "05": { moduleSlug: "prompt-engineering", lessonSlug: "rctf" },
+  "06": { moduleSlug: "digital-products", lessonSlug: "picking-idea" },
+  "07": { moduleSlug: "funnels-copy", lessonSlug: "anatomy" },
+  "08": { moduleSlug: "lovable-apps", lessonSlug: "mental-model" },
+  "09": { moduleSlug: "n8n-automations", lessonSlug: "n8n-intro" },
+  "10": { moduleSlug: "launching", lessonSlug: "pre-launch" },
+  "11": { moduleSlug: "scaling", lessonSlug: "hustle-to-system" },
+  "12": { moduleSlug: "agents-and-skills", lessonSlug: "agent-mental-model" },
+  "13": { moduleSlug: "faceless-video-income", lessonSlug: "faceless-income-model" },
+  "14": { moduleSlug: "ai-image-income", lessonSlug: "image-income-opportunities" },
+  "15": { moduleSlug: "chatbot-agency-botpress", lessonSlug: "chatbot-agency-offer" },
+};
