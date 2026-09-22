@@ -212,3 +212,13 @@ export const incrementShare = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { shareCount: (count as number) ?? 0 };
   });
+
+export const listMyLikedIds = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await (context.supabase as any)
+      .from("newsletter_post_likes")
+      .select("post_id")
+      .eq("user_id", context.userId);
+    return { ids: ((data ?? []) as any[]).map((r) => r.post_id as string) };
+  });
