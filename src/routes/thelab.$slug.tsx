@@ -15,6 +15,15 @@ import { getLabPostBySlug, listMySavedIds, listMyLikedIds } from "@/lib/lab.func
 import { useAuth } from "@/lib/auth-context";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
+const TRUSTED_HTML_PREFIX = '<div class="lab-post"';
+
+export function sanitizeTrustedLabHtml(content: string) {
+  return content
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "")
+    .replace(/<script\b[^>]*\/?\s*>/gi, "")
+    .replace(/\s+on[a-z][\w:.-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?/gi, "");
+}
+
 export const Route = createFileRoute("/thelab/$slug")({
   loader: async ({ context, params }) => {
     const res = await context.queryClient.ensureQueryData({
@@ -152,7 +161,9 @@ function LabPostPage() {
   if (!post) return null;
 
   const related = data?.related ?? [];
-  const headings = extractHeadings(post.content ?? "");
+  const content = post.content ?? "";
+  const isTrustedHtml = content.startsWith(TRUSTED_HTML_PREFIX);
+  const headings = isTrustedHtml ? [] : extractHeadings(content);
   const isSaved = (saved.data?.ids ?? []).includes(post.id);
   const isLiked = (liked.data?.ids ?? []).includes(post.id);
   const scrollToComments = () =>
@@ -236,19 +247,28 @@ function LabPostPage() {
               )}
             </dl>
 
-            <LabProse
-              content={post.content ?? ""}
-              postSlug={post.slug}
-              midSlot={
-                <div className="glass my-10 rounded-2xl p-6">
-                  <h3 className="font-display text-lg font-bold">Get tomorrow's build in your inbox</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">Free. One system a day. Unsubscribe anytime.</p>
-                  <div className="mt-4 max-w-xl">
-                    <NewsletterSignup source="thelab-mid" />
-                  </div>
-                </div>
-              }
-            />
+            <div className="overflow-x-hidden">
+              {isTrustedHtml ? (
+                <div
+                  className="mt-10"
+                  dangerouslySetInnerHTML={{ __html: sanitizeTrustedLabHtml(content) }}
+                />
+              ) : (
+                <LabProse
+                  content={content}
+                  postSlug={post.slug}
+                  midSlot={
+                    <div className="glass my-10 rounded-2xl p-6">
+                      <h3 className="font-display text-lg font-bold">Get tomorrow's build in your inbox</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">Free. One system a day. Unsubscribe anytime.</p>
+                      <div className="mt-4 max-w-xl">
+                        <NewsletterSignup source="thelab-mid" />
+                      </div>
+                    </div>
+                  }
+                />
+              )}
+            </div>
 
             <div id="lab-comments">
               <NewsletterEngagement postId={post.id} />
