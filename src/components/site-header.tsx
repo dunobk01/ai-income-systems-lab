@@ -9,6 +9,7 @@ const nav = [
   { label: "Curriculum", to: "/curriculum" as const },
   { label: "Tool Stack", to: "/tools" as const },
   { label: "Free Tools", to: "/free-tools" as const, badge: "New" },
+  { label: "The Lab", to: "/thelab" as const, badge: "New" },
   { label: "Blog", to: "/blog" as const },
   { label: "Guides", to: "/guides" as const },
   { label: "Newsletter", to: "/newsletter" as const },

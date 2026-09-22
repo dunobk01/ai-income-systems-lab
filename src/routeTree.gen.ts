@@ -93,6 +93,8 @@ import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/em
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicPinterestCatalogDottsvRouteImport } from './routes/api/public/pinterest/catalog[.]tsv'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicLabRecentRouteImport } from './routes/api/public/lab/recent'
+import { Route as ApiPublicLabPublishRouteImport } from './routes/api/public/lab/publish'
 import { Route as ApiPublicEmailOsDay5RouteImport } from './routes/api/public/email/os-day5'
 import { Route as ApiPublicEmailMailerliteSyncRouteImport } from './routes/api/public/email/mailerlite-sync'
 import { Route as AuthenticatedCourseModuleSlugLessonSlugRouteImport } from './routes/_authenticated/course.$moduleSlug.$lessonSlug'
@@ -542,6 +544,16 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicLabRecentRoute = ApiPublicLabRecentRouteImport.update({
+  id: '/api/public/lab/recent',
+  path: '/api/public/lab/recent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicLabPublishRoute = ApiPublicLabPublishRouteImport.update({
+  id: '/api/public/lab/publish',
+  path: '/api/public/lab/publish',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicEmailOsDay5Route = ApiPublicEmailOsDay5RouteImport.update({
   id: '/api/public/email/os-day5',
   path: '/api/public/email/os-day5',
@@ -640,6 +652,8 @@ export interface FileRoutesByFullPath {
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
+  '/api/public/lab/publish': typeof ApiPublicLabPublishRoute
+  '/api/public/lab/recent': typeof ApiPublicLabRecentRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -724,6 +738,8 @@ export interface FileRoutesByTo {
   '/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
+  '/api/public/lab/publish': typeof ApiPublicLabPublishRoute
+  '/api/public/lab/recent': typeof ApiPublicLabRecentRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -814,6 +830,8 @@ export interface FileRoutesById {
   '/_authenticated/course/$moduleSlug/$lessonSlug': typeof AuthenticatedCourseModuleSlugLessonSlugRoute
   '/api/public/email/mailerlite-sync': typeof ApiPublicEmailMailerliteSyncRoute
   '/api/public/email/os-day5': typeof ApiPublicEmailOsDay5Route
+  '/api/public/lab/publish': typeof ApiPublicLabPublishRoute
+  '/api/public/lab/recent': typeof ApiPublicLabRecentRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -904,6 +922,8 @@ export interface FileRouteTypes {
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
+    | '/api/public/lab/publish'
+    | '/api/public/lab/recent'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
@@ -988,6 +1008,8 @@ export interface FileRouteTypes {
     | '/course/$moduleSlug/$lessonSlug'
     | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
+    | '/api/public/lab/publish'
+    | '/api/public/lab/recent'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
@@ -1077,6 +1099,8 @@ export interface FileRouteTypes {
     | '/_authenticated/course/$moduleSlug/$lessonSlug'
     | '/api/public/email/mailerlite-sync'
     | '/api/public/email/os-day5'
+    | '/api/public/lab/publish'
+    | '/api/public/lab/recent'
     | '/api/public/payments/webhook'
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
@@ -1135,6 +1159,8 @@ export interface RootRouteChildren {
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicEmailMailerliteSyncRoute: typeof ApiPublicEmailMailerliteSyncRoute
   ApiPublicEmailOsDay5Route: typeof ApiPublicEmailOsDay5Route
+  ApiPublicLabPublishRoute: typeof ApiPublicLabPublishRoute
+  ApiPublicLabRecentRoute: typeof ApiPublicLabRecentRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicPinterestCatalogDottsvRoute: typeof ApiPublicPinterestCatalogDottsvRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -1734,6 +1760,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/lab/recent': {
+      id: '/api/public/lab/recent'
+      path: '/api/public/lab/recent'
+      fullPath: '/api/public/lab/recent'
+      preLoaderRoute: typeof ApiPublicLabRecentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/lab/publish': {
+      id: '/api/public/lab/publish'
+      path: '/api/public/lab/publish'
+      fullPath: '/api/public/lab/publish'
+      preLoaderRoute: typeof ApiPublicLabPublishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/email/os-day5': {
       id: '/api/public/email/os-day5'
       path: '/api/public/email/os-day5'
@@ -1919,6 +1959,8 @@ const rootRouteChildren: RootRouteChildren = {
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicEmailMailerliteSyncRoute: ApiPublicEmailMailerliteSyncRoute,
   ApiPublicEmailOsDay5Route: ApiPublicEmailOsDay5Route,
+  ApiPublicLabPublishRoute: ApiPublicLabPublishRoute,
+  ApiPublicLabRecentRoute: ApiPublicLabRecentRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicPinterestCatalogDottsvRoute: ApiPublicPinterestCatalogDottsvRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
