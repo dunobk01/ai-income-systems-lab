@@ -41,6 +41,7 @@ import { Route as VsMightyNetworksRouteImport } from './routes/vs.mighty-network
 import { Route as VsCircleRouteImport } from './routes/vs.circle'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as ThelabSavedRouteImport } from './routes/thelab.saved'
+import { Route as ThelabSlugRouteImport } from './routes/thelab.$slug'
 import { Route as SystemsSlugRouteImport } from './routes/systems.$slug'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
@@ -253,6 +254,11 @@ const ToolsSlugRoute = ToolsSlugRouteImport.update({
 const ThelabSavedRoute = ThelabSavedRouteImport.update({
   id: '/thelab/saved',
   path: '/thelab/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThelabSlugRoute = ThelabSlugRouteImport.update({
+  id: '/thelab/$slug',
+  path: '/thelab/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SystemsSlugRoute = SystemsSlugRouteImport.update({
@@ -598,6 +604,7 @@ export interface FileRoutesByFullPath {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/$slug': typeof ThelabSlugRoute
   '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
@@ -681,6 +688,7 @@ export interface FileRoutesByTo {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/$slug': typeof ThelabSlugRoute
   '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
@@ -770,6 +778,7 @@ export interface FileRoutesById {
   '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/systems/$slug': typeof SystemsSlugRoute
+  '/thelab/$slug': typeof ThelabSlugRoute
   '/thelab/saved': typeof ThelabSavedRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/vs/circle': typeof VsCircleRoute
@@ -859,6 +868,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/$slug'
     | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
@@ -942,6 +952,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/$slug'
     | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
@@ -1030,6 +1041,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/newsletter/$slug'
     | '/systems/$slug'
+    | '/thelab/$slug'
     | '/thelab/saved'
     | '/tools/$slug'
     | '/vs/circle'
@@ -1107,6 +1119,7 @@ export interface RootRouteChildren {
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
   SystemsSlugRoute: typeof SystemsSlugRoute
+  ThelabSlugRoute: typeof ThelabSlugRoute
   ThelabSavedRoute: typeof ThelabSavedRoute
   VsCircleRoute: typeof VsCircleRoute
   VsMightyNetworksRoute: typeof VsMightyNetworksRoute
@@ -1355,6 +1368,13 @@ declare module '@tanstack/react-router' {
       path: '/thelab/saved'
       fullPath: '/thelab/saved'
       preLoaderRoute: typeof ThelabSavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thelab/$slug': {
+      id: '/thelab/$slug'
+      path: '/thelab/$slug'
+      fullPath: '/thelab/$slug'
+      preLoaderRoute: typeof ThelabSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/systems/$slug': {
@@ -1883,6 +1903,7 @@ const rootRouteChildren: RootRouteChildren = {
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
   SystemsSlugRoute: SystemsSlugRoute,
+  ThelabSlugRoute: ThelabSlugRoute,
   ThelabSavedRoute: ThelabSavedRoute,
   VsCircleRoute: VsCircleRoute,
   VsMightyNetworksRoute: VsMightyNetworksRoute,
