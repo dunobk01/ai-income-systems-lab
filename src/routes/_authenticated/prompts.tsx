@@ -46,17 +46,16 @@ function PromptsPage() {
       try {
         // Catalogue = every prompt's metadata (visible to all members).
         // Full text only comes back for prompts the member's tier allows (RLS).
-        const [{ data: catalog, error: cErr }, { data: unlocked }] = await withFreshSession(() =>
-          Promise.all([
-            supabase.rpc("prompt_catalog"),
-            supabase.from("prompts").select("id, prompt_text"),
-          ]).then((res) => {
-            if (res[0].error) throw res[0].error;
-            if (res[1].error) throw res[1].error;
-            return res;
-          }),
-        );
-        if (cErr) throw cErr;
+        const catalog = await withFreshSession(async () => {
+          const { data, error } = await supabase.rpc("prompt_catalog");
+          if (error) throw error;
+          return data;
+        });
+        const unlocked = await withFreshSession(async () => {
+          const { data, error } = await supabase.from("prompts").select("id, prompt_text");
+          if (error) throw error;
+          return data;
+        });
         setPrompts((catalog ?? []) as CatalogPrompt[]);
         const map: Record<string, string> = {};
         (unlocked ?? []).forEach((p) => { map[p.id] = p.prompt_text; });
