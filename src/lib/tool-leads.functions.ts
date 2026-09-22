@@ -525,6 +525,7 @@ export const generateSavingsBlueprint = createServerFn({ method: "POST" })
 /* --------------------- AI Search Visibility Check --------------------- */
 
 const VISIBILITY_SLUG = "ai-visibility-check";
+const VISIBILITY_FIXLIST_SLUG = "ai-visibility-check-fixlist";
 const VISIBILITY_RATE_LIMIT = 2;
 const VISIBILITY_CACHE_DAYS = 7;
 
@@ -734,7 +735,9 @@ export const generateVisibilityFixList = createServerFn({ method: "POST" })
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) throw new Error("AI is not configured right now. Try again shortly.");
 
-    await assertRateLimit(VISIBILITY_SLUG, {
+    // Counted under its own slug: the fix list is the second half of a check
+    // that was already counted, so it must not eat the 2-checks-per-hour budget.
+    await assertRateLimit(VISIBILITY_FIXLIST_SLUG, {
       limit: VISIBILITY_RATE_LIMIT + 1,
       scopeToTool: true,
       message:
