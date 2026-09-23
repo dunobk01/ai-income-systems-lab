@@ -17,6 +17,14 @@ describe("trusted Lab HTML", () => {
     expect(sanitized).toContain('<img src="x">');
     expect(sanitized).toContain("<p>Safe</p>");
     expect(sanitized).not.toMatch(/<script/i);
-    expect(sanitized).not.toMatch(/\son[a-z]/i);
+    expect(sanitized).not.toMatch(/\son[a-z]+\s*=/i);
+  });
+
+  it("preserves ordinary words starting with 'on' in visible text", () => {
+    const html = '<div class="lab-post"><p>One new build every day, only online.</p><p>Once your onboarding is done, work on it.</p></div>';
+    const sanitized = sanitizeTrustedLabHtml(html);
+
+    expect(sanitized).toContain("One new build every day, only online.");
+    expect(sanitized).toContain("Once your onboarding is done, work on it.");
   });
 });
