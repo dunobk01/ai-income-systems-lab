@@ -57,6 +57,13 @@
       "when": 1790216679745,
       "tag": "0007_tighten_permissive_rls",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790216886166,
+      "tag": "0008_restore_public_course_catalog",
+      "breakpoints": true
     }
   ]
 }
