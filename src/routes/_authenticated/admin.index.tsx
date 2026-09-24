@@ -67,6 +67,12 @@ function AdminPage() {
       <p className="text-sm text-muted-foreground mt-1">Overview of users, purchases, and revenue.</p>
 
       <div className="mt-4 flex flex-wrap gap-2">
+        <Link to="/admin/members" className="inline-flex items-center gap-2 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 px-3 py-2 text-sm">
+          <Users className="h-4 w-4" /> Members & tiers
+        </Link>
+        <Link to="/admin/course" className="inline-flex items-center gap-2 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 px-3 py-2 text-sm">
+          <BookOpen className="h-4 w-4" /> Course editor
+        </Link>
         <Link to="/admin/newsletter" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3 py-2 text-sm">
           <Mail className="h-4 w-4" /> Newsletter & blog posts
         </Link>
@@ -87,7 +93,7 @@ function AdminPage() {
       {err && <div className="mt-6 text-sm text-red-300">{err}</div>}
 
       <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={<Users className="h-4 w-4" />} label="Total users" value={stats?.totalUsers ?? "—"} />
+        <Link to="/admin/members"><StatCard icon={<Users className="h-4 w-4" />} label="Total users (view all)" value={stats?.totalUsers ?? "—"} /></Link>
         <StatCard icon={<ShoppingBag className="h-4 w-4" />} label="Paid users" value={stats?.paidUsers ?? "—"} />
         <StatCard icon={<BookOpen className="h-4 w-4" />} label="Purchases" value={stats?.totalPurchases ?? "—"} />
         <StatCard icon={<DollarSign className="h-4 w-4" />} label="Revenue" value={stats ? `$${(stats.revenueCents / 100).toLocaleString()}` : "—"} />
