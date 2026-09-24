@@ -84,7 +84,9 @@ import { Route as AuthenticatedAdminToolLeadsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminPillarsRouteImport } from './routes/_authenticated/admin.pillars'
 import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_authenticated/admin.permissions'
 import { Route as AuthenticatedAdminNewsletterRouteImport } from './routes/_authenticated/admin.newsletter'
+import { Route as AuthenticatedAdminMembersRouteImport } from './routes/_authenticated/admin.members'
 import { Route as AuthenticatedAdminLabRouteImport } from './routes/_authenticated/admin.lab'
+import { Route as AuthenticatedAdminCourseRouteImport } from './routes/_authenticated/admin.course'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
@@ -494,11 +496,23 @@ const AuthenticatedAdminNewsletterRoute =
     path: '/newsletter',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminMembersRoute =
+  AuthenticatedAdminMembersRouteImport.update({
+    id: '/members',
+    path: '/members',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminLabRoute = AuthenticatedAdminLabRouteImport.update({
   id: '/lab',
   path: '/lab',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminCourseRoute =
+  AuthenticatedAdminCourseRouteImport.update({
+    id: '/course',
+    path: '/course',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -637,7 +651,9 @@ export interface FileRoutesByFullPath {
   '/tools/': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/course': typeof AuthenticatedAdminCourseRoute
   '/admin/lab': typeof AuthenticatedAdminLabRoute
+  '/admin/members': typeof AuthenticatedAdminMembersRoute
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
@@ -724,7 +740,9 @@ export interface FileRoutesByTo {
   '/tools': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/course': typeof AuthenticatedAdminCourseRoute
   '/admin/lab': typeof AuthenticatedAdminLabRoute
+  '/admin/members': typeof AuthenticatedAdminMembersRoute
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
@@ -817,7 +835,9 @@ export interface FileRoutesById {
   '/tools/': typeof ToolsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_authenticated/admin/course': typeof AuthenticatedAdminCourseRoute
   '/_authenticated/admin/lab': typeof AuthenticatedAdminLabRoute
+  '/_authenticated/admin/members': typeof AuthenticatedAdminMembersRoute
   '/_authenticated/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
   '/_authenticated/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/_authenticated/admin/pillars': typeof AuthenticatedAdminPillarsRoute
@@ -910,7 +930,9 @@ export interface FileRouteTypes {
     | '/tools/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/course'
     | '/admin/lab'
+    | '/admin/members'
     | '/admin/newsletter'
     | '/admin/permissions'
     | '/admin/pillars'
@@ -997,7 +1019,9 @@ export interface FileRouteTypes {
     | '/tools'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/course'
     | '/admin/lab'
+    | '/admin/members'
     | '/admin/newsletter'
     | '/admin/permissions'
     | '/admin/pillars'
@@ -1089,7 +1113,9 @@ export interface FileRouteTypes {
     | '/tools/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_authenticated/admin/course'
     | '/_authenticated/admin/lab'
+    | '/_authenticated/admin/members'
     | '/_authenticated/admin/newsletter'
     | '/_authenticated/admin/permissions'
     | '/_authenticated/admin/pillars'
@@ -1709,11 +1735,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminNewsletterRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/members': {
+      id: '/_authenticated/admin/members'
+      path: '/members'
+      fullPath: '/admin/members'
+      preLoaderRoute: typeof AuthenticatedAdminMembersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/lab': {
       id: '/_authenticated/admin/lab'
       path: '/lab'
       fullPath: '/admin/lab'
       preLoaderRoute: typeof AuthenticatedAdminLabRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/course': {
+      id: '/_authenticated/admin/course'
+      path: '/course'
+      fullPath: '/admin/course'
+      preLoaderRoute: typeof AuthenticatedAdminCourseRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/.mcp/invoke-tool/$tool': {
@@ -1818,7 +1858,9 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminCourseRoute: typeof AuthenticatedAdminCourseRoute
   AuthenticatedAdminLabRoute: typeof AuthenticatedAdminLabRoute
+  AuthenticatedAdminMembersRoute: typeof AuthenticatedAdminMembersRoute
   AuthenticatedAdminNewsletterRoute: typeof AuthenticatedAdminNewsletterRoute
   AuthenticatedAdminPermissionsRoute: typeof AuthenticatedAdminPermissionsRoute
   AuthenticatedAdminPillarsRoute: typeof AuthenticatedAdminPillarsRoute
@@ -1827,7 +1869,9 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminCourseRoute: AuthenticatedAdminCourseRoute,
   AuthenticatedAdminLabRoute: AuthenticatedAdminLabRoute,
+  AuthenticatedAdminMembersRoute: AuthenticatedAdminMembersRoute,
   AuthenticatedAdminNewsletterRoute: AuthenticatedAdminNewsletterRoute,
   AuthenticatedAdminPermissionsRoute: AuthenticatedAdminPermissionsRoute,
   AuthenticatedAdminPillarsRoute: AuthenticatedAdminPillarsRoute,
