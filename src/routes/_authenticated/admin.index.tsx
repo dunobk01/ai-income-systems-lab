@@ -70,6 +70,9 @@ function AdminPage() {
         <Link to="/admin/newsletter" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3 py-2 text-sm">
           <Mail className="h-4 w-4" /> Newsletter & blog posts
         </Link>
+        <Link to="/admin/lab" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3 py-2 text-sm">
+          <Mail className="h-4 w-4" /> The Lab builds
+        </Link>
         <Link to="/admin/pillars" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3 py-2 text-sm">
           <BookOpen className="h-4 w-4" /> Manage pillar guides
         </Link>
