@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { trackDownload } from "@/lib/downloads";
 import { useServerFn } from "@tanstack/react-start";
 import { Mail, ArrowRight, Check, Loader2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -90,6 +91,7 @@ export function LeadCapture({
               rel="noopener noreferrer"
               download
               onClick={() => {
+                trackDownload("ai-income-starter-kit");
                 tiktokTrack("Download", {
                   contents: [{ content_id: leadMagnet, content_type: "product", content_name: leadMagnet }],
                   value: 0,

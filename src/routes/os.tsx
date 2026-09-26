@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { trackDownload } from "@/lib/downloads";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, Check, Download, Loader2, Mail, Sparkles, Workflow, FileText, Zap } from "lucide-react";
@@ -155,7 +156,7 @@ function OperatingSystemPage() {
               </p>
               <div className="mt-5 flex flex-col sm:flex-row gap-3">
                 <Button asChild variant="brand" size="lg">
-                  <a href={PDF} download>
+                  <a href={PDF} download onClick={() => trackDownload("ai-income-operating-system")}>
                     <Download className="h-4 w-4" /> Download the PDF
                   </a>
                 </Button>
