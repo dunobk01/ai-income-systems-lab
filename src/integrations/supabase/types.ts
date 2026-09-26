@@ -274,6 +274,27 @@ export type Database = {
         }
         Relationships: []
       }
+      download_events: {
+        Row: {
+          created_at: string
+          id: string
+          page: string | null
+          resource: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page?: string | null
+          resource: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page?: string | null
+          resource?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string

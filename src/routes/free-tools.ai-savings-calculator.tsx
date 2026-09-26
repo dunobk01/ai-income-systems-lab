@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { trackDownload } from "@/lib/downloads";
 import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useRef, useState } from "react";
 import {
@@ -504,6 +505,7 @@ function SavingsCalculatorPage() {
                 className="h-11 whitespace-nowrap"
                 onClick={() => {
                   dlToolCtaClick(SLUG, { location: "download-pdf" });
+                  trackDownload("savings-blueprint");
                   void downloadBlueprintPdf(blueprint, {
                     hoursWeek: savings.hoursWeek,
                     hoursMonth: savings.hoursMonth,

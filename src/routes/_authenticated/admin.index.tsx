@@ -15,6 +15,7 @@ type Stats = {
   totalPurchases: number;
   revenueCents: number;
   byTier: Record<string, number>;
+  downloads: Record<string, number>;
   recent: Array<{ user_id: string; price_id: string; created_at: string; environment: string }>;
 };
 
@@ -32,10 +33,11 @@ function AdminPage() {
     if (!isAdmin) return;
     void (async () => {
       try {
-        const [{ count: totalUsers }, { data: profiles }, { data: subs }] = await Promise.all([
+        const [{ count: totalUsers }, { data: profiles }, { data: subs }, { data: dls }] = await Promise.all([
           supabase.from("profiles").select("id", { count: "exact", head: true }),
           supabase.from("profiles").select("tier"),
           supabase.from("subscriptions").select("user_id, price_id, amount_cents, status, created_at, environment").order("created_at", { ascending: false }),
+          supabase.from("download_events").select("resource"),
         ]);
 
         const byTier: Record<string, number> = { none: 0, starter: 0, builder: 0, pro: 0 };
@@ -51,6 +53,7 @@ function AdminPage() {
           totalPurchases: subs?.length ?? 0,
           revenueCents,
           byTier,
+          downloads: (dls ?? []).reduce((m: Record<string, number>, d: any) => { m[d.resource] = (m[d.resource] ?? 0) + 1; return m; }, {}),
           recent: (subs ?? []).slice(0, 10) as any,
         });
       } catch (e: any) {
@@ -126,10 +129,30 @@ function AdminPage() {
             ))}
           </div>
         </div>
+        <div className="glass rounded-2xl p-6 lg:col-span-2">
+          <h2 className="font-semibold">Downloads (actual button clicks)</h2>
+          <div className="mt-4 grid sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+            {DOWNLOAD_LABELS.map(([key, label]) => (
+              <div key={key} className="flex justify-between">
+                <span className="text-muted-foreground">{label}</span>
+                <span className="font-medium">{stats ? (stats.downloads[key] ?? 0) : "—"}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">Counting started Sep 26, 2026. Earlier downloads weren't recorded.</p>
+        </div>
       </div>
     </div>
   );
 }
+
+const DOWNLOAD_LABELS: Array<[string, string]> = [
+  ["ai-income-operating-system", "AI Income Operating System (PDF)"],
+  ["ai-business-engine", "AI Business Engine (PDF)"],
+  ["ai-income-starter-kit", "AI Income Starter Kit (PDF)"],
+  ["7-day-checklist", "7-Day Map checklist"],
+  ["savings-blueprint", "Savings Calculator blueprint (PDF)"],
+];
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
   return (

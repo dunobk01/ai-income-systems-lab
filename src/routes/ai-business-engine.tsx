@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { trackDownload } from "@/lib/downloads";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, Check, Download, Loader2, Mail, Sparkles, Workflow, FileText } from "lucide-react";
@@ -142,7 +143,7 @@ function AiBusinessEnginePage() {
               </p>
               <div className="mt-5 flex flex-col sm:flex-row gap-3">
                 <Button asChild variant="brand" size="lg">
-                  <a href={PDF} download>
+                  <a href={PDF} download onClick={() => trackDownload("ai-business-engine")}>
                     <Download className="h-4 w-4" /> Download the guide (PDF)
                   </a>
                 </Button>

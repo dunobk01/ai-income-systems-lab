@@ -64,6 +64,13 @@
       "when": 1790216886166,
       "tag": "0008_restore_public_course_catalog",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790432372184,
+      "tag": "0009_download_events",
+      "breakpoints": true
     }
   ]
 }
