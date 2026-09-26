@@ -8,7 +8,8 @@ import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { submitLead } from "@/lib/leads.functions";
-import { ogImageMeta } from "@/lib/og";
+import { ogImageMeta, SITE_URL } from "@/lib/og";
+import abeOg from "@/assets/og-ai-business-engine.jpg.asset.json";
 import { dlLead } from "@/lib/datalayer";
 import { pinLead } from "@/lib/pinterest";
 import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
@@ -45,12 +46,15 @@ export const Route = createFileRoute("/ai-business-engine")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { name: "robots", content: "index, follow" },
+      { property: "og:site_name", content: "AI Income Systems Lab" },
+      { property: "og:title", content: "Free AI Business Engine Guide | AI Income Systems Lab" },
+      { property: "og:description", content: "Learn how to combine AI tools into practical systems for creating, automating, researching and building. Get the free AI Business Engine guide from AI Income Systems Lab." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: URL },
-      { name: "twitter:card", content: "summary_large_image" },
-      ...ogImageMeta(),
+      { name: "twitter:title", content: "Free AI Business Engine Guide | AI Income Systems Lab" },
+      { name: "twitter:description", content: "Learn how to combine AI tools into practical systems for creating, automating, researching and building." },
+      ...ogImageMeta(`${SITE_URL}${abeOg.url}`, "Free AI Business Engine Guide from AI Income Systems Lab."),
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
