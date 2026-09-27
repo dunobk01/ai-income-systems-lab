@@ -1,6 +1,6 @@
 /** Server-only delivery for the uploaded, large-print AI Business Engine guide. */
 import { createHash } from "crypto";
-import guideAsset from "@/assets/ai-business-engine-large-print.pdf.asset.json";
+import guideAsset from "@/assets/ai-business-engine-gold.pdf.asset.json";
 
 const GUIDE_URL = `https://ai-income-systems.com${guideAsset.url}`;
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
@@ -17,7 +17,7 @@ export async function sendBusinessEngineGuide(email: string): Promise<{ ok: bool
     const response = await fetch(GUIDE_URL);
     if (!response.ok) throw new Error(`Guide fetch failed (${response.status})`);
     const content = Buffer.from(await response.arrayBuffer()).toString("base64");
-    const idempotencyKey = `business-engine-large-print-${createHash("sha256").update(email.trim().toLowerCase()).digest("hex")}`;
+    const idempotencyKey = `business-engine-gold-${createHash("sha256").update(email.trim().toLowerCase()).digest("hex")}`;
     const unsubscribe = `https://ai-income-systems.com/unsubscribe?email=${encodeURIComponent(email)}`;
 
     const result = await fetch(`${GATEWAY_URL}/emails`, {
