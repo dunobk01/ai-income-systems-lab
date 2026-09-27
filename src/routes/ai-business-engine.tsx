@@ -14,7 +14,7 @@ import { dlLead } from "@/lib/datalayer";
 import { pinLead } from "@/lib/pinterest";
 import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import engine from "@/lib/ai-business-engine.json";
-import largePrintGuide from "@/assets/ai-business-engine-large-print.pdf.asset.json";
+import largePrintGuide from "@/assets/ai-business-engine-gold.pdf.asset.json";
 
 const SLUG = "ai-business-engine";
 const PDF = largePrintGuide.url;
@@ -26,7 +26,7 @@ const URL = "https://ai-income-systems.com/ai-business-engine";
 const FAQS = [
   {
     q: "What exactly do I get?",
-    a: "A 26-page large-print PDF with 20 engineered prompts across four income categories, a step-by-step n8n automation walkthrough, and the build story behind ai-income-systems.com.",
+    a: "A large-print PDF with 20 engineered prompts across four income categories, a step-by-step n8n automation walkthrough, and the build story behind ai-income-systems.com.",
   },
   {
     q: "Is it really free?",
