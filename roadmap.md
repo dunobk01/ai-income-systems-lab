@@ -5,3 +5,4 @@
 - [ ] Semrush keyword plan + real blog posts with SEO meta
 - [ ] Link /free from footer + sitemap
 - [ ] Unsubscribe link in settings + shareable unsubscribe page URL for MailerLite
+- [x] Deliver uploaded large-print AI Business Engine PDF through instant download and direct email

@@ -1,0 +1,1 @@
+- Keep the AI Business Engine instant download and direct email attachment sourced from the same immutable uploaded PDF asset; this prevents mismatched guide versions.

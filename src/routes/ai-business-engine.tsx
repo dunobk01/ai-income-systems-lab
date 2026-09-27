@@ -14,9 +14,10 @@ import { dlLead } from "@/lib/datalayer";
 import { pinLead } from "@/lib/pinterest";
 import { tiktokIdentify, tiktokTrack } from "@/lib/tiktok";
 import engine from "@/lib/ai-business-engine.json";
+import largePrintGuide from "@/assets/ai-business-engine-large-print.pdf.asset.json";
 
 const SLUG = "ai-business-engine";
-const PDF = "/downloads/ai-business-engine.pdf";
+const PDF = largePrintGuide.url;
 const TITLE = "The AI Business Engine — 20 Free AI Prompts + n8n Automation Guide";
 const DESC =
   "Free PDF: 20 engineered prompts for ChatGPT, Claude and Perplexity across content, digital products, clients and revenue — plus a full n8n automation walkthrough.";
@@ -25,7 +26,7 @@ const URL = "https://ai-income-systems.com/ai-business-engine";
 const FAQS = [
   {
     q: "What exactly do I get?",
-    a: "A 28-page PDF with 20 engineered prompts across four income categories, a step-by-step n8n automation walkthrough, and the build story behind ai-income-systems.com.",
+    a: "A 26-page large-print PDF with 20 engineered prompts across four income categories, a step-by-step n8n automation walkthrough, and the build story behind ai-income-systems.com.",
   },
   {
     q: "Is it really free?",
@@ -81,6 +82,7 @@ function AiBusinessEnginePage() {
   const [company, setCompany] = useState(""); // honeypot
   const [state, setState] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,9 +90,10 @@ function AiBusinessEnginePage() {
     setState("loading");
     setError(null);
     try {
-      await fn({
+      const result = await fn({
         data: { email, source: "ai-business-engine-landing", lead_magnet: SLUG, audience: "free", company },
       });
+      setEmailSent(result.emailSent === true);
       setState("done");
       void tiktokIdentify({ email });
       tiktokTrack("Lead", {
@@ -143,7 +146,9 @@ function AiBusinessEnginePage() {
               </div>
               <h2 className="mt-3 text-2xl font-bold tracking-tight">Grab the PDF</h2>
               <p className="mt-1 text-sm text-muted-foreground max-w-xl">
-                A copy is on its way to your inbox too, so you can find it again later.
+                {emailSent
+                  ? "The same large-print PDF is on its way to your inbox too."
+                  : "We couldn't confirm the emailed copy. You can download the large-print PDF here now."}
               </p>
               <div className="mt-5 flex flex-col sm:flex-row gap-3">
                 <Button asChild variant="brand" size="lg">
