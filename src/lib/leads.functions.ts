@@ -173,7 +173,18 @@ export const submitLead = createServerFn({ method: "POST" })
       }
     }
 
-    return { ok: true };
+    if (data.lead_magnet === "ai-business-engine") {
+      try {
+        const { sendBusinessEngineGuide } = await import("@/lib/business-engine-delivery.server");
+        const delivery = await sendBusinessEngineGuide(email);
+        return { ok: true, emailSent: delivery.ok };
+      } catch (err) {
+        console.error("[submitLead] business engine guide delivery failed", err);
+        return { ok: true, emailSent: false };
+      }
+    }
+
+    return { ok: true, emailSent: undefined };
   });
 
 /* ------------------------------------------------------------------ *
