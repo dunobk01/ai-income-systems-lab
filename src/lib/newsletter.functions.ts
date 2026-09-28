@@ -60,7 +60,25 @@ export const getPostBySlug = createServerFn({ method: "GET" })
       .lte("published_at", new Date().toISOString())
       .maybeSingle();
     if (error) throw new Error(error.message);
-    return { post };
+    let related: Array<{ slug: string; title: string; excerpt: string | null; post_type: string }> = [];
+    if (post) {
+      const { data: others } = await (sb as any)
+        .from("newsletter_posts")
+        .select("slug, title, excerpt, post_type, tags, published_at")
+        .neq("slug", data.slug)
+        .not("published_at", "is", null)
+        .lte("published_at", new Date().toISOString())
+        .order("published_at", { ascending: false })
+        .limit(60);
+      const { data: mine } = await (sb as any).from("newsletter_posts").select("tags").eq("slug", data.slug).maybeSingle();
+      const myTags = new Set<string>(((mine?.tags ?? []) as string[]).map((t) => t.toLowerCase()));
+      related = ((others ?? []) as any[])
+        .map((o) => ({ o, score: ((o.tags ?? []) as string[]).filter((t) => myTags.has(t.toLowerCase())).length }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3)
+        .map(({ o }) => ({ slug: o.slug, title: o.title, excerpt: o.excerpt, post_type: o.post_type }));
+    }
+    return { post, related };
   });
 
 /* ---------------- Admin ---------------- */

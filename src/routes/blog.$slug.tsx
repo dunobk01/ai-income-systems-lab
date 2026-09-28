@@ -9,6 +9,7 @@ import { NewsletterEngagement } from "@/components/newsletter-engagement";
 import { ProseContent } from "@/components/prose-content";
 import { InlineToolCard } from "@/components/free-tools/inline-tool-card";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
+import { RelatedReading } from "@/components/related-reading";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ context, params }) => {
@@ -140,6 +141,8 @@ function BlogPostPage() {
 
 
           <NewsletterEngagement postId={post.id} />
+
+          <RelatedReading items={(data as any)?.related} />
 
           <div className="mt-16">
             <div className="glass rounded-2xl p-6">

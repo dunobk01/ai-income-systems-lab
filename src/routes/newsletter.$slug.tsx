@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { RelatedReading } from "@/components/related-reading";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { getPostBySlug } from "@/lib/newsletter.functions";
@@ -129,6 +130,8 @@ function PostPage() {
           </div>
 
           <NewsletterEngagement postId={post.id} />
+
+          <RelatedReading items={(data as any)?.related} />
 
           <div className="mt-16">
             <div className="glass rounded-2xl p-6">
