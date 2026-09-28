@@ -6,3 +6,4 @@
 - [ ] Link /free from footer + sitemap
 - [ ] Unsubscribe link in settings + shareable unsubscribe page URL for MailerLite
 - [x] Deliver uploaded large-print AI Business Engine PDF through instant download and direct email
+- [x] Launch Vault landing page, instant download, direct PDF email, and MailerLite Free group sync

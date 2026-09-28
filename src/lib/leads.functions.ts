@@ -159,6 +159,25 @@ export const submitLead = createServerFn({ method: "POST" })
       audience,
     });
 
+    if (data.lead_magnet === "ai-income-launch-vault") {
+      try {
+        const { data: suppression } = await supabaseAdmin
+          .from("suppressed_emails")
+          .select("reason")
+          .eq("email", email)
+          .maybeSingle();
+        if (suppression?.reason === "bounce" || suppression?.reason === "complaint") {
+          return { ok: true, emailSent: false };
+        }
+        const { sendLaunchVaultGuide } = await import("@/lib/launch-vault-delivery.server");
+        const delivery = await sendLaunchVaultGuide(email);
+        return { ok: true, emailSent: delivery.ok };
+      } catch (err) {
+        console.error("[submitLead] launch vault delivery failed", err);
+        return { ok: true, emailSent: false };
+      }
+    }
+
     // For OS leads, also send the PDF as a Resend attachment. Keep this
     // non-blocking so a mail hiccup doesn't stop the signup.
     if (audience === "os") {

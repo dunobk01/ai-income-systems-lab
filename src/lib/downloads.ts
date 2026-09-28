@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 export type DownloadResource =
   | "ai-income-operating-system"
   | "ai-business-engine"
+  | "ai-income-launch-vault"
   | "ai-income-starter-kit"
   | "7-day-checklist"
   | "savings-blueprint";
