@@ -149,6 +149,7 @@ function AdminPage() {
 const DOWNLOAD_LABELS: Array<[string, string]> = [
   ["ai-income-operating-system", "AI Income Operating System (PDF)"],
   ["ai-business-engine", "AI Business Engine (PDF)"],
+  ["ai-income-launch-vault", "AI Income Launch Guide (PDF)"],
   ["ai-income-starter-kit", "AI Income Starter Kit (PDF)"],
   ["7-day-checklist", "7-Day Map checklist"],
   ["savings-blueprint", "Savings Calculator blueprint (PDF)"],

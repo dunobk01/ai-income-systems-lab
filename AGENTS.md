@@ -1,1 +1,2 @@
 - Keep the AI Business Engine instant download and direct email attachment sourced from the same immutable uploaded PDF asset; this prevents mismatched guide versions.
+- Source AI Income Launch Vault downloads and emailed attachments from one immutable uploaded PDF asset so recipients always receive the same guide.
