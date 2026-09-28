@@ -26,6 +26,7 @@ import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CurriculumRouteImport } from './routes/curriculum'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AiIncomeLaunchGuideRouteImport } from './routes/ai-income-launch-guide'
 import { Route as AiBusinessEngineRouteImport } from './routes/ai-business-engine'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -185,6 +186,11 @@ const CurriculumRoute = CurriculumRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiIncomeLaunchGuideRoute = AiIncomeLaunchGuideRouteImport.update({
+  id: '/ai-income-launch-guide',
+  path: '/ai-income-launch-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AiBusinessEngineRoute = AiBusinessEngineRouteImport.update({
@@ -595,6 +601,7 @@ const AuthenticatedCourseModuleSlugLessonSlugRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ai-business-engine': typeof AiBusinessEngineRoute
+  '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -688,6 +695,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ai-business-engine': typeof AiBusinessEngineRoute
+  '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -779,6 +787,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/ai-business-engine': typeof AiBusinessEngineRoute
+  '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
   '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
@@ -874,6 +883,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/ai-business-engine'
+    | '/ai-income-launch-guide'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -967,6 +977,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/ai-business-engine'
+    | '/ai-income-launch-guide'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -1057,6 +1068,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/ai-business-engine'
+    | '/ai-income-launch-guide'
     | '/contact'
     | '/curriculum'
     | '/faq'
@@ -1152,6 +1164,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AiBusinessEngineRoute: typeof AiBusinessEngineRoute
+  AiIncomeLaunchGuideRoute: typeof AiIncomeLaunchGuideRoute
   ContactRoute: typeof ContactRoute
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
@@ -1327,6 +1340,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-income-launch-guide': {
+      id: '/ai-income-launch-guide'
+      path: '/ai-income-launch-guide'
+      fullPath: '/ai-income-launch-guide'
+      preLoaderRoute: typeof AiIncomeLaunchGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ai-business-engine': {
@@ -1978,6 +1998,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AiBusinessEngineRoute: AiBusinessEngineRoute,
+  AiIncomeLaunchGuideRoute: AiIncomeLaunchGuideRoute,
   ContactRoute: ContactRoute,
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,

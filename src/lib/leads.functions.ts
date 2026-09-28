@@ -70,6 +70,36 @@ async function syncToMailerLite(
   try {
     const groupId = await resolveGroupId(apiKey, AUDIENCE_GROUPS[opts.audience]);
 
+    // This guide's Free-group opt-in must not replace any groups the person
+    // already belongs to, or reactivate a previously unsubscribed address.
+    if (opts.leadMagnet === "ai-income-launch-vault") {
+      const response = await fetch(`${ML_BASE}/subscribers`, {
+        method: "POST",
+        headers: mlHeaders(apiKey),
+        body: JSON.stringify({
+          email,
+          fields: { lead_source: opts.source ?? undefined, lead_magnet: opts.leadMagnet, plan_status: "free-lead" },
+        }),
+      });
+      if (!response.ok) {
+        console.error("[mailerlite] launch guide subscribe failed", response.status, await response.text());
+        return;
+      }
+      const subscriber = (await response.json()) as { data?: { id?: string; status?: string } };
+      if (subscriber.data?.status !== "active" || !subscriber.data.id) {
+        console.warn("[mailerlite] launch guide subscriber is not active");
+        return;
+      }
+      if (groupId) {
+        const assigned = await fetch(`${ML_BASE}/subscribers/${subscriber.data.id}/groups/${groupId}`, {
+          method: "POST",
+          headers: mlHeaders(apiKey),
+        });
+        if (!assigned.ok) console.error("[mailerlite] launch guide group assignment failed", assigned.status);
+      }
+      return;
+    }
+
     const subscriberRes = await fetch(`${ML_BASE}/subscribers`, {
       method: "POST",
       headers: mlHeaders(apiKey),
