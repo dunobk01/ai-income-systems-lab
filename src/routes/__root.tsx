@@ -209,6 +209,10 @@ function RootComponent() {
     import("@/lib/datalayer").then((m) =>
       m.dlPageView({ path: pathname, title: typeof document !== "undefined" ? document.title : "" }),
     ).catch(() => {});
+    // GA4 page_view on SPA route change (gtag only auto-tracks the initial load).
+    if (typeof window !== "undefined" && GA_MEASUREMENT_ID && (window as any).gtag) {
+      try { (window as any).gtag("event", "page_view", { page_path: pathname }); } catch {}
+    }
   }, [pathname]);
 
 
