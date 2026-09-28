@@ -182,6 +182,19 @@ export const submitLead = createServerFn({ method: "POST" })
       console.error("[submitLead] clearing suppression failed", unsuppressError.message);
     }
 
+    // A fresh voluntary opt-in may rejoin; hard bounces and complaints may not.
+    // Check before MailerLite as well as before direct attachment delivery.
+    if (data.lead_magnet === "ai-income-launch-vault") {
+      const { data: suppression } = await supabaseAdmin
+        .from("suppressed_emails")
+        .select("reason")
+        .eq("email", email)
+        .maybeSingle();
+      if (suppression?.reason === "bounce" || suppression?.reason === "complaint") {
+        return { ok: true, emailSent: false };
+      }
+    }
+
     // Fire MailerLite sync; don't block the user on failures.
     await syncToMailerLite(email, {
       source: data.source,
@@ -191,14 +204,6 @@ export const submitLead = createServerFn({ method: "POST" })
 
     if (data.lead_magnet === "ai-income-launch-vault") {
       try {
-        const { data: suppression } = await supabaseAdmin
-          .from("suppressed_emails")
-          .select("reason")
-          .eq("email", email)
-          .maybeSingle();
-        if (suppression?.reason === "bounce" || suppression?.reason === "complaint") {
-          return { ok: true, emailSent: false };
-        }
         const { sendLaunchVaultGuide } = await import("@/lib/launch-vault-delivery.server");
         const delivery = await sendLaunchVaultGuide(email);
         return { ok: true, emailSent: delivery.ok };
