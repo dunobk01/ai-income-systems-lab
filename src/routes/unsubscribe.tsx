@@ -36,7 +36,8 @@ function UnsubscribePage() {
     <div className="min-h-screen grid place-items-center p-6">
       <div className="glass-strong rounded-3xl p-8 max-w-md w-full">
         <h1 className="text-2xl font-bold mb-3 text-center">Unsubscribe</h1>
-        {token ? <TokenFlow token={token} /> : <EmailFlow initialEmail={emailParam} />}
+        <EmailFlow initialEmail={emailParam} />
+        {token ? null : null}
         <p className="mt-6 text-center text-xs text-muted-foreground">
           Changed your mind?{" "}
           <Link to="/" className="hover:text-foreground underline">
