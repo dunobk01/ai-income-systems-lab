@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Publish uploaded “Don't Let Your AI Agent Hit Send” Lab post with illustrations and metadata
+
 - [x] Stripe billing portal page at /settings/billing (portal, cancel, resume, history)
 - [x] Free-tier MailerLite group + /free lead page + /free/plan lead magnet
 - [ ] Semrush keyword plan + real blog posts with SEO meta
