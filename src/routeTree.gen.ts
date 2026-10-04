@@ -52,7 +52,6 @@ import { Route as FreeToolsPromptGeneratorRouteImport } from './routes/free-tool
 import { Route as FreeToolsAiVisibilityCheckRouteImport } from './routes/free-tools.ai-visibility-check'
 import { Route as FreeToolsAiSavingsCalculatorRouteImport } from './routes/free-tools.ai-savings-calculator'
 import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
@@ -72,7 +71,6 @@ import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedCommunityIndexRouteImport } from './routes/_authenticated/community.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
-import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as FreeToolsRTokenRouteImport } from './routes/free-tools.r.$token'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
@@ -91,9 +89,7 @@ import { Route as AuthenticatedAdminLabRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAdminCourseRouteImport } from './routes/_authenticated/admin.course'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
-import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicPinterestCatalogDottsvRouteImport } from './routes/api/public/pinterest/catalog[.]tsv'
@@ -322,11 +318,6 @@ const FreeToolsAiReadinessScorecardRoute =
     path: '/free-tools/ai-readiness-scorecard',
     getParentRoute: () => rootRouteImport,
   } as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
   path: '/checkout/return',
@@ -427,11 +418,6 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
-} as any)
-const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
-  id: '/lovable/email/suppression',
-  path: '/lovable/email/suppression',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
   id: '/lovable/email/events',
@@ -536,22 +522,10 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailTransactionalSendRoute =
-  LovableEmailTransactionalSendRouteImport.update({
-    id: '/lovable/email/transactional/send',
-    path: '/lovable/email/transactional/send',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
     path: '/lovable/email/transactional/preview',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const LovableEmailQueueProcessRoute =
-  LovableEmailQueueProcessRouteImport.update({
-    id: '/lovable/email/queue/process',
-    path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
@@ -639,7 +613,6 @@ export interface FileRoutesByFullPath {
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
@@ -680,7 +653,6 @@ export interface FileRoutesByFullPath {
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/community/': typeof AuthenticatedCommunityIndexRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
@@ -695,9 +667,7 @@ export interface FileRoutesByFullPath {
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -730,7 +700,6 @@ export interface FileRoutesByTo {
   '/workflows': typeof AuthenticatedWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
@@ -771,7 +740,6 @@ export interface FileRoutesByTo {
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/community': typeof AuthenticatedCommunityIndexRoute
   '/course': typeof AuthenticatedCourseIndexRoute
@@ -786,9 +754,7 @@ export interface FileRoutesByTo {
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -827,7 +793,6 @@ export interface FileRoutesById {
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
@@ -868,7 +833,6 @@ export interface FileRoutesById {
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/community/': typeof AuthenticatedCommunityIndexRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
@@ -883,9 +847,7 @@ export interface FileRoutesById {
   '/api/public/pinterest/catalog.tsv': typeof ApiPublicPinterestCatalogDottsvRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -924,7 +886,6 @@ export interface FileRouteTypes {
     | '/workflows'
     | '/blog/$slug'
     | '/checkout/return'
-    | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
@@ -965,7 +926,6 @@ export interface FileRouteTypes {
     | '/blog/tag/$tag'
     | '/free-tools/r/$token'
     | '/lovable/email/events'
-    | '/lovable/email/suppression'
     | '/admin/'
     | '/community/'
     | '/course/'
@@ -980,9 +940,7 @@ export interface FileRouteTypes {
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
-    | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1015,7 +973,6 @@ export interface FileRouteTypes {
     | '/workflows'
     | '/blog/$slug'
     | '/checkout/return'
-    | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
@@ -1056,7 +1013,6 @@ export interface FileRouteTypes {
     | '/blog/tag/$tag'
     | '/free-tools/r/$token'
     | '/lovable/email/events'
-    | '/lovable/email/suppression'
     | '/admin'
     | '/community'
     | '/course'
@@ -1071,9 +1027,7 @@ export interface FileRouteTypes {
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
-    | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   id:
     | '__root__'
     | '/'
@@ -1111,7 +1065,6 @@ export interface FileRouteTypes {
     | '/_authenticated/workflows'
     | '/blog/$slug'
     | '/checkout/return'
-    | '/email/unsubscribe'
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
@@ -1152,7 +1105,6 @@ export interface FileRouteTypes {
     | '/blog/tag/$tag'
     | '/free-tools/r/$token'
     | '/lovable/email/events'
-    | '/lovable/email/suppression'
     | '/_authenticated/admin/'
     | '/_authenticated/community/'
     | '/_authenticated/course/'
@@ -1167,9 +1119,7 @@ export interface FileRouteTypes {
     | '/api/public/pinterest/catalog.tsv'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
-    | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1198,7 +1148,6 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
-  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
   FreeToolsAiSavingsCalculatorRoute: typeof FreeToolsAiSavingsCalculatorRoute
   FreeToolsAiVisibilityCheckRoute: typeof FreeToolsAiVisibilityCheckRoute
@@ -1220,7 +1169,6 @@ export interface RootRouteChildren {
   BlogTagTagRoute: typeof BlogTagTagRoute
   FreeToolsRTokenRoute: typeof FreeToolsRTokenRoute
   LovableEmailEventsRoute: typeof LovableEmailEventsRoute
-  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicEmailMailerliteSyncRoute: typeof ApiPublicEmailMailerliteSyncRoute
   ApiPublicEmailOsDay5Route: typeof ApiPublicEmailOsDay5Route
   ApiPublicLabPublishRoute: typeof ApiPublicLabPublishRoute
@@ -1229,9 +1177,7 @@ export interface RootRouteChildren {
   ApiPublicPinterestCatalogDottsvRoute: typeof ApiPublicPinterestCatalogDottsvRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
-  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
-  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1537,13 +1483,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FreeToolsAiReadinessScorecardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/checkout/return': {
       id: '/checkout/return'
       path: '/checkout/return'
@@ -1677,13 +1616,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/lovable/email/suppression': {
-      id: '/lovable/email/suppression'
-      path: '/lovable/email/suppression'
-      fullPath: '/lovable/email/suppression'
-      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/lovable/email/events': {
       id: '/lovable/email/events'
       path: '/lovable/email/events'
@@ -1810,25 +1742,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/send': {
-      id: '/lovable/email/transactional/send'
-      path: '/lovable/email/transactional/send'
-      fullPath: '/lovable/email/transactional/send'
-      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
       fullPath: '/lovable/email/transactional/preview'
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lovable/email/queue/process': {
-      id: '/lovable/email/queue/process'
-      path: '/lovable/email/queue/process'
-      fullPath: '/lovable/email/queue/process'
-      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/auth/webhook': {
@@ -2041,7 +1959,6 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
-  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,
   FreeToolsAiSavingsCalculatorRoute: FreeToolsAiSavingsCalculatorRoute,
   FreeToolsAiVisibilityCheckRoute: FreeToolsAiVisibilityCheckRoute,
@@ -2063,7 +1980,6 @@ const rootRouteChildren: RootRouteChildren = {
   BlogTagTagRoute: BlogTagTagRoute,
   FreeToolsRTokenRoute: FreeToolsRTokenRoute,
   LovableEmailEventsRoute: LovableEmailEventsRoute,
-  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicEmailMailerliteSyncRoute: ApiPublicEmailMailerliteSyncRoute,
   ApiPublicEmailOsDay5Route: ApiPublicEmailOsDay5Route,
   ApiPublicLabPublishRoute: ApiPublicLabPublishRoute,
@@ -2072,9 +1988,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicPinterestCatalogDottsvRoute: ApiPublicPinterestCatalogDottsvRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
-  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
-  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
