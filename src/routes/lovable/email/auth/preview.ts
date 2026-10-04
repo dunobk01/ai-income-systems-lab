@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { render as renderAsync } from '@react-email/components'
+import { render } from '@react-email/render'
 import { createFileRoute } from '@tanstack/react-router'
 import { SignupEmail } from '@/lib/email-templates/signup'
 import { InviteEmail } from '@/lib/email-templates/invite'
@@ -18,7 +18,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "ai-income-sytems"
+const SITE_NAME = "AI Income Systems"
 const ROOT_DOMAIN = "ai-income-systems.com"
 
 // Sample data for preview mode ONLY (not used in actual email sending).
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/lovable/email/auth/preview")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.LOVABLE_API_KEY
+        const apiKey = process.env['LOVABLE_API_KEY']
 
         if (!apiKey) {
           return Response.json(
@@ -100,7 +100,7 @@ export const Route = createFileRoute("/lovable/email/auth/preview")({
         }
 
         const sampleData = SAMPLE_DATA[type] || {}
-        const html = await renderAsync(React.createElement(EmailTemplate, sampleData))
+        const html = await render(React.createElement(EmailTemplate, sampleData))
 
         return new Response(html, {
           status: 200,
