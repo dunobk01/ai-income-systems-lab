@@ -73,6 +73,7 @@ import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenti
 import { Route as AuthenticatedCommunityIndexRouteImport } from './routes/_authenticated/community.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as FreeToolsRTokenRouteImport } from './routes/free-tools.r.$token'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as AuthenticatedSettingsBillingRouteImport } from './routes/_authenticated/settings.billing'
@@ -432,6 +433,11 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
+  id: '/lovable/email/events',
+  path: '/lovable/email/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FreeToolsRTokenRoute = FreeToolsRTokenRouteImport.update({
   id: '/free-tools/r/$token',
   path: '/free-tools/r/$token',
@@ -673,6 +679,7 @@ export interface FileRoutesByFullPath {
   '/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/community/': typeof AuthenticatedCommunityIndexRoute
@@ -763,6 +770,7 @@ export interface FileRoutesByTo {
   '/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/community': typeof AuthenticatedCommunityIndexRoute
@@ -859,6 +867,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/community/': typeof AuthenticatedCommunityIndexRoute
@@ -955,6 +964,7 @@ export interface FileRouteTypes {
     | '/settings/billing'
     | '/blog/tag/$tag'
     | '/free-tools/r/$token'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/admin/'
     | '/community/'
@@ -1045,6 +1055,7 @@ export interface FileRouteTypes {
     | '/settings/billing'
     | '/blog/tag/$tag'
     | '/free-tools/r/$token'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/admin'
     | '/community'
@@ -1140,6 +1151,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/billing'
     | '/blog/tag/$tag'
     | '/free-tools/r/$token'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/_authenticated/admin/'
     | '/_authenticated/community/'
@@ -1207,6 +1219,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
   FreeToolsRTokenRoute: typeof FreeToolsRTokenRoute
+  LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicEmailMailerliteSyncRoute: typeof ApiPublicEmailMailerliteSyncRoute
   ApiPublicEmailOsDay5Route: typeof ApiPublicEmailOsDay5Route
@@ -1671,6 +1684,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/events': {
+      id: '/lovable/email/events'
+      path: '/lovable/email/events'
+      fullPath: '/lovable/email/events'
+      preLoaderRoute: typeof LovableEmailEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/free-tools/r/$token': {
       id: '/free-tools/r/$token'
       path: '/free-tools/r/$token'
@@ -2042,6 +2062,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   BlogTagTagRoute: BlogTagTagRoute,
   FreeToolsRTokenRoute: FreeToolsRTokenRoute,
+  LovableEmailEventsRoute: LovableEmailEventsRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicEmailMailerliteSyncRoute: ApiPublicEmailMailerliteSyncRoute,
   ApiPublicEmailOsDay5Route: ApiPublicEmailOsDay5Route,
