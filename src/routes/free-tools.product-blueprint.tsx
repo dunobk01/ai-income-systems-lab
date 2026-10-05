@@ -126,17 +126,17 @@ function ProductBlueprintPage() {
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="hoursPerWeek" className="text-sm font-medium">Time you can invest weekly</label>
-              <select id="hoursPerWeek" name="hoursPerWeek" className={`${inputClass} mt-2`}>
+              <select id="hoursPerWeek" name="hoursPerWeek" defaultValue="5-10" className={`${inputClass} mt-2`}>
                 <option value="under-5">Under 5 hours</option>
-                <option value="5-10" selected>5–10 hours</option>
+                <option value="5-10">5–10 hours</option>
                 <option value="10-20">10–20 hours</option>
                 <option value="20-plus">20+ hours</option>
               </select>
             </div>
             <div>
               <label htmlFor="budget" className="text-sm font-medium">Starting budget</label>
-              <select id="budget" name="budget" className={`${inputClass} mt-2`}>
-                <option value="0" selected>$0</option>
+              <select id="budget" name="budget" defaultValue="0" className={`${inputClass} mt-2`}>
+                <option value="0">$0</option>
                 <option value="under-100">Under $100</option>
                 <option value="100-500">$100–$500</option>
                 <option value="500-plus">$500+</option>
@@ -146,8 +146,8 @@ function ProductBlueprintPage() {
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="platform" className="text-sm font-medium">Where would you sell?</label>
-              <select id="platform" name="platform" className={`${inputClass} mt-2`}>
-                <option value="gumroad" selected>Gumroad</option>
+              <select id="platform" name="platform" defaultValue="gumroad" className={`${inputClass} mt-2`}>
+                <option value="gumroad">Gumroad</option>
                 <option value="stan">Stan</option>
                 <option value="lovable">My own site</option>
                 <option value="etsy">Etsy</option>
@@ -156,8 +156,8 @@ function ProductBlueprintPage() {
             </div>
             <div>
               <label htmlFor="incomeGoal" className="text-sm font-medium">First income goal</label>
-              <select id="incomeGoal" name="incomeGoal" className={`${inputClass} mt-2`}>
-                <option value="first-100" selected>First $100</option>
+              <select id="incomeGoal" name="incomeGoal" defaultValue="first-100" className={`${inputClass} mt-2`}>
+                <option value="first-100">First $100</option>
                 <option value="1k-month">$1,000/month</option>
                 <option value="5k-month">$5,000/month</option>
               </select>
