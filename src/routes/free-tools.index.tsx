@@ -5,10 +5,11 @@ import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { FreeToolCards } from "@/components/free-tools/tool-cards";
 import { ogImageMeta } from "@/lib/og";
+import { FREE_TOOLS } from "@/lib/free-tools-data";
 
 const TITLE = "Free AI Tools for Small Business Owners";
 const DESC =
-  "Free interactive AI tools for small business owners: score your AI readiness, see what to automate first, and get a plain-English plan. Answers in 60 seconds, no signup to start.";
+  "Free AI tools for small business: prompt generator, AI readiness scorecard, time & money savings calculator, and AI search visibility check. Results in 60 seconds, no signup.";
 const URL = "https://ai-income-systems.com/free-tools";
 
 const FAQS = [
@@ -59,12 +60,33 @@ export const Route = createFileRoute("/free-tools/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
+          "@type": "ItemList",
           name: "Free AI Tools for Small Business Owners",
-          applicationCategory: "BusinessApplication",
-          operatingSystem: "Web",
           url: URL,
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          itemListElement: FREE_TOOLS.filter((t) => t.status === "live").map((t, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "SoftwareApplication",
+              name: t.name,
+              description: t.promise,
+              url: `https://ai-income-systems.com${t.path}`,
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Web",
+              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+            },
+          })),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://ai-income-systems.com/" },
+            { "@type": "ListItem", position: 2, name: "Free Tools", item: URL },
+          ],
         }),
       },
     ],
@@ -109,6 +131,10 @@ function FreeToolsHub() {
             </div>
           ))}
         </div>
+        <p className="mt-4 text-center text-sm text-muted-foreground">
+          Want the step-by-step version? Read our{" "}
+          <Link to="/guides" className="text-[color:var(--brand)] hover:underline">free AI business guides</Link>.
+        </p>
       </section>
 
       <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-12">

@@ -10,16 +10,46 @@ import { ogImageMeta } from "@/lib/og";
 export const Route = createFileRoute("/guides/")({
   head: () => ({
     meta: [
-      { title: "Guides — AI Income Systems | Complete Playbooks" },
-      { name: "description", content: "Deep, end-to-end playbooks for building an AI-powered income — validation, product, funnels, automation, and traffic." },
-      { property: "og:title", content: "AI Income Systems Guides" },
-      { property: "og:description", content: "Complete, end-to-end playbooks for building an AI-powered income." },
+      { title: "Free AI Business Guides & Playbooks | AI Income Systems" },
+      { name: "description", content: "Free step-by-step guides for building an AI-powered business: validation, digital products, funnels, n8n automation, and traffic — with copy-paste prompts." },
+      { property: "og:title", content: "Free AI Business Guides & Playbooks" },
+      { property: "og:description", content: "Step-by-step guides with copy-paste prompts for building an AI-powered business." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ai-income-systems.com/guides" },
-    
       ...ogImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://ai-income-systems.com/guides" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "AI Business Guides & Playbooks",
+          url: "https://ai-income-systems.com/guides",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: STATIC_GUIDES.map((g, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: g.title,
+              url: `https://ai-income-systems.com/guides/${g.slug}`,
+            })),
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://ai-income-systems.com/" },
+            { "@type": "ListItem", position: 2, name: "Guides", item: "https://ai-income-systems.com/guides" },
+          ],
+        }),
+      },
+    ],
   }),
   loader: async ({ context }) =>
     context.queryClient.ensureQueryData({
