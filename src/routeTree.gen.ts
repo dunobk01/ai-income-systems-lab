@@ -52,6 +52,8 @@ import { Route as FreeToolsPromptGeneratorRouteImport } from './routes/free-tool
 import { Route as FreeToolsPromptCustomizerRouteImport } from './routes/free-tools.prompt-customizer'
 import { Route as FreeToolsProductBlueprintRouteImport } from './routes/free-tools.product-blueprint'
 import { Route as FreeToolsLeadMagnetGeneratorRouteImport } from './routes/free-tools.lead-magnet-generator'
+import { Route as FreeToolsFunnelAuditorRouteImport } from './routes/free-tools.funnel-auditor'
+import { Route as FreeToolsContentRepurposerRouteImport } from './routes/free-tools.content-repurposer'
 import { Route as FreeToolsAskTheLabRouteImport } from './routes/free-tools.ask-the-lab'
 import { Route as FreeToolsAiVisibilityCheckRouteImport } from './routes/free-tools.ai-visibility-check'
 import { Route as FreeToolsAiSavingsCalculatorRouteImport } from './routes/free-tools.ai-savings-calculator'
@@ -320,6 +322,17 @@ const FreeToolsLeadMagnetGeneratorRoute =
   FreeToolsLeadMagnetGeneratorRouteImport.update({
     id: '/free-tools/lead-magnet-generator',
     path: '/free-tools/lead-magnet-generator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FreeToolsFunnelAuditorRoute = FreeToolsFunnelAuditorRouteImport.update({
+  id: '/free-tools/funnel-auditor',
+  path: '/free-tools/funnel-auditor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FreeToolsContentRepurposerRoute =
+  FreeToolsContentRepurposerRouteImport.update({
+    id: '/free-tools/content-repurposer',
+    path: '/free-tools/content-repurposer',
     getParentRoute: () => rootRouteImport,
   } as any)
 const FreeToolsAskTheLabRoute = FreeToolsAskTheLabRouteImport.update({
@@ -644,6 +657,8 @@ export interface FileRoutesByFullPath {
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
   '/free-tools/ask-the-lab': typeof FreeToolsAskTheLabRoute
+  '/free-tools/content-repurposer': typeof FreeToolsContentRepurposerRoute
+  '/free-tools/funnel-auditor': typeof FreeToolsFunnelAuditorRoute
   '/free-tools/lead-magnet-generator': typeof FreeToolsLeadMagnetGeneratorRoute
   '/free-tools/product-blueprint': typeof FreeToolsProductBlueprintRoute
   '/free-tools/prompt-customizer': typeof FreeToolsPromptCustomizerRoute
@@ -735,6 +750,8 @@ export interface FileRoutesByTo {
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
   '/free-tools/ask-the-lab': typeof FreeToolsAskTheLabRoute
+  '/free-tools/content-repurposer': typeof FreeToolsContentRepurposerRoute
+  '/free-tools/funnel-auditor': typeof FreeToolsFunnelAuditorRoute
   '/free-tools/lead-magnet-generator': typeof FreeToolsLeadMagnetGeneratorRoute
   '/free-tools/product-blueprint': typeof FreeToolsProductBlueprintRoute
   '/free-tools/prompt-customizer': typeof FreeToolsPromptCustomizerRoute
@@ -832,6 +849,8 @@ export interface FileRoutesById {
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
   '/free-tools/ask-the-lab': typeof FreeToolsAskTheLabRoute
+  '/free-tools/content-repurposer': typeof FreeToolsContentRepurposerRoute
+  '/free-tools/funnel-auditor': typeof FreeToolsFunnelAuditorRoute
   '/free-tools/lead-magnet-generator': typeof FreeToolsLeadMagnetGeneratorRoute
   '/free-tools/product-blueprint': typeof FreeToolsProductBlueprintRoute
   '/free-tools/prompt-customizer': typeof FreeToolsPromptCustomizerRoute
@@ -929,6 +948,8 @@ export interface FileRouteTypes {
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
     | '/free-tools/ask-the-lab'
+    | '/free-tools/content-repurposer'
+    | '/free-tools/funnel-auditor'
     | '/free-tools/lead-magnet-generator'
     | '/free-tools/product-blueprint'
     | '/free-tools/prompt-customizer'
@@ -1020,6 +1041,8 @@ export interface FileRouteTypes {
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
     | '/free-tools/ask-the-lab'
+    | '/free-tools/content-repurposer'
+    | '/free-tools/funnel-auditor'
     | '/free-tools/lead-magnet-generator'
     | '/free-tools/product-blueprint'
     | '/free-tools/prompt-customizer'
@@ -1116,6 +1139,8 @@ export interface FileRouteTypes {
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
     | '/free-tools/ask-the-lab'
+    | '/free-tools/content-repurposer'
+    | '/free-tools/funnel-auditor'
     | '/free-tools/lead-magnet-generator'
     | '/free-tools/product-blueprint'
     | '/free-tools/prompt-customizer'
@@ -1203,6 +1228,8 @@ export interface RootRouteChildren {
   FreeToolsAiSavingsCalculatorRoute: typeof FreeToolsAiSavingsCalculatorRoute
   FreeToolsAiVisibilityCheckRoute: typeof FreeToolsAiVisibilityCheckRoute
   FreeToolsAskTheLabRoute: typeof FreeToolsAskTheLabRoute
+  FreeToolsContentRepurposerRoute: typeof FreeToolsContentRepurposerRoute
+  FreeToolsFunnelAuditorRoute: typeof FreeToolsFunnelAuditorRoute
   FreeToolsLeadMagnetGeneratorRoute: typeof FreeToolsLeadMagnetGeneratorRoute
   FreeToolsProductBlueprintRoute: typeof FreeToolsProductBlueprintRoute
   FreeToolsPromptCustomizerRoute: typeof FreeToolsPromptCustomizerRoute
@@ -1536,6 +1563,20 @@ declare module '@tanstack/react-router' {
       path: '/free-tools/lead-magnet-generator'
       fullPath: '/free-tools/lead-magnet-generator'
       preLoaderRoute: typeof FreeToolsLeadMagnetGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/funnel-auditor': {
+      id: '/free-tools/funnel-auditor'
+      path: '/free-tools/funnel-auditor'
+      fullPath: '/free-tools/funnel-auditor'
+      preLoaderRoute: typeof FreeToolsFunnelAuditorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/content-repurposer': {
+      id: '/free-tools/content-repurposer'
+      path: '/free-tools/content-repurposer'
+      fullPath: '/free-tools/content-repurposer'
+      preLoaderRoute: typeof FreeToolsContentRepurposerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/free-tools/ask-the-lab': {
@@ -2046,6 +2087,8 @@ const rootRouteChildren: RootRouteChildren = {
   FreeToolsAiSavingsCalculatorRoute: FreeToolsAiSavingsCalculatorRoute,
   FreeToolsAiVisibilityCheckRoute: FreeToolsAiVisibilityCheckRoute,
   FreeToolsAskTheLabRoute: FreeToolsAskTheLabRoute,
+  FreeToolsContentRepurposerRoute: FreeToolsContentRepurposerRoute,
+  FreeToolsFunnelAuditorRoute: FreeToolsFunnelAuditorRoute,
   FreeToolsLeadMagnetGeneratorRoute: FreeToolsLeadMagnetGeneratorRoute,
   FreeToolsProductBlueprintRoute: FreeToolsProductBlueprintRoute,
   FreeToolsPromptCustomizerRoute: FreeToolsPromptCustomizerRoute,

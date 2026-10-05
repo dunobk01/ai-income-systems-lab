@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Package, ArrowRight, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -278,9 +278,7 @@ function ProductBlueprintPage() {
           <h2 className="text-2xl font-bold">Ready to build the systems behind the products?</h2>
           <p className="mt-2 text-muted-foreground">The Lab teaches you to wire AI tools into complete income systems — step by step.</p>
           <Button asChild size="lg" variant="brand" className="mt-6 h-12 px-7">
-            <span>
-              <a href="/pricing" className="inline-flex items-center gap-2">See pricing <ArrowRight className="h-4 w-4" /></a>
-            </span>
+            <Link to="/pricing">See pricing <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SlidersHorizontal, ArrowRight, Sparkles, Copy, Check } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -205,9 +205,7 @@ function PromptCustomizerPage() {
           <h2 className="text-2xl font-bold">Want the systems behind the prompts?</h2>
           <p className="mt-2 text-muted-foreground">The Lab teaches you to wire AI tools into complete income systems — step by step.</p>
           <Button asChild size="lg" variant="brand" className="mt-6 h-12 px-7">
-            <span>
-              <a href="/pricing" className="inline-flex items-center gap-2">See pricing <ArrowRight className="h-4 w-4" /></a>
-            </span>
+            <Link to="/pricing">See pricing <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
       </section>
