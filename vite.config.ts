@@ -15,5 +15,15 @@ export default defineConfig({
   },
   vite: {
     plugins: [mcpPlugin()],
+    // Pre-bundle these up front so Vite doesn't re-optimize mid-session,
+    // which mixes old/new chunks in open tabs (duplicate React → null dispatcher).
+    optimizeDeps: {
+      include: [
+        "@tanstack/router-core",
+        "@tanstack/router-core/ssr/client",
+        "@tanstack/history",
+        "seroval",
+      ],
+    },
   },
 });
