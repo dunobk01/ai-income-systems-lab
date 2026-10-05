@@ -230,6 +230,7 @@ export function generateBlueprint(input: BlueprintInput): Blueprint {
   const pace = HOUR_PACE[input.hoursPerWeek] ?? HOUR_PACE["5-10"];
   const budgetNote = BUDGET_NOTE[input.budget] ?? BUDGET_NOTE["0"];
   const T = titleCase(topic || "your skills");
+  const pinPrice = (goal.first.split(" ")[0] || "$27").replace("$", "$");
   const platformNote: Record<string, string> = {
     gumroad: "Gumroad — simplest checkout, built-in affiliate system, no monthly fee.",
     stan: "Stan — one link in bio for the product, the emails and the booking call.",
@@ -293,7 +294,7 @@ export function generateBlueprint(input: BlueprintInput): Blueprint {
     launchContent: [
       {
         type: "Pinterest pin title",
-        text: `${T}: The ${goal.first.replace("$", "$")} Blueprint That Works While You Sleep`,
+        text: `${T}: The ${pinPrice} Blueprint That Works While You Sleep`,
       },
       {
         type: "Launch post",
