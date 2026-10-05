@@ -49,6 +49,8 @@ import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as FreePlanRouteImport } from './routes/free.plan'
 import { Route as FreeChecklistDotmdRouteImport } from './routes/free.checklist[.]md'
 import { Route as FreeToolsPromptGeneratorRouteImport } from './routes/free-tools.prompt-generator'
+import { Route as FreeToolsPromptCustomizerRouteImport } from './routes/free-tools.prompt-customizer'
+import { Route as FreeToolsProductBlueprintRouteImport } from './routes/free-tools.product-blueprint'
 import { Route as FreeToolsAiVisibilityCheckRouteImport } from './routes/free-tools.ai-visibility-check'
 import { Route as FreeToolsAiSavingsCalculatorRouteImport } from './routes/free-tools.ai-savings-calculator'
 import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
@@ -298,6 +300,18 @@ const FreeToolsPromptGeneratorRoute =
   FreeToolsPromptGeneratorRouteImport.update({
     id: '/free-tools/prompt-generator',
     path: '/free-tools/prompt-generator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FreeToolsPromptCustomizerRoute =
+  FreeToolsPromptCustomizerRouteImport.update({
+    id: '/free-tools/prompt-customizer',
+    path: '/free-tools/prompt-customizer',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FreeToolsProductBlueprintRoute =
+  FreeToolsProductBlueprintRouteImport.update({
+    id: '/free-tools/product-blueprint',
+    path: '/free-tools/product-blueprint',
     getParentRoute: () => rootRouteImport,
   } as any)
 const FreeToolsAiVisibilityCheckRoute =
@@ -616,6 +630,8 @@ export interface FileRoutesByFullPath {
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
+  '/free-tools/product-blueprint': typeof FreeToolsProductBlueprintRoute
+  '/free-tools/prompt-customizer': typeof FreeToolsPromptCustomizerRoute
   '/free-tools/prompt-generator': typeof FreeToolsPromptGeneratorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
@@ -703,6 +719,8 @@ export interface FileRoutesByTo {
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
+  '/free-tools/product-blueprint': typeof FreeToolsProductBlueprintRoute
+  '/free-tools/prompt-customizer': typeof FreeToolsPromptCustomizerRoute
   '/free-tools/prompt-generator': typeof FreeToolsPromptGeneratorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
@@ -796,6 +814,8 @@ export interface FileRoutesById {
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
   '/free-tools/ai-savings-calculator': typeof FreeToolsAiSavingsCalculatorRoute
   '/free-tools/ai-visibility-check': typeof FreeToolsAiVisibilityCheckRoute
+  '/free-tools/product-blueprint': typeof FreeToolsProductBlueprintRoute
+  '/free-tools/prompt-customizer': typeof FreeToolsPromptCustomizerRoute
   '/free-tools/prompt-generator': typeof FreeToolsPromptGeneratorRoute
   '/free/checklist.md': typeof FreeChecklistDotmdRoute
   '/free/plan': typeof FreePlanRoute
@@ -889,6 +909,8 @@ export interface FileRouteTypes {
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
+    | '/free-tools/product-blueprint'
+    | '/free-tools/prompt-customizer'
     | '/free-tools/prompt-generator'
     | '/free/checklist.md'
     | '/free/plan'
@@ -976,6 +998,8 @@ export interface FileRouteTypes {
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
+    | '/free-tools/product-blueprint'
+    | '/free-tools/prompt-customizer'
     | '/free-tools/prompt-generator'
     | '/free/checklist.md'
     | '/free/plan'
@@ -1068,6 +1092,8 @@ export interface FileRouteTypes {
     | '/free-tools/ai-readiness-scorecard'
     | '/free-tools/ai-savings-calculator'
     | '/free-tools/ai-visibility-check'
+    | '/free-tools/product-blueprint'
+    | '/free-tools/prompt-customizer'
     | '/free-tools/prompt-generator'
     | '/free/checklist.md'
     | '/free/plan'
@@ -1151,6 +1177,8 @@ export interface RootRouteChildren {
   FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
   FreeToolsAiSavingsCalculatorRoute: typeof FreeToolsAiSavingsCalculatorRoute
   FreeToolsAiVisibilityCheckRoute: typeof FreeToolsAiVisibilityCheckRoute
+  FreeToolsProductBlueprintRoute: typeof FreeToolsProductBlueprintRoute
+  FreeToolsPromptCustomizerRoute: typeof FreeToolsPromptCustomizerRoute
   FreeToolsPromptGeneratorRoute: typeof FreeToolsPromptGeneratorRoute
   FreeChecklistDotmdRoute: typeof FreeChecklistDotmdRoute
   FreePlanRoute: typeof FreePlanRoute
@@ -1460,6 +1488,20 @@ declare module '@tanstack/react-router' {
       path: '/free-tools/prompt-generator'
       fullPath: '/free-tools/prompt-generator'
       preLoaderRoute: typeof FreeToolsPromptGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/prompt-customizer': {
+      id: '/free-tools/prompt-customizer'
+      path: '/free-tools/prompt-customizer'
+      fullPath: '/free-tools/prompt-customizer'
+      preLoaderRoute: typeof FreeToolsPromptCustomizerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/free-tools/product-blueprint': {
+      id: '/free-tools/product-blueprint'
+      path: '/free-tools/product-blueprint'
+      fullPath: '/free-tools/product-blueprint'
+      preLoaderRoute: typeof FreeToolsProductBlueprintRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/free-tools/ai-visibility-check': {
@@ -1962,6 +2004,8 @@ const rootRouteChildren: RootRouteChildren = {
   FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,
   FreeToolsAiSavingsCalculatorRoute: FreeToolsAiSavingsCalculatorRoute,
   FreeToolsAiVisibilityCheckRoute: FreeToolsAiVisibilityCheckRoute,
+  FreeToolsProductBlueprintRoute: FreeToolsProductBlueprintRoute,
+  FreeToolsPromptCustomizerRoute: FreeToolsPromptCustomizerRoute,
   FreeToolsPromptGeneratorRoute: FreeToolsPromptGeneratorRoute,
   FreeChecklistDotmdRoute: FreeChecklistDotmdRoute,
   FreePlanRoute: FreePlanRoute,
