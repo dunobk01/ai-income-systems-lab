@@ -203,18 +203,13 @@ export function GuideView({ guide }: { guide: StaticGuide }) {
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Button asChild variant="brand">
-                  <a href="https://ai-income-systems.com" target="_blank" rel="noopener noreferrer">
-                    Explore the full curriculum
-                  </a>
+                  <Link to="/curriculum">Explore the full curriculum</Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <a
-                    href="https://ai-income-systems.netlify.app/prompt-engine"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Free prompt pack →
-                  </a>
+                  <Link to="/free-tools/prompt-generator">Free AI prompt generator →</Link>
+                </Button>
+                <Button asChild variant="ghost">
+                  <Link to="/free-tools">All free AI tools</Link>
                 </Button>
               </div>
             </div>
