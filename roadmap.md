@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Add 6 new free tools to /free-tools: Product Blueprint Generator, AI Prompt Customizer, Lead-Magnet Generator, Ask the Lab, AI Funnel Auditor, Content Repurposing Engine
+
 - [x] Publish uploaded “Don't Let Your AI Agent Hit Send” Lab post with illustrations and metadata
 
 - [x] Stripe billing portal page at /settings/billing (portal, cancel, resume, history)
