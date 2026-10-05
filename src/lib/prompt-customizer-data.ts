@@ -255,7 +255,7 @@ export function buildCustomPrompt(categoryValue: string, taskKey: string, answer
   return cat.build(answers, taskLabel);
 }
 
-export const CUSTOMIZER_TASKS: Record<string, string> = {
+export const CUSTOMIZER_TASKS: Record<string, { key: string; label: string }> = {
   "digital-product": { key: "outline", label: "Outline the product" },
   website: { key: "copy", label: "Write the page copy" },
   pinterest: { key: "pin-plan", label: "Plan the pins" },
