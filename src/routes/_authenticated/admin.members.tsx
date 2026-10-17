@@ -72,8 +72,8 @@ function MembersAdmin() {
     </div>
     <div className="mt-4 flex flex-wrap items-end gap-3">
       <label className="flex-1 min-w-48 text-xs text-muted-foreground">Search email or name<input className={`${input} w-full mt-1 text-foreground`} value={q} onChange={e => setQ(e.target.value)} /></label>
-      <label className="text-xs text-muted-foreground">Status<select className={`${input} block mt-1 text-foreground`} value={status} onChange={e => setStatus(e.target.value)}><option value="all">All statuses</option><option value="renewing">Renewing</option><option value="email-only">Email subscribers</option><option value="past_due">Payment overdue</option><option value="canceled">Canceled</option></select></label>
-      <label className="text-xs text-muted-foreground">Payment records<select className={`${input} block mt-1 text-foreground`} value={environment} onChange={e => setEnvironment(e.target.value as "live" | "sandbox")}><option value="live">Live payments</option><option value="sandbox">Test payments</option></select></label>
+      <label className="text-xs text-muted-foreground">Status<select aria-label="Status" className={`${input} block mt-1 text-foreground`} value={status} onChange={e => setStatus(e.target.value)}><option value="all">All statuses</option><option value="renewing">Renewing</option><option value="email-only">Email subscribers</option><option value="past_due">Payment overdue</option><option value="canceled">Canceled</option></select></label>
+      <label className="text-xs text-muted-foreground">Payment records<select aria-label="Payment records" className={`${input} block mt-1 text-foreground`} value={environment} onChange={e => setEnvironment(e.target.value as "live" | "sandbox")}><option value="live">Live payments</option><option value="sandbox">Test payments</option></select></label>
       <Button variant="secondary" onClick={exportCsv} disabled={busy || !!error}><Download />Export CSV</Button>
     </div>
     {error && <p role="alert" className="mt-4 text-destructive">{error}</p>}
