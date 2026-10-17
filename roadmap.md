@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Expand admin Members to include lead-magnet email subscribers, tiers, signup dates, verified charges, and renewal dates; verify signed-in admin flow
+- [x] Expand admin Members to include lead-magnet email subscribers, tiers, signup dates, verified charges, and renewal dates; signed-in directory, email-only details, and CSV verified; 33 targeted tests pass
 
 - [x] Verify uploaded audit; repair payment persistence/retries and MailerLite opt-out handling; validate access, pages, and regression tests
 - [ ] Move retired Day-5 nurture email into MailerLite and activate welcome funnel — owner action, laptop-only (Mail­erLite automation editor is unusable on phone); Dustin will do it when laptop is available
