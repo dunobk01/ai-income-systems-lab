@@ -96,6 +96,10 @@ async function syncLeadToMailerLite(lead: MlLead): Promise<{ ok: boolean; error?
   if (typeof lead.score === "number") fields["ai_score"] = lead.score;
 
   try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: blocked, error: blockError } = await supabaseAdmin
+      .from("suppressed_emails").select("reason").eq("email", lead.email.trim().toLowerCase()).maybeSingle();
+    if (blockError || blocked) return { ok: false, error: "Opt-out check blocked marketing sync" };
     const res = await fetch("https://connect.mailerlite.com/api/subscribers", {
       method: "POST",
       headers: {
