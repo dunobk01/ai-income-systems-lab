@@ -1,5 +1,5 @@
 import { useAuth } from "@/lib/auth-context";
-import { canUseBuilders } from "@/lib/access";
+import { canUseTool } from "@/lib/access";
 import { useUpgradePrompt } from "@/components/upgrade-gate";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Clock, Share2, Check } from "lucide-react";
@@ -11,7 +11,6 @@ import { dlToolCtaClick, shareResult } from "@/lib/free-tools";
 export function FreeToolCards({ exclude, location }: { exclude?: string; location?: string }) {
   const { profile, isAdmin } = useAuth();
   const upgrade = useUpgradePrompt();
-  const allowed = canUseBuilders(profile?.tier, isAdmin);
   const tools = FREE_TOOLS.filter((t) => t.slug !== exclude);
   return (
     <><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -33,7 +32,7 @@ export function FreeToolCards({ exclude, location }: { exclude?: string; locatio
             <Clock className="h-3.5 w-3.5" /> {t.time}
           </p>
           <div className="mt-4">
-            {t.status === "live" && t.slug !== "ai-prompt-generator" && !allowed ? (
+            {t.status === "live" && !canUseTool(t.slug, profile?.tier, isAdmin) ? (
               <Button variant="glass" className="w-full h-10" onClick={() => upgrade.prompt({ action: t.name, requiredTier: "builder", benefits: ["All member tools", "The Lab builds and guides", "12 modules and 77 lessons"] })}>Unlock with Builder <ArrowRight className="h-4 w-4" /></Button>
             ) : t.status === "live" ? (
               <Button
