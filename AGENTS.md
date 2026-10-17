@@ -3,3 +3,4 @@
 - Public catalogs and route loaders expose metadata only; member guide/Lab bodies and tool generation are fetched through authenticated server functions with the shared entitlement assertion, so page gates cannot be bypassed.
 - Keep static guide metadata in a browser-safe catalog and load complete guide data only inside authenticated handlers, preventing protected text from entering public bundles.
 - Stripe event claims use durable processing/complete states and checked writes; failures release the claim so retries cannot acknowledge an unrecorded purchase.
+- The admin subscriber overview merges normalized site opt-in emails with accounts without creating auth users; payment totals and renewal status come from paginated environment-specific Stripe reads after server-side admin authorization, because plan prices are not collected revenue.
