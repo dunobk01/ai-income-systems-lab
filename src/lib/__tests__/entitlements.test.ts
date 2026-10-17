@@ -26,16 +26,16 @@ function fakeContext(tier: string | null, roles: string[] = []) {
 
 describe("assertBuilderAccess — server-side paywall", () => {
   it("rejects a free member calling a builder endpoint directly", async () => {
-    await expect(assertBuilderAccess(fakeContext("none"))).rejects.toThrow(/Builder plan/i);
+    await expect(assertBuilderAccess(fakeContext("none"))).rejects.toThrow(/Builder and Accelerator/i);
   });
 
   it("rejects a member with no profile row at all", async () => {
-    await expect(assertBuilderAccess(fakeContext(null))).rejects.toThrow(/Builder plan/i);
+    await expect(assertBuilderAccess(fakeContext(null))).rejects.toThrow(/Builder and Accelerator/i);
   });
 
   it("rejects a starter/monthly member", async () => {
-    await expect(assertBuilderAccess(fakeContext("starter"))).rejects.toThrow(/Builder plan/i);
-    await expect(assertBuilderAccess(fakeContext("monthly"))).rejects.toThrow(/Builder plan/i);
+    await expect(assertBuilderAccess(fakeContext("starter"))).rejects.toThrow(/Builder and Accelerator/i);
+    await expect(assertBuilderAccess(fakeContext("monthly"))).rejects.toThrow(/Builder and Accelerator/i);
   });
 
   it("allows builder tier and above", async () => {
