@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { buildSubscriberOverview, type SubscriberAccount } from "./admin-subscriber-data";
+import { getStripeErrorMessage } from "./stripe.server";
 
 async function assertAdmin(supabase: any, userId: string) {
   const { data, error } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
@@ -122,7 +124,8 @@ export const deleteLesson = createServerFn({ method: "POST" })
 
 export const listMembersAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator((d: unknown) => z.object({ environment: z.enum(["live", "sandbox"]) }).parse(d))
+  .handler(async ({ context, data }) => {
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const admin = supabaseAdmin as any;
@@ -133,16 +136,30 @@ export const listMembersAdmin = createServerFn({ method: "GET" })
       users.push(...data.users);
       if (data.users.length < 1000) break;
     }
-    const [{ data: profiles }, { data: roles }, { data: subs }] = await Promise.all([
-      admin.from("profiles").select("user_id, display_name, tier, onboarded_at"),
-      admin.from("user_roles").select("user_id, role"),
-      admin.from("subscriptions").select("user_id, status, price_id, current_period_end, cancel_at_period_end, environment"),
+    const readAll = async (table: string, columns: string) => {
+      const rows: any[] = [];
+      for (let offset = 0; ; offset += 1000) {
+        const result = await admin.from(table).select(columns).order("id").range(offset, offset + 999);
+        if (result.error) throw new Error(result.error.message);
+        rows.push(...(result.data ?? []));
+        if ((result.data ?? []).length < 1000) return rows;
+      }
+    };
+    const [profiles, roles, leads, toolLeads] = await Promise.all([
+      readAll("profiles", "user_id, display_name, tier"),
+      readAll("user_roles", "user_id, role"),
+      readAll("leads", "email, created_at, source, lead_magnet"),
+      readAll("tool_leads", "email, created_at, tool_slug"),
     ]);
+    let billing = null;
+    let billingError: string | null = null;
+    try {
+      const { readSubscriberBilling } = await import("./admin-subscriber-billing.server");
+      billing = await readSubscriberBilling(data.environment);
+    } catch (error) { billingError = getStripeErrorMessage(error); }
     const pMap = new Map((profiles ?? []).map((p: any) => [p.user_id, p]));
-    return {
-      members: users.map((u) => {
+    const accounts: SubscriberAccount[] = users.map((u) => {
         const p: any = pMap.get(u.id);
-        const s = (subs ?? []).filter((x: any) => x.user_id === u.id);
         return {
           id: u.id,
           email: u.email ?? "",
@@ -152,10 +169,9 @@ export const listMembersAdmin = createServerFn({ method: "GET" })
           provider: u.app_metadata?.provider ?? "email",
           created_at: u.created_at,
           last_sign_in_at: u.last_sign_in_at ?? null,
-          subscriptions: s,
         };
-      }),
-    };
+      });
+    return { members: buildSubscriberOverview(accounts, [...leads, ...toolLeads], billing), billingError, environment: data.environment };
   });
 
 export const setMemberTier = createServerFn({ method: "POST" })
