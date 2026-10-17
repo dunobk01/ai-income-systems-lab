@@ -1,7 +1,7 @@
 # Roadmap
 
 - [x] Verify uploaded audit; repair payment persistence/retries and MailerLite opt-out handling; validate access, pages, and regression tests
-- [ ] Move retired Day-5 nurture email into MailerLite and activate welcome funnel — blocked by owner-only automation editor access
+- [ ] Move retired Day-5 nurture email into MailerLite and activate welcome funnel — owner action, laptop-only (Mail­erLite automation editor is unusable on phone); Dustin will do it when laptop is available
 - [ ] Remove legacy Day-5 schedule — database scheduling permissions blocked removal; its exposed app credential was deleted and replacement endpoint returns 410 after publish
 - [ ] Verify real payment receipt and guide email delivery after publishing — no live purchase or external test email authorized
 
