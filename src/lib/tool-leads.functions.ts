@@ -1,3 +1,4 @@
+import { assertBuilderAccess } from "@/lib/entitlements";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
@@ -115,8 +116,10 @@ async function syncLeadToMailerLite(lead: MlLead): Promise<{ ok: boolean; error?
 }
 
 export const submitToolLead = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => leadSchema.parse(d))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
     if (data.company && data.company.trim().length > 0) return { ok: true, report_token: null };
 
     const email = data.email.trim().toLowerCase();
@@ -171,6 +174,7 @@ export const submitToolLead = createServerFn({ method: "POST" })
 /* ------------------- Persisted report + public page ------------------- */
 
 export const attachToolReport = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
     z
       .object({
@@ -179,7 +183,8 @@ export const attachToolReport = createServerFn({ method: "POST" })
       })
       .parse(d),
   )
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: lead, error } = await supabaseAdmin
       .from("tool_leads")
@@ -230,8 +235,10 @@ export type StoredReport = {
 };
 
 export const getToolReport = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ token: z.string().max(64) }).parse(d))
-  .handler(async ({ data }): Promise<StoredReport | null> => {
+  .handler(async ({ data, context }): Promise<StoredReport | null> => {
+    await assertBuilderAccess(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rows, error } = await supabaseAdmin.rpc("get_tool_report", { _token: data.token });
     if (error) {
@@ -338,8 +345,10 @@ const reportInput = z.object({
 });
 
 export const generateScorecardReport = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => reportInput.parse(d))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) throw new Error("AI is not configured right now. Your report is on its way by email instead.");
 
@@ -354,7 +363,7 @@ export const generateScorecardReport = createServerFn({ method: "POST" })
 
     if ((count ?? 0) >= RATE_LIMIT) {
       throw new Error(
-        "You've generated 5 reports in the last hour — that's our cap so the free tools stay free. Try again in an hour; your emailed copy is already saved.",
+        "You've generated 5 reports in the last hour — that's our cap to keep report generation reliable. Try again in an hour; your emailed copy is already saved.",
       );
     }
     await supabaseAdmin.from("tool_ai_usage").insert({ ip_hash: ipHash, tool_slug: "ai-readiness-scorecard" });
@@ -462,15 +471,17 @@ async function assertRateLimit(
   if ((count ?? 0) >= limit) {
     throw new Error(
       opts.message ??
-        "You've generated 5 reports in the last hour — that's our cap so the free tools stay free. Try again in an hour; your emailed copy is already saved.",
+        "You've generated 5 reports in the last hour — that's our cap to keep report generation reliable. Try again in an hour; your emailed copy is already saved.",
     );
   }
   await supabaseAdmin.from("tool_ai_usage").insert({ ip_hash: ipHash, tool_slug: toolSlug });
 }
 
 export const generateSavingsBlueprint = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => blueprintInput.parse(d))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) throw new Error("AI is not configured right now. Try again shortly.");
 
@@ -596,8 +607,10 @@ const REASONING = {
 };
 
 export const runVisibilityCheck = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => visibilityInput.parse(d))
-  .handler(async ({ data }): Promise<VisibilityResult> => {
+  .handler(async ({ data, context }): Promise<VisibilityResult> => {
+    await assertBuilderAccess(context);
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) throw new Error("AI is not configured right now. Try again shortly.");
 
@@ -730,8 +743,10 @@ const fixListInput = z.object({
 });
 
 export const generateVisibilityFixList = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => fixListInput.parse(d))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) throw new Error("AI is not configured right now. Try again shortly.");
 
@@ -741,7 +756,7 @@ export const generateVisibilityFixList = createServerFn({ method: "POST" })
       limit: VISIBILITY_RATE_LIMIT + 1,
       scopeToTool: true,
       message:
-        "This tool is capped at a couple of runs per hour so it stays free. Try again in an hour — your details are saved.",
+        "This tool is capped at a couple of runs per hour to keep report generation reliable. Try again in an hour — your details are saved.",
     });
 
     const { streamText, Output } = await import("ai");

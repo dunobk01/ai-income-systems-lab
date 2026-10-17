@@ -1,3 +1,4 @@
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
@@ -36,12 +37,12 @@ import {
 const SLUG = "ai-readiness-scorecard";
 const TITLE = "AI Readiness Scorecard for Small Businesses";
 const DESC =
-  "Free 2-minute AI readiness scorecard. Answer 10 questions and find where AI can save your business the most time — plus what to automate first. No signup to see your score.";
+  "Member 2-minute AI readiness scorecard. Answer 10 questions and find where AI can save your business the most time — plus what to automate first. Builder or Accelerator membership required.";
 const URL = "https://ai-income-systems.com/free-tools/ai-readiness-scorecard";
 
 const FAQS = [
   { q: "How long does the scorecard take?", a: "About two minutes. Ten multiple-choice questions, one screen at a time." },
-  { q: "Do I need an account to see my score?", a: "No. Your score and your top automation opportunity appear straight away. Email is only for the full report." },
+  { q: "Do I need an account to see my score?", a: "Yes. This tool is included with Builder and Accelerator memberships." },
   { q: "How is the score calculated?", a: "Each answer carries a weight based on how much of that area still runs manually. The weights are added up and scaled to 100." },
   { q: "Is the hours-saved number a guarantee?", a: "No — it's an estimate based on typical small businesses in that situation, and it's labelled as one. Your mileage will vary." },
 ];
@@ -49,7 +50,7 @@ const FAQS = [
 export const Route = createFileRoute("/free-tools/ai-readiness-scorecard")({
   head: () => ({
     meta: [
-      { title: `${TITLE} — Free Tool` },
+      { title: `${TITLE} — Member Tool` },
       { name: "description", content: DESC },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
@@ -80,12 +81,12 @@ export const Route = createFileRoute("/free-tools/ai-readiness-scorecard")({
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
           url: URL,
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: ScorecardPage,
+  component: () => <BuilderAccess title={TITLE}><ScorecardPage /></BuilderAccess>,
 });
 
 function Gauge100({ score }: { score: number }) {
@@ -224,7 +225,7 @@ function ScorecardPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Gauge className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool · about 2 minutes
+            <Gauge className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool · about 2 minutes
           </div>
           <h1 className="mt-5 text-3xl sm:text-5xl font-black tracking-tight">
             AI Readiness <span className="text-gradient">Scorecard</span>

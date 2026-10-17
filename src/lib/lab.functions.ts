@@ -1,3 +1,4 @@
+import { assertBuilderAccess } from "@/lib/entitlements";
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -81,7 +82,7 @@ export const listLabPosts = createServerFn({ method: "GET" })
       .parse(d ?? {}),
   )
   .handler(async ({ data }) => {
-    const sb = serverPublic();
+    const { supabaseAdmin: sb } = await import("@/integrations/supabase/client.server");
     let q = (sb as any)
       .from("newsletter_posts")
       .select(LAB_FIELDS)
@@ -107,10 +108,10 @@ export const listLabPosts = createServerFn({ method: "GET" })
 export const getLabPostBySlug = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ slug: z.string().min(1).max(200) }).parse(d))
   .handler(async ({ data }) => {
-    const sb = serverPublic();
+    const { supabaseAdmin: sb } = await import("@/integrations/supabase/client.server");
     const { data: post, error } = await (sb as any)
       .from("newsletter_posts")
-      .select(`${LAB_FIELDS}, content, seo_title, seo_description, post_type`)
+      .select(`${LAB_FIELDS}, seo_title, seo_description, post_type`)
       .eq("slug", data.slug)
       .eq("post_type", "lab")
       .not("published_at", "is", null)
@@ -144,13 +145,14 @@ export const getLabPostBySlug = createServerFn({ method: "GET" })
       .slice(0, 3)
       .map((x: any) => x.o);
 
-    return { post: { ...full, content: post.content, seo_title: post.seo_title, seo_description: post.seo_description }, related: await decorateCounts(sb, scored) };
+    return { post: { ...full, seo_title: post.seo_title, seo_description: post.seo_description }, related: await decorateCounts(sb, scored) };
   });
 
 export const toggleSave = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ postId: z.string().uuid() }).parse(d))
   .handler(async ({ context, data }) => {
+    await assertBuilderAccess(context);
     const { data: existing } = await (context.supabase as any)
       .from("newsletter_post_saves")
       .select("id")
@@ -175,6 +177,7 @@ export const toggleSave = createServerFn({ method: "POST" })
 export const listMySaves = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    await assertBuilderAccess(context);
     const { data: saves, error } = await (context.supabase as any)
       .from("newsletter_post_saves")
       .select("post_id")
@@ -182,7 +185,7 @@ export const listMySaves = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     const ids = (saves ?? []).map((s: any) => s.post_id);
     if (!ids.length) return { posts: [] as LabPost[], savedIds: [] as string[] };
-    const sb = serverPublic();
+    const { supabaseAdmin: sb } = await import("@/integrations/supabase/client.server");
     const { data: rows } = await (sb as any)
       .from("newsletter_posts")
       .select(LAB_FIELDS)
@@ -195,6 +198,7 @@ export const listMySaves = createServerFn({ method: "GET" })
 export const listMySavedIds = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    await assertBuilderAccess(context);
     const { data } = await (context.supabase as any)
       .from("newsletter_post_saves")
       .select("post_id")
@@ -205,7 +209,7 @@ export const listMySavedIds = createServerFn({ method: "GET" })
 export const incrementShare = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ postId: z.string().uuid() }).parse(d))
   .handler(async ({ data }) => {
-    const sb = serverPublic();
+    const { supabaseAdmin: sb } = await import("@/integrations/supabase/client.server");
     const { data: count, error } = await (sb as any).rpc("increment_lab_share", {
       _post_id: data.postId,
     });
@@ -216,9 +220,22 @@ export const incrementShare = createServerFn({ method: "POST" })
 export const listMyLikedIds = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    await assertBuilderAccess(context);
     const { data } = await (context.supabase as any)
       .from("newsletter_post_likes")
       .select("post_id")
       .eq("user_id", context.userId);
     return { ids: ((data ?? []) as any[]).map((r) => r.post_id as string) };
+  });
+
+export const getMemberLabContent = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ slug: z.string().min(1).max(200) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
+    const { data: post, error } = await context.supabase.from("newsletter_posts")
+      .select("content").eq("slug", data.slug).eq("post_type", "lab")
+      .not("published_at", "is", null).lte("published_at", new Date().toISOString()).maybeSingle();
+    if (error) throw new Error(error.message);
+    return { content: post?.content ?? "" };
   });

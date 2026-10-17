@@ -4,7 +4,7 @@ import { ArrowRight, Clock, Compass } from "lucide-react";
 import { listPublishedPillars } from "@/lib/blog.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { STATIC_GUIDES } from "@/lib/guides-content";
+import { STATIC_GUIDES } from "@/lib/guides-catalog";
 import { ogImageMeta } from "@/lib/og";
 
 export const Route = createFileRoute("/guides/")({

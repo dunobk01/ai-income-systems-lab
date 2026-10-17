@@ -1,3 +1,6 @@
+import { useServerFn } from "@tanstack/react-start";
+import { askMemberLab } from "@/lib/member-tools.functions";
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { MessagesSquare, ArrowRight, Sparkles } from "lucide-react";
@@ -5,13 +8,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ShareResultButton, TryAnotherTools } from "@/components/free-tools/tool-cards";
-import { askTheLab, type LabAnswer } from "@/lib/ask-the-lab-data";
+import { type LabAnswer } from "@/lib/ask-the-lab-data";
 import { dlToolStart, dlToolComplete, dlToolCtaClick } from "@/lib/free-tools";
 import { ogImageMeta } from "@/lib/og";
 
-const TITLE = "Ask the Lab — Free AI Business Advice From the Lab's Own Library";
+const TITLE = "Ask the Lab — AI Business Advice From the Lab's Own Library";
 const DESC =
-  "Ask any question about building an AI-powered business — pricing, prompts, lead magnets, automation — and get an answer drawn from the Lab's guides and lessons, with the right next step. Free, no signup.";
+  "Ask any question about building an AI-powered business — pricing, prompts, lead magnets, automation — and get an answer drawn from the Lab's guides and lessons, with the right next step. Included with Builder and Accelerator memberships.";
 const URL = "https://ai-income-systems.com/free-tools/ask-the-lab";
 
 const FAQS = [
@@ -25,7 +28,7 @@ const FAQS = [
   },
   {
     q: "Do I need an account?",
-    a: "No. Ask and read — no signup required.",
+    a: "Yes. This tool is included with Builder and Accelerator memberships.",
   },
 ];
 
@@ -64,29 +67,35 @@ export const Route = createFileRoute("/free-tools/ask-the-lab")({
           url: URL,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: AskTheLabPage,
+  component: () => <BuilderAccess title={TITLE}><AskTheLabPage /></BuilderAccess>,
 });
 
 function AskTheLabPage() {
+  const runTool = useServerFn(askMemberLab);
+  const [error, setError] = useState<string | null>(null);
   const [answer, setAnswer] = useState<LabAnswer | null>(null);
   const [question, setQuestion] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const run = (e: React.FormEvent<HTMLFormElement>) => {
+  const run = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (busy || !question.trim()) return;
     setBusy(true);
+    setError(null);
+    try {
     dlToolStart("ask-the-lab");
-    const a = askTheLab(question);
+    const a = await runTool({ data: { question } });
     setAnswer(a);
     dlToolComplete("ask-the-lab", { matched: a.matched });
-    setBusy(false);
+
     setTimeout(() => document.getElementById("lab-answer")?.scrollIntoView({ behavior: "smooth" }), 50);
+    } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
   };
 
   return (
@@ -96,7 +105,7 @@ function AskTheLabPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <MessagesSquare className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool
+            <MessagesSquare className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool
           </div>
           <h1 className="mt-4 text-3xl sm:text-5xl font-black tracking-tight">
             Ask the <span className="text-gradient">Lab</span>
@@ -135,6 +144,7 @@ function AskTheLabPage() {
               </button>
             ))}
           </p>
+          {error && <p role="alert" className="text-destructive">{error}</p>}
         </form>
       </section>
 

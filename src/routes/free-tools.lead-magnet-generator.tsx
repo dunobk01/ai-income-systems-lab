@@ -1,3 +1,6 @@
+import { useServerFn } from "@tanstack/react-start";
+import { buildMemberLeadMagnet } from "@/lib/member-tools.functions";
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Magnet, ArrowRight, Sparkles } from "lucide-react";
@@ -5,13 +8,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ShareResultButton, TryAnotherTools } from "@/components/free-tools/tool-cards";
-import { generateLeadMagnet, type LeadMagnet, type LeadMagnetInput } from "@/lib/lead-magnet-generator-data";
+import { type LeadMagnet, type LeadMagnetInput } from "@/lib/lead-magnet-generator-data";
 import { dlToolStart, dlToolComplete, dlToolCtaClick } from "@/lib/free-tools";
 import { ogImageMeta } from "@/lib/og";
 
-const TITLE = "Free Lead-Magnet Generator — Concepts, Landing Copy and a 5-Email Sequence";
+const TITLE = "Lead-Magnet Generator — Concepts, Landing Copy and a 5-Email Sequence";
 const DESC =
-  "Enter your niche, audience and offer to get lead-magnet concepts, a full outline, landing-page copy, thank-you-page copy and a 5-email follow-up sequence. Free, no signup.";
+  "Enter your niche, audience and offer to get lead-magnet concepts, a full outline, landing-page copy, thank-you-page copy and a 5-email follow-up sequence. Included with Builder and Accelerator memberships.";
 const URL = "https://ai-income-systems.com/free-tools/lead-magnet-generator";
 
 const FAQS = [
@@ -21,7 +24,7 @@ const FAQS = [
   },
   {
     q: "Do I need an account?",
-    a: "No. Everything appears on screen instantly and is ready to copy.",
+    a: "Yes. This tool is included with Builder and Accelerator memberships.",
   },
   {
     q: "Can I use the copy as-is?",
@@ -67,33 +70,39 @@ export const Route = createFileRoute("/free-tools/lead-magnet-generator")({
           url: URL,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: LeadMagnetGeneratorPage,
+  component: () => <BuilderAccess title={TITLE}><LeadMagnetGeneratorPage /></BuilderAccess>,
 });
 
 function LeadMagnetGeneratorPage() {
+  const runTool = useServerFn(buildMemberLeadMagnet);
+  const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LeadMagnet | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const run = (e: React.FormEvent<HTMLFormElement>) => {
+  const run = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (busy) return;
     setBusy(true);
+    setError(null);
+    try {
     const form = new FormData(e.currentTarget);
     const input: LeadMagnetInput = {
       niche: String(form.get("niche") ?? ""),
       audience: String(form.get("audience") ?? ""),
       offer: String(form.get("offer") ?? ""),
-    };
+      } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
+  };
     dlToolStart("lead-magnet-generator");
-    const lm = generateLeadMagnet(input);
+    const lm = await runTool({ data: input });
     setResult(lm);
     dlToolComplete("lead-magnet-generator", {});
-    setBusy(false);
+
     setTimeout(() => document.getElementById("lm-result")?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
@@ -104,7 +113,7 @@ function LeadMagnetGeneratorPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Magnet className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool
+            <Magnet className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool
           </div>
           <h1 className="mt-4 text-3xl sm:text-5xl font-black tracking-tight">
             Lead-Magnet <span className="text-gradient">Generator</span>
@@ -132,6 +141,7 @@ function LeadMagnetGeneratorPage() {
           <Button type="submit" variant="brand" className="w-full h-12" disabled={busy}>
             <Sparkles className="h-4 w-4" /> Generate my lead magnet
           </Button>
+          {error && <p role="alert" className="text-destructive">{error}</p>}
         </form>
       </section>
 
@@ -213,7 +223,7 @@ function LeadMagnetGeneratorPage() {
           <div className="flex flex-wrap items-center gap-3">
             <ShareResultButton
               toolSlug="lead-magnet-generator"
-              title="Free Lead-Magnet Generator"
+              title="Lead-Magnet Generator"
               text="Get lead-magnet concepts, landing copy and a 5-email follow-up sequence, free:"
             />
             <Button variant="glass" className="h-11 px-5" onClick={() => { dlToolCtaClick("lead-magnet-generator", { location: "regenerate" }); setResult(null); }}>

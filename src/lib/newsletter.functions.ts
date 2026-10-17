@@ -56,6 +56,7 @@ export const getPostBySlug = createServerFn({ method: "GET" })
       .from("newsletter_posts")
       .select("id, slug, title, excerpt, content, cover_image_url, published_at, post_type, seo_title, seo_description")
       .eq("slug", data.slug)
+      .neq("post_type", "lab")
       .not("published_at", "is", null)
       .lte("published_at", new Date().toISOString())
       .maybeSingle();

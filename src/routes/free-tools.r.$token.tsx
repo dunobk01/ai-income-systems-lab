@@ -1,3 +1,6 @@
+import { BuilderAccess } from "@/components/builder-access";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -13,7 +16,6 @@ const TITLE = "Your free AI report";
 const DESC = "Your saved report from the AI Income Systems free tools — automations to run first, with the tools and prompts to do it.";
 
 export const Route = createFileRoute("/free-tools/r/$token")({
-  loader: ({ params }) => getToolReport({ data: { token: params.token } }),
   head: () => ({
     meta: [
       { title: `${TITLE} — AI Income Systems` },
@@ -27,7 +29,7 @@ export const Route = createFileRoute("/free-tools/r/$token")({
   }),
   errorComponent: () => <NotFoundState />,
   notFoundComponent: () => <NotFoundState />,
-  component: ReportPage,
+  component: () => <BuilderAccess title="Your saved AI report"><ReportPage /></BuilderAccess>,
 });
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -61,7 +63,10 @@ function NotFoundState() {
 }
 
 function ReportPage() {
-  const data = Route.useLoaderData();
+  const { token } = Route.useParams();
+  const getReport = useServerFn(getToolReport);
+  const { data, isPending } = useQuery({ queryKey: ["member-report", token], queryFn: () => getReport({ data: { token } }) });
+  if (isPending) return <Shell><p role="status">Loading report…</p></Shell>;
   if (!data) return <NotFoundState />;
 
   const tool = freeToolBySlug(data.tool_slug);

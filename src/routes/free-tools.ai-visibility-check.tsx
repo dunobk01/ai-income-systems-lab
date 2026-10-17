@@ -1,3 +1,4 @@
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
@@ -28,7 +29,7 @@ import {
 const SLUG = "ai-visibility-check";
 const TITLE = "AI Search Visibility Check";
 const DESC =
-  "Free check: when customers ask ChatGPT for a business like yours, do you show up? We ask an AI model five real customer questions and show you who it names.";
+  "Member check: when customers ask ChatGPT for a business like yours, do you show up? We ask an AI model five real customer questions and show you who it names.";
 const URL = "https://ai-income-systems.com/free-tools/ai-visibility-check";
 const SNAPSHOT_NOTE =
   "A snapshot from one AI model at one moment — results vary by model, location, and time.";
@@ -65,7 +66,7 @@ const FAQS = [
   },
   {
     q: "Why only five questions?",
-    a: "Each check runs several live model queries. Five keeps it fast, free and honest about being a snapshot rather than a full audit.",
+    a: "Each check runs several live model queries. Five keeps it fast and honest about being a snapshot rather than a full audit.",
   },
   {
     q: "What's in the emailed fix list?",
@@ -76,7 +77,7 @@ const FAQS = [
 export const Route = createFileRoute("/free-tools/ai-visibility-check")({
   head: () => ({
     meta: [
-      { title: `${TITLE} — Free Tool` },
+      { title: `${TITLE} — Member Tool` },
       { name: "description", content: DESC },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
@@ -107,12 +108,12 @@ export const Route = createFileRoute("/free-tools/ai-visibility-check")({
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
           url: URL,
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: VisibilityCheckPage,
+  component: () => <BuilderAccess title={TITLE}><VisibilityCheckPage /></BuilderAccess>,
 });
 
 function PromptBlock({ prompt }: { prompt: string }) {
@@ -280,7 +281,7 @@ function VisibilityCheckPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Radar className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool · about 60 seconds
+            <Radar className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool · about 60 seconds
           </div>
           <h1 className="mt-5 text-3xl sm:text-5xl font-black tracking-tight">
             AI Search <span className="text-gradient">Visibility Check</span>
@@ -566,7 +567,7 @@ function VisibilityCheckPage() {
           <h3 className="text-xl sm:text-2xl font-bold">Build the content engine that fixes this</h3>
           <p className="mt-2 text-sm text-muted-foreground max-w-xl mx-auto">
             Showing up in AI answers comes down to publishing the answers customers actually ask for. Start with the
-            free guide, then use the Builder tier if you want the workflows that keep it running.
+            member guide, then use the Builder workflows if you want the workflows that keep it running.
           </p>
           <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center">
             <Button

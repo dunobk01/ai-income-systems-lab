@@ -1,3 +1,6 @@
+import { useServerFn } from "@tanstack/react-start";
+import { buildProductBlueprint } from "@/lib/member-tools.functions";
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Package, ArrowRight, Sparkles } from "lucide-react";
@@ -5,13 +8,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ShareResultButton, TryAnotherTools } from "@/components/free-tools/tool-cards";
-import { generateBlueprint, type Blueprint, type BlueprintInput } from "@/lib/blueprint-generator-data";
+import { type Blueprint, type BlueprintInput } from "@/lib/blueprint-generator-data";
 import { dlToolStart, dlToolComplete, dlToolCtaClick } from "@/lib/free-tools";
 import { ogImageMeta } from "@/lib/og";
 
-const TITLE = "AI Product Blueprint Generator — Free Digital Product Ideas With a 7-Day Plan";
+const TITLE = "AI Product Blueprint Generator — Digital Product Ideas With a 7-Day Plan";
 const DESC =
-  "Enter your skills, time and budget and get three realistic digital product ideas, a recommended pick, a 7-day creation plan, pricing, a sales funnel and launch content. Free, no signup.";
+  "Enter your skills, time and budget and get three realistic digital product ideas, a recommended pick, a 7-day creation plan, pricing, a sales funnel and launch content. Included with Builder and Accelerator memberships.";
 const URL = "https://ai-income-systems.com/free-tools/product-blueprint";
 
 const FAQS = [
@@ -21,7 +24,7 @@ const FAQS = [
   },
   {
     q: "Do I need an account?",
-    a: "No. You get the full blueprint on screen instantly. Nothing is emailed unless you ask.",
+    a: "Yes. This tool is included with Builder and Accelerator memberships.",
   },
   {
     q: "Can I build the product in 7 days?",
@@ -67,22 +70,26 @@ export const Route = createFileRoute("/free-tools/product-blueprint")({
           url: URL,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: ProductBlueprintPage,
+  component: () => <BuilderAccess title={TITLE}><ProductBlueprintPage /></BuilderAccess>,
 });
 
 function ProductBlueprintPage() {
+  const runTool = useServerFn(buildProductBlueprint);
+  const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Blueprint | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const run = (e: React.FormEvent<HTMLFormElement>) => {
+  const run = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (busy) return;
     setBusy(true);
+    setError(null);
+    try {
     const form = new FormData(e.currentTarget);
     const input: BlueprintInput = {
       skills: String(form.get("skills") ?? ""),
@@ -90,12 +97,14 @@ function ProductBlueprintPage() {
       budget: String(form.get("budget") ?? "0"),
       platform: String(form.get("platform") ?? "gumroad"),
       incomeGoal: String(form.get("incomeGoal") ?? "first-100"),
-    };
+      } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
+  };
     dlToolStart("product-blueprint-generator");
-    const bp = generateBlueprint(input);
+    const bp = await runTool({ data: input });
     setResult(bp);
     dlToolComplete("product-blueprint-generator", { goal: input.incomeGoal });
-    setBusy(false);
+
     setTimeout(() => document.getElementById("bp-result")?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
@@ -106,7 +115,7 @@ function ProductBlueprintPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Package className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool
+            <Package className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool
           </div>
           <h1 className="mt-4 text-3xl sm:text-5xl font-black tracking-tight">
             AI Product <span className="text-gradient">Blueprint Generator</span>
@@ -166,6 +175,7 @@ function ProductBlueprintPage() {
           <Button type="submit" variant="brand" className="w-full h-12" disabled={busy}>
             <Sparkles className="h-4 w-4" /> Generate my blueprint
           </Button>
+          {error && <p role="alert" className="text-destructive">{error}</p>}
         </form>
       </section>
 

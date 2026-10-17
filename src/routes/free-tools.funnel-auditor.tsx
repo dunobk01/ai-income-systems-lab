@@ -1,3 +1,6 @@
+import { useServerFn } from "@tanstack/react-start";
+import { auditMemberFunnel } from "@/lib/member-tools.functions";
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SearchCheck, ArrowRight, Sparkles, CheckCircle2, XCircle } from "lucide-react";
@@ -5,13 +8,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ShareResultButton, TryAnotherTools } from "@/components/free-tools/tool-cards";
-import { auditFunnel, type FunnelAudit, type FunnelInput } from "@/lib/funnel-auditor-data";
+import { type FunnelAudit, type FunnelInput } from "@/lib/funnel-auditor-data";
 import { dlToolStart, dlToolComplete, dlToolCtaClick } from "@/lib/free-tools";
 import { ogImageMeta } from "@/lib/og";
 
-const TITLE = "Free AI Funnel Auditor — Score Your Offer and Landing Page";
+const TITLE = "AI Funnel Auditor — Score Your Offer and Landing Page";
 const DESC =
-  "Paste your offer, audience, price and landing-page text. Get a conversion score, weak headlines, objection analysis, a revised page structure and a 5-email rescue sequence. Free, no signup.";
+  "Paste your offer, audience, price and landing-page text. Get a conversion score, weak headlines, objection analysis, a revised page structure and a 5-email rescue sequence. Included with Builder and Accelerator memberships.";
 const URL = "https://ai-income-systems.com/free-tools/funnel-auditor";
 
 const FAQS = [
@@ -21,11 +24,11 @@ const FAQS = [
   },
   {
     q: "Do you store my landing-page text?",
-    a: "No. The audit runs and displays in your browser session — the text isn't sent to third parties.",
+    a: "Yes. This tool is included with Builder and Accelerator memberships.",
   },
   {
     q: "Do I need an account?",
-    a: "No. Results appear on screen instantly.",
+    a: "Yes. This tool is included with Builder and Accelerator memberships.",
   },
 ];
 
@@ -67,34 +70,40 @@ export const Route = createFileRoute("/free-tools/funnel-auditor")({
           url: URL,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: FunnelAuditorPage,
+  component: () => <BuilderAccess title={TITLE}><FunnelAuditorPage /></BuilderAccess>,
 });
 
 function FunnelAuditorPage() {
+  const runTool = useServerFn(auditMemberFunnel);
+  const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FunnelAudit | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const run = (e: React.FormEvent<HTMLFormElement>) => {
+  const run = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (busy) return;
     setBusy(true);
+    setError(null);
+    try {
     const form = new FormData(e.currentTarget);
     const input: FunnelInput = {
       offer: String(form.get("offer") ?? ""),
       audience: String(form.get("audience") ?? ""),
       price: String(form.get("price") ?? ""),
       pageText: String(form.get("pageText") ?? ""),
-    };
+      } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
+  };
     dlToolStart("ai-funnel-auditor");
-    const a = auditFunnel(input);
+    const a = await runTool({ data: input });
     setResult(a);
     dlToolComplete("ai-funnel-auditor", { score: a.score });
-    setBusy(false);
+
     setTimeout(() => document.getElementById("fa-result")?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
@@ -105,7 +114,7 @@ function FunnelAuditorPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <SearchCheck className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool
+            <SearchCheck className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool
           </div>
           <h1 className="mt-4 text-3xl sm:text-5xl font-black tracking-tight">
             AI Funnel <span className="text-gradient">Auditor</span>
@@ -139,6 +148,7 @@ function FunnelAuditorPage() {
           <Button type="submit" variant="brand" className="w-full h-12" disabled={busy}>
             <Sparkles className="h-4 w-4" /> Audit my funnel
           </Button>
+          {error && <p role="alert" className="text-destructive">{error}</p>}
         </form>
       </section>
 
@@ -227,7 +237,7 @@ function FunnelAuditorPage() {
           <div className="flex flex-wrap items-center gap-3">
             <ShareResultButton
               toolSlug="ai-funnel-auditor"
-              title="Free AI Funnel Auditor"
+              title="AI Funnel Auditor"
               text="Get your landing page scored against the 8 things that decide whether visitors buy — free:"
             />
             <Button variant="glass" className="h-11 px-5" onClick={() => { dlToolCtaClick("ai-funnel-auditor", { location: "regenerate" }); setResult(null); }}>

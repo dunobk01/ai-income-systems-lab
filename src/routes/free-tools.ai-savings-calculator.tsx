@@ -1,3 +1,4 @@
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { trackDownload } from "@/lib/downloads";
 import { useServerFn } from "@tanstack/react-start";
@@ -47,7 +48,7 @@ import { downloadBlueprintPdf } from "@/lib/savings-pdf";
 const SLUG = "ai-savings-calculator";
 const TITLE = "AI Time & Money Savings Calculator";
 const DESC =
-  "Free calculator: see how many hours and dollars AI could give back to you every month. Move the sliders for the work that eats your week and get an instant, conservative estimate.";
+  "Member calculator: see how many hours and dollars AI could give back to you every month. Move the sliders for the work that eats your week and get an instant, conservative estimate.";
 const URL = "https://ai-income-systems.com/free-tools/ai-savings-calculator";
 const DISCLAIMER = "Estimates only. Your mileage will vary depending on how much you actually implement.";
 
@@ -58,9 +59,9 @@ const FAQS = [
   },
   {
     q: "Is this a prediction of how much I'll save?",
-    a: "No. It's an estimate based on the hours you enter. Nothing saves you time until it's actually built and used.",
+    a: "Yes. This tool is included with Builder and Accelerator memberships.",
   },
-  { q: "Do I need an account?", a: "No. The numbers and chart are free. Email is only for the automation blueprint PDF." },
+  { q: "Do I need an account?", a: "Yes. This tool is included with Builder and Accelerator memberships." },
   {
     q: "What's in the emailed blueprint?",
     a: "The three tasks worth automating first, each as a concrete n8n workflow — trigger, steps and output — plus honest caveats. It downloads as a branded PDF.",
@@ -70,7 +71,7 @@ const FAQS = [
 export const Route = createFileRoute("/free-tools/ai-savings-calculator")({
   head: () => ({
     meta: [
-      { title: `${TITLE} — Free Tool` },
+      { title: `${TITLE} — Member Tool` },
       { name: "description", content: DESC },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
@@ -101,12 +102,12 @@ export const Route = createFileRoute("/free-tools/ai-savings-calculator")({
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
           url: URL,
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: SavingsCalculatorPage,
+  component: () => <BuilderAccess title={TITLE}><SavingsCalculatorPage /></BuilderAccess>,
 });
 
 type CustomTask = { id: string; label: string; hours: number };
@@ -283,7 +284,7 @@ function SavingsCalculatorPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Calculator className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool · about 90 seconds
+            <Calculator className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool · about 90 seconds
           </div>
           <h1 className="mt-5 text-3xl sm:text-5xl font-black tracking-tight">
             AI Time &amp; Money <span className="text-gradient">Savings Calculator</span>
