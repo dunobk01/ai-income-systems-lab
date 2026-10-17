@@ -240,7 +240,7 @@ export const getToolReport = createServerFn({ method: "GET" })
   .handler(async ({ data, context }): Promise<StoredReport | null> => {
     await assertBuilderAccess(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: rows, error } = await supabaseAdmin.rpc("get_tool_report", { _token: data.token });
+    const { data: rows, error } = await context.supabase.rpc("get_tool_report", { _token: data.token });
     if (error) {
       console.error("[tool-leads] report lookup failed", error.message);
       return null;

@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ShareResultButton, TryAnotherTools } from "@/components/free-tools/tool-cards";
-import { CUSTOMIZER_CATEGORIES, CUSTOMIZER_TASKS, buildCustomPrompt } from "@/lib/prompt-customizer-data";
+import { CUSTOMIZER_CATEGORIES, CUSTOMIZER_TASKS } from "@/lib/prompt-customizer-data";
 import { dlToolStart, dlToolComplete, dlToolCtaClick } from "@/lib/free-tools";
 import { ogImageMeta } from "@/lib/og";
 
@@ -86,7 +86,7 @@ function PromptCustomizerPage() {
   const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const cat = CUSTOMIZER_CATEGORIES.find((c) => c.value === category)!;
+  const cat = CUSTOMIZER_CATEGORIES.find((c) => c.value === category) ?? CUSTOMIZER_CATEGORIES[0];
 
   const run = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -96,15 +96,15 @@ function FunnelAuditorPage() {
       audience: String(form.get("audience") ?? ""),
       price: String(form.get("price") ?? ""),
       pageText: String(form.get("pageText") ?? ""),
-      } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
-    finally { setBusy(false); }
-  };
+    };
     dlToolStart("ai-funnel-auditor");
     const a = await runTool({ data: input });
     setResult(a);
     dlToolComplete("ai-funnel-auditor", { score: a.score });
 
     setTimeout(() => document.getElementById("fa-result")?.scrollIntoView({ behavior: "smooth" }), 50);
+    } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
   };
 
   return (
