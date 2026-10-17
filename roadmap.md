@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Restrict tools except Prompt Generator, Lab posts, and guides to Builder/Accelerator; update pricing, llms.txt, Stripe descriptions, and access tests
+- [x] Restrict tools except Prompt Generator, Lab posts, and guides to Builder/Accelerator; update pricing, llms.txt, Stripe descriptions, and access tests
 
 - [x] Add 6 new free tools to /free-tools: Product Blueprint Generator, AI Prompt Customizer, Lead-Magnet Generator, Ask the Lab, AI Funnel Auditor, Content Repurposing Engine
 

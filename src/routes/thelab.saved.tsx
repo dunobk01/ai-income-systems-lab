@@ -17,6 +17,7 @@ export const Route = createFileRoute("/thelab/saved")({
       { property: "og:title", content: "Saved builds — The Lab" },
       { property: "og:description", content: "The Lab builds you saved to install later." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => <BuilderAccess title="Saved Lab builds"><SavedPage /></BuilderAccess>,
