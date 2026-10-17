@@ -103,9 +103,19 @@ async function syncLeadToMailerLite(lead: MlLead): Promise<{ ok: boolean; error?
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ email: lead.email, fields, groups: [MAILERLITE_GROUP_ID] }),
+      body: JSON.stringify({ email: lead.email, fields }),
     });
-    if (res.status === 200 || res.status === 201) return { ok: true };
+    if (res.ok) {
+      const subscriber = (await res.json()) as { data?: { id?: string; status?: string } };
+      if (subscriber.data?.status !== "active" || !subscriber.data.id) {
+        return { ok: false, error: "Subscriber is not active; existing opt-out preserved" };
+      }
+      const assigned = await fetch(`https://connect.mailerlite.com/api/subscribers/${subscriber.data.id}/groups/${MAILERLITE_GROUP_ID}`, {
+        method: "POST", headers: { Authorization: `Bearer ${apiKey}`, Accept: "application/json" },
+      });
+      if (!assigned.ok) return { ok: false, error: `Group assignment failed (${assigned.status})` };
+      return { ok: true };
+    }
     const body = (await res.text()).slice(0, 500);
     console.error("[tool-leads] mailerlite sync failed", res.status, body);
     return { ok: false, error: `${res.status}: ${body}` };

@@ -110,40 +110,20 @@ async function syncToMailerLite(
           lead_magnet: opts.leadMagnet ?? undefined,
           plan_status: opts.audience === "free" || opts.audience === "os" ? "free-lead" : undefined,
         },
-        status: "active",
-        groups: groupId ? [groupId] : undefined,
       }),
     });
     if (!subscriberRes.ok) {
-      const body = await subscriberRes.text();
-      console.error("[mailerlite] subscribe failed", subscriberRes.status, body);
+      console.error("[mailerlite] subscribe failed", subscriberRes.status);
       return;
     }
-
-    // MailerLite's upsert keeps a previously unsubscribed person unsubscribed,
-    // so they never appear in the list again. Someone submitting the form is
-    // opting back in — flip them to active explicitly.
-    const created = (await subscriberRes.json()) as {
-      data?: { id?: string; status?: string };
-    };
-    if (created.data?.id && created.data.status !== "active") {
-      const reactivate = await fetch(`${ML_BASE}/subscribers/${created.data.id}`, {
-        method: "PUT",
-        headers: mlHeaders(apiKey),
-        body: JSON.stringify({ status: "active", groups: groupId ? [groupId] : undefined }),
+    const subscriber = (await subscriberRes.json()) as { data?: { id?: string; status?: string } };
+    // A form submission never clears an existing unsubscribe/bounce/complaint.
+    if (subscriber.data?.status !== "active" || !subscriber.data.id) return;
+    if (groupId) {
+      const assigned = await fetch(`${ML_BASE}/subscribers/${subscriber.data.id}/groups/${groupId}`, {
+        method: "POST", headers: mlHeaders(apiKey),
       });
-      const after = reactivate.ok
-        ? (((await reactivate.json()) as { data?: { status?: string } }).data?.status ?? "unknown")
-        : "error";
-      if (after !== "active") {
-        // MailerLite refuses to resubscribe someone who previously unsubscribed;
-        // they have to opt back in through a MailerLite-hosted form themselves.
-        console.warn(
-          "[mailerlite] subscriber remains unsubscribed and cannot be reactivated via API",
-          email,
-          after,
-        );
-      }
+      if (!assigned.ok) console.error("[mailerlite] group assignment failed", assigned.status);
     }
   } catch (err) {
     console.error("[mailerlite] subscribe error", err);
@@ -169,31 +149,11 @@ export const submitLead = createServerFn({ method: "POST" })
     if (error && !/duplicate key/i.test(error.message)) {
       throw new Error(error.message);
     }
-    // Submitting the form is a fresh opt-in, so clear an earlier *voluntary*
-    // unsubscribe only. Bounce and spam-complaint suppressions stay in place:
-    // the form is unauthenticated, so anyone could otherwise type in someone
-    // else's address and un-block a hard-bouncing or complaining recipient.
-    const { error: unsuppressError } = await supabaseAdmin
-      .from("suppressed_emails")
-      .delete()
-      .eq("email", email)
-      .eq("reason", "unsubscribe");
-    if (unsuppressError) {
-      console.error("[submitLead] clearing suppression failed", unsuppressError.message);
-    }
-
-    // A fresh voluntary opt-in may rejoin; hard bounces and complaints may not.
-    // Check before MailerLite as well as before direct attachment delivery.
-    if (data.lead_magnet === "ai-income-launch-vault") {
-      const { data: suppression } = await supabaseAdmin
-        .from("suppressed_emails")
-        .select("reason")
-        .eq("email", email)
-        .maybeSingle();
-      if (suppression?.reason === "bounce" || suppression?.reason === "complaint") {
-        return { ok: true, emailSent: false };
-      }
-    }
+    // Never interpret an unauthenticated guide request as verified renewed
+    // consent. Preserve all legacy blocks and fail closed on lookup errors.
+    const { data: suppression, error: suppressionError } = await supabaseAdmin
+      .from("suppressed_emails").select("reason").eq("email", email).maybeSingle();
+    if (suppressionError || suppression) return { ok: true, emailSent: false };
 
     // Fire MailerLite sync; don't block the user on failures.
     await syncToMailerLite(email, {
@@ -279,10 +239,13 @@ export const unsubscribeByEmail = createServerFn({ method: "POST" })
     const email = data.email.trim().toLowerCase();
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: prior, error: priorError } = await supabaseAdmin
+      .from("suppressed_emails").select("reason").eq("email", email).maybeSingle();
+    if (priorError) throw new Error("Could not process unsubscribe");
     const { error } = await supabaseAdmin.from("suppressed_emails").upsert(
       {
         email,
-        reason: "unsubscribe",
+        reason: prior?.reason === "bounce" || prior?.reason === "complaint" ? prior.reason : "unsubscribe",
         metadata: { via: "unsubscribe-page" },
       },
       { onConflict: "email" },

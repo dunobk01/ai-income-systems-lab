@@ -92,7 +92,7 @@ async function upsertSubscriber(
   const res = await fetch(`${ML_BASE}/subscribers`, {
     method: "POST",
     headers: headers(apiKey),
-    body: JSON.stringify({ email, status: "active", fields }),
+    body: JSON.stringify({ email, fields }),
   });
   if (!res.ok) {
     throw new MailerliteError(`subscriber upsert failed (${res.status})`, res.status);
@@ -174,11 +174,15 @@ export async function processMailerliteSyncJobs(
     const job = raw as unknown as SyncJob;
 
     // Respect suppression at send time as well as at enqueue time.
-    const { data: suppression } = await admin
+    const { data: suppression, error: suppressionError } = await admin
       .from("suppressed_emails")
       .select("reason")
       .eq("email", normalizeEmail(job.email))
       .maybeSingle();
+    if (suppressionError) {
+      failed += 1;
+      continue; // Leave the job pending; never send when the block check fails.
+    }
     const reason = (suppression as { reason?: string } | null)?.reason;
     if (reason === "bounce" || reason === "complaint" || reason === "unsubscribe") {
       await admin

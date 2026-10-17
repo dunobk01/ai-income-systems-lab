@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
+import { assertPaymentWrite, processPaymentEvent } from "@/lib/payment-event-processing";
 import { type StripeEnv, verifyWebhook, createStripeClient } from "@/lib/stripe.server";
 
-let _supabase: ReturnType<typeof createClient> | null = null;
+let _supabase: ReturnType<typeof createClient<Database>> | null = null;
 function getSupabase() {
   if (!_supabase) {
-    _supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+    _supabase = createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
   }
   return _supabase;
 }
@@ -131,17 +133,6 @@ async function sendRefundEmail(opts: {
  * processed, so webhook retries can never duplicate entitlements, purchase
  * rows, receipt emails or MailerLite automation triggers.
  */
-async function alreadyProcessed(eventId: string, eventType: string, env: StripeEnv): Promise<boolean> {
-  const { error } = await (getSupabase().from("stripe_events") as any).insert({
-    id: eventId,
-    event_type: eventType,
-    environment: env,
-  });
-  if (!error) return false;
-  if (/duplicate key/i.test(error.message)) return true;
-  console.error("stripe_events ledger write failed", error.message);
-  return false;
-}
 
 async function recordOneTimePurchase(session: any, env: StripeEnv) {
   const userId = session.metadata?.userId;
@@ -183,7 +174,7 @@ async function recordOneTimePurchase(session: any, env: StripeEnv) {
       ? (full.customer as any).email
       : null) ?? full.customer_details?.email ?? null;
 
-  await (getSupabase().from("subscriptions") as any).upsert(
+  const { error: writeError } = await (getSupabase().from("subscriptions") as any).upsert(
     {
       user_id: userId,
       stripe_subscription_id: paymentIntentId,
@@ -198,6 +189,7 @@ async function recordOneTimePurchase(session: any, env: StripeEnv) {
     },
     { onConflict: "stripe_subscription_id" },
   );
+  assertPaymentWrite(writeError);
 
   if (email) {
     await sendReceiptEmail({
@@ -242,14 +234,15 @@ async function handleSubscriptionUpsert(sub: any, env: StripeEnv, isNew: boolean
   const currency = (item?.price?.currency ?? "usd").toLowerCase();
   const periodEnd = item?.current_period_end ?? sub.current_period_end;
 
-  const { data: existing } = await (getSupabase().from("subscriptions") as any)
+  const { data: existing, error: existingError } = await (getSupabase().from("subscriptions") as any)
     .select("status")
     .eq("stripe_subscription_id", sub.id)
     .eq("environment", env)
     .maybeSingle();
+  assertPaymentWrite(existingError);
   const wasActiveBefore = existing?.status && ["active", "trialing"].includes(existing.status as string);
 
-  await (getSupabase().from("subscriptions") as any).upsert(
+  const { error: writeError } = await (getSupabase().from("subscriptions") as any).upsert(
     {
       user_id: userId,
       stripe_subscription_id: sub.id,
@@ -266,6 +259,7 @@ async function handleSubscriptionUpsert(sub: any, env: StripeEnv, isNew: boolean
     },
     { onConflict: "stripe_subscription_id" },
   );
+  assertPaymentWrite(writeError);
 
   // Welcome / upgrade signals only once the first payment has actually
   // succeeded. `incomplete`, `incomplete_expired` and `unpaid` grant nothing:
@@ -295,7 +289,7 @@ async function handleSubscriptionDeleted(sub: any, env: StripeEnv) {
   const periodEnd = sub.items?.data?.[0]?.current_period_end ?? sub.current_period_end;
   const periodEndISO = periodEnd ? new Date(periodEnd * 1000).toISOString() : null;
 
-  const { data: updated } = await (getSupabase().from("subscriptions") as any)
+  const { data: updated, error: writeError } = await (getSupabase().from("subscriptions") as any)
     .update({
       status: "canceled",
       cancel_at_period_end: false,
@@ -307,6 +301,7 @@ async function handleSubscriptionDeleted(sub: any, env: StripeEnv) {
     .select("user_id, price_id")
     .maybeSingle();
 
+  assertPaymentWrite(writeError);
   if (updated?.user_id && updated.price_id === "ailab_monthly_subscription") {
     const email = await getUserEmail(updated.user_id);
     if (email) await sendMonthlyCanceledEmail({ to: email, periodEndISO });
@@ -331,8 +326,7 @@ async function handleRefund(charge: any, env: StripeEnv) {
     .maybeSingle();
 
   if (updateErr) {
-    console.error("Failed to mark subscription refunded", updateErr);
-    return;
+    assertPaymentWrite(updateErr);
   }
   if (!updated) {
     console.warn("No subscription row matched refunded charge", paymentIntentId);
@@ -368,11 +362,10 @@ async function handleRefund(charge: any, env: StripeEnv) {
  * Releases the idempotency claim so a failed event can be retried by Stripe.
  */
 async function releaseClaim(eventId: string, env: StripeEnv) {
-  const { error } = await (getSupabase().from("stripe_events") as any)
-    .delete()
-    .eq("id", eventId)
-    .eq("environment", env);
-  if (error) console.error("failed to release stripe_events claim", error.message);
+  const { error } = await getSupabase().from("stripe_events")
+    .update({ processing_state: "retryable", claimed_at: null })
+    .eq("id", eventId).eq("environment", env);
+  assertPaymentWrite(error);
 }
 
 async function dispatch(event: { type: string; data: { object: any } }, env: StripeEnv) {
@@ -407,19 +400,25 @@ async function dispatch(event: { type: string; data: { object: any } }, env: Str
 async function handle(req: Request, env: StripeEnv) {
   const event = (await verifyWebhook(req, env)) as { id?: string; type: string; data: { object: any } };
 
-  if (event.id && (await alreadyProcessed(event.id, event.type, env))) {
-    console.log("duplicate Stripe event ignored:", event.type);
-    return;
-  }
-
-  try {
-    await dispatch(event, env);
-  } catch (e) {
-    // Processing failed after claiming the event. Drop the claim so Stripe's
-    // automatic retry is actually processed instead of silently ignored.
-    if (event.id) await releaseClaim(event.id, env);
-    throw e;
-  }
+  if (!event.id) throw new Error("Stripe event id is required");
+  const eventId = event.id;
+  await processPaymentEvent({
+    claim: async () => {
+      const { data, error } = await getSupabase().rpc("claim_stripe_event", {
+        p_id: eventId, p_type: event.type, p_environment: env,
+      });
+      assertPaymentWrite(error);
+      if (!data) throw new Error("No durable Stripe claim returned");
+      return data;
+    },
+    dispatch: () => dispatch(event, env),
+    complete: async () => {
+      const { error } = await getSupabase().from("stripe_events")
+        .update({ processing_state: "complete" }).eq("id", eventId).eq("environment", env);
+      assertPaymentWrite(error);
+    },
+    release: () => releaseClaim(eventId, env),
+  });
 }
 
 export const Route = createFileRoute("/api/public/payments/webhook")({
