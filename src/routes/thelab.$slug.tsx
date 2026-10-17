@@ -1,3 +1,4 @@
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -11,7 +12,7 @@ import { LabProse, extractHeadings } from "@/components/lab/lab-prose";
 import { CoverPlaceholder } from "@/components/lab/cover-placeholder";
 import { LabActions } from "@/components/lab/lab-actions";
 import { LabCard } from "@/components/lab/lab-card";
-import { getLabPostBySlug, listMySavedIds, listMyLikedIds } from "@/lib/lab.functions";
+import { getLabPostBySlug, getMemberLabContent, listMySavedIds, listMyLikedIds } from "@/lib/lab.functions";
 import { useAuth } from "@/lib/auth-context";
 import { isTrustedLabHtml, sanitizeTrustedLabHtml } from "@/lib/lab-content";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
@@ -101,7 +102,7 @@ export const Route = createFileRoute("/thelab/$slug")({
       <SiteFooter />
     </div>
   ),
-  component: LabPostPage,
+  component: () => <BuilderAccess title="The Lab build"><LabPostPage /></BuilderAccess>,
 });
 
 function useReadingProgress(ref: React.RefObject<HTMLElement | null>) {
@@ -131,6 +132,8 @@ function LabPostPage() {
   const { user } = useAuth();
   const savedFn = useServerFn(listMySavedIds);
   const likedFn = useServerFn(listMyLikedIds);
+  const contentFn = useServerFn(getMemberLabContent);
+  const memberContent = useQuery({ queryKey: ["lab", "content", params.slug, user?.id], queryFn: () => contentFn({ data: { slug: params.slug } }) });
   const articleRef = useRef<HTMLElement>(null);
   const progress = useReadingProgress(articleRef);
 
@@ -153,7 +156,7 @@ function LabPostPage() {
   if (!post) return null;
 
   const related = data?.related ?? [];
-  const content = post.content ?? "";
+  const content = memberContent.data?.content ?? "";
   const renderAsHtml = isTrustedLabHtml(content);
   const headings = renderAsHtml ? [] : extractHeadings(content);
   const isSaved = (saved.data?.ids ?? []).includes(post.id);
@@ -240,6 +243,8 @@ function LabPostPage() {
             </dl>
 
             <div className="overflow-x-hidden">
+              {memberContent.isPending && <p role="status">Loading build…</p>}
+              {memberContent.error && <p role="alert" className="text-destructive">{memberContent.error.message}</p>}
               {renderAsHtml ? (
                 <div
                   className="mt-10"

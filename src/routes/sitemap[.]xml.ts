@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { STATIC_GUIDES } from "@/lib/guides-content";
+import { STATIC_GUIDES } from "@/lib/guides-catalog";
 
 const BASE_URL = "https://ai-income-systems.com";
 

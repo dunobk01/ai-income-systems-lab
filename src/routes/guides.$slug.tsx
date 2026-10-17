@@ -1,12 +1,15 @@
+import { BuilderAccess } from "@/components/builder-access";
+import { useServerFn } from "@tanstack/react-start";
+import { getMemberStaticGuide } from "@/lib/guides.functions";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { getPillarBySlug } from "@/lib/blog.functions";
+import { getPillarBySlug, getMemberPillarBySlug } from "@/lib/blog.functions";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Linkify } from "@/components/linkify";
 import { GuideView } from "@/components/guide-view";
-import { getStaticGuideBySlug, STATIC_GUIDES } from "@/lib/guides-content";
+import { getStaticGuideBySlug, STATIC_GUIDES } from "@/lib/guides-catalog";
 import { ogImageMeta, DEFAULT_OG_IMAGE } from "@/lib/og";
 
 export const Route = createFileRoute("/guides/$slug")({
@@ -132,12 +135,17 @@ export const Route = createFileRoute("/guides/$slug")({
       <SiteFooter />
     </div>
   ),
-  component: GuideRouteComponent,
+  component: () => <BuilderAccess title="Member guide"><GuideRouteComponent /></BuilderAccess>,
 });
 
 function GuideRouteComponent() {
   const params = Route.useParams();
-  const staticGuide = getStaticGuideBySlug(params.slug);
+  const metadata = getStaticGuideBySlug(params.slug);
+  const loadGuide = useServerFn(getMemberStaticGuide);
+  const result = useQuery({ queryKey: ["member-guide", params.slug], queryFn: () => loadGuide({ data: { slug: params.slug } }), enabled: !!metadata });
+  const staticGuide = result.data?.guide;
+  if (metadata && result.isPending) return <p className="px-4 py-16" role="status">Loading guide…</p>;
+  if (result.error) return <p role="alert" className="px-4 py-16 text-destructive">{result.error.message}</p>;
 
   if (staticGuide) {
     const related = STATIC_GUIDES.filter((g) => g.slug !== staticGuide.slug).slice(0, 3);
@@ -176,9 +184,10 @@ function GuideRouteComponent() {
 
 function PillarPage() {
   const params = Route.useParams();
+  const loadPillar = useServerFn(getMemberPillarBySlug);
   const { data } = useQuery({
-    queryKey: ["pillar", params.slug],
-    queryFn: () => getPillarBySlug({ data: { slug: params.slug } }),
+    queryKey: ["member-pillar", params.slug],
+    queryFn: () => loadPillar({ data: { slug: params.slug } }),
   });
   const pillar = data?.pillar;
   const posts = data?.posts ?? [];

@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { LabCard, LabCardSkeleton } from "@/components/lab/lab-card";
 import { listLabPosts, listMySavedIds, listMyLikedIds } from "@/lib/lab.functions";
+import { canUseBuilders } from "@/lib/access";
 import { useAuth } from "@/lib/auth-context";
 import { ogImageMeta } from "@/lib/og";
 
@@ -31,7 +32,7 @@ const searchSchema = z.object({
 
 const TITLE = "The Lab — Working AI systems you can install today";
 const DESC =
-  "A new AI build every day: the pain point, who it's for, the tools, and the steps. Free, plain-English, no fake income claims.";
+  "A new AI build every day: the pain point, who it's for, the tools, and the steps. Builder and Accelerator builds, plain-English, no fake income claims.";
 const URL = "https://ai-income-systems.com/thelab";
 
 export const Route = createFileRoute("/thelab/")({
@@ -67,7 +68,8 @@ export const Route = createFileRoute("/thelab/")({
 function LabWall() {
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
-  const { user } = useAuth();
+  const { user, profile, isAdmin } = useAuth();
+  const allowed = canUseBuilders(profile?.tier, isAdmin);
   const listFn = useServerFn(listLabPosts);
   const savedFn = useServerFn(listMySavedIds);
   const likedFn = useServerFn(listMyLikedIds);
@@ -86,12 +88,12 @@ function LabWall() {
   const saved = useQuery({
     queryKey: ["lab", "saves", "ids", user?.id ?? "anon"],
     queryFn: () => savedFn({ data: undefined } as never),
-    enabled: !!user,
+    enabled: !!user && allowed,
   });
   const liked = useQuery({
     queryKey: ["lab", "likes", "ids", user?.id ?? "anon"],
     queryFn: () => likedFn({ data: undefined } as never),
-    enabled: !!user,
+    enabled: !!user && allowed,
   });
 
   const savedIds = new Set(saved.data?.ids ?? []);
@@ -119,7 +121,7 @@ function LabWall() {
               The <span className="text-gradient">Lab</span>
             </h1>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Working AI systems you can install today. One new build every day — free, no fake income claims.
+              Working AI systems you can install today. One new build every day — included with Builder and Accelerator.
             </p>
             <div className="mt-6 max-w-xl">
               <NewsletterSignup source="thelab" />

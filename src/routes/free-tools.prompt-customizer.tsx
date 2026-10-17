@@ -1,3 +1,6 @@
+import { useServerFn } from "@tanstack/react-start";
+import { customizeMemberPrompt } from "@/lib/member-tools.functions";
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SlidersHorizontal, ArrowRight, Sparkles, Copy, Check } from "lucide-react";
@@ -11,7 +14,7 @@ import { ogImageMeta } from "@/lib/og";
 
 const TITLE = "AI Prompt Customizer — Get a Detailed, Ready-to-Use Prompt for Your Task";
 const DESC =
-  "Pick a task — digital products, websites, Pinterest, email funnels, n8n, social media, Airbnb or KDP — answer three questions, and get one detailed, copy-ready AI prompt. Free, no signup.";
+  "Pick a task — digital products, websites, Pinterest, email funnels, n8n, social media, Airbnb or KDP — answer three questions, and get one detailed, copy-ready AI prompt. Included with Builder and Accelerator memberships.";
 const URL = "https://ai-income-systems.com/free-tools/prompt-customizer";
 
 const FAQS = [
@@ -25,7 +28,7 @@ const FAQS = [
   },
   {
     q: "Do I need an account?",
-    a: "No. The prompt appears instantly on screen, ready to copy.",
+    a: "Yes. This tool is included with Builder and Accelerator memberships.",
   },
 ];
 
@@ -67,15 +70,17 @@ export const Route = createFileRoute("/free-tools/prompt-customizer")({
           url: URL,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: PromptCustomizerPage,
+  component: () => <BuilderAccess title={TITLE}><PromptCustomizerPage /></BuilderAccess>,
 });
 
 function PromptCustomizerPage() {
+  const runTool = useServerFn(customizeMemberPrompt);
+  const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState(CUSTOMIZER_CATEGORIES[0].value);
   const [prompt, setPrompt] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -83,19 +88,23 @@ function PromptCustomizerPage() {
 
   const cat = CUSTOMIZER_CATEGORIES.find((c) => c.value === category)!;
 
-  const run = (e: React.FormEvent<HTMLFormElement>) => {
+  const run = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (busy) return;
     setBusy(true);
+    setError(null);
+    try {
     const form = new FormData(e.currentTarget);
     const answers: Record<string, string> = {};
     for (const q of cat.questions) answers[q.key] = String(form.get(q.key) ?? "");
     dlToolStart("ai-prompt-customizer");
-    const built = buildCustomPrompt(category, CUSTOMIZER_TASKS[category]?.key ?? "task", answers);
+    const built = await runTool({ data: { category, task: CUSTOMIZER_TASKS[category]?.key ?? "task", answers } });
     setPrompt(built);
     dlToolComplete("ai-prompt-customizer", { category });
-    setBusy(false);
+
     setTimeout(() => document.getElementById("pc-result")?.scrollIntoView({ behavior: "smooth" }), 50);
+    } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
   };
 
   const copy = async () => {
@@ -116,7 +125,7 @@ function PromptCustomizerPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <SlidersHorizontal className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool
+            <SlidersHorizontal className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool
           </div>
           <h1 className="mt-4 text-3xl sm:text-5xl font-black tracking-tight">
             AI Prompt <span className="text-gradient">Customizer</span>
@@ -155,6 +164,7 @@ function PromptCustomizerPage() {
           <Button type="submit" variant="brand" className="w-full h-12" disabled={busy}>
             <Sparkles className="h-4 w-4" /> Build my prompt
           </Button>
+          {error && <p role="alert" className="text-destructive">{error}</p>}
         </form>
       </section>
 

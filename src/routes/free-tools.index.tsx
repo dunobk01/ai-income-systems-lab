@@ -7,19 +7,19 @@ import { FreeToolCards } from "@/components/free-tools/tool-cards";
 import { ogImageMeta } from "@/lib/og";
 import { FREE_TOOLS } from "@/lib/free-tools-data";
 
-const TITLE = "Free AI Tools for Small Business Owners";
+const TITLE = "AI Business Tools — Free Prompt Generator & Member Tools";
 const DESC =
-  "Free AI tools for small business: prompt generator, AI readiness scorecard, time & money savings calculator, and AI search visibility check. Results in 60 seconds, no signup.";
+  "Use the AI Prompt Generator free. Builder and Accelerator unlock product blueprints, funnel audits, automation reports and the complete member tool collection.";
 const URL = "https://ai-income-systems.com/free-tools";
 
 const FAQS = [
   {
     q: "Are these tools really free?",
-    a: "Yes. You can run every tool and see a result without an account or a card. You only give an email if you want the full personalised report.",
+    a: "The AI Prompt Generator is free for everyone. All other tools require Builder or Accelerator membership; they are not included with Free or Starter.",
   },
   {
     q: "Do I need to sign up to get a result?",
-    a: "No. Each tool shows your result on screen immediately. The email step is optional and only sends the longer report.",
+    a: "Prompt Generator needs no account. Sign in with a Builder or Accelerator membership to use the other tools.",
   },
   {
     q: "What happens to my email address?",
@@ -61,7 +61,7 @@ export const Route = createFileRoute("/free-tools/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ItemList",
-          name: "Free AI Tools for Small Business Owners",
+          name: "AI Business Tools — Free Prompt Generator & Member Tools",
           url: URL,
           itemListElement: FREE_TOOLS.filter((t) => t.status === "live").map((t, i) => ({
             "@type": "ListItem",
@@ -73,7 +73,7 @@ export const Route = createFileRoute("/free-tools/")({
               url: `https://ai-income-systems.com${t.path}`,
               applicationCategory: "BusinessApplication",
               operatingSystem: "Web",
-              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              offers: { "@type": "Offer", price: t.slug === "ai-prompt-generator" ? "0" : "29.99", priceCurrency: "USD" },
             },
           })),
         }),
@@ -106,10 +106,10 @@ function FreeToolsHub() {
             <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tools
           </div>
           <h1 className="mt-5 text-3xl sm:text-5xl font-black tracking-tight">
-            Free AI tools for <span className="text-gradient">small business owners</span>.
+            AI business tools for <span className="text-gradient">small business owners</span>.
           </h1>
           <p className="mt-4 mx-auto max-w-2xl text-muted-foreground">
-            Answers in 60 seconds, no signup to start.
+            Prompt Generator is free for everyone. All other tools are included with Builder and Accelerator.
           </p>
         </div>
       </section>
@@ -121,7 +121,7 @@ function FreeToolsHub() {
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-12">
         <div className="glass rounded-2xl p-5 grid gap-4 sm:grid-cols-3 text-sm">
           {[
-            { icon: CreditCard, text: "No card, ever" },
+            { icon: CreditCard, text: "Free Prompt Generator" },
             { icon: Zap, text: "Instant result on screen" },
             { icon: ShieldCheck, text: "We never sell your email" },
           ].map((t) => (
@@ -133,7 +133,7 @@ function FreeToolsHub() {
         </div>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Want the step-by-step version? Read our{" "}
-          <Link to="/guides" className="text-[color:var(--brand)] hover:underline">free AI business guides</Link>.
+          <Link to="/guides" className="text-[color:var(--brand)] hover:underline">member AI business guides</Link>.
         </p>
       </section>
 

@@ -1,3 +1,6 @@
+import { useServerFn } from "@tanstack/react-start";
+import { repurposeMemberContent } from "@/lib/member-tools.functions";
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Repeat, ArrowRight, Sparkles, Copy, Check } from "lucide-react";
@@ -5,13 +8,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ShareResultButton, TryAnotherTools } from "@/components/free-tools/tool-cards";
-import { repurpose, type Repurposed, type RepurposeInput } from "@/lib/repurposing-engine-data";
+import { type Repurposed, type RepurposeInput } from "@/lib/repurposing-engine-data";
 import { dlToolStart, dlToolComplete, dlToolCtaClick } from "@/lib/free-tools";
 import { ogImageMeta } from "@/lib/og";
 
-const TITLE = "Free Content Repurposing Engine — Turn One Post Into a Week of Content";
+const TITLE = "Content Repurposing Engine — Turn One Post Into a Week of Content";
 const DESC =
-  "Paste one blog post, product description or idea. Get Pinterest pins, short-video scripts, social posts, an email newsletter, an Instagram carousel, an SEO description and CTAs. Free, no signup.";
+  "Paste one blog post, product description or idea. Get Pinterest pins, short-video scripts, social posts, an email newsletter, an Instagram carousel, an SEO description and CTAs. Included with Builder and Accelerator memberships.";
 const URL = "https://ai-income-systems.com/free-tools/content-repurposer";
 
 const FAQS = [
@@ -21,7 +24,7 @@ const FAQS = [
   },
   {
     q: "Do I need an account?",
-    a: "No. Everything appears on screen instantly, ready to copy.",
+    a: "Yes. This tool is included with Builder and Accelerator memberships.",
   },
   {
     q: "Can I edit the results?",
@@ -67,33 +70,39 @@ export const Route = createFileRoute("/free-tools/content-repurposer")({
           url: URL,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: "29.99", priceCurrency: "USD" },
         }),
       },
     ],
   }),
-  component: ContentRepurposerPage,
+  component: () => <BuilderAccess title={TITLE}><ContentRepurposerPage /></BuilderAccess>,
 });
 
 function ContentRepurposerPage() {
+  const runTool = useServerFn(repurposeMemberContent);
+  const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Repurposed | null>(null);
   const [copiedIdx, setCopiedIdx] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const run = (e: React.FormEvent<HTMLFormElement>) => {
+  const run = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (busy) return;
     setBusy(true);
+    setError(null);
+    try {
     const form = new FormData(e.currentTarget);
     const input: RepurposeInput = {
       content: String(form.get("content") ?? ""),
       angle: String(form.get("angle") ?? ""),
-    };
+      } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
+  };
     dlToolStart("content-repurposing-engine");
-    const r = repurpose(input);
+    const r = await runTool({ data: input });
     setResult(r);
     dlToolComplete("content-repurposing-engine", {});
-    setBusy(false);
+
     setTimeout(() => document.getElementById("cr-result")?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
@@ -121,7 +130,7 @@ function ContentRepurposerPage() {
         <div className="absolute inset-0 -z-10 bg-hero opacity-80" />
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-14 sm:pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-            <Repeat className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Free tool
+            <Repeat className="h-3.5 w-3.5 text-[color:var(--brand-2)]" /> Member tool
           </div>
           <h1 className="mt-4 text-3xl sm:text-5xl font-black tracking-tight">
             Content Repurposing <span className="text-gradient">Engine</span>
@@ -145,6 +154,7 @@ function ContentRepurposerPage() {
           <Button type="submit" variant="brand" className="w-full h-12" disabled={busy}>
             <Sparkles className="h-4 w-4" /> Repurpose my content
           </Button>
+          {error && <p role="alert" className="text-destructive">{error}</p>}
         </form>
       </section>
 
@@ -245,7 +255,7 @@ function ContentRepurposerPage() {
           <div className="flex flex-wrap items-center gap-3">
             <ShareResultButton
               toolSlug="content-repurposing-engine"
-              title="Free Content Repurposing Engine"
+              title="Content Repurposing Engine"
               text="Paste one piece of content, get a full week of posts, pins, scripts and emails — free:"
             />
             <Button variant="glass" className="h-11 px-5" onClick={() => { dlToolCtaClick("content-repurposing-engine", { location: "regenerate" }); setResult(null); }}>

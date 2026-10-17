@@ -1,3 +1,4 @@
+import { BuilderAccess } from "@/components/builder-access";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/thelab/saved")({
       { property: "og:type", content: "website" },
     ],
   }),
-  component: SavedPage,
+  component: () => <BuilderAccess title="Saved Lab builds"><SavedPage /></BuilderAccess>,
 });
 
 function SavedPage() {

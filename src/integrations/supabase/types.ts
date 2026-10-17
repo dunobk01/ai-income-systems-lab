@@ -1224,6 +1224,7 @@ export type Database = {
           tool_slug: string
         }[]
       }
+      has_builder_content_access: { Args: never; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
