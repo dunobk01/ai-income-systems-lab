@@ -248,7 +248,7 @@ export const unsubscribeByEmail = createServerFn({ method: "POST" })
         reason: prior?.reason === "bounce" || prior?.reason === "complaint" ? prior.reason : "unsubscribe",
         metadata: { via: "unsubscribe-page" },
       },
-      { onConflict: "email" },
+      { onConflict: "email", ignoreDuplicates: true },
     );
     if (error) {
       console.error("[unsubscribe] suppression insert failed", error.message);
