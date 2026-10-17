@@ -95,15 +95,15 @@ function ContentRepurposerPage() {
     const input: RepurposeInput = {
       content: String(form.get("content") ?? ""),
       angle: String(form.get("angle") ?? ""),
-      } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
-    finally { setBusy(false); }
-  };
+    };
     dlToolStart("content-repurposing-engine");
     const r = await runTool({ data: input });
     setResult(r);
     dlToolComplete("content-repurposing-engine", {});
 
     setTimeout(() => document.getElementById("cr-result")?.scrollIntoView({ behavior: "smooth" }), 50);
+    } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
   };
 
   const copy = async (text: string, id: string) => {

@@ -97,15 +97,15 @@ function ProductBlueprintPage() {
       budget: String(form.get("budget") ?? "0"),
       platform: String(form.get("platform") ?? "gumroad"),
       incomeGoal: String(form.get("incomeGoal") ?? "first-100"),
-      } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
-    finally { setBusy(false); }
-  };
+    };
     dlToolStart("product-blueprint-generator");
     const bp = await runTool({ data: input });
     setResult(bp);
     dlToolComplete("product-blueprint-generator", { goal: input.incomeGoal });
 
     setTimeout(() => document.getElementById("bp-result")?.scrollIntoView({ behavior: "smooth" }), 50);
+    } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
   };
 
   return (

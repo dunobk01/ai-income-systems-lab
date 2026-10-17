@@ -95,15 +95,15 @@ function LeadMagnetGeneratorPage() {
       niche: String(form.get("niche") ?? ""),
       audience: String(form.get("audience") ?? ""),
       offer: String(form.get("offer") ?? ""),
-      } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
-    finally { setBusy(false); }
-  };
+    };
     dlToolStart("lead-magnet-generator");
     const lm = await runTool({ data: input });
     setResult(lm);
     dlToolComplete("lead-magnet-generator", {});
 
     setTimeout(() => document.getElementById("lm-result")?.scrollIntoView({ behavior: "smooth" }), 50);
+    } catch (err) { setError(err instanceof Error ? err.message : "Please try again."); }
+    finally { setBusy(false); }
   };
 
   return (
