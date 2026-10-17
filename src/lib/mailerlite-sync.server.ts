@@ -92,7 +92,7 @@ async function upsertSubscriber(
   const res = await fetch(`${ML_BASE}/subscribers`, {
     method: "POST",
     headers: headers(apiKey),
-    body: JSON.stringify({ email, status: "active", fields }),
+    body: JSON.stringify({ email, fields }),
   });
   if (!res.ok) {
     throw new MailerliteError(`subscriber upsert failed (${res.status})`, res.status);

@@ -58,7 +58,6 @@ export async function mailerliteTrackUpgrade(opts: {
       headers: headers(apiKey),
       body: JSON.stringify({
         email: opts.email.trim().toLowerCase(),
-        status: "active",
         fields: {
           plan_status: "paid",
           plan_id: opts.planId,
@@ -76,8 +75,8 @@ export async function mailerliteTrackUpgrade(opts: {
 
     // Add to the Customers group additively so the member keeps their Free
     // Members group and any nurture history.
-    const body = (await res.json()) as { data?: { id?: string } };
-    if (body.data?.id && groupId) {
+    const body = (await res.json()) as { data?: { id?: string; status?: string } };
+    if (body.data?.status === "active" && body.data.id && groupId) {
       const assign = await fetch(`${ML_BASE}/subscribers/${body.data.id}/groups/${groupId}`, {
         method: "POST",
         headers: headers(apiKey),

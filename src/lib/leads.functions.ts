@@ -110,40 +110,20 @@ async function syncToMailerLite(
           lead_magnet: opts.leadMagnet ?? undefined,
           plan_status: opts.audience === "free" || opts.audience === "os" ? "free-lead" : undefined,
         },
-        status: "active",
-        groups: groupId ? [groupId] : undefined,
       }),
     });
     if (!subscriberRes.ok) {
-      const body = await subscriberRes.text();
-      console.error("[mailerlite] subscribe failed", subscriberRes.status, body);
+      console.error("[mailerlite] subscribe failed", subscriberRes.status);
       return;
     }
-
-    // MailerLite's upsert keeps a previously unsubscribed person unsubscribed,
-    // so they never appear in the list again. Someone submitting the form is
-    // opting back in — flip them to active explicitly.
-    const created = (await subscriberRes.json()) as {
-      data?: { id?: string; status?: string };
-    };
-    if (created.data?.id && created.data.status !== "active") {
-      const reactivate = await fetch(`${ML_BASE}/subscribers/${created.data.id}`, {
-        method: "PUT",
-        headers: mlHeaders(apiKey),
-        body: JSON.stringify({ status: "active", groups: groupId ? [groupId] : undefined }),
+    const subscriber = (await subscriberRes.json()) as { data?: { id?: string; status?: string } };
+    // A form submission never clears an existing unsubscribe/bounce/complaint.
+    if (subscriber.data?.status !== "active" || !subscriber.data.id) return;
+    if (groupId) {
+      const assigned = await fetch(`${ML_BASE}/subscribers/${subscriber.data.id}/groups/${groupId}`, {
+        method: "POST", headers: mlHeaders(apiKey),
       });
-      const after = reactivate.ok
-        ? (((await reactivate.json()) as { data?: { status?: string } }).data?.status ?? "unknown")
-        : "error";
-      if (after !== "active") {
-        // MailerLite refuses to resubscribe someone who previously unsubscribed;
-        // they have to opt back in through a MailerLite-hosted form themselves.
-        console.warn(
-          "[mailerlite] subscriber remains unsubscribed and cannot be reactivated via API",
-          email,
-          after,
-        );
-      }
+      if (!assigned.ok) console.error("[mailerlite] group assignment failed", assigned.status);
     }
   } catch (err) {
     console.error("[mailerlite] subscribe error", err);
