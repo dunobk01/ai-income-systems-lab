@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Expand admin Members to include lead-magnet email subscribers, tiers, signup dates, verified charges, and renewal dates; verify signed-in admin flow
+
 - [x] Verify uploaded audit; repair payment persistence/retries and MailerLite opt-out handling; validate access, pages, and regression tests
 - [ ] Move retired Day-5 nurture email into MailerLite and activate welcome funnel — owner action, laptop-only (Mail­erLite automation editor is unusable on phone); Dustin will do it when laptop is available
 - [ ] Remove legacy Day-5 schedule — database scheduling permissions blocked removal; its exposed app credential was deleted and replacement endpoint returns 410 after publish
