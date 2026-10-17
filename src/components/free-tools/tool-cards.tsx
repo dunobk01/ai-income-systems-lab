@@ -1,3 +1,6 @@
+import { useAuth } from "@/lib/auth-context";
+import { canUseBuilders } from "@/lib/access";
+import { useUpgradePrompt } from "@/components/upgrade-gate";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Clock, Share2, Check } from "lucide-react";
 import { useState } from "react";
@@ -6,9 +9,12 @@ import { FREE_TOOLS } from "@/lib/free-tools-data";
 import { dlToolCtaClick, shareResult } from "@/lib/free-tools";
 
 export function FreeToolCards({ exclude, location }: { exclude?: string; location?: string }) {
+  const { profile, isAdmin } = useAuth();
+  const upgrade = useUpgradePrompt();
+  const allowed = canUseBuilders(profile?.tier, isAdmin);
   const tools = FREE_TOOLS.filter((t) => t.slug !== exclude);
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {tools.map((t) => (
         <div key={t.slug} className="glass rounded-2xl p-5 flex flex-col">
           <div className="flex items-start justify-between gap-3">
@@ -27,7 +33,9 @@ export function FreeToolCards({ exclude, location }: { exclude?: string; locatio
             <Clock className="h-3.5 w-3.5" /> {t.time}
           </p>
           <div className="mt-4">
-            {t.status === "live" ? (
+            {t.status === "live" && t.slug !== "ai-prompt-generator" && !allowed ? (
+              <Button variant="glass" className="w-full h-10" onClick={() => upgrade.prompt({ action: t.name, requiredTier: "builder", benefits: ["All member tools", "The Lab builds and guides", "12 modules and 77 lessons"] })}>Unlock with Builder <ArrowRight className="h-4 w-4" /></Button>
+            ) : t.status === "live" ? (
               <Button
                 asChild
                 variant="brand"
@@ -35,7 +43,7 @@ export function FreeToolCards({ exclude, location }: { exclude?: string; locatio
                 onClick={() => dlToolCtaClick(t.slug, { location: location ?? "free-tools-grid" })}
               >
                 <Link to={t.path}>
-                  Start free <ArrowRight className="h-4 w-4" />
+                  {t.slug === "ai-prompt-generator" ? "Start free" : "Open tool"} <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             ) : (
@@ -46,14 +54,14 @@ export function FreeToolCards({ exclude, location }: { exclude?: string; locatio
           </div>
         </div>
       ))}
-    </div>
+    </div>{upgrade.dialog}</>
   );
 }
 
 export function TryAnotherTools({ exclude }: { exclude: string }) {
   return (
     <div className="mt-10">
-      <h3 className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Try another free tool</h3>
+      <h3 className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Explore more tools</h3>
       <div className="mt-4">
         <FreeToolCards exclude={exclude} location="try-another" />
       </div>

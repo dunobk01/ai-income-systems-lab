@@ -12,7 +12,7 @@ import { ExitIntentModal } from "@/components/exit-intent-modal";
 
 const pricingFaqs = [
   { q: "Can I cancel anytime?", a: "Yes. Cancel from Settings in one click; access continues through the end of your billing period." },
-  { q: "Is there a free plan?", a: "Yes. The free account is permanent: Module 1, sample lessons, tool guides and progress tracking, with no card required." },
+  { q: "Is there a free plan?", a: "Yes. The free account is permanent: Module 1, sample lessons, AI Prompt Generator and progress tracking, with no card required." },
   { q: "Do you offer refunds?", a: "Yes. Your first payment for any subscription tier has a 14-day money-back guarantee. Email support within 14 days of that initial purchase for a full refund. Renewals are not refundable, but you can cancel anytime and keep access through the paid billing period." },
   { q: "Can I upgrade or downgrade?", a: "Yes, from Settings. Upgrades pro-rate immediately; downgrades apply at the next billing cycle." },
   { q: "Is my payment secure?", a: "All payments are processed by Stripe. We never see or store your card details." },
@@ -28,6 +28,7 @@ export const Route = createFileRoute("/pricing")({
       { property: "og:title", content: "Pricing — AI Income Systems Lab" },
       { property: "og:description", content: "Three monthly tiers — Starter $19.99, Builder $29.99, Accelerator $44.99. Cancel anytime." },
       { property: "og:url", content: "https://ai-income-systems.com/pricing" },
+      { property: "og:type", content: "website" },
     
       ...ogImageMeta(),
     ],
@@ -95,6 +96,7 @@ const tiers: Tier[] = [
       "Searchable prompt library (12 starter prompts)",
       "Action steps + downloads on every lesson",
       "Progress tracking + private notes",
+      "AI Prompt Generator (free for everyone)",
       "Cancel anytime · Upgrade anytime",
     ],
   },
@@ -106,9 +108,11 @@ const tiers: Tier[] = [
     tag: "Most popular",
     featured: true,
     bestFor: "Creators ready to launch products, funnels, and offers with AI shortcuts.",
-    whyUpgrade: "Courses + community + templates + the interactive builders that turn ideas into ship-ready plans in minutes.",
+    whyUpgrade: "Courses + member tools + The Lab + guides + community + templates + the interactive builders that turn ideas into ship-ready plans in minutes.",
     features: [
       "Everything in Starter",
+      "All member tools: blueprints, lead magnets, funnel audits & more",
+      "The Lab posts + complete business guides",
       "AI Agents & Skills: Module 12 (8 lessons)",
       "Members-only Community + Wins channel",
       "Template Library (prompts, n8n workflows, Lovable scaffolds)",
@@ -140,6 +144,12 @@ const TIER_RANK: Record<string, number> = { none: 0, monthly: 1, starter: 1, bui
 
 type Row = { label: string; starter: boolean | string; builder: boolean | string; accelerator: boolean | string };
 const compare: { section: string; rows: Row[] }[] = [
+  { section: "Tools, Lab & guides", rows: [
+    { label: "AI Prompt Generator (free for everyone)", starter: true, builder: true, accelerator: true },
+    { label: "All other member tools", starter: false, builder: true, accelerator: true },
+    { label: "The Lab posts", starter: false, builder: true, accelerator: true },
+    { label: "Complete business guides", starter: false, builder: true, accelerator: true },
+  ] },
   {
     section: "Learning",
     rows: [

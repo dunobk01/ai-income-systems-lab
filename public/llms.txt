@@ -1,15 +1,21 @@
 # AI Income Systems Lab
 
-> A course and toolkit teaching you to combine ChatGPT, Claude, Perplexity, Lovable, and n8n to build digital products, sales funnels, automations, and AI agents you can actually sell.
+> Practical AI business education, courses and tools for building repeatable business systems.
 
-AI Income Systems Lab is a subscription learning platform with three tiers (Starter $29, Builder $79, Pro $149). It pairs an 15-module curriculum with interactive AI builders that turn ideas into ship-ready product plans, funnel plans, and agent specs.
+Monthly memberships are priced in USD: Starter $19.99, Builder $29.99, and Accelerator $44.99. Starter includes Modules 1–11 (69 lessons), Starter prompts and progress tracking. Builder includes Modules 1–12 (77 lessons), all member tools, The Lab posts, complete guides, community, templates, Product Builder and Funnel Builder. Accelerator includes all 15 modules (89 lessons), everything in Builder, Agent Generator and member direct messages.
+
+AI Prompt Generator is free for everyone. Other tools, Lab post content and complete guides require Builder or Accelerator; they are not included with Free or Starter. Public catalogs are previews, not access to member content. Legacy Pro and administrators retain their existing access.
 
 ## Pages
 
-- [Home](/): Overview of the system, tools covered, what you build, curriculum, and pricing.
-- [Pricing](/pricing): Starter, Builder, and Pro tiers with feature comparison and tier-specific upgrade rationale.
+- [Home](/): Platform overview and membership previews.
+- [Pricing](/pricing): Current monthly prices and feature comparison.
+- [Curriculum](/curriculum): Public course and module catalog; lesson access depends on membership.
+- [AI Prompt Generator](/free-tools/prompt-generator): Free prompts by business type and goal.
+- [Blog](/blog): Public practical AI articles.
+- [Newsletter](/newsletter): Public newsletter articles.
 
 ## Optional
 
-- [Sign up](/signup): Create an account.
-- [Log in](/login): Sign in to an existing account.
+- [Free AI Income Launch Guide](/ai-income-launch-guide): Free PDF delivered after email signup.
+- [AI Business Engine](/ai-business-engine): Free prompt guide download.

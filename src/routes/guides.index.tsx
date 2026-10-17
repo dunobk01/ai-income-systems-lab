@@ -10,9 +10,9 @@ import { ogImageMeta } from "@/lib/og";
 export const Route = createFileRoute("/guides/")({
   head: () => ({
     meta: [
-      { title: "Free AI Business Guides & Playbooks | AI Income Systems" },
-      { name: "description", content: "Free step-by-step guides for building an AI-powered business: validation, digital products, funnels, n8n automation, and traffic — with copy-paste prompts." },
-      { property: "og:title", content: "Free AI Business Guides & Playbooks" },
+      { title: "AI Business Guides & Playbooks | AI Income Systems" },
+      { name: "description", content: "Builder and Accelerator step-by-step guides for building an AI-powered business: validation, digital products, funnels, n8n automation, and traffic — with copy-paste prompts." },
+      { property: "og:title", content: "AI Business Guides & Playbooks" },
       { property: "og:description", content: "Step-by-step guides with copy-paste prompts for building an AI-powered business." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ai-income-systems.com/guides" },
@@ -78,7 +78,7 @@ function GuidesIndex() {
             Complete <span className="text-[color:var(--brand)]">Playbooks</span>
           </h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
-            Deep, end-to-end guides on the systems that actually generate AI income. Each guide is a standalone operating manual — written instruction, copy-paste prompts, tool stack, and step-by-step workflows in one place.
+            Deep, end-to-end guides on the systems that actually generate AI income. Included with Builder and Accelerator. Each guide is a standalone operating manual — written instruction, copy-paste prompts, tool stack, and step-by-step workflows in one place.
           </p>
         </section>
 

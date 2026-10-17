@@ -1,3 +1,4 @@
+import { assertBuilderAccess } from "@/lib/entitlements";
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -56,7 +57,7 @@ export const listPostsByTag = createServerFn({ method: "GET" })
 /* ---------------- Public: pillars ---------------- */
 
 export const listPublishedPillars = createServerFn({ method: "GET" }).handler(async () => {
-  const sb = serverPublic();
+  const { supabaseAdmin: sb } = await import("@/integrations/supabase/client.server");
   const { data, error } = await sb
     .from("blog_pillars")
     .select("id, slug, title, description, cover_image_url, published_at")
@@ -70,10 +71,10 @@ export const listPublishedPillars = createServerFn({ method: "GET" }).handler(as
 export const getPillarBySlug = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => z.object({ slug: z.string().min(1).max(200) }).parse(d))
   .handler(async ({ data }) => {
-    const sb = serverPublic();
+    const { supabaseAdmin: sb } = await import("@/integrations/supabase/client.server");
     const { data: pillar, error } = await sb
       .from("blog_pillars")
-      .select("id, slug, title, description, intro, cover_image_url, published_at")
+      .select("id, slug, title, description, cover_image_url, published_at")
       .eq("slug", data.slug)
       .not("published_at", "is", null)
       .lte("published_at", new Date().toISOString())
@@ -162,4 +163,20 @@ export const togglePillarPublished = createServerFn({ method: "POST" })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
+  });
+
+export const getMemberPillarBySlug = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ slug: z.string().min(1).max(200) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertBuilderAccess(context);
+    const { data: pillar, error } = await context.supabase.from("blog_pillars")
+      .select("id, slug, title, description, intro, cover_image_url, published_at")
+      .eq("slug", data.slug).not("published_at", "is", null).lte("published_at", new Date().toISOString()).maybeSingle();
+    if (error) throw new Error(error.message);
+    const { data: posts } = await context.supabase.from("newsletter_posts")
+      .select("id, slug, title, excerpt, cover_image_url, published_at, tags")
+      .eq("pillar_slug", data.slug).neq("post_type", "lab")
+      .not("published_at", "is", null).lte("published_at", new Date().toISOString()).order("published_at", { ascending: false });
+    return { pillar, posts: posts ?? [] };
   });
