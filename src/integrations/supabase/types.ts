@@ -920,22 +920,28 @@ export type Database = {
       }
       stripe_events: {
         Row: {
+          claimed_at: string | null
           environment: string
           event_type: string
           id: string
           processed_at: string
+          processing_state: string
         }
         Insert: {
+          claimed_at?: string | null
           environment: string
           event_type: string
           id: string
           processed_at?: string
+          processing_state?: string
         }
         Update: {
+          claimed_at?: string | null
           environment?: string
           event_type?: string
           id?: string
           processed_at?: string
+          processing_state?: string
         }
         Relationships: []
       }
@@ -1210,6 +1216,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_stripe_event: {
+        Args: { p_environment: string; p_id: string; p_type: string }
+        Returns: string
+      }
       generate_referral_code: { Args: never; Returns: string }
       get_permission_diagnostics: { Args: never; Returns: Json }
       get_tool_report: {
