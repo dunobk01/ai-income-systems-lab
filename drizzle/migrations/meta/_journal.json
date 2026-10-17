@@ -71,6 +71,13 @@
       "when": 1790432372184,
       "tag": "0009_download_events",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792244232898,
+      "tag": "0010_builder_content_entitlements",
+      "breakpoints": true
     }
   ]
 }
