@@ -189,7 +189,7 @@ export default function LandingPage() {
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
             No credit card needed. Unsubscribe anytime — start with Module 1 and free sample lessons,
-            preview every tool, and upgrade only when you're ready.
+            use the free Prompt Generator, and upgrade when you're ready for the member tools, Lab builds and guides.
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
