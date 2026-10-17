@@ -38,5 +38,9 @@ export const tierLabel = tierLabelFor;
 export const canUseBuilders = (tier: string | null | undefined, isAdmin?: boolean) =>
   isAdmin === true || tierRank(tier) >= TIER_RANK.builder;
 
+/** Prompt Generator is the only public tool; all remaining tools need Builder. */
+export const canUseTool = (slug: string, tier?: string | null, isAdmin?: boolean) =>
+  slug === "ai-prompt-generator" || canUseBuilders(tier, isAdmin);
+
 /** Nice display name for the tier that unlocks a given requirement. */
 export const requiredTierLabel = (required: string) => tierLabel(required);

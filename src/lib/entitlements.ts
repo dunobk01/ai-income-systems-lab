@@ -14,6 +14,6 @@ export async function assertBuilderAccess(context: AuthedContext) {
   ]);
   const isAdmin = !!(roles ?? []).some((r: { role: string }) => r.role === "admin");
   if (!canUseBuilders(profile?.tier, isAdmin)) {
-    throw new Error("This builder is included with the Builder plan. Upgrade to generate and save results.");
+    throw new Error("This tool or content is included with Builder and Accelerator. Upgrade to access it.");
   }
 }

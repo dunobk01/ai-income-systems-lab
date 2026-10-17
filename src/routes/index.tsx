@@ -189,7 +189,7 @@ export default function LandingPage() {
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
             No credit card needed. Unsubscribe anytime — start with Module 1 and free sample lessons,
-            preview every tool, and upgrade only when you're ready.
+            use the free Prompt Generator, and upgrade when you're ready for the member tools, Lab builds and guides.
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
@@ -205,7 +205,7 @@ export default function LandingPage() {
         <div className="text-center">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Try a free tool first</h2>
           <p className="mt-2 text-sm text-muted-foreground max-w-2xl mx-auto">
-            No account, no card. Get a straight answer about your business in about a minute.
+            Prompt Generator is free for everyone. Builder and Accelerator unlock all other tools.
           </p>
         </div>
         <div className="mt-6">
@@ -213,7 +213,7 @@ export default function LandingPage() {
         </div>
         <div className="mt-5 text-center">
           <Button asChild variant="ghost" className="h-10">
-            <Link to="/free-tools">See all free tools <ArrowRight className="h-4 w-4" /></Link>
+            <Link to="/free-tools">Explore all tools <ArrowRight className="h-4 w-4" /></Link>
           </Button>
         </div>
       </section>

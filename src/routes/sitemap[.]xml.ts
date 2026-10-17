@@ -67,11 +67,9 @@ export const Route = createFileRoute("/sitemap.xml")({
         }
 
         try {
-          const sb = createClient<Database>(
-            process.env.SUPABASE_URL!,
-            process.env.SUPABASE_PUBLISHABLE_KEY!,
-            { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
-          );
+          // Catalog metadata only: preserve shareable Lab/guide URLs without
+          // selecting member bodies now protected by RLS.
+          const { supabaseAdmin: sb } = await import("@/integrations/supabase/client.server");
 
           // Published newsletter posts + blog posts + tag pages
           const { data: posts } = await sb

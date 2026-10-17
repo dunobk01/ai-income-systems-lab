@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { canUseBuilders, hasTier, isFreeTier, tierLabel, tierRank } from "@/lib/access";
+import { canUseBuilders, canUseTool, hasTier, isFreeTier, tierLabel, tierRank } from "@/lib/access";
+import { FREE_TOOLS } from "@/lib/free-tools-data";
 import { COURSE_ACCESS, hasCourseAccess } from "@/lib/course-access";
 
 describe("access model — free members", () => {
@@ -61,5 +62,29 @@ describe("course module ladder", () => {
       expect(hasCourseAccess("pro", requirement)).toBe(true);
     }
     expect(COURSE_ACCESS.accelerator).toEqual({ modules: 15, lessons: 89 });
+  });
+});
+
+describe("revised tools, Lab and guide benefits", () => {
+  it("keeps AI Prompt Generator available to everyone", () => {
+    for (const tier of [undefined, null, "none", "free", "starter", "builder", "accelerator"]) {
+      expect(canUseTool("ai-prompt-generator", tier)).toBe(true);
+    }
+  });
+  it("denies every other catalog tool to signed-out, Free and Starter members", () => {
+    const tools = FREE_TOOLS.filter(t => t.slug !== "ai-prompt-generator");
+    expect(tools.length).toBe(9);
+    for (const tool of tools) for (const tier of [undefined, null, "none", "free", "starter", "monthly"]) {
+      expect(canUseTool(tool.slug, tier)).toBe(false);
+    }
+  });
+  it("unlocks tools, Lab bodies and guides for Builder and Accelerator, preserving Pro and admin", () => {
+    for (const tier of ["builder", "accelerator", "pro"]) {
+      expect(canUseBuilders(tier)).toBe(true);
+      for (const tool of FREE_TOOLS) expect(canUseTool(tool.slug, tier)).toBe(true);
+    }
+    expect(canUseBuilders("none", true)).toBe(true);
+    expect(canUseBuilders("starter")).toBe(false);
+    expect(canUseBuilders("none")).toBe(false);
   });
 });

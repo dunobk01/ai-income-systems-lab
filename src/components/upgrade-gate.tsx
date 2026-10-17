@@ -39,7 +39,7 @@ export function UpgradeDialog({
           </div>
           <DialogTitle>Unlock this with {label}</DialogTitle>
           <DialogDescription>
-            {info.action} is part of the {label} membership. Your Free account stays yours either way — upgrade
+            {info.action} is part of the {label} membership. Your current membership stays unchanged — upgrade
             whenever you're ready to use the full toolset.
           </DialogDescription>
         </DialogHeader>
