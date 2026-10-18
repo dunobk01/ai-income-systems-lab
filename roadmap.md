@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Add Gemini/n8n hands-on Lab tutorial with preserved visuals, examples, SEO, and mobile/desktop checks; leave existing posts unchanged
+
 - [x] Remove required dollar amounts from Post Win and celebrate AI accomplishments; signed-in posting/readback/deletion verified without revenue; validation tests pass
 
 - [x] Expand admin Members to include lead-magnet email subscribers, tiers, signup dates, verified charges, and renewal dates; signed-in directory, email-only details, and CSV verified; 33 targeted tests pass
