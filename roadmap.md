@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Add Gemini/n8n hands-on Lab tutorial with preserved visuals, examples, SEO, and mobile/desktop checks; leave existing posts unchanged
+- [x] Add Gemini/n8n hands-on Lab tutorial with all 4 diagrams, 2 images, 5 code examples, Beginner/Creator/Automation tags, SEO, and completion checks; published through the existing editor, live URL returns 200, desktop/mobile images and layout verified, existing posts unchanged
 
 - [x] Remove required dollar amounts from Post Win and celebrate AI accomplishments; signed-in posting/readback/deletion verified without revenue; validation tests pass
 
