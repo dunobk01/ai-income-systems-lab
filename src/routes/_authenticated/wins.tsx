@@ -122,7 +122,12 @@ function WinsPage() {
             rows={3}
             maxLength={500}
           />
-          <div className="flex justify-end gap-2">
+          <div className="flex items-center justify-end gap-3 flex-wrap">
+            {(!amount || Number(amount) <= 0 || system.trim().length < 1) && !create.isPending && (
+              <p className="text-xs text-muted-foreground">
+                Enter an amount and a system name to enable posting.
+              </p>
+            )}
             <Button variant="glass" onClick={() => setOpen(false)}>Cancel</Button>
             <Button
               variant="brand"
