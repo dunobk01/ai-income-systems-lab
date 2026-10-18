@@ -68,23 +68,19 @@
           "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "object",
           "properties": {
-            "amount": {
-              "type": "number",
-              "minimum": 0,
-              "description": "Dollar amount of the win."
-            },
             "system": {
               "type": "string",
               "minLength": 1,
-              "description": "Which system/product produced the win (e.g. 'Digital Product', 'Agency')."
+              "maxLength": 120,
+              "description": "An AI accomplishment, learning milestone, or project built."
             },
             "note": {
               "description": "Optional short note about the win.",
-              "type": "string"
+              "type": "string",
+              "maxLength": 500
             }
           },
           "required": [
-            "amount",
             "system"
           ]
         },
