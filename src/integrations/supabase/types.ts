@@ -1183,7 +1183,7 @@ export type Database = {
       }
       wins: {
         Row: {
-          amount: number
+          amount: number | null
           created_at: string
           id: string
           note: string | null
@@ -1192,7 +1192,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          amount: number
+          amount?: number | null
           created_at?: string
           id?: string
           note?: string | null
@@ -1201,7 +1201,7 @@ export type Database = {
           user_id: string
         }
         Update: {
-          amount?: number
+          amount?: number | null
           created_at?: string
           id?: string
           note?: string | null
