@@ -4,3 +4,4 @@
 - Keep static guide metadata in a browser-safe catalog and load complete guide data only inside authenticated handlers, preventing protected text from entering public bundles.
 - Stripe event claims use durable processing/complete states and checked writes; failures release the claim so retries cannot acknowledge an unrecorded purchase.
 - The admin subscriber overview merges normalized site opt-in emails with accounts without creating auth users; payment totals and renewal status come from paginated environment-specific Stripe reads after server-side admin authorization, because plan prices are not collected revenue.
+- Win creation uses shared accomplishment validation and omits the deprecated amount field; this keeps website posting independent of legacy revenue data.

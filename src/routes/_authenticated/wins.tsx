@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Trophy, Plus, Loader2, Trash2, DollarSign } from "lucide-react";
+import { Trophy, Plus, Loader2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,16 +13,16 @@ export const Route = createFileRoute("/_authenticated/wins")({
   head: () => ({
     meta: [
       { title: "Wall of Wins — AI Income Systems Lab" },
-      { name: "description", content: "Revenue milestones from AI Income Systems members." },
+      { name: "description", content: "Celebrate AI accomplishments, learning milestones, and workflows built by AI Income Systems Lab members." },
+      { property: "og:title", content: "Wall of Wins — AI Income Systems Lab" },
+      { property: "og:description", content: "Celebrate AI accomplishments and learning milestones—no revenue required." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
   component: WinsPage,
 });
-
-function fmt(n: number) {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-}
 
 function timeAgo(iso: string) {
   const d = Date.now() - new Date(iso).getTime();
@@ -44,16 +44,15 @@ function WinsPage() {
   const deleteFn = useServerFn(deleteWin);
 
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState("");
   const [system, setSystem] = useState("");
   const [note, setNote] = useState("");
 
   const wins = useQuery({ queryKey: ["wins"], queryFn: () => listFn() });
 
   const create = useMutation({
-    mutationFn: () => createFn({ data: { amount: Number(amount), system, note: note || undefined } }),
+    mutationFn: () => createFn({ data: { system, note: note || undefined } }),
     onSuccess: () => {
-      setAmount(""); setSystem(""); setNote(""); setOpen(false);
+      setSystem(""); setNote(""); setOpen(false);
       void qc.invalidateQueries({ queryKey: ["wins"] });
     },
   });
@@ -72,7 +71,7 @@ function WinsPage() {
             <Trophy className="h-8 w-8 text-[color:var(--brand-2)]" /> Wall of Wins
           </h1>
           <p className="mt-2 text-muted-foreground max-w-xl">
-            Real revenue milestones from members. Every dollar earned with an AI Income System belongs here.
+            Built your first workflow, learned a new skill, or finished an AI project? Every accomplishment belongs here—no revenue required.
           </p>
         </div>
         <Button variant="brand" onClick={() => setOpen((v) => !v)}>
@@ -81,11 +80,7 @@ function WinsPage() {
       </div>
 
       {wins.data && (
-        <div className="grid sm:grid-cols-2 gap-3 mb-8">
-          <div className="glass-strong rounded-2xl p-5">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider">Total member revenue</p>
-            <p className="mt-1 text-3xl font-bold">{fmt(wins.data.total)}</p>
-          </div>
+        <div className="mb-8">
           <div className="glass-strong rounded-2xl p-5">
             <p className="text-xs text-muted-foreground uppercase tracking-wider">Wins posted</p>
             <p className="mt-1 text-3xl font-bold">{wins.data.count}</p>
@@ -95,22 +90,12 @@ function WinsPage() {
 
       {open && (
         <div className="glass-strong rounded-2xl p-5 mb-8 grid gap-3">
-          <div className="grid sm:grid-cols-2 gap-3">
-            <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="number"
-                inputMode="decimal"
-                min="1"
-                step="1"
-                placeholder="Amount (USD)"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="pl-9"
-              />
-            </div>
+          <div className="grid gap-2">
+            <label htmlFor="win-accomplishment" className="text-sm font-medium">Your AI accomplishment</label>
             <Input
-              placeholder="System (e.g., Cold Start, Digital Product Machine)"
+              id="win-accomplishment"
+              placeholder="e.g., Built my first AI workflow"
+              maxLength={120}
               value={system}
               onChange={(e) => setSystem(e.target.value)}
             />
@@ -123,15 +108,15 @@ function WinsPage() {
             maxLength={500}
           />
           <div className="flex items-center justify-end gap-3 flex-wrap">
-            {(!amount || Number(amount) <= 0 || system.trim().length < 1) && !create.isPending && (
+            {system.trim().length < 1 && !create.isPending && (
               <p className="text-xs text-muted-foreground">
-                Enter an amount and a system name to enable posting.
+                Add your AI accomplishment to post your win.
               </p>
             )}
             <Button variant="glass" onClick={() => setOpen(false)}>Cancel</Button>
             <Button
               variant="brand"
-              disabled={create.isPending || !amount || Number(amount) <= 0 || system.trim().length < 1}
+              disabled={create.isPending || system.trim().length < 1}
               onClick={() => create.mutate()}
             >
               {create.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Post win"}
@@ -156,7 +141,7 @@ function WinsPage() {
       {wins.data && wins.data.wins.length === 0 && (
         <div className="glass rounded-2xl p-10 text-center">
           <h3 className="font-semibold">Be the first win on the wall 🏆</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Made your first dollar with an AI system? Post it.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Share something you learned, built, or accomplished with AI.</p>
         </div>
       )}
 
@@ -170,8 +155,7 @@ function WinsPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-3 flex-wrap">
-                  <span className="text-2xl font-bold text-[color:var(--brand-2)]">{fmt(w.amount)}</span>
-                  <span className="text-sm font-medium">{w.system}</span>
+                  <span className="text-lg font-semibold break-words">{w.system}</span>
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {w.author} · {timeAgo(w.created_at)}
@@ -179,13 +163,13 @@ function WinsPage() {
                 {w.note && <p className="mt-2 text-sm text-muted-foreground">{w.note}</p>}
               </div>
               {(mine || isAdmin) && (
-                <button
+                <Button variant="ghost" size="icon"
                   onClick={() => { if (confirm("Delete this win?")) remove.mutate(w.id); }}
                   className="text-muted-foreground hover:text-red-400 transition p-1"
                   aria-label="Delete win"
                 >
                   <Trash2 className="h-4 w-4" />
-                </button>
+                </Button>
               )}
             </div>
           );

@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Remove required dollar amounts from Post Win and celebrate AI accomplishments; verify signed-in posting without revenue
+
 - [x] Expand admin Members to include lead-magnet email subscribers, tiers, signup dates, verified charges, and renewal dates; signed-in directory, email-only details, and CSV verified; 33 targeted tests pass
 
 - [x] Verify uploaded audit; repair payment persistence/retries and MailerLite opt-out handling; validate access, pages, and regression tests
