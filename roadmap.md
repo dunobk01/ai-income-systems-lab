@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Remove required dollar amounts from Post Win and celebrate AI accomplishments; verify signed-in posting without revenue
+- [x] Remove required dollar amounts from Post Win and celebrate AI accomplishments; signed-in posting/readback/deletion verified without revenue; validation tests pass
 
 - [x] Expand admin Members to include lead-magnet email subscribers, tiers, signup dates, verified charges, and renewal dates; signed-in directory, email-only details, and CSV verified; 33 targeted tests pass
 
