@@ -60,6 +60,7 @@ import { Route as FreeToolsAiSavingsCalculatorRouteImport } from './routes/free-
 import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ApiAssistantChatRouteImport } from './routes/api/assistant-chat'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
 import { Route as AuthenticatedWinsRouteImport } from './routes/_authenticated/wins'
 import { Route as AuthenticatedWelcomeRouteImport } from './routes/_authenticated/welcome'
@@ -76,6 +77,7 @@ import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedCommunityIndexRouteImport } from './routes/_authenticated/community.index'
+import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as FreeToolsRTokenRouteImport } from './routes/free-tools.r.$token'
@@ -86,6 +88,7 @@ import { Route as AuthenticatedCommunityThreadIdRouteImport } from './routes/_au
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
 import { Route as AuthenticatedBuildersAgentRouteImport } from './routes/_authenticated/builders/agent'
+import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant.$threadId'
 import { Route as AuthenticatedAdminToolLeadsRouteImport } from './routes/_authenticated/admin.tool-leads'
 import { Route as AuthenticatedAdminPillarsRouteImport } from './routes/_authenticated/admin.pillars'
 import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_authenticated/admin.permissions'
@@ -368,6 +371,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAssistantChatRoute = ApiAssistantChatRouteImport.update({
+  id: '/api/assistant-chat',
+  path: '/api/assistant-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedWorkflowsRoute = AuthenticatedWorkflowsRouteImport.update({
   id: '/workflows',
   path: '/workflows',
@@ -454,6 +462,12 @@ const AuthenticatedCommunityIndexRoute =
     path: '/community/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAssistantIndexRoute =
+  AuthenticatedAssistantIndexRouteImport.update({
+    id: '/assistant/',
+    path: '/assistant/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -508,6 +522,12 @@ const AuthenticatedBuildersAgentRoute =
   AuthenticatedBuildersAgentRouteImport.update({
     id: '/builders/agent',
     path: '/builders/agent',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAssistantThreadIdRoute =
+  AuthenticatedAssistantThreadIdRouteImport.update({
+    id: '/assistant/$threadId',
+    path: '/assistant/$threadId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminToolLeadsRoute =
@@ -651,6 +671,7 @@ export interface FileRoutesByFullPath {
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/wins': typeof AuthenticatedWinsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
+  '/api/assistant-chat': typeof ApiAssistantChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
@@ -690,6 +711,7 @@ export interface FileRoutesByFullPath {
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
+  '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -700,6 +722,7 @@ export interface FileRoutesByFullPath {
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/assistant/': typeof AuthenticatedAssistantIndexRoute
   '/community/': typeof AuthenticatedCommunityIndexRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
   '/library/': typeof AuthenticatedLibraryIndexRoute
@@ -744,6 +767,7 @@ export interface FileRoutesByTo {
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/wins': typeof AuthenticatedWinsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
+  '/api/assistant-chat': typeof ApiAssistantChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
@@ -783,6 +807,7 @@ export interface FileRoutesByTo {
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
+  '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -793,6 +818,7 @@ export interface FileRoutesByTo {
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/assistant': typeof AuthenticatedAssistantIndexRoute
   '/community': typeof AuthenticatedCommunityIndexRoute
   '/course': typeof AuthenticatedCourseIndexRoute
   '/library': typeof AuthenticatedLibraryIndexRoute
@@ -843,6 +869,7 @@ export interface FileRoutesById {
   '/_authenticated/welcome': typeof AuthenticatedWelcomeRoute
   '/_authenticated/wins': typeof AuthenticatedWinsRoute
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
+  '/api/assistant-chat': typeof ApiAssistantChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
@@ -882,6 +909,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/_authenticated/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/_authenticated/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
+  '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/_authenticated/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -892,6 +920,7 @@ export interface FileRoutesById {
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/assistant/': typeof AuthenticatedAssistantIndexRoute
   '/_authenticated/community/': typeof AuthenticatedCommunityIndexRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
   '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
@@ -942,6 +971,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/wins'
     | '/workflows'
+    | '/api/assistant-chat'
     | '/blog/$slug'
     | '/checkout/return'
     | '/free-tools/ai-readiness-scorecard'
@@ -981,6 +1011,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/pillars'
     | '/admin/tool-leads'
+    | '/assistant/$threadId'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
@@ -991,6 +1022,7 @@ export interface FileRouteTypes {
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/admin/'
+    | '/assistant/'
     | '/community/'
     | '/course/'
     | '/library/'
@@ -1035,6 +1067,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/wins'
     | '/workflows'
+    | '/api/assistant-chat'
     | '/blog/$slug'
     | '/checkout/return'
     | '/free-tools/ai-readiness-scorecard'
@@ -1074,6 +1107,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/pillars'
     | '/admin/tool-leads'
+    | '/assistant/$threadId'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
@@ -1084,6 +1118,7 @@ export interface FileRouteTypes {
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/admin'
+    | '/assistant'
     | '/community'
     | '/course'
     | '/library'
@@ -1133,6 +1168,7 @@ export interface FileRouteTypes {
     | '/_authenticated/welcome'
     | '/_authenticated/wins'
     | '/_authenticated/workflows'
+    | '/api/assistant-chat'
     | '/blog/$slug'
     | '/checkout/return'
     | '/free-tools/ai-readiness-scorecard'
@@ -1172,6 +1208,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/permissions'
     | '/_authenticated/admin/pillars'
     | '/_authenticated/admin/tool-leads'
+    | '/_authenticated/assistant/$threadId'
     | '/_authenticated/builders/agent'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
@@ -1182,6 +1219,7 @@ export interface FileRouteTypes {
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/_authenticated/admin/'
+    | '/_authenticated/assistant/'
     | '/_authenticated/community/'
     | '/_authenticated/course/'
     | '/_authenticated/library/'
@@ -1222,6 +1260,7 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  ApiAssistantChatRoute: typeof ApiAssistantChatRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
@@ -1621,6 +1660,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/assistant-chat': {
+      id: '/api/assistant-chat'
+      path: '/api/assistant-chat'
+      fullPath: '/api/assistant-chat'
+      preLoaderRoute: typeof ApiAssistantChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/workflows': {
       id: '/_authenticated/workflows'
       path: '/workflows'
@@ -1733,6 +1779,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommunityIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/assistant/': {
+      id: '/_authenticated/assistant/'
+      path: '/assistant'
+      fullPath: '/assistant/'
+      preLoaderRoute: typeof AuthenticatedAssistantIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/'
@@ -1801,6 +1854,13 @@ declare module '@tanstack/react-router' {
       path: '/builders/agent'
       fullPath: '/builders/agent'
       preLoaderRoute: typeof AuthenticatedBuildersAgentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/assistant/$threadId': {
+      id: '/_authenticated/assistant/$threadId'
+      path: '/assistant/$threadId'
+      fullPath: '/assistant/$threadId'
+      preLoaderRoute: typeof AuthenticatedAssistantThreadIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/tool-leads': {
@@ -1975,12 +2035,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedWelcomeRoute: typeof AuthenticatedWelcomeRoute
   AuthenticatedWinsRoute: typeof AuthenticatedWinsRoute
   AuthenticatedWorkflowsRoute: typeof AuthenticatedWorkflowsRoute
+  AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
   AuthenticatedBuildersAgentRoute: typeof AuthenticatedBuildersAgentRoute
   AuthenticatedBuildersFunnelRoute: typeof AuthenticatedBuildersFunnelRoute
   AuthenticatedBuildersProductRoute: typeof AuthenticatedBuildersProductRoute
   AuthenticatedCommunityThreadIdRoute: typeof AuthenticatedCommunityThreadIdRoute
   AuthenticatedLibrarySlugRoute: typeof AuthenticatedLibrarySlugRoute
   AuthenticatedSettingsBillingRoute: typeof AuthenticatedSettingsBillingRoute
+  AuthenticatedAssistantIndexRoute: typeof AuthenticatedAssistantIndexRoute
   AuthenticatedCommunityIndexRoute: typeof AuthenticatedCommunityIndexRoute
   AuthenticatedCourseIndexRoute: typeof AuthenticatedCourseIndexRoute
   AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
@@ -1999,12 +2061,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWelcomeRoute: AuthenticatedWelcomeRoute,
   AuthenticatedWinsRoute: AuthenticatedWinsRoute,
   AuthenticatedWorkflowsRoute: AuthenticatedWorkflowsRoute,
+  AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,
   AuthenticatedBuildersAgentRoute: AuthenticatedBuildersAgentRoute,
   AuthenticatedBuildersFunnelRoute: AuthenticatedBuildersFunnelRoute,
   AuthenticatedBuildersProductRoute: AuthenticatedBuildersProductRoute,
   AuthenticatedCommunityThreadIdRoute: AuthenticatedCommunityThreadIdRoute,
   AuthenticatedLibrarySlugRoute: AuthenticatedLibrarySlugRoute,
   AuthenticatedSettingsBillingRoute: AuthenticatedSettingsBillingRoute,
+  AuthenticatedAssistantIndexRoute: AuthenticatedAssistantIndexRoute,
   AuthenticatedCommunityIndexRoute: AuthenticatedCommunityIndexRoute,
   AuthenticatedCourseIndexRoute: AuthenticatedCourseIndexRoute,
   AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
@@ -2081,6 +2145,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  ApiAssistantChatRoute: ApiAssistantChatRoute,
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,
