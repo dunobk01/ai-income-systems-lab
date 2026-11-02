@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { ogImageMeta } from "@/lib/og";
+import { ContactForm } from "@/components/contact-form";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -52,6 +53,10 @@ function ContactPage() {
       </section>
 
       <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-24">
+        <div className="mb-8">
+          <ContactForm />
+        </div>
+
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="glass rounded-2xl p-6 space-y-4">
             <div className="flex items-center gap-3">
