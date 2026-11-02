@@ -81,6 +81,7 @@ import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as FreeToolsRTokenRouteImport } from './routes/free-tools.r.$token'
+import { Route as ContactRTokenRouteImport } from './routes/contact.r.$token'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as AuthenticatedSettingsBillingRouteImport } from './routes/_authenticated/settings.billing'
 import { Route as AuthenticatedLibrarySlugRouteImport } from './routes/_authenticated/library.$slug'
@@ -95,6 +96,7 @@ import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminNewsletterRouteImport } from './routes/_authenticated/admin.newsletter'
 import { Route as AuthenticatedAdminMembersRouteImport } from './routes/_authenticated/admin.members'
 import { Route as AuthenticatedAdminLabRouteImport } from './routes/_authenticated/admin.lab'
+import { Route as AuthenticatedAdminInboxRouteImport } from './routes/_authenticated/admin.inbox'
 import { Route as AuthenticatedAdminCourseRouteImport } from './routes/_authenticated/admin.course'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -483,6 +485,11 @@ const FreeToolsRTokenRoute = FreeToolsRTokenRouteImport.update({
   path: '/free-tools/r/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRTokenRoute = ContactRTokenRouteImport.update({
+  id: '/r/$token',
+  path: '/r/$token',
+  getParentRoute: () => ContactRoute,
+} as any)
 const BlogTagTagRoute = BlogTagTagRouteImport.update({
   id: '/blog/tag/$tag',
   path: '/blog/tag/$tag',
@@ -565,6 +572,11 @@ const AuthenticatedAdminLabRoute = AuthenticatedAdminLabRouteImport.update({
   path: '/lab',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminInboxRoute = AuthenticatedAdminInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminCourseRoute =
   AuthenticatedAdminCourseRouteImport.update({
     id: '/course',
@@ -642,7 +654,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ai-business-engine': typeof AiBusinessEngineRoute
   '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
-  '/contact': typeof ContactRoute
+  '/contact': typeof ContactRouteWithChildren
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
   '/guides': typeof GuidesRouteWithChildren
@@ -705,6 +717,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/course': typeof AuthenticatedAdminCourseRoute
+  '/admin/inbox': typeof AuthenticatedAdminInboxRoute
   '/admin/lab': typeof AuthenticatedAdminLabRoute
   '/admin/members': typeof AuthenticatedAdminMembersRoute
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
@@ -719,6 +732,7 @@ export interface FileRoutesByFullPath {
   '/library/$slug': typeof AuthenticatedLibrarySlugRoute
   '/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
+  '/contact/r/$token': typeof ContactRTokenRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -742,7 +756,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ai-business-engine': typeof AiBusinessEngineRoute
   '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
-  '/contact': typeof ContactRoute
+  '/contact': typeof ContactRouteWithChildren
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
@@ -801,6 +815,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/course': typeof AuthenticatedAdminCourseRoute
+  '/admin/inbox': typeof AuthenticatedAdminInboxRoute
   '/admin/lab': typeof AuthenticatedAdminLabRoute
   '/admin/members': typeof AuthenticatedAdminMembersRoute
   '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
@@ -815,6 +830,7 @@ export interface FileRoutesByTo {
   '/library/$slug': typeof AuthenticatedLibrarySlugRoute
   '/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
+  '/contact/r/$token': typeof ContactRTokenRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -840,7 +856,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/ai-business-engine': typeof AiBusinessEngineRoute
   '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
-  '/contact': typeof ContactRoute
+  '/contact': typeof ContactRouteWithChildren
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
   '/guides': typeof GuidesRouteWithChildren
@@ -903,6 +919,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/course': typeof AuthenticatedAdminCourseRoute
+  '/_authenticated/admin/inbox': typeof AuthenticatedAdminInboxRoute
   '/_authenticated/admin/lab': typeof AuthenticatedAdminLabRoute
   '/_authenticated/admin/members': typeof AuthenticatedAdminMembersRoute
   '/_authenticated/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
@@ -917,6 +934,7 @@ export interface FileRoutesById {
   '/_authenticated/library/$slug': typeof AuthenticatedLibrarySlugRoute
   '/_authenticated/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
+  '/contact/r/$token': typeof ContactRTokenRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -1005,6 +1023,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/course'
+    | '/admin/inbox'
     | '/admin/lab'
     | '/admin/members'
     | '/admin/newsletter'
@@ -1019,6 +1038,7 @@ export interface FileRouteTypes {
     | '/library/$slug'
     | '/settings/billing'
     | '/blog/tag/$tag'
+    | '/contact/r/$token'
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/admin/'
@@ -1101,6 +1121,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/course'
+    | '/admin/inbox'
     | '/admin/lab'
     | '/admin/members'
     | '/admin/newsletter'
@@ -1115,6 +1136,7 @@ export interface FileRouteTypes {
     | '/library/$slug'
     | '/settings/billing'
     | '/blog/tag/$tag'
+    | '/contact/r/$token'
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/admin'
@@ -1202,6 +1224,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/course'
+    | '/_authenticated/admin/inbox'
     | '/_authenticated/admin/lab'
     | '/_authenticated/admin/members'
     | '/_authenticated/admin/newsletter'
@@ -1216,6 +1239,7 @@ export interface FileRouteTypes {
     | '/_authenticated/library/$slug'
     | '/_authenticated/settings/billing'
     | '/blog/tag/$tag'
+    | '/contact/r/$token'
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/_authenticated/admin/'
@@ -1241,7 +1265,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AiBusinessEngineRoute: typeof AiBusinessEngineRoute
   AiIncomeLaunchGuideRoute: typeof AiIncomeLaunchGuideRoute
-  ContactRoute: typeof ContactRoute
+  ContactRoute: typeof ContactRouteWithChildren
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
   GuidesRoute: typeof GuidesRouteWithChildren
@@ -1807,6 +1831,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FreeToolsRTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact/r/$token': {
+      id: '/contact/r/$token'
+      path: '/r/$token'
+      fullPath: '/contact/r/$token'
+      preLoaderRoute: typeof ContactRTokenRouteImport
+      parentRoute: typeof ContactRoute
+    }
     '/blog/tag/$tag': {
       id: '/blog/tag/$tag'
       path: '/blog/tag/$tag'
@@ -1905,6 +1936,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminLabRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/inbox': {
+      id: '/_authenticated/admin/inbox'
+      path: '/inbox'
+      fullPath: '/admin/inbox'
+      preLoaderRoute: typeof AuthenticatedAdminInboxRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/course': {
       id: '/_authenticated/admin/course'
       path: '/course'
@@ -2001,6 +2039,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminCourseRoute: typeof AuthenticatedAdminCourseRoute
+  AuthenticatedAdminInboxRoute: typeof AuthenticatedAdminInboxRoute
   AuthenticatedAdminLabRoute: typeof AuthenticatedAdminLabRoute
   AuthenticatedAdminMembersRoute: typeof AuthenticatedAdminMembersRoute
   AuthenticatedAdminNewsletterRoute: typeof AuthenticatedAdminNewsletterRoute
@@ -2012,6 +2051,7 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminCourseRoute: AuthenticatedAdminCourseRoute,
+  AuthenticatedAdminInboxRoute: AuthenticatedAdminInboxRoute,
   AuthenticatedAdminLabRoute: AuthenticatedAdminLabRoute,
   AuthenticatedAdminMembersRoute: AuthenticatedAdminMembersRoute,
   AuthenticatedAdminNewsletterRoute: AuthenticatedAdminNewsletterRoute,
@@ -2081,6 +2121,17 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface ContactRouteChildren {
+  ContactRTokenRoute: typeof ContactRTokenRoute
+}
+
+const ContactRouteChildren: ContactRouteChildren = {
+  ContactRTokenRoute: ContactRTokenRoute,
+}
+
+const ContactRouteWithChildren =
+  ContactRoute._addFileChildren(ContactRouteChildren)
+
 interface GuidesRouteChildren {
   GuidesSlugRoute: typeof GuidesSlugRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
@@ -2125,7 +2176,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AiBusinessEngineRoute: AiBusinessEngineRoute,
   AiIncomeLaunchGuideRoute: AiIncomeLaunchGuideRoute,
-  ContactRoute: ContactRoute,
+  ContactRoute: ContactRouteWithChildren,
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,
   GuidesRoute: GuidesRouteWithChildren,
