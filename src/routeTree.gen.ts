@@ -60,6 +60,7 @@ import { Route as FreeToolsAiSavingsCalculatorRouteImport } from './routes/free-
 import { Route as FreeToolsAiReadinessScorecardRouteImport } from './routes/free-tools.ai-readiness-scorecard'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ApiAssistantChatRouteImport } from './routes/api/assistant-chat'
 import { Route as AuthenticatedWorkflowsRouteImport } from './routes/_authenticated/workflows'
 import { Route as AuthenticatedWinsRouteImport } from './routes/_authenticated/wins'
 import { Route as AuthenticatedWelcomeRouteImport } from './routes/_authenticated/welcome'
@@ -368,6 +369,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAssistantChatRoute = ApiAssistantChatRouteImport.update({
+  id: '/api/assistant-chat',
+  path: '/api/assistant-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedWorkflowsRoute = AuthenticatedWorkflowsRouteImport.update({
   id: '/workflows',
   path: '/workflows',
@@ -651,6 +657,7 @@ export interface FileRoutesByFullPath {
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/wins': typeof AuthenticatedWinsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
+  '/api/assistant-chat': typeof ApiAssistantChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
@@ -744,6 +751,7 @@ export interface FileRoutesByTo {
   '/welcome': typeof AuthenticatedWelcomeRoute
   '/wins': typeof AuthenticatedWinsRoute
   '/workflows': typeof AuthenticatedWorkflowsRoute
+  '/api/assistant-chat': typeof ApiAssistantChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
@@ -843,6 +851,7 @@ export interface FileRoutesById {
   '/_authenticated/welcome': typeof AuthenticatedWelcomeRoute
   '/_authenticated/wins': typeof AuthenticatedWinsRoute
   '/_authenticated/workflows': typeof AuthenticatedWorkflowsRoute
+  '/api/assistant-chat': typeof ApiAssistantChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/free-tools/ai-readiness-scorecard': typeof FreeToolsAiReadinessScorecardRoute
@@ -942,6 +951,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/wins'
     | '/workflows'
+    | '/api/assistant-chat'
     | '/blog/$slug'
     | '/checkout/return'
     | '/free-tools/ai-readiness-scorecard'
@@ -1035,6 +1045,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/wins'
     | '/workflows'
+    | '/api/assistant-chat'
     | '/blog/$slug'
     | '/checkout/return'
     | '/free-tools/ai-readiness-scorecard'
@@ -1133,6 +1144,7 @@ export interface FileRouteTypes {
     | '/_authenticated/welcome'
     | '/_authenticated/wins'
     | '/_authenticated/workflows'
+    | '/api/assistant-chat'
     | '/blog/$slug'
     | '/checkout/return'
     | '/free-tools/ai-readiness-scorecard'
@@ -1222,6 +1234,7 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  ApiAssistantChatRoute: typeof ApiAssistantChatRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   FreeToolsAiReadinessScorecardRoute: typeof FreeToolsAiReadinessScorecardRoute
@@ -1619,6 +1632,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/assistant-chat': {
+      id: '/api/assistant-chat'
+      path: '/api/assistant-chat'
+      fullPath: '/api/assistant-chat'
+      preLoaderRoute: typeof ApiAssistantChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/workflows': {
@@ -2081,6 +2101,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  ApiAssistantChatRoute: ApiAssistantChatRoute,
   BlogSlugRoute: BlogSlugRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   FreeToolsAiReadinessScorecardRoute: FreeToolsAiReadinessScorecardRoute,

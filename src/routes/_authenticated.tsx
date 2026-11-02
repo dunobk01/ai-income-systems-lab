@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import {
   LayoutDashboard, BookOpen, Sparkles, Wrench, Workflow, Package,
   Megaphone, BarChart3, Settings, Shield, LogOut, ChevronLeft, Menu, Bot,
-  Users, Trophy,
+  Users, Trophy, MessageSquare,
 } from "lucide-react";
 
 import { useAuth } from "@/lib/auth-context";
@@ -22,6 +22,7 @@ export const Route = createFileRoute("/_authenticated")({
 const nav = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
   { label: "Course", to: "/course", icon: BookOpen },
+  { label: "AI Assistant", to: "/assistant", icon: MessageSquare },
   { label: "Prompt Library", to: "/prompts", icon: Sparkles },
   { label: "Tool Stack", to: "/tools", icon: Wrench },
   { label: "n8n Workflows", to: "/workflows", icon: Workflow },
