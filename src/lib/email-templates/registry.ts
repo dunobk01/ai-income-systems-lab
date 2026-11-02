@@ -1,4 +1,6 @@
 import type { ComponentType } from 'react'
+import { template as contactReply } from './contact-reply'
+import { template as contactNewMessage } from './contact-new-message'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -18,6 +20,6 @@ export interface TemplateEntry {
  *   // then add to TEMPLATES: 'welcome': welcomeTemplate
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
-  // Add templates here as they are created, e.g.:
-  // 'welcome': welcomeTemplate,
+  'contact-reply': contactReply,
+  'contact-new-message': contactNewMessage,
 }

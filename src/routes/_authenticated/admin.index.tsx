@@ -70,6 +70,9 @@ function AdminPage() {
       <p className="text-sm text-muted-foreground mt-1">Overview of users, purchases, and revenue.</p>
 
       <div className="mt-4 flex flex-wrap gap-2">
+        <Link to="/admin/inbox" className="inline-flex items-center gap-2 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 px-3 py-2 text-sm">
+          Inbox
+        </Link>
         <Link to="/admin/members" className="inline-flex items-center gap-2 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 px-3 py-2 text-sm">
           <Users className="h-4 w-4" /> Members & tiers
         </Link>

@@ -270,6 +270,77 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_entries: {
+        Row: {
+          author: string
+          body: string
+          created_at: string
+          email_status: string | null
+          id: string
+          message_id: string
+        }
+        Insert: {
+          author: string
+          body: string
+          created_at?: string
+          email_status?: string | null
+          id?: string
+          message_id: string
+        }
+        Update: {
+          author?: string
+          body?: string
+          created_at?: string
+          email_status?: string | null
+          id?: string
+          message_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_entries_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "contact_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          ip_hash: string | null
+          name: string
+          status: string
+          subject: string
+          thread_token: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          ip_hash?: string | null
+          name: string
+          status?: string
+          subject: string
+          thread_token?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          ip_hash?: string | null
+          name?: string
+          status?: string
+          subject?: string
+          thread_token?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       courses: {
         Row: {
           created_at: string
