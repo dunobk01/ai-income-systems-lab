@@ -53,7 +53,7 @@ function ThreadPage() {
           Chat not found. <Link to="/assistant" className="text-brand underline">Back to chats</Link>
         </p>
       )}
-      {q.data?.found && <ChatWindow key={threadId} threadId={threadId} initial={q.data.messages} />}
+      {q.data?.found && <ChatWindow key={threadId} threadId={threadId} initial={q.data.messages as unknown as UIMessage[]} />}
     </AssistantShell>
   );
 }

@@ -1,5 +1,5 @@
+import type { Json } from "@/integrations/supabase/types";
 import { createServerFn } from "@tanstack/react-start";
-import type { UIMessage } from "ai";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { ASSISTANT_DAILY_LIMIT, remainingMessages, startOfUtcDay } from "@/lib/assistant-rules";
 
@@ -49,7 +49,7 @@ export const getAssistantMessages = createServerFn({ method: "GET" })
       .eq("id", data.threadId)
       .eq("user_id", context.userId)
       .maybeSingle();
-    if (!thread) return { found: false as const, messages: [] as UIMessage[], title: "" };
+    if (!thread) return { found: false as const, messages: [] as Json[], title: "" };
     const { data: rows, error } = await context.supabase
       .from("ai_chat_messages")
       .select("message")
@@ -59,7 +59,7 @@ export const getAssistantMessages = createServerFn({ method: "GET" })
     return {
       found: true as const,
       title: thread.title,
-      messages: (rows ?? []).map((r) => r.message as unknown as UIMessage),
+      messages: (rows ?? []).map((r) => r.message),
     };
   });
 

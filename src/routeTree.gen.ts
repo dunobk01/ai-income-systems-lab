@@ -77,6 +77,7 @@ import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
 import { Route as AuthenticatedCourseIndexRouteImport } from './routes/_authenticated/course.index'
 import { Route as AuthenticatedCommunityIndexRouteImport } from './routes/_authenticated/community.index'
+import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as FreeToolsRTokenRouteImport } from './routes/free-tools.r.$token'
@@ -87,6 +88,7 @@ import { Route as AuthenticatedCommunityThreadIdRouteImport } from './routes/_au
 import { Route as AuthenticatedBuildersProductRouteImport } from './routes/_authenticated/builders/product'
 import { Route as AuthenticatedBuildersFunnelRouteImport } from './routes/_authenticated/builders/funnel'
 import { Route as AuthenticatedBuildersAgentRouteImport } from './routes/_authenticated/builders/agent'
+import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant.$threadId'
 import { Route as AuthenticatedAdminToolLeadsRouteImport } from './routes/_authenticated/admin.tool-leads'
 import { Route as AuthenticatedAdminPillarsRouteImport } from './routes/_authenticated/admin.pillars'
 import { Route as AuthenticatedAdminPermissionsRouteImport } from './routes/_authenticated/admin.permissions'
@@ -460,6 +462,12 @@ const AuthenticatedCommunityIndexRoute =
     path: '/community/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAssistantIndexRoute =
+  AuthenticatedAssistantIndexRouteImport.update({
+    id: '/assistant/',
+    path: '/assistant/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -514,6 +522,12 @@ const AuthenticatedBuildersAgentRoute =
   AuthenticatedBuildersAgentRouteImport.update({
     id: '/builders/agent',
     path: '/builders/agent',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAssistantThreadIdRoute =
+  AuthenticatedAssistantThreadIdRouteImport.update({
+    id: '/assistant/$threadId',
+    path: '/assistant/$threadId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminToolLeadsRoute =
@@ -697,6 +711,7 @@ export interface FileRoutesByFullPath {
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
+  '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -707,6 +722,7 @@ export interface FileRoutesByFullPath {
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/assistant/': typeof AuthenticatedAssistantIndexRoute
   '/community/': typeof AuthenticatedCommunityIndexRoute
   '/course/': typeof AuthenticatedCourseIndexRoute
   '/library/': typeof AuthenticatedLibraryIndexRoute
@@ -791,6 +807,7 @@ export interface FileRoutesByTo {
   '/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
+  '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -801,6 +818,7 @@ export interface FileRoutesByTo {
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/assistant': typeof AuthenticatedAssistantIndexRoute
   '/community': typeof AuthenticatedCommunityIndexRoute
   '/course': typeof AuthenticatedCourseIndexRoute
   '/library': typeof AuthenticatedLibraryIndexRoute
@@ -891,6 +909,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/permissions': typeof AuthenticatedAdminPermissionsRoute
   '/_authenticated/admin/pillars': typeof AuthenticatedAdminPillarsRoute
   '/_authenticated/admin/tool-leads': typeof AuthenticatedAdminToolLeadsRoute
+  '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/_authenticated/builders/agent': typeof AuthenticatedBuildersAgentRoute
   '/_authenticated/builders/funnel': typeof AuthenticatedBuildersFunnelRoute
   '/_authenticated/builders/product': typeof AuthenticatedBuildersProductRoute
@@ -901,6 +920,7 @@ export interface FileRoutesById {
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/assistant/': typeof AuthenticatedAssistantIndexRoute
   '/_authenticated/community/': typeof AuthenticatedCommunityIndexRoute
   '/_authenticated/course/': typeof AuthenticatedCourseIndexRoute
   '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
@@ -991,6 +1011,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/pillars'
     | '/admin/tool-leads'
+    | '/assistant/$threadId'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
@@ -1001,6 +1022,7 @@ export interface FileRouteTypes {
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/admin/'
+    | '/assistant/'
     | '/community/'
     | '/course/'
     | '/library/'
@@ -1085,6 +1107,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/pillars'
     | '/admin/tool-leads'
+    | '/assistant/$threadId'
     | '/builders/agent'
     | '/builders/funnel'
     | '/builders/product'
@@ -1095,6 +1118,7 @@ export interface FileRouteTypes {
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/admin'
+    | '/assistant'
     | '/community'
     | '/course'
     | '/library'
@@ -1184,6 +1208,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/permissions'
     | '/_authenticated/admin/pillars'
     | '/_authenticated/admin/tool-leads'
+    | '/_authenticated/assistant/$threadId'
     | '/_authenticated/builders/agent'
     | '/_authenticated/builders/funnel'
     | '/_authenticated/builders/product'
@@ -1194,6 +1219,7 @@ export interface FileRouteTypes {
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/_authenticated/admin/'
+    | '/_authenticated/assistant/'
     | '/_authenticated/community/'
     | '/_authenticated/course/'
     | '/_authenticated/library/'
@@ -1753,6 +1779,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommunityIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/assistant/': {
+      id: '/_authenticated/assistant/'
+      path: '/assistant'
+      fullPath: '/assistant/'
+      preLoaderRoute: typeof AuthenticatedAssistantIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/'
@@ -1821,6 +1854,13 @@ declare module '@tanstack/react-router' {
       path: '/builders/agent'
       fullPath: '/builders/agent'
       preLoaderRoute: typeof AuthenticatedBuildersAgentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/assistant/$threadId': {
+      id: '/_authenticated/assistant/$threadId'
+      path: '/assistant/$threadId'
+      fullPath: '/assistant/$threadId'
+      preLoaderRoute: typeof AuthenticatedAssistantThreadIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/tool-leads': {
@@ -1995,12 +2035,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedWelcomeRoute: typeof AuthenticatedWelcomeRoute
   AuthenticatedWinsRoute: typeof AuthenticatedWinsRoute
   AuthenticatedWorkflowsRoute: typeof AuthenticatedWorkflowsRoute
+  AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
   AuthenticatedBuildersAgentRoute: typeof AuthenticatedBuildersAgentRoute
   AuthenticatedBuildersFunnelRoute: typeof AuthenticatedBuildersFunnelRoute
   AuthenticatedBuildersProductRoute: typeof AuthenticatedBuildersProductRoute
   AuthenticatedCommunityThreadIdRoute: typeof AuthenticatedCommunityThreadIdRoute
   AuthenticatedLibrarySlugRoute: typeof AuthenticatedLibrarySlugRoute
   AuthenticatedSettingsBillingRoute: typeof AuthenticatedSettingsBillingRoute
+  AuthenticatedAssistantIndexRoute: typeof AuthenticatedAssistantIndexRoute
   AuthenticatedCommunityIndexRoute: typeof AuthenticatedCommunityIndexRoute
   AuthenticatedCourseIndexRoute: typeof AuthenticatedCourseIndexRoute
   AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
@@ -2019,12 +2061,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWelcomeRoute: AuthenticatedWelcomeRoute,
   AuthenticatedWinsRoute: AuthenticatedWinsRoute,
   AuthenticatedWorkflowsRoute: AuthenticatedWorkflowsRoute,
+  AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,
   AuthenticatedBuildersAgentRoute: AuthenticatedBuildersAgentRoute,
   AuthenticatedBuildersFunnelRoute: AuthenticatedBuildersFunnelRoute,
   AuthenticatedBuildersProductRoute: AuthenticatedBuildersProductRoute,
   AuthenticatedCommunityThreadIdRoute: AuthenticatedCommunityThreadIdRoute,
   AuthenticatedLibrarySlugRoute: AuthenticatedLibrarySlugRoute,
   AuthenticatedSettingsBillingRoute: AuthenticatedSettingsBillingRoute,
+  AuthenticatedAssistantIndexRoute: AuthenticatedAssistantIndexRoute,
   AuthenticatedCommunityIndexRoute: AuthenticatedCommunityIndexRoute,
   AuthenticatedCourseIndexRoute: AuthenticatedCourseIndexRoute,
   AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
