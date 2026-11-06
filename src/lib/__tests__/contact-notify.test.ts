@@ -38,15 +38,15 @@ describe("contact form confirmation email", () => {
   });
 
   it("keeps the owner heads-up on its own fixed-recipient template", async () => {
-    const send = vi.fn(async () => ({ sent: true }));
+    const send = vi.fn(async (..._args: Parameters<NotifySend>) => ({ sent: true }));
     await notifyOwner(
       { name: "Jane", email: "jane@example.com", subject: "Hi there", message: "Question" },
       "contact-new-123",
       send,
     );
-    expect(send.mock.calls[0][0]).toBe("contact-new-message");
-    expect(send.mock.calls[0][1]).toBe("");
-    expect(send.mock.calls[0][2].idempotencyKey).toBe("contact-new-123");
+    expect(send.mock.calls[0]?.[0]).toBe("contact-new-message");
+    expect(send.mock.calls[0]?.[1]).toBe("");
+    expect(send.mock.calls[0]?.[2]?.idempotencyKey).toBe("contact-new-123");
   });
 
   it("registers the confirmation template so the send can resolve it", () => {
