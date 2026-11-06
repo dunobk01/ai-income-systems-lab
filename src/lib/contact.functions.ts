@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { notifyOwner, notifyVisitor, threadUrl } from "@/lib/contact-notify";
 
 /**
  * Contact inbox. Visitors submit and continue threads through a secret
@@ -9,9 +10,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  * emailed from the verified sender domain.
  */
 
-const SITE_URL = "https://ai-income-systems.com";
 const HOURLY_LIMIT = 5;
-const threadUrl = (token: string) => `${SITE_URL}/contact/r/${token}`;
 
 const clean = (s: string) => s.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "").trim();
 
@@ -20,15 +19,6 @@ async function ipHash() {
   const ip = h?.get("cf-connecting-ip") ?? h?.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`contact:${ip}`));
   return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-
-async function notifyOwner(data: Record<string, unknown>, key: string) {
-  try {
-    const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
-    await sendTemplateEmail("contact-new-message", "", { templateData: data, idempotencyKey: key });
-  } catch (err) {
-    console.error("[contact] owner notification failed", err);
-  }
 }
 
 export const contactSubmitSchema = z.object({
@@ -56,7 +46,7 @@ export const submitContactMessage = createServerFn({ method: "POST" })
     const { data: msg, error } = await supabaseAdmin
       .from("contact_messages")
       .insert({ name: data.name, email: data.email, subject: data.subject, ip_hash: hash })
-      .select("id")
+      .select("id, thread_token")
       .single();
     if (error || !msg) throw new Error("Could not send your message. Please try again.");
     const { error: e2 } = await supabaseAdmin
@@ -65,6 +55,11 @@ export const submitContactMessage = createServerFn({ method: "POST" })
     if (e2) throw new Error("Could not send your message. Please try again.");
 
     await notifyOwner({ name: data.name, email: data.email, subject: data.subject, message: data.message }, `contact-new-${msg.id}`);
+    await notifyVisitor(
+      { name: data.name, subject: data.subject, threadUrl: threadUrl(msg.thread_token) },
+      data.email,
+      `contact-confirm-${msg.id}`,
+    );
     return { ok: true as const };
   });
 

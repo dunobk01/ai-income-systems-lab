@@ -43,6 +43,7 @@ export function ContactForm() {
         <h2 className="mt-3 text-lg font-semibold">Message sent</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Thanks — we'll reply to {form.email} as soon as we can, usually within 24 hours.
+          A confirmation is on its way to your inbox.
         </p>
       </div>
     );
