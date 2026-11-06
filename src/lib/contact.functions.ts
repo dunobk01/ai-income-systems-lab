@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { notifyOwner, notifyVisitor, threadUrl } from "@/lib/contact-notify";
 
 /**
  * Contact inbox. Visitors submit and continue threads through a secret
@@ -9,9 +10,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  * emailed from the verified sender domain.
  */
 
-const SITE_URL = "https://ai-income-systems.com";
 const HOURLY_LIMIT = 5;
-const threadUrl = (token: string) => `${SITE_URL}/contact/r/${token}`;
 
 const clean = (s: string) => s.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "").trim();
 
