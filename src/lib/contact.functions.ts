@@ -31,6 +31,19 @@ async function notifyOwner(data: Record<string, unknown>, key: string) {
   }
 }
 
+/**
+ * Automatic "we got your message" note back to the visitor. Best-effort: a
+ * failed confirmation must never make the submission itself look like it failed.
+ */
+async function notifyVisitor(data: Record<string, unknown>, to: string, key: string) {
+  try {
+    const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+    await sendTemplateEmail("contact-confirmation", to, { templateData: data, idempotencyKey: key });
+  } catch (err) {
+    console.error("[contact] visitor confirmation failed", err);
+  }
+}
+
 export const contactSubmitSchema = z.object({
   name: z.string().transform(clean).pipe(z.string().min(1, "Name is required").max(100)),
   email: z.string().trim().toLowerCase().email("Enter a valid email").max(255),
