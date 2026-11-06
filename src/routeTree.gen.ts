@@ -81,7 +81,7 @@ import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as FreeToolsRTokenRouteImport } from './routes/free-tools.r.$token'
-import { Route as ContactRTokenRouteImport } from './routes/contact.r.$token'
+import { Route as ContactRTokenRouteImport } from './routes/contact_.r.$token'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as AuthenticatedSettingsBillingRouteImport } from './routes/_authenticated/settings.billing'
 import { Route as AuthenticatedLibrarySlugRouteImport } from './routes/_authenticated/library.$slug'
@@ -486,9 +486,9 @@ const FreeToolsRTokenRoute = FreeToolsRTokenRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRTokenRoute = ContactRTokenRouteImport.update({
-  id: '/r/$token',
-  path: '/r/$token',
-  getParentRoute: () => ContactRoute,
+  id: '/contact_/r/$token',
+  path: '/contact/r/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BlogTagTagRoute = BlogTagTagRouteImport.update({
   id: '/blog/tag/$tag',
@@ -654,7 +654,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ai-business-engine': typeof AiBusinessEngineRoute
   '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
-  '/contact': typeof ContactRouteWithChildren
+  '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
   '/guides': typeof GuidesRouteWithChildren
@@ -756,7 +756,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ai-business-engine': typeof AiBusinessEngineRoute
   '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
-  '/contact': typeof ContactRouteWithChildren
+  '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
@@ -856,7 +856,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/ai-business-engine': typeof AiBusinessEngineRoute
   '/ai-income-launch-guide': typeof AiIncomeLaunchGuideRoute
-  '/contact': typeof ContactRouteWithChildren
+  '/contact': typeof ContactRoute
   '/curriculum': typeof CurriculumRoute
   '/faq': typeof FaqRoute
   '/guides': typeof GuidesRouteWithChildren
@@ -934,7 +934,7 @@ export interface FileRoutesById {
   '/_authenticated/library/$slug': typeof AuthenticatedLibrarySlugRoute
   '/_authenticated/settings/billing': typeof AuthenticatedSettingsBillingRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
-  '/contact/r/$token': typeof ContactRTokenRoute
+  '/contact_/r/$token': typeof ContactRTokenRoute
   '/free-tools/r/$token': typeof FreeToolsRTokenRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -1239,7 +1239,7 @@ export interface FileRouteTypes {
     | '/_authenticated/library/$slug'
     | '/_authenticated/settings/billing'
     | '/blog/tag/$tag'
-    | '/contact/r/$token'
+    | '/contact_/r/$token'
     | '/free-tools/r/$token'
     | '/lovable/email/events'
     | '/_authenticated/admin/'
@@ -1265,7 +1265,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AiBusinessEngineRoute: typeof AiBusinessEngineRoute
   AiIncomeLaunchGuideRoute: typeof AiIncomeLaunchGuideRoute
-  ContactRoute: typeof ContactRouteWithChildren
+  ContactRoute: typeof ContactRoute
   CurriculumRoute: typeof CurriculumRoute
   FaqRoute: typeof FaqRoute
   GuidesRoute: typeof GuidesRouteWithChildren
@@ -1312,6 +1312,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
+  ContactRTokenRoute: typeof ContactRTokenRoute
   FreeToolsRTokenRoute: typeof FreeToolsRTokenRoute
   LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   ApiPublicEmailMailerliteSyncRoute: typeof ApiPublicEmailMailerliteSyncRoute
@@ -1831,12 +1832,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FreeToolsRTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact/r/$token': {
-      id: '/contact/r/$token'
-      path: '/r/$token'
+    '/contact_/r/$token': {
+      id: '/contact_/r/$token'
+      path: '/contact/r/$token'
       fullPath: '/contact/r/$token'
       preLoaderRoute: typeof ContactRTokenRouteImport
-      parentRoute: typeof ContactRoute
+      parentRoute: typeof rootRouteImport
     }
     '/blog/tag/$tag': {
       id: '/blog/tag/$tag'
@@ -2121,17 +2122,6 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
-interface ContactRouteChildren {
-  ContactRTokenRoute: typeof ContactRTokenRoute
-}
-
-const ContactRouteChildren: ContactRouteChildren = {
-  ContactRTokenRoute: ContactRTokenRoute,
-}
-
-const ContactRouteWithChildren =
-  ContactRoute._addFileChildren(ContactRouteChildren)
-
 interface GuidesRouteChildren {
   GuidesSlugRoute: typeof GuidesSlugRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
@@ -2176,7 +2166,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AiBusinessEngineRoute: AiBusinessEngineRoute,
   AiIncomeLaunchGuideRoute: AiIncomeLaunchGuideRoute,
-  ContactRoute: ContactRouteWithChildren,
+  ContactRoute: ContactRoute,
   CurriculumRoute: CurriculumRoute,
   FaqRoute: FaqRoute,
   GuidesRoute: GuidesRouteWithChildren,
@@ -2224,6 +2214,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   BlogTagTagRoute: BlogTagTagRoute,
+  ContactRTokenRoute: ContactRTokenRoute,
   FreeToolsRTokenRoute: FreeToolsRTokenRoute,
   LovableEmailEventsRoute: LovableEmailEventsRoute,
   ApiPublicEmailMailerliteSyncRoute: ApiPublicEmailMailerliteSyncRoute,
