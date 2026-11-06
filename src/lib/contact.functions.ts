@@ -56,7 +56,7 @@ export const submitContactMessage = createServerFn({ method: "POST" })
     const { data: msg, error } = await supabaseAdmin
       .from("contact_messages")
       .insert({ name: data.name, email: data.email, subject: data.subject, ip_hash: hash })
-      .select("id")
+      .select("id, thread_token")
       .single();
     if (error || !msg) throw new Error("Could not send your message. Please try again.");
     const { error: e2 } = await supabaseAdmin

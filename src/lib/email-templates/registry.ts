@@ -23,4 +23,5 @@ export interface TemplateEntry {
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'contact-reply': contactReply,
   'contact-new-message': contactNewMessage,
+  'contact-confirmation': contactConfirmation,
 }
