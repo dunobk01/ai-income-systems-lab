@@ -78,6 +78,11 @@ export const submitContactMessage = createServerFn({ method: "POST" })
     if (e2) throw new Error("Could not send your message. Please try again.");
 
     await notifyOwner({ name: data.name, email: data.email, subject: data.subject, message: data.message }, `contact-new-${msg.id}`);
+    await notifyVisitor(
+      { name: data.name, subject: data.subject, threadUrl: threadUrl(msg.thread_token) },
+      data.email,
+      `contact-confirm-${msg.id}`,
+    );
     return { ok: true as const };
   });
 
