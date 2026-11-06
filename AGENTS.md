@@ -7,3 +7,4 @@
 - Win creation uses shared accomplishment validation and omits the deprecated amount field; this keeps website posting independent of legacy revenue data.
 - The member AI Assistant streams through the /api/assistant-chat server route with a user-scoped database client, so course/Lab RLS limits what it can quote; daily usage is counted from an insert-only usage table so deleting chats cannot reset the limit.
 - Contact inbox: visitors submit via server functions; admin reads/replies at /admin/inbox through admin-checked functions; visitors continue threads through a secret per-thread link because inbound email is not routed into the app.
+- Contact conversation routes stay un-nested from the contact form page so emailed thread URLs render their own view instead of the parent form.

@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { getContactThread, replyToContactThread } from "@/lib/contact.functions";
 
-export const Route = createFileRoute("/contact/r/$token")({
+export const Route = createFileRoute("/contact_/r/$token")({
   head: () => ({
     meta: [
       { title: "Your conversation — AI Income Systems Lab" },
