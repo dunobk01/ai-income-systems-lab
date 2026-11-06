@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { notifyOwner, notifyVisitor, threadUrl } from "../contact-notify";
+import { notifyOwner, notifyVisitor, threadUrl, type NotifySend } from "../contact-notify";
 import { TEMPLATES } from "../email-templates/registry";
 
 afterEach(() => {
