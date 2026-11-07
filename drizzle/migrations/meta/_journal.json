@@ -127,6 +127,13 @@
       "when": 1794027619612,
       "tag": "0017_win_engagement_notifications",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1794033308798,
+      "tag": "0018_scope_win_engagement_reads_to_visible_wins",
+      "breakpoints": true
     }
   ]
 }

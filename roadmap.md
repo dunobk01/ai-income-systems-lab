@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Publish uploaded product-photo-to-promo Lab tutorial with complete diagrams, prompt examples, matching cover, SEO, and beginner implementation metadata
+
 - [x] Add Wall of Wins likes, comments, and private in-app activity notifications; signed-in like/comment/reload/delete verified on desktop/mobile, author notifications verified and test interactions removed
 
 - [x] Contact form + admin inbox with emailed replies and visitor reply link; submit and admin read verified (live reply email not sent to a test address)

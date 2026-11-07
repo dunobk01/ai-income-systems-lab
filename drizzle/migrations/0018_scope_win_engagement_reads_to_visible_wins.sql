@@ -1,0 +1,2 @@
+ALTER POLICY "Members read win likes" ON public.win_likes USING (auth.uid() IS NOT NULL AND EXISTS (SELECT 1 FROM public.wins w WHERE w.id = win_likes.win_id));
+ALTER POLICY "Members read win comments" ON public.win_comments USING (auth.uid() IS NOT NULL AND EXISTS (SELECT 1 FROM public.wins w WHERE w.id = win_comments.win_id));
