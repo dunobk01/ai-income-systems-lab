@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/lib/auth-context";
 import { listWins, createWin, deleteWin } from "@/lib/wins.functions";
+import { WinEngagement, WinNotifications } from "@/components/win-engagement";
 
 export const Route = createFileRoute("/_authenticated/wins")({
   head: () => ({
@@ -79,6 +80,8 @@ function WinsPage() {
         </Button>
       </div>
 
+      <WinNotifications />
+
       {wins.data && (
         <div className="mb-8">
           <div className="glass-strong rounded-2xl p-5">
@@ -149,7 +152,7 @@ function WinsPage() {
         {wins.data?.wins.map((w) => {
           const mine = w.author_id === user?.id;
           return (
-            <div key={w.id} className="glass rounded-2xl p-5 flex items-start gap-4">
+            <div key={w.id} id={`win-${w.id}`} className="glass rounded-2xl p-5 flex items-start gap-4 scroll-mt-6">
               <div className="grid place-items-center h-12 w-12 rounded-xl shrink-0" style={{ background: "var(--gradient-soft)" }}>
                 <Trophy className="h-5 w-5 text-[color:var(--brand-2)]" />
               </div>
@@ -161,6 +164,7 @@ function WinsPage() {
                   {w.author} · {timeAgo(w.created_at)}
                 </p>
                 {w.note && <p className="mt-2 text-sm text-muted-foreground">{w.note}</p>}
+                <WinEngagement winId={w.id} />
               </div>
               {(mine || isAdmin) && (
                 <Button variant="ghost" size="icon"
