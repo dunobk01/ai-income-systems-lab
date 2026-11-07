@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Add Wall of Wins likes, comments, and private in-app activity notifications; signed-in like/comment/reload/delete verified on desktop/mobile, author notifications verified and test interactions removed
+
 - [x] Contact form + admin inbox with emailed replies and visitor reply link; submit and admin read verified (live reply email not sent to a test address)
 
 - [x] Add Gemini/n8n hands-on Lab tutorial with all 4 diagrams, 2 images, 5 code examples, Beginner/Creator/Automation tags, SEO, and completion checks; published through the existing editor, live URL returns 200, desktop/mobile images and layout verified, existing posts unchanged
