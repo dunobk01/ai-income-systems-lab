@@ -3,6 +3,8 @@ import type {} from "@tanstack/react-start";
 
 const BASE_URL = "https://ai-income-systems.com";
 const BRAND = "AI Income Systems Lab";
+// Google en-US taxonomy: Software > Computer Software > Educational Software.
+const GOOGLE_PRODUCT_CATEGORY = "317";
 
 type Row = Record<string, string>;
 
@@ -17,6 +19,7 @@ const products: Row[] = [
     availability: "in stock",
     condition: "new",
     brand: BRAND,
+    google_product_category: GOOGLE_PRODUCT_CATEGORY,
     product_type: "Course > Subscription > Starter Monthly",
   },
   {
@@ -29,6 +32,7 @@ const products: Row[] = [
     availability: "in stock",
     condition: "new",
     brand: BRAND,
+    google_product_category: GOOGLE_PRODUCT_CATEGORY,
     product_type: "Course > Subscription > Builder Monthly",
   },
   {
@@ -42,11 +46,12 @@ const products: Row[] = [
     availability: "in stock",
     condition: "new",
     brand: BRAND,
+    google_product_category: GOOGLE_PRODUCT_CATEGORY,
     product_type: "Course > Subscription > Accelerator Monthly",
   },
 ];
 
-const HEADERS = ["id", "title", "description", "link", "image_link", "price", "availability", "condition", "brand", "product_type"];
+const HEADERS = ["id", "title", "description", "link", "image_link", "price", "availability", "condition", "brand", "google_product_category", "product_type"];
 
 function esc(v: string): string {
   return v.replace(/[\t\r\n]+/g, " ").trim();
