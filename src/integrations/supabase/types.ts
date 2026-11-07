@@ -1332,6 +1332,131 @@ export type Database = {
         }
         Relationships: []
       }
+      win_comments: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          user_id: string
+          win_id: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          user_id: string
+          win_id: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+          win_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "win_comments_win_id_fkey"
+            columns: ["win_id"]
+            isOneToOne: false
+            referencedRelation: "wins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      win_likes: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+          win_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+          win_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+          win_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "win_likes_win_id_fkey"
+            columns: ["win_id"]
+            isOneToOne: false
+            referencedRelation: "wins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      win_notifications: {
+        Row: {
+          actor_id: string
+          actor_name: string
+          comment_id: string | null
+          created_at: string
+          id: string
+          kind: string
+          like_id: string | null
+          read_at: string | null
+          recipient_id: string
+          win_id: string
+        }
+        Insert: {
+          actor_id: string
+          actor_name: string
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          like_id?: string | null
+          read_at?: string | null
+          recipient_id: string
+          win_id: string
+        }
+        Update: {
+          actor_id?: string
+          actor_name?: string
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          like_id?: string | null
+          read_at?: string | null
+          recipient_id?: string
+          win_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "win_notifications_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: true
+            referencedRelation: "win_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "win_notifications_like_id_fkey"
+            columns: ["like_id"]
+            isOneToOne: true
+            referencedRelation: "win_likes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "win_notifications_win_id_fkey"
+            columns: ["win_id"]
+            isOneToOne: false
+            referencedRelation: "wins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wins: {
         Row: {
           amount: number | null
