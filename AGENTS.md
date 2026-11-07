@@ -5,6 +5,7 @@
 - Stripe event claims use durable processing/complete states and checked writes; failures release the claim so retries cannot acknowledge an unrecorded purchase.
 - The admin subscriber overview merges normalized site opt-in emails with accounts without creating auth users; payment totals and renewal status come from paginated environment-specific Stripe reads after server-side admin authorization, because plan prices are not collected revenue.
 - Win creation uses shared accomplishment validation and omits the deprecated amount field; this keeps website posting independent of legacy revenue data.
+- Win interactions use user-scoped tables and database-triggered owner-only notifications; atomic notifications prevent forged activity and stay consistent with likes/comments.
 - The member AI Assistant streams through the /api/assistant-chat server route with a user-scoped database client, so course/Lab RLS limits what it can quote; daily usage is counted from an insert-only usage table so deleting chats cannot reset the limit.
 - Contact inbox: visitors submit via server functions; admin reads/replies at /admin/inbox through admin-checked functions; visitors continue threads through a secret per-thread link because inbound email is not routed into the app.
 - Contact conversation routes stay un-nested from the contact form page so emailed thread URLs render their own view instead of the parent form.
